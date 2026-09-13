@@ -15,7 +15,7 @@ function renderVienna(){
    section.append(row);
    const status=el('div','vienna-status');section.append(status);
    if(chosen){presentationId=chosen.id;viennaPositions[shelf.key]=chosen.id;status.textContent=chosen.title+' · '+(shelf.items.indexOf(chosen)+1)+' / '+shelf.items.length;}
-   else{presentationId=null;row.append(el('p','vienna-empty',query?'No favorites match this search.':'Your favorites belong here. Open a game’s menu or press the right stick to add one.'));status.textContent='↑ ↓ Categories · ← → Games · Triggers: jump through games';}
+   else{presentationId=null;row.append(el('p','vienna-empty',query?'No favorites match this search.':'Your favorites belong here. Open a game’s menu or press Select to add one.'));status.textContent='↑ ↓ Categories · ← → Games · Triggers: jump through games';}
    row.addEventListener('scroll',()=>{if(performance.now()<(row.viennaIgnoreUntil||0))return;clearTimeout(viennaScrollTimer);viennaScrollTimer=setTimeout(()=>{if(presentation!=='vienna'||!row.isConnected)return;const x=row.getBoundingClientRect().left+36;let best=null,distance=Infinity;for(const b of row.querySelectorAll('.game')){const d=Math.abs(b.getBoundingClientRect().left-x);if(d<distance){distance=d;best=b}}if(best)viennaSelect(best.dataset.id,false,false);},160)},{passive:true});
   }else{
    const preview=el('button','vienna-preview');preview.setAttribute('aria-label','Browse '+shelf.label);preview.tabIndex=-1;preview.onclick=()=>viennaOpen(shelf.key,true);

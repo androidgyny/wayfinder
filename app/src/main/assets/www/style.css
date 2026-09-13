@@ -392,3 +392,10 @@ body[data-cover-brightness=dimmed]:not([data-presentation=library]):not([data-pr
 body[data-cover-brightness=even] .cupertino-preview-tile:not(.preview-placeholder){opacity:1}
 
 @media(max-width:450px){#settings-dialog .settings-row>select{width:100%;max-width:100%}}
+
+/* A fixed background remains separate from cover movement and palette surfaces. */
+#custom-backdrop{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:-1;}
+.background-actions,.background-dimmer{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.background-dimmer input{width:150px;accent-color:var(--accent)}
+.background-dimmer output{min-width:4ch;color:var(--muted);text-align:right}
+#background-file-name{overflow-wrap:anywhere}

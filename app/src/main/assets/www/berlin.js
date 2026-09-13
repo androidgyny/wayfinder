@@ -5,7 +5,7 @@ function berlinHeader(){
  const current=filtered[berlinIndex()];presentationId=current?.id||null;
  const options=sections(),i=sectionIndex();$('#category-current').textContent=sectionLabel();$('#category-before').textContent=options[(i-1+options.length)%options.length].label;$('#category-after').textContent=options[(i+1)%options.length].label;
  $('#presentation-title').textContent=current?.title||(favoritesOnly?'No favorites yet':'No games found');
- $('#presentation-position').textContent=current?`${berlinIndex()+1} / ${filtered.length.toLocaleString()} · ${current.genre}`:(favoritesOnly?'Add a favorite from a game’s menu or with the right stick.':'Try another category or search.');
+ $('#presentation-position').textContent=current?`${berlinIndex()+1} / ${filtered.length.toLocaleString()} · ${current.genre}`:(favoritesOnly?'Add a favorite from a game’s menu or with Select.':'Try another category or search.');
  setFavoriteButton($('#presentation-favorite'),current);$('#presentation-play').disabled=!current;$('#presentation-edit').disabled=!current;
 }
 function paintBerlin(){

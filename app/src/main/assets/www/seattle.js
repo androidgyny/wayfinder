@@ -45,7 +45,7 @@ function renderSeattle(){renderPinnedApps();
   const recent=games.filter(g=>g.lastPlayed>0).sort((a,b)=>b.lastPlayed-a.lastPlayed||a.title.localeCompare(b.title));
   const favorites=filtered.filter(g=>g.favorite===true);
   shelf('Recently played',recent,12,'Your recently played games will appear here.',()=>{sort='recent';$('#sort').value=sort;seattleOpen()});
-  shelf('★ Favorites',favorites,24,'Keep your go-to games here. Select a game and click the right stick, or use the star in its details.',()=>seattleOpen('',true));
+  shelf('★ Favorites',favorites,24,'Keep your go-to games here. Select a game and press Select, or use the star in its details.',()=>seattleOpen('',true));
   const heading=el('div','seattle-discovery-heading');
   const text=el('div');text.append(el('h2','','Explore by category'),el('p','','A handful from every category. Shuffle to discover more.'));
   const shuffle=el('button','secondary','Shuffle all');shuffle.id='shuffle-discovery';shuffle.onclick=shuffleDiscovery;heading.append(text,shuffle);fragment.append(heading);
@@ -54,7 +54,7 @@ function renderSeattle(){renderPinnedApps();
    const shuffle=el('button','text-button category-shuffle','Shuffle');shuffle.setAttribute('aria-label','Shuffle '+name);shuffle.onclick=()=>shuffleDiscovery(name);
    actions.append(shuffle,heading.querySelector('button'));heading.append(actions);
   }
- }else shelf(sectionLabel(),filtered,visible,favoritesOnly&&!query?'No favorites yet. Use the star in game details or click the right stick to add one.':'No games match this search.');
+ }else shelf(sectionLabel(),filtered,visible,favoritesOnly&&!query?'No favorites yet. Use the star in game details or press Select to add one.':'No games match this search.');
  $('#grid').replaceChildren(fragment);$('#load').hidden=true;$('#empty').hidden=true;
  if(!home&&visible<filtered.length){const more=el('button','load-button seattle-more','Show more games');more.onclick=()=>{const at=visible;visible+=72;renderSeattle();controllerFocus($('#grid .seattle-shelf').children[at]);persist()};$('#grid').append(more)}
 }

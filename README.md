@@ -31,6 +31,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Eight typography choices:** Computer, Editorial, Clean, Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans, all included for offline use.
 - **Appearance controls:** cover halos, gradient backdrops, selection markers, cover corners, and brightness.
 - **Saved appearance presets**, including Default, Launchbiz, Niagaramond, iTomes, and Playrite.
+- **Custom image and animated WebP backgrounds**, with adjustable dimming. Animation stops while Wayfinder is in the background.
 - **Optional interface sounds and background audio** from a user-selected file.
 - **An optional startup video**, with support for a custom replacement.
 - **An app drawer** for non-game Android apps, with customizable icons and rearrangeable pins.
@@ -74,7 +75,7 @@ Adding a library entry does not install the game. Games must already be installe
 | LB / RB | Previous / next category |
 | LT / RT | Page up / page down |
 | Left stick click | Open apps |
-| Right stick click | Toggle favorite |
+| Select | Toggle favorite |
 | Start | Open settings |
 
 ## Appearance gallery

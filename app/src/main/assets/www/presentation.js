@@ -45,7 +45,7 @@ function renderPresentation(){if(presentation==='berlin'){renderBerlin();return;
  preview.alt=current?current.title+' cover':'';
  $('#presentation-prev').textContent=presentation==='tokyo'?'↑':'‹';$('#presentation-next').textContent=presentation==='tokyo'?'↓':'›';
 
- $('#presentation-position').textContent=current?`${index+1} / ${filtered.length.toLocaleString()} · ${current.genre}`:(favoritesOnly&&!query?'Choose a game and press its star or click the right stick.':'Try another search or category');
+ $('#presentation-position').textContent=current?`${index+1} / ${filtered.length.toLocaleString()} · ${current.genre}`:(favoritesOnly&&!query?'Choose a game and press its star or press Select.':'Try another search or category');
  $('#presentation-seek').max=Math.max(1,filtered.length);$('#presentation-seek').value=index+1;$('#presentation-seek').disabled=!current;$('#presentation-seek-position').textContent=current?`${index+1} / ${filtered.length}`:'0 / 0';$('#presentation-first').disabled=!current||index===0;$('#presentation-last').disabled=!current||index===filtered.length-1;
  $('#presentation-play').disabled=!current;$('#presentation-edit').disabled=!current;
  const existing=new Map([...document.querySelectorAll('#grid .game')].map(b=>[b.dataset.id,b]));
