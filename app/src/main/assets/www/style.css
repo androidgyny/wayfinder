@@ -280,7 +280,7 @@ body[data-presentation=vienna] #grid{display:block}
 .vienna-heading{display:flex;align-items:center;gap:18px;width:100%;padding:8px 36px;background:transparent;text-align:left;font-family:var(--display-font);font-size:19px;color:var(--muted);position:relative;z-index:1}
 .vienna-heading small{font:12px WayfinderClean,sans-serif;color:var(--muted)}
 .expanded .vienna-heading{color:var(--accent);font-size:23px}
-.vienna-preview{display:flex;gap:12px;align-items:center;width:100%;height:48px;overflow:hidden;background:transparent;padding:0 36px;text-align:left;color:var(--muted)}
+.vienna-preview{display:flex;gap:12px;align-items:center;width:100%;height:48px;overflow:hidden;background:transparent;padding:0 0 0 36px;text-align:left;color:var(--muted)}
 .vienna-preview img{flex:none;width:28px;height:42px;object-fit:cover;border-radius:3px;opacity:.6}
 .vienna-row{display:flex;position:relative;gap:22px;overflow-x:auto;overscroll-behavior-x:contain;padding:40px 36px 38px;margin:-24px 0 -24px;scroll-padding-inline:36px;scrollbar-width:thin;touch-action:pan-x pan-y}
 body[data-presentation=vienna] .vienna-row .game{flex:0 0 auto;width:clamp(100px,calc((100dvh - 360px)/1.5),190px);scroll-margin:0}
