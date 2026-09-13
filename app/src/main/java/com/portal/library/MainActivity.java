@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
                     Map<String,String> headers=new HashMap<>();headers.put("Content-Security-Policy","default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'");out.setResponseHeaders(headers);return out;
                 }catch(Exception e){return response("text/plain",new byte[0],404);}
             }
-            @Override public void onPageFinished(WebView v,String url){ready=true;focusStartupGame();}
+            @Override public void onPageFinished(WebView v,String url){if(!ready){ready=true;focusStartupGame();}}
         });web.loadUrl(ORIGIN+"/index.html");startup.initial();
     }
     @Override protected void onNewIntent(Intent intent){super.onNewIntent(intent);setIntent(intent);}
@@ -164,6 +164,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void androidSettings(){runOnUiThread(()->{try{startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));}catch(Exception e){notice("Android Settings is unavailable");}});}
         @JavascriptInterface public String library(){return db.all().toString();}
         @JavascriptInterface public String view(){return getPreferences(0).getString("view","{}");}
+        @JavascriptInterface public void showKeyboard(){runOnUiThread(()->{if(web==null)return;web.requestFocus();web.post(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);});});}
         @JavascriptInterface public void saveView(String value){if(value.length()<20000)getPreferences(0).edit().putString("view",value).apply();}
         @JavascriptInterface public String clearRecent(String id){try{JSONObject g=db.get(id);g.put("lastPlayed",0);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String favorite(String id,boolean value){try{JSONObject g=db.get(id);g.put("favorite",value);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
