@@ -31,7 +31,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Eight typography choices:** Computer, Editorial, Clean, Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans, all included for offline use.
 - **Appearance controls:** cover halos, gradient backdrops, selection markers, cover corners, and brightness.
 - **Saved appearance presets**, including Default, Launchbiz, Niagaramond, iTomes, and Playrite.
-- **A built-in Mountain dusk parallax background**, based on CC0 artwork by Luis Zuno (ansimuz).
+- **Three built-in parallax backgrounds: Mountain dusk, Magical road, and Urban landscape**, based on CC0 artwork by Luis Zuno (ansimuz). Keep their original colors, mute them, or match your palette; dimming remains independent.
 - **Custom image and animated WebP backgrounds**, with adjustable dimming. Animation stops while Wayfinder is in the background.
 - **Optional interface sounds and background audio**, with a built-in Another August ambient loop or your own sound file. Music is off by default.
 - **An optional startup video**, with support for a custom replacement.

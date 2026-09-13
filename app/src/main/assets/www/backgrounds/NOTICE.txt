@@ -7,3 +7,18 @@ https://creativecommons.org/publicdomain/zero/1.0/
 Adapted for Wayfinder as a 40-second parallax animation, 1088 x 612, 15 fps.
 The original pack includes this permission:
 "You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission."
+
+
+Magical Road
+Artwork by Luis Zuno (ansimuz).
+Source: https://opengameart.org/content/magical-road-pixel-art-environment
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+Adapted for Wayfinder as a 60-second seamless parallax loop, 1152 x 648, 15 fps, with a closer crop omitting the flat foreground and decorative props.
+
+Urban Landscape
+Artwork by Luis Zuno (ansimuz).
+Source: https://opengameart.org/content/urban-landscape
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+Adapted for Wayfinder as a 60-second seamless parallax loop, 1152 x 648, 15 fps, cropped closely around the skyline.

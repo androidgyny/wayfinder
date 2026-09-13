@@ -1,3 +1,4 @@
+const builtinBackgrounds={mountain:{file:'mountain-dusk.webp',credit:'Mountain at Dusk by Luis Zuno (ansimuz) · CC0. Adapted as a looping parallax background.'},magical:{file:'magical-road.webp',credit:'Magical Road by Luis Zuno (ansimuz) · CC0. Adapted as a framed, 60-second parallax loop.'},urban:{file:'urban-landscape.webp',credit:'Urban Landscape by Luis Zuno (ansimuz) · CC0. Adapted as a skyline-framed, 60-second parallax loop.'}};
 // A single color matrix remaps luminance, without blur or extra artwork layers.
 function updateBackgroundPalette(){
  const style=getComputedStyle(document.body),parse=name=>{const hex=style.getPropertyValue(name).trim().replace('#','');return [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)/255);};
@@ -11,8 +12,8 @@ function setBackgroundColor(value){backgroundColor=['muted','palette'].includes(
 let backgroundColor='original',backgroundDim=60,backgroundInfo={url:'',name:''},backgroundActive=true;
 function setBackgroundDim(value){backgroundDim=Math.max(0,Math.min(100,Number.isFinite(Number(value))?Number(value):60));$('#background-dim').value=backgroundDim;$('#background-dim-value').textContent=backgroundDim+'%';$('#custom-backdrop').style.opacity=String(1-backgroundDim/100);persist();}
 function syncCustomBackground(){
- const image=$('#custom-backdrop'),url=backdrop==='mountain'?'backgrounds/mountain-dusk.webp':backdrop==='custom'?backgroundInfo.url:'',enabled=!!url&&backgroundActive&&!document.hidden;
- $('#custom-background-controls').hidden=!['custom','mountain'].includes(backdrop);$('#custom-background-file').hidden=backdrop!=='custom';$('#mountain-credit').hidden=backdrop!=='mountain';$('#background-file-name').textContent=backgroundInfo.name||'No image selected';$('#background-remove').disabled=!backgroundInfo.url;
+ const builtIn=builtinBackgrounds[backdrop],image=$('#custom-backdrop'),url=builtIn?'backgrounds/'+builtIn.file:backdrop==='custom'?backgroundInfo.url:'',enabled=!!url&&backgroundActive&&!document.hidden;
+ $('#custom-background-controls').hidden=!(builtIn||backdrop==='custom');$('#custom-background-file').hidden=backdrop!=='custom';$('#mountain-credit').hidden=!builtIn;$('#mountain-credit').textContent=builtIn?.credit||'';$('#background-file-name').textContent=backgroundInfo.name||'No image selected';$('#background-remove').disabled=!backgroundInfo.url;
  image.hidden=!enabled;
  if(enabled){if(image.getAttribute('src')!==url)image.src=url;}
  else image.removeAttribute('src');
