@@ -21,6 +21,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 ## Features
 
 - **Five presentation themes:** Alexandria, Kyoto, Cupertino, Tokyo, and Seattle.
+- **Cupertino appearance controls:** Off, Subtle, or Classic reflections and Compact or Airy cover spacing, with a live settings preview.
 - **Categories, search, and sorting** for navigating large collections.
 - **Favorites and recently played games**, with sampled category shelves in Seattle.
 - **Touch and controller navigation**, including fast scrolling and page controls.

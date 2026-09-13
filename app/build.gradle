@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 android {
  namespace 'com.portal.library'
  compileSdk 35
- defaultConfig { applicationId 'com.portal.library'; minSdk 26; targetSdk 35; versionCode 41; versionName '0.9.8' }
+ defaultConfig { applicationId 'com.portal.library'; minSdk 26; targetSdk 35; versionCode 42; versionName '0.9.9' }
  buildFeatures { buildConfig true }
  buildTypes { release { minifyEnabled false; signingConfig signingConfigs.debug } }
  compileOptions { sourceCompatibility JavaVersion.VERSION_11; targetCompatibility JavaVersion.VERSION_11 }

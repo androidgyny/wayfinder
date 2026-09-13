@@ -1,5 +1,5 @@
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
-let typography='computer',coverGlow=true;
+let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy';
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
 function setTypography(value){typography=['computer','editorial','clean'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').checked=coverGlow;queueCoverGlow();persist();}
@@ -32,10 +32,32 @@ function updateCoverGlow(){
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
 }
 function initAppearance(value){
- setTypography(value.typography);setCoverGlow(value.coverGlow);
+ setTypography(value.typography);setCoverGlow(value.coverGlow);setCupertinoOptions(value.cupertinoReflections,value.cupertinoSpacing);
+ $('#cupertino-reflections').onchange=$('#cupertino-spacing').onchange=()=>{setCupertinoOptions($('#cupertino-reflections').value,$('#cupertino-spacing').value);effect('select')};
+ new MutationObserver(refreshCupertinoControls).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
  $('#typography').onchange=e=>{setTypography(e.target.value);effect('select')};$('#cover-glow').onchange=e=>setCoverGlow(e.target.checked);
  const grid=$('#grid');new MutationObserver(queueCoverGlow).observe(grid,{childList:true,subtree:true,attributes:true,attributeFilter:['class','src']});
  grid.addEventListener('load',queueCoverGlow,true);grid.addEventListener('focusin',queueCoverGlow);
  grid.addEventListener('pointerover',e=>{if(e.pointerType==='mouse'){hoverGlowCard=e.target.closest('.game');queueCoverGlow();}});
  grid.addEventListener('pointerleave',()=>{hoverGlowCard=null;queueCoverGlow();});
+}
+
+function cupertinoPitch(){return cupertinoSpacing==='airy'?.82:.63;}
+function cupertinoGap(){return cupertinoSpacing==='airy'?64:42;}
+function setCupertinoOptions(reflections,spacing){
+ stopCarouselMotion();cupertinoReflections=['off','subtle','classic'].includes(reflections)?reflections:'subtle';cupertinoSpacing=spacing==='compact'?'compact':'airy';
+ document.body.dataset.cupertinoReflections=cupertinoReflections;document.body.dataset.cupertinoSpacing=cupertinoSpacing;
+ document.body.style.setProperty('--cupertino-pitch',cupertinoPitch());document.body.style.setProperty('--cupertino-gap',cupertinoGap()+'px');
+ $('#cupertino-reflections').value=cupertinoReflections;$('#cupertino-spacing').value=cupertinoSpacing;refreshCupertinoControls();persist();
+}
+function refreshCupertinoControls(){
+ const section=$('#cupertino-options');section.hidden=presentation!=='cupertino';if(section.hidden||!$('#settings-dialog').open)return;
+ const preview=$('#cupertino-preview'),index=Math.max(0,filtered.findIndex(g=>g.id===presentationId));
+ preview.replaceChildren();
+ for(let offset=-2;offset<=2;offset++){
+  const g=filtered[index+offset];const tile=el('div','cupertino-preview-tile');tile.style.setProperty('--preview-offset',offset);tile.style.setProperty('--preview-side',Math.sign(offset));tile.style.setProperty('--preview-distance',Math.abs(offset));tile.style.zIndex=3-Math.abs(offset);
+  if(g){const img=el('img');img.src=g.image;img.alt='';tile.append(img);}else tile.classList.add('preview-placeholder');
+  if(!offset)tile.classList.add('preview-selected');preview.append(tile);
+ }
+ $('#cupertino-preview-caption').textContent=filtered[index]?.title||'Preview · add games to see your covers here';
 }
