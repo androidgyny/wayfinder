@@ -1,0 +1,9 @@
+Soft Terminal interface sounds
+
+back.ogg, select.ogg, page.ogg: original synthesized sounds created for Wayfinder. Dedicated to the public domain under CC0 1.0 Universal. Reproducible source: audio-source/soft-terminal/generate.py.
+
+move.ogg = tick_001.ogg
+launch.ogg = confirmation_001.ogg
+These two unchanged sounds are from Interface Sounds by Kenney (Kenney.nl), CC0 1.0 Universal.
+https://kenney.nl/assets/interface-sounds
+https://creativecommons.org/publicdomain/zero/1.0/
