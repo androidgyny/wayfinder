@@ -1,9 +1,10 @@
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
+let backdrop='flat',selectionStyle='outline';
 let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy',berlinCoverSize=120,kyotoTitlePlacement='above',cupertinoTitlePlacement='above';
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
 function setTypography(value){typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').checked=coverGlow;queueCoverGlow();persist();}
-function queueCoverGlow(){clearTimeout(glowTimer);if(coverGlow)glowTimer=setTimeout(updateCoverGlow,100);}
+function queueCoverGlow(){clearTimeout(glowTimer);glowTimer=setTimeout(updateCoverGlow,100);}
 function coverColor(img){
  const key=img.currentSrc||img.src;if(glowColors.has(key))return glowColors.get(key);
  if(!img.complete||!img.naturalWidth)return null;
@@ -20,18 +21,27 @@ function coverColor(img){
  }catch{return null;}
 }
 function updateCoverGlow(){
- if(!coverGlow)return;
  const grid=$('#grid');if(grid.classList.contains('fluid-motion'))return;
  const carousel=['kyoto','cupertino','tokyo','vienna','oxford','berlin'].includes(presentation);
  const selected=carousel?grid.querySelector('.presentation-selected'):(hoverGlowCard?.isConnected?hoverGlowCard:document.activeElement?.closest('#grid .game')||grid.querySelector('.controller-selected')||grid.querySelector('.game'));
  if(glowCard!==selected){glowCard?.classList.remove('glow-selected');glowCard=selected;if(selected)selected.classList.add('glow-selected');}
  const preview=$('#tokyo-art');const img=presentation==='oxford'?preview:selected?.querySelector('.cover img');
  const color=img?coverColor(img):null;
+ document.body.style.setProperty('--backdrop-rgb',color||'128,128,128');
+ const sample=$('#appearance-preview img');if(img&&sample.getAttribute('src')!==img.getAttribute('src'))sample.src=img.src;sample.hidden=!img;
+ $('#appearance-preview').style.setProperty('--cover-glow-rgb',color||'150,160,150');
  if(selected){if(color)selected.style.setProperty('--cover-glow-rgb',color);else selected.style.removeProperty('--cover-glow-rgb');}
  preview.classList.toggle('glow-selected',(presentation==='tokyo'||presentation==='oxford')&&!!selected);
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
 }
+function setAtmosphere(background,selection){
+ backdrop=background==='gradient'?'gradient':'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
+ document.body.dataset.backdrop=backdrop;document.body.dataset.selectionStyle=selectionStyle;
+ $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;queueCoverGlow();persist();
+}
 function initAppearance(value){
+ setAtmosphere(value.backdrop,value.selectionStyle);
+ $('#backdrop').onchange=$('#selection-style').onchange=()=>{setAtmosphere($('#backdrop').value,$('#selection-style').value);effect('select')};
  berlinCoverSize=Math.max(64,Math.min(200,Number(value.berlinCoverSize)||120));kyotoTitlePlacement=value.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=value.cupertinoTitlePlacement==='below'?'below':'above';
  refreshLayoutControls();
  $('#berlin-cover-size').oninput=e=>setBerlinCoverSize(e.target.value);
