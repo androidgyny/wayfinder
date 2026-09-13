@@ -411,3 +411,6 @@ body[data-presentation=kyoto] #grid .game:is(:focus,:focus-visible,.controller-s
 #settings-dialog .settings-subheading{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin:26px 0 2px}
 #settings-dialog .settings-group>.settings-row:last-child{border-bottom:0}
 #settings-appearance #preset-options{margin:0 0 20px}
+
+body[data-background-color=muted] #custom-backdrop{filter:saturate(.25)}
+body[data-background-color=palette] #custom-backdrop{filter:url(#background-palette-filter)}

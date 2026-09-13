@@ -1,5 +1,14 @@
+// A single color matrix remaps luminance, without blur or extra artwork layers.
+function updateBackgroundPalette(){
+ const style=getComputedStyle(document.body),parse=name=>{const hex=style.getPropertyValue(name).trim().replace('#','');return [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)/255);};
+ let low=parse('--bg'),high=parse('--accent');const luma=c=>c[0]*.2126+c[1]*.7152+c[2]*.0722;
+ if(luma(low)>luma(high))[low,high]=[high,low];
+ const matrix=low.flatMap((v,i)=>{const delta=high[i]-v;return [.2126*delta,.7152*delta,.0722*delta,0,v];});
+ matrix.push(0,0,0,1,0);$('#background-palette-matrix').setAttribute('values',matrix.join(' '));
+}
+function setBackgroundColor(value){backgroundColor=['muted','palette'].includes(value)?value:'original';document.body.dataset.backgroundColor=backgroundColor;$('#background-color').value=backgroundColor;updateBackgroundPalette();persist();}
 // One stationary image layer; never rebuild it when the selected game changes.
-let backgroundDim=60,backgroundInfo={url:'',name:''},backgroundActive=true;
+let backgroundColor='original',backgroundDim=60,backgroundInfo={url:'',name:''},backgroundActive=true;
 function setBackgroundDim(value){backgroundDim=Math.max(0,Math.min(100,Number.isFinite(Number(value))?Number(value):60));$('#background-dim').value=backgroundDim;$('#background-dim-value').textContent=backgroundDim+'%';$('#custom-backdrop').style.opacity=String(1-backgroundDim/100);persist();}
 function syncCustomBackground(){
  const image=$('#custom-backdrop'),url=backdrop==='mountain'?'backgrounds/mountain-dusk.webp':backdrop==='custom'?backgroundInfo.url:'',enabled=!!url&&backgroundActive&&!document.hidden;
@@ -10,9 +19,10 @@ function syncCustomBackground(){
 }
 function refreshCustomBackground(){try{backgroundInfo=native?.backgroundSettings?JSON.parse(native.backgroundSettings()):{url:'',name:''}}catch{backgroundInfo={url:'',name:''}}syncCustomBackground();}
 function initCustomBackground(value){
- setBackgroundDim(value.backgroundDim??60);refreshCustomBackground();
+ setBackgroundColor(value.backgroundColor);setBackgroundDim(value.backgroundDim??60);refreshCustomBackground();
  $('#background-choose').onclick=()=>{if(native?.chooseBackground)native.chooseBackground();else toast('Choose a background in the Android app')};
  $('#background-remove').onclick=()=>native?.clearBackground?.();
+ $('#background-color').onchange=e=>{setBackgroundColor(e.target.value);effect('select')};
  $('#background-dim').oninput=e=>setBackgroundDim(e.target.value);
  $('#custom-backdrop').onerror=()=>{$('#custom-backdrop').hidden=true;toast('Could not display this background. Choose a different image.');};
  document.addEventListener('visibilitychange',syncCustomBackground);
