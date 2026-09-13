@@ -1,4 +1,4 @@
-package com.portal.library;
+package com.androidgyny.wayfinder;
 
 import android.content.Context;
 import android.graphics.*;
