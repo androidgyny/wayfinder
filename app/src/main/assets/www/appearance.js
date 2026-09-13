@@ -1,4 +1,5 @@
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
+let viennaSeparators='lines';
 let backdrop='flat',selectionStyle='outline';
 let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy',berlinCoverSize=120,kyotoTitlePlacement='above',cupertinoTitlePlacement='above';
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
@@ -39,7 +40,9 @@ function setAtmosphere(background,selection){
  document.body.dataset.backdrop=backdrop;document.body.dataset.selectionStyle=selectionStyle;
  $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;queueCoverGlow();persist();
 }
+function setViennaSeparators(value){viennaSeparators=value==='space'?'space':'lines';document.body.dataset.viennaSeparators=viennaSeparators;$('#vienna-separators').value=viennaSeparators;persist();}
 function initAppearance(value){
+ setViennaSeparators(value.viennaSeparators);$('#vienna-separators').onchange=e=>{setViennaSeparators(e.target.value);effect('select')};
  setAtmosphere(value.backdrop,value.selectionStyle);
  $('#backdrop').onchange=$('#selection-style').onchange=()=>{setAtmosphere($('#backdrop').value,$('#selection-style').value);effect('select')};
  berlinCoverSize=Math.max(64,Math.min(200,Number(value.berlinCoverSize)||120));kyotoTitlePlacement=value.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=value.cupertinoTitlePlacement==='below'?'below':'above';
@@ -78,6 +81,7 @@ function refreshCupertinoControls(){
 }
 
 function refreshLayoutControls(){
+ $('#vienna-options').hidden=presentation!=='vienna';
  const carousel=presentation==='kyoto'||presentation==='cupertino';
  $('#title-placement-options').hidden=!carousel;$('#berlin-options').hidden=presentation!=='berlin';
  const placement=presentation==='kyoto'?kyotoTitlePlacement:cupertinoTitlePlacement;

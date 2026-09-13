@@ -373,3 +373,6 @@ body[data-selection-style=underline] #grid.fluid-motion .game .cover::before{dis
 body{--optional-halo:0 0 0 0 transparent}
 body[data-cover-glow=true] :is(.cover,#tokyo-art,.appearance-sample){--optional-halo:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
 body:not([data-selection-style=glow]) .appearance-sample{box-shadow:var(--optional-halo)}
+
+#vienna-options[hidden]{display:none}
+body[data-presentation=vienna][data-vienna-separators=space] .vienna-section{border-bottom-color:transparent}
