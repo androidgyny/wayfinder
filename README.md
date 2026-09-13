@@ -106,6 +106,6 @@ On Windows, use `gradlew.bat assembleDebug`. The APK is written to `app/build/ou
 
 Fresh installations start with an empty library. The collection shown in the screenshot is an example; its games and cover files are not bundled.
 
-The Android application ID is `com.androidgyny.wayfinder`. This is a separate Android installation from older versions using `com.portal.library`; back up your library before migrating. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
+The Android application ID is `com.androidgyny.wayfinder`. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
 
 Typography uses Inter (Clean), Lora (Editorial), IBM Plex Mono (Computer), Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans under the SIL Open Font License. Notices are included in `app/src/main/assets/www/fonts/`.
