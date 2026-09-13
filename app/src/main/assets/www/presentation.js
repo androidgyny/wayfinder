@@ -7,7 +7,7 @@ function presentationPageSize(){return Math.max(12,Math.ceil(filtered.length/10)
 function sizePresentation(){
  if(presentation==='library'||presentation==='seattle')return;
  const height=$('#grid').clientHeight;
- const width=Math.max(32,Math.floor(Math.min(innerWidth*.38,(height-(presentation==='cupertino'?60:34))/1.5)));
+ const width=Math.max(32,Math.floor(Math.min(innerWidth*.38,(height-(presentation==='cupertino'?84:34))/1.5)));
  $('#grid').style.setProperty('--tile',width+'px');
 }
 function setPresentation(value){

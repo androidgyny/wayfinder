@@ -211,7 +211,7 @@ body[data-typography] :is(h1,h2,.game-title,#category-strip button,.seattle-shel
 body[data-typography=computer] :is(h1,h2,.game-title,#category-strip button){font-weight:400;letter-spacing:-.025em}
 body[data-typography=editorial] :is(h1,h2,.game-title,#category-strip button){letter-spacing:0}
 /* One static shadow on the selection; no duplicate artwork or full-screen filter. */
-body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 0 20px 4px rgba(var(--cover-glow-rgb,150,160,150),.30),0 0 38px 8px rgba(var(--cover-glow-rgb,150,160,150),.13)}
+body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
 body[data-presentation=tokyo][data-cover-glow=true] .game.glow-selected .cover{box-shadow:none}
 #grid.fluid-motion .game.glow-selected .cover{box-shadow:none}
 
@@ -241,3 +241,10 @@ body[data-palette="seaglass"]{--bg:#091917;--panel:#102823;--field:#17352e;--hov
 body[data-palette="terracotta"]{--bg:#1b1010;--panel:#2a1b19;--field:#352320;--hover:#4b322b;--line:#6a4940;--muted:#c7a89a;--accent:#edaa87;--text:#fff0e6;--accent-soft:#563326;--accent-ink:#28130b;--glow:#edaa8755;}
 body[data-palette="graphite"]{--bg:#131415;--panel:#1d1f21;--field:#25282b;--hover:#33373b;--line:#4c5258;--muted:#a7adb3;--accent:#d4dbe2;--text:#f0f2f4;--accent-soft:#363d44;--accent-ink:#181d22;--glow:#d4dbe255;}
 body[data-palette=parchment] .danger{background:#f0d8d3;color:#742d25;border-color:#bb8276}
+
+/* Leave room for the selected cover's perspective, outline, and ambient glow. */
+body[data-presentation=cupertino] #grid .game{top:28px}
+body[data-presentation=cupertino] #grid .game:focus{outline:none}
+body[data-presentation=cupertino] #grid .presentation-selected .cover{outline:2px solid var(--accent);outline-offset:3px}
+
+body[data-presentation=cupertino] #grid{overflow:visible;clip-path:inset(-24px 0 0)}
