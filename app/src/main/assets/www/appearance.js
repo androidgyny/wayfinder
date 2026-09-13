@@ -4,7 +4,17 @@ let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertino
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
 function setTypography(value){typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').value=coverGlow?'subtle':'off';queueCoverGlow();persist();}
-function queueCoverGlow(){clearTimeout(glowTimer);glowTimer=setTimeout(updateCoverGlow,100);}
+function queueCoverGlow(){
+ clearTimeout(glowTimer);const halo=$('#cover-halo-layer');if(halo)halo.style.opacity='0';
+ glowTimer=setTimeout(updateCoverGlow,180);
+}
+function renderCoverHalo(target,color){
+ const halo=$('#cover-halo-layer');if(!halo)return;
+ if(!coverGlow||!target||document.hidden){halo.style.opacity='0';return;}
+ const r=target.getBoundingClientRect();if(!r.width||!r.height||r.bottom<0||r.top>innerHeight){halo.style.opacity='0';return;}
+ // Stretch a tiny pre-blurred mask; only the settled selection needs geometry or tint updates.
+ const pad=36;Object.assign(halo.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px',backgroundColor:'rgb('+(color||'150,160,150')+')',opacity:'1'});
+}
 function coverColor(img){
  const key=img.currentSrc||img.src;if(glowColors.has(key))return glowColors.get(key);
  if(!img.complete||!img.naturalWidth)return null;
@@ -33,6 +43,7 @@ function updateCoverGlow(){
  if(selected){if(color)selected.style.setProperty('--cover-glow-rgb',color);else selected.style.removeProperty('--cover-glow-rgb');}
  preview.classList.toggle('glow-selected',(presentation==='tokyo'||presentation==='oxford')&&!!selected);
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
+ renderCoverHalo((presentation==='tokyo'||presentation==='oxford')?preview:selected?.querySelector('.cover'),color);
 }
 function setAtmosphere(background,selection){
  backdrop=background==='gradient'?'gradient':'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
@@ -40,6 +51,11 @@ function setAtmosphere(background,selection){
  $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;queueCoverGlow();persist();
 }
 function initAppearance(value){
+ const halo=el('div');halo.id='cover-halo-layer';halo.setAttribute('aria-hidden','true');document.body.append(halo);
+ document.addEventListener('scroll',queueCoverGlow,{capture:true,passive:true});
+ $('#grid').addEventListener('touchmove',queueCoverGlow,{passive:true});
+ window.addEventListener('resize',queueCoverGlow);document.addEventListener('visibilitychange',queueCoverGlow);
+
  setAtmosphere(value.backdrop,value.selectionStyle);
  $('#backdrop').onchange=$('#selection-style').onchange=()=>{setAtmosphere($('#backdrop').value,$('#selection-style').value);effect('select')};
  berlinCoverSize=Math.max(64,Math.min(200,Number(value.berlinCoverSize)||120));kyotoTitlePlacement=value.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=value.cupertinoTitlePlacement==='below'?'below':'above';

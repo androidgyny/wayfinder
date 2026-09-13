@@ -211,7 +211,7 @@ body[data-typography] :is(h1,h2,.game-title,#category-strip button,.seattle-shel
 body[data-typography=computer] :is(h1,h2,.game-title,#category-strip button){font-weight:400;letter-spacing:-.025em}
 body[data-typography=editorial] :is(h1,h2,.game-title,#category-strip button){letter-spacing:0}
 /* One static shadow on the selection; no duplicate artwork or full-screen filter. */
-body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
+body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 8px 20px #0002}
 body[data-presentation=tokyo][data-cover-glow=true] .game.glow-selected .cover{box-shadow:none}
 #grid.fluid-motion .game.glow-selected .cover{box-shadow:none}
 
@@ -364,12 +364,12 @@ body[data-selection-style=underline] .appearance-sample::after{content:'';positi
 body[data-selection-style=underline]:is([data-presentation=tokyo],[data-presentation=oxford]) #grid .game.presentation-selected{box-shadow:inset 0 -3px var(--accent)}
 body[data-selection-style=glow] #grid .game:is(.presentation-selected,.controller-selected,:focus-visible) .cover,
 body[data-selection-style=glow] .appearance-sample,
-body[data-selection-style=glow] #tokyo-art.glow-selected{box-shadow:0 0 5px 2px var(--accent),var(--optional-halo)}
+body[data-selection-style=glow] #tokyo-art.glow-selected{box-shadow:0 0 5px 2px var(--accent)}
 body[data-selection-style=glow]:is([data-presentation=tokyo],[data-presentation=oxford]) #grid .game.presentation-selected{box-shadow:inset 0 0 8px var(--accent)}
 body:is([data-selection-style=underline],[data-selection-style=glow]) #grid.fluid-motion .game .cover{box-shadow:none}
 body[data-selection-style=underline] #grid.fluid-motion .game .cover::before{display:none}
 
-/* Halo remains independently optional, including with the Glow marker. */
-body{--optional-halo:0 0 0 0 transparent}
-body[data-cover-glow=true] :is(.cover,#tokyo-art,.appearance-sample){--optional-halo:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
-body:not([data-selection-style=glow]) .appearance-sample{box-shadow:var(--optional-halo)}
+/* Reusable pre-blurred mask: no broad live shadows on moving covers. */
+#cover-halo-layer{position:fixed;z-index:-1;pointer-events:none;opacity:0;-webkit-mask-box-image:url(cover-halo.png) 36 fill stretch;-webkit-mask-box-image-width:36px;will-change:opacity}
+.appearance-sample{isolation:isolate}
+body[data-cover-glow=true] .appearance-sample::before{content:'';position:absolute;inset:-25px;z-index:-1;pointer-events:none;background:rgb(var(--cover-glow-rgb,150,160,150));-webkit-mask-box-image:url(cover-halo.png) 36 fill stretch;-webkit-mask-box-image-width:36px}
