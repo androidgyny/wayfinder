@@ -19,12 +19,11 @@ function renderVienna(){
    row.addEventListener('scroll',()=>{if(performance.now()<(row.viennaIgnoreUntil||0))return;clearTimeout(viennaScrollTimer);viennaScrollTimer=setTimeout(()=>{if(presentation!=='vienna'||!row.isConnected)return;const x=row.getBoundingClientRect().left+36;let best=null,distance=Infinity;for(const b of row.querySelectorAll('.game')){const d=Math.abs(b.getBoundingClientRect().left-x);if(d<distance){distance=d;best=b}}if(best)viennaSelect(best.dataset.id,false,false);},160)},{passive:true});
   }else{
    const preview=el('button','vienna-preview');preview.setAttribute('aria-label','Browse '+shelf.label);preview.tabIndex=-1;preview.onclick=()=>viennaOpen(shelf.key,true);
-   for(const g of shelf.items.slice(0,8)){const im=el('img');im.src=g.image;im.alt='';im.loading='lazy';preview.append(im)}
    if(!shelf.items.length)preview.append(el('span','','Add your favorite games here'));section.append(preview);
   }
   fragment.append(section);
  }
- $('#grid').replaceChildren(fragment);$('#load').hidden=true;$('#empty').hidden=true;
+ $('#grid').replaceChildren(fragment);refreshViennaPreviews();$('#load').hidden=true;$('#empty').hidden=true;
  const selected=$('#grid .presentation-selected'),row=selected?.parentElement;
  if(selected&&row){row.viennaIgnoreUntil=performance.now()+250;row.scrollLeft=Math.max(0,selected.offsetLeft-36);}
  queueCoverGlow();
@@ -59,3 +58,16 @@ function viennaController(action){
  }
  return false;
 }
+
+function refreshViennaPreviews(){
+ if(presentation!=='vienna')return;
+ for(const preview of document.querySelectorAll('.vienna-preview')){
+  const shelf=viennaShelves.find(s=>s.key===preview.closest('.vienna-section').dataset.shelf);if(!shelf?.items.length)continue;
+  const style=getComputedStyle(preview),gap=parseFloat(style.columnGap)||0;
+  const width=preview.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
+  const count=Math.min(shelf.items.length,Math.max(0,Math.floor((width+gap)/(28+gap))));
+  if(preview.children.length===count)continue;
+  preview.replaceChildren(...shelf.items.slice(0,count).map(g=>{const im=el('img');im.src=g.image;im.alt='';im.loading='lazy';return im}));
+ }
+}
+window.addEventListener('resize',refreshViennaPreviews);
