@@ -32,7 +32,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **An integrated artwork picker:** retrieve images from Google Play, open Google Images or SteamGridDB searches, or choose a local image.
 - **Artwork fitting and cropping**, with options to fit or fill game tiles.
 - **Eleven color schemes**, including bright green and pink, warm Parchment, Midnight Blue, Sea Glass, Terracotta, and Graphite.
-- **Computer, Editorial, and Clean typography**, with fonts included for offline use.
+- **Eight typography choices:** Computer, Editorial, Clean, Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans, all included for offline use.
 - **An optional soft glow** sampled from the selected cover.
 - **Optional interface sounds and background audio** from a user-selected file.
 - **An optional startup video**, with support for a custom replacement.
@@ -108,4 +108,4 @@ Fresh installations start with an empty library. The collection shown in the scr
 
 The Android application ID remains `com.portal.library` for compatibility with earlier Wayfinder installations. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
 
-Typography uses Inter, Lora, and IBM Plex Mono under the SIL Open Font License. Notices are included in `app/src/main/assets/www/fonts/`.
+Typography uses Inter (Clean), Lora (Editorial), IBM Plex Mono (Computer), Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans under the SIL Open Font License. Notices are included in `app/src/main/assets/www/fonts/`.
