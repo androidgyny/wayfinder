@@ -10,14 +10,6 @@ Wayfinder makes a substantial library of Android games easy to browse with a tou
 
 It is designed specifically for **launching Android games**. It is not intended as a general-purpose retro-gaming frontend, emulator manager, or ROM organizer.
 
-![Wayfinder in the Cupertino presentation theme with the Amber Terminal color scheme, browsing Story adventures with Night in the Woods selected.](docs/screenshots/wayfinder-cupertino.png)
-
-*Cupertino presentation theme · Amber Terminal color scheme.*
-
-![Wayfinder in the Vienna presentation theme, with Simulation & sandbox expanded, Junk Jack selected, and compact SHMUPS and Sports shelves above and below.](docs/screenshots/wayfinder-vienna.png)
-
-*Vienna presentation theme · Expandable category shelves.*
-
 ## Design philosophy
 
 Wayfinder aims to be aesthetically pleasing without becoming elaborate.
@@ -84,6 +76,38 @@ Adding a library entry does not install the game. Games must already be installe
 | Right stick click | Toggle favorite |
 | Start | Open settings |
 
+## Appearance gallery
+
+The same library, shown with different presentation themes, color schemes, and typography. These screenshots show an example collection; games and personal cover artwork are not bundled.
+
+### Cupertino · Midnight Blue · Outfit
+
+![Cupertino · Midnight Blue · Outfit. Night in the Woods selected in coverflow, with subtle reflections and the title below the covers.](docs/screenshots/wayfinder-cupertino-midnight.png)
+
+### Vienna · Terracotta · Editorial
+
+![Vienna · Terracotta · Editorial. Puzzle platformers expanded with Braid selected, between compact category shelves.](docs/screenshots/wayfinder-vienna-terracotta.png)
+
+### Berlin · Hacker Green · Computer
+
+![Berlin · Hacker Green · Computer. A dense contact sheet of All games, with Gravity Circuit selected.](docs/screenshots/wayfinder-berlin-hacker.png)
+
+### Oxford · Parchment · Editorial
+
+![Oxford · Parchment · Editorial. A title list and large cover preview, with Broken Age selected.](docs/screenshots/wayfinder-oxford-parchment.png)
+
+### Tokyo · Hot Pink · Oxanium
+
+![Tokyo · Hot Pink · Oxanium. Gravity Circuit selected in a vertical list beside its glowing cover.](docs/screenshots/wayfinder-tokyo-pink.png)
+
+### Cupertino · Parchment · Editorial
+
+![Cupertino · Parchment · Editorial. Broken Age selected in a light coverflow layout with subtle reflections.](docs/screenshots/wayfinder-cupertino-parchment.png)
+
+### Kyoto · Sea Glass · Clean
+
+![Kyoto · Sea Glass · Clean. Large game tiles with Braid selected and its title below the covers.](docs/screenshots/wayfinder-kyoto-seaglass.png)
+
 ## Local library, personal artwork
 
 Your library and selected artwork are stored on the device. Browsing does not require an internet connection; retrieving online artwork does.
@@ -108,7 +132,7 @@ Build a debug APK:
 
 On Windows, use `gradlew.bat assembleDebug`. The APK is written to `app/build/outputs/apk/debug/`.
 
-Fresh installations start with an empty library. The collection shown in the screenshot is an example; its games and cover files are not bundled.
+Fresh installations start with an empty library. The collection shown in the screenshots is an example; its games and cover files are not bundled.
 
 The Android application ID is `com.androidgyny.wayfinder`. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
 
