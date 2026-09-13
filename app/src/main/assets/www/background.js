@@ -2,10 +2,10 @@
 let backgroundDim=60,backgroundInfo={url:'',name:''},backgroundActive=true;
 function setBackgroundDim(value){backgroundDim=Math.max(0,Math.min(100,Number.isFinite(Number(value))?Number(value):60));$('#background-dim').value=backgroundDim;$('#background-dim-value').textContent=backgroundDim+'%';$('#custom-backdrop').style.opacity=String(1-backgroundDim/100);persist();}
 function syncCustomBackground(){
- const image=$('#custom-backdrop'),enabled=backdrop==='custom'&&!!backgroundInfo.url&&backgroundActive&&!document.hidden;
- $('#custom-background-controls').hidden=backdrop!=='custom';$('#background-file-name').textContent=backgroundInfo.name||'No image selected';$('#background-remove').disabled=!backgroundInfo.url;
+ const image=$('#custom-backdrop'),url=backdrop==='mountain'?'backgrounds/mountain-dusk.webp':backdrop==='custom'?backgroundInfo.url:'',enabled=!!url&&backgroundActive&&!document.hidden;
+ $('#custom-background-controls').hidden=!['custom','mountain'].includes(backdrop);$('#custom-background-file').hidden=backdrop!=='custom';$('#mountain-credit').hidden=backdrop!=='mountain';$('#background-file-name').textContent=backgroundInfo.name||'No image selected';$('#background-remove').disabled=!backgroundInfo.url;
  image.hidden=!enabled;
- if(enabled){if(image.getAttribute('src')!==backgroundInfo.url)image.src=backgroundInfo.url;}
+ if(enabled){if(image.getAttribute('src')!==url)image.src=url;}
  else image.removeAttribute('src');
 }
 function refreshCustomBackground(){try{backgroundInfo=native?.backgroundSettings?JSON.parse(native.backgroundSettings()):{url:'',name:''}}catch{backgroundInfo={url:'',name:''}}syncCustomBackground();}

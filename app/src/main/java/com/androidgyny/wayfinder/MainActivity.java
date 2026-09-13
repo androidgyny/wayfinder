@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
                     if(path.startsWith("/art-icon/")){String pkg=path.substring(10);if(!pkg.matches("[a-zA-Z0-9_.]+"))throw new IOException();return response("image/png",icon(pkg,512),200);}
                     if(path.startsWith("/icon/")){String pkg=path.substring(6);if(!pkg.matches("[a-zA-Z0-9_.]+"))throw new IOException();return response("image/png",icon(pkg),200);}
                     String file=path.equals("/")?"www/index.html":"www"+path;
-                    String mime=path.endsWith(".ttf")?"font/ttf":path.endsWith(".js")?"application/javascript":path.endsWith(".css")?"text/css":path.endsWith(".jpg")?"image/jpeg":"text/html";
+                    String mime=path.endsWith(".ttf")?"font/ttf":path.endsWith(".js")?"application/javascript":path.endsWith(".css")?"text/css":path.endsWith(".jpg")?"image/jpeg":path.endsWith(".webp")?"image/webp":"text/html";
                     WebResourceResponse out=new WebResourceResponse(mime,mime.startsWith("image/")?null:"UTF-8",getAssets().open(file));
                     Map<String,String> headers=new HashMap<>();headers.put("Content-Security-Policy","default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'");out.setResponseHeaders(headers);return out;
                 }catch(Exception e){return response("text/plain",new byte[0],404);}
