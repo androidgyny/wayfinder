@@ -64,10 +64,7 @@ html,body{width:100%;height:100%;background:var(--opening-bg,#151719)}
 .stage .screen-frame{padding:9px;transform:translateY(13px)}
 .stage .power{left:20px;top:19px;font-size:9px;gap:9px;letter-spacing:1px}
 .stage .led{width:11px;height:11px;border-width:3px}
-.stage .running.console{opacity:1;animation-delay:-2.4s}
-.running .led,.running .boot-flash,.running .face{animation-delay:-2.4s}
-.running .eye-left{animation-delay:.3s}.running .eye-right{animation-delay:.44s}
-.running .mouth{animation-delay:3.25s}
+.stage .running.console{opacity:1}
 </style>
 </head>
 <body>
@@ -82,18 +79,28 @@ html,body{width:100%;height:100%;background:var(--opening-bg,#151719)}
  </div>
 </div>
 </div></main>
-<audio id="jingle" preload="auto" src="jingle.m4a"></audio>
 <script>
-let started=false,finished=false,finishTimer,loadTimer;
-window.setOpeningBackground=(color,light)=>{document.documentElement.style.setProperty("--opening-bg",color);document.documentElement.style.setProperty("--opening-wash",light?"#ffffff40":"#ffffff08");};
+let started=false,finished=false,context,source,frame,animations=[];
+window.setOpeningBackground=(color,light)=>{document.documentElement.style.setProperty('--opening-bg',color);document.documentElement.style.setProperty('--opening-wash',light?'#ffffff40':'#ffffff08');};
 function fit(){document.documentElement.style.setProperty('--shell-scale',Math.min(innerWidth*.82/850,innerHeight*.78/442.7083));}
 addEventListener('resize',fit);fit();
-function finish(){if(finished)return;finished=true;clearTimeout(finishTimer);clearTimeout(loadTimer);document.getElementById('jingle').pause();window.StartupHost?.complete();}
-function begin(sound){
- if(started||finished)return;started=true;const audio=document.getElementById('jingle');
- const animate=()=>{if(finished)return;document.getElementById('console').classList.add('running');finishTimer=setTimeout(finish,6000);};
- if(sound){audio.play().then(animate,animate);}else animate();
-}
-window.startOpening=sound=>{if(started||finished)return;const audio=document.getElementById('jingle');if(!sound||audio.readyState>=3){begin(sound);return;}audio.addEventListener('canplay',()=>{clearTimeout(loadTimer);begin(sound);},{once:true});loadTimer=setTimeout(()=>begin(false),1500);};
+function finish(){if(finished)return;finished=true;cancelAnimationFrame(frame);if(source){try{source.stop()}catch{}}if(context)context.close();window.StartupHost?.complete();}
+// Match the original video render: every animation samples the same original
+// timeline, beginning at 2400 ms. Sound and motion share the AudioContext clock.
+function showTime(ms){for(const animation of animations)animation.currentTime=2400+ms;}
+window.startOpening=async sound=>{
+ if(started||finished)return;started=true;let buffer;
+ if(sound){try{
+  context=new AudioContext();
+  await Promise.race([(async()=>{await context.resume();const response=await fetch('jingle.m4a');buffer=await context.decodeAudioData(await response.arrayBuffer());})(),new Promise((_,reject)=>setTimeout(()=>reject(Error('Audio preparation timeout')),2500))]);
+ }catch{if(context)context.close();context=null;buffer=null;}}
+ if(finished){if(context)context.close();return;}
+ document.getElementById('console').classList.add('running');
+ animations=document.getAnimations();for(const animation of animations)animation.pause();showTime(0);
+ const audioClock=!!(context&&buffer),start=audioClock?context.currentTime+.06:performance.now()/1000+.06;
+ if(audioClock){source=context.createBufferSource();source.buffer=buffer;source.connect(context.destination);source.start(start);}
+ const tick=()=>{if(finished)return;const ms=Math.max(0,((audioClock?context.currentTime:performance.now()/1000)-start)*1000);showTime(Math.min(ms,6000));if(ms>=6000){finish();return;}frame=requestAnimationFrame(tick);};
+ frame=requestAnimationFrame(tick);
+};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)finish();});
 </script></body></html>
