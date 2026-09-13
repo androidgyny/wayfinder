@@ -334,3 +334,14 @@ body[data-presentation=berlin] :is(#presentation-scrub,#presentation-navigation)
 #edit-image{width:min(100%,206.6667px);height:auto;aspect-ratio:2/3;margin-inline:auto}
 .category-entry{position:relative}
 .category-entry::after{content:'';position:absolute;right:19px;top:50%;width:7px;height:7px;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+
+/* Layout preferences retain the same vertical space for artwork. */
+#title-placement-options[hidden],#berlin-options[hidden]{display:none}
+#berlin-cover-size{width:190px;max-width:45%;accent-color:var(--accent)}
+.density-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:0 0 18px auto;width:190px;max-width:45%}
+body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-placement=below] #presentation-info{position:absolute;left:0;right:0;bottom:70px;height:72px;z-index:10}
+body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-placement=below] #grid{top:48px;bottom:142px}
+@media(max-width:600px){
+ body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-placement=below] #presentation-info{height:112px}
+ body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-placement=below] #grid{bottom:182px}
+}

@@ -1,5 +1,5 @@
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
-let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy';
+let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy',berlinCoverSize=120,kyotoTitlePlacement='above',cupertinoTitlePlacement='above';
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
 function setTypography(value){typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').checked=coverGlow;queueCoverGlow();persist();}
@@ -32,6 +32,10 @@ function updateCoverGlow(){
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
 }
 function initAppearance(value){
+ berlinCoverSize=Math.max(64,Math.min(200,Number(value.berlinCoverSize)||120));kyotoTitlePlacement=value.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=value.cupertinoTitlePlacement==='below'?'below':'above';
+ refreshLayoutControls();
+ $('#berlin-cover-size').oninput=e=>setBerlinCoverSize(e.target.value);
+ $('#title-placement').onchange=e=>{if(presentation==='kyoto')kyotoTitlePlacement=e.target.value;else cupertinoTitlePlacement=e.target.value;refreshLayoutControls();sizePresentation();persist();effect('select')};
  setTypography(value.typography);setCoverGlow(value.coverGlow);setCupertinoOptions(value.cupertinoReflections,value.cupertinoSpacing);
  $('#cupertino-reflections').onchange=$('#cupertino-spacing').onchange=()=>{setCupertinoOptions($('#cupertino-reflections').value,$('#cupertino-spacing').value);effect('select')};
  new MutationObserver(refreshCupertinoControls).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
@@ -51,6 +55,7 @@ function setCupertinoOptions(reflections,spacing){
  $('#cupertino-reflections').value=cupertinoReflections;$('#cupertino-spacing').value=cupertinoSpacing;refreshCupertinoControls();persist();
 }
 function refreshCupertinoControls(){
+ refreshLayoutControls();
  const section=$('#cupertino-options');section.hidden=presentation!=='cupertino';if(section.hidden||!$('#settings-dialog').open)return;
  const preview=$('#cupertino-preview'),index=Math.max(0,filtered.findIndex(g=>g.id===presentationId));
  preview.replaceChildren();
@@ -60,4 +65,16 @@ function refreshCupertinoControls(){
   if(!offset)tile.classList.add('preview-selected');preview.append(tile);
  }
  $('#cupertino-preview-caption').textContent=filtered[index]?.title||'Preview · add games to see your covers here';
+}
+
+function refreshLayoutControls(){
+ const carousel=presentation==='kyoto'||presentation==='cupertino';
+ $('#title-placement-options').hidden=!carousel;$('#berlin-options').hidden=presentation!=='berlin';
+ const placement=presentation==='kyoto'?kyotoTitlePlacement:cupertinoTitlePlacement;
+ document.body.dataset.titlePlacement=carousel?placement:'above';$('#title-placement').value=placement;
+ $('#berlin-cover-size').value=berlinCoverSize;
+}
+function setBerlinCoverSize(value,save=true){
+ berlinCoverSize=Math.max(64,Math.min(200,Number(value)||120));$('#berlin-cover-size').value=berlinCoverSize;
+ if(presentation==='berlin')renderBerlin();if(save)persist();
 }
