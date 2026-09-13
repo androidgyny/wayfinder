@@ -400,3 +400,6 @@ body[data-cover-brightness=even] .cupertino-preview-tile:not(.preview-placeholde
 .background-dimmer input{width:150px;accent-color:var(--accent)}
 .background-dimmer output{min-width:4ch;color:var(--muted);text-align:right}
 #background-file-name{overflow-wrap:anywhere}
+
+/* Kyoto marks the cover itself; the enclosing button must not add a second ring. */
+body[data-presentation=kyoto] #grid .game:is(:focus,:focus-visible,.controller-selected){outline:none}
