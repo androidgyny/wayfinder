@@ -1,4 +1,4 @@
-# Wayfinder
+# <img src="docs/branding/wayfinder-icon.png" width="64" height="64" alt=""> Wayfinder
 
 **A minimal, visually focused launcher for large Android game collections.**
 
