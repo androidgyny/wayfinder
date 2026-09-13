@@ -200,3 +200,18 @@ body[data-presentation="cupertino"] #grid.fluid-motion .game{transform:translate
 
 /* Keep category focus rings inside the horizontal scroll viewport. */
 #seattle-categories .seattle-chip:focus-visible,body[data-input="controller"] #seattle-categories .seattle-chip:focus{outline-offset:-3px}
+
+/* Bundled, offline type styles: expressive headings and quiet interface text. */
+@font-face{font-family:WayfinderClean;src:url('fonts/WayfinderClean.ttf') format('truetype');font-weight:100 900;font-display:swap}
+@font-face{font-family:WayfinderEditorial;src:url('fonts/WayfinderEditorial.ttf') format('truetype');font-weight:400 700;font-display:swap}
+@font-face{font-family:WayfinderComputer;src:url('fonts/WayfinderComputer.ttf') format('truetype');font-weight:400;font-display:swap}
+body[data-typography]{font-family:WayfinderClean,sans-serif;--display-font:WayfinderComputer,monospace}
+body[data-typography=editorial]{--display-font:WayfinderEditorial,serif}
+body[data-typography=clean]{--display-font:WayfinderClean,sans-serif}
+body[data-typography] :is(h1,h2,.game-title,#category-strip button,.seattle-shelf-heading h2){font-family:var(--display-font)}
+body[data-typography=computer] :is(h1,h2,.game-title,#category-strip button){font-weight:400;letter-spacing:-.025em}
+body[data-typography=editorial] :is(h1,h2,.game-title,#category-strip button){letter-spacing:0}
+/* One static shadow on the selection; no duplicate artwork or full-screen filter. */
+body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 0 20px 4px rgba(var(--cover-glow-rgb,150,160,150),.30),0 0 38px 8px rgba(var(--cover-glow-rgb,150,160,150),.13)}
+body[data-presentation=tokyo][data-cover-glow=true] .game.glow-selected .cover{box-shadow:none}
+#grid.fluid-motion .game.glow-selected .cover{box-shadow:none}

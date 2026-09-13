@@ -28,6 +28,8 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **An integrated artwork picker:** retrieve images from Google Play, open Google Images or SteamGridDB searches, or choose a local image.
 - **Artwork fitting and cropping**, with options to fit or fill game tiles.
 - **Multiple color schemes**, including bright green and pink.
+- **Computer, Editorial, and Clean typography**, with fonts included for offline use.
+- **An optional soft glow** sampled from the selected cover.
 - **Optional interface sounds and background audio** from a user-selected file.
 - **An optional startup video**, with support for a custom replacement.
 - **An app drawer** for non-game Android apps, with customizable icons and rearrangeable pins.
@@ -101,3 +103,5 @@ On Windows, use `gradlew.bat assembleDebug`. The APK is written to `app/build/ou
 Fresh installations start with an empty library. The collection shown in the screenshot is an example; its games and cover files are not bundled.
 
 The Android application ID remains `com.portal.library` for compatibility with earlier Wayfinder installations. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
+
+Typography uses Inter, Lora, and IBM Plex Mono under the SIL Open Font License. Notices are included in `app/src/main/assets/www/fonts/`.
