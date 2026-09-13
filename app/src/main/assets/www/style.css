@@ -15,7 +15,7 @@ body[data-input="controller"] .game.controller-selected .cover::after{opacity:1;
 .game{scroll-margin-top:108px;scroll-margin-bottom:24px}
 
 body[data-art-fit="cover"] .cover img{object-fit:cover}
-.sound-toggle{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:14px}.sound-toggle input{width:22px;height:22px;accent-color:var(--accent)}#art-fit{background:var(--panel);color:var(--text);border:1px solid #53634d;border-radius:6px;padding:12px;font:inherit}
+.sound-toggle{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:14px}.sound-toggle input{width:22px;height:22px;accent-color:var(--accent)}
 
 
 
@@ -35,7 +35,7 @@ aside{scrollbar-color:var(--line) transparent}.sidebar-label,.genre-label>span,.
 .edit-fields label{color:var(--muted)}.edit-fields input,#app-search{background:var(--bg);color:var(--text);border-color:var(--line)}
 .card-edit{background:var(--field);color:var(--text)}.card-edit:hover{background:var(--hover)}#toast{background:var(--accent);color:var(--accent-ink)}
 #about-dialog p:not(.eyebrow){color:var(--muted)}#about-dialog strong{color:var(--text)}
-#palette,#art-fit{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px;font:inherit;max-width:190px}
+#palette,
 .palette-preview{display:flex;gap:5px;margin-top:10px}.palette-preview i{width:22px;height:14px;border-radius:3px;background:var(--accent)}.palette-preview i:nth-child(2){background:var(--text)}.palette-preview i:nth-child(3){background:var(--hover);border:1px solid var(--line)}
 
 select,.cover::after{color:var(--text)}#result,#active-filter{color:var(--muted)}.primary:hover,.load-button:hover{background:var(--accent);filter:brightness(1.08)}
@@ -45,7 +45,7 @@ body[data-input="controller"] .genre:not(.active):hover,
 body[data-input="touch"] .genre:not(.active):hover{background:transparent;color:var(--text)}
 /* Presentation layouts retain the library's palette and native effects. */
 #category-strip,#presentation-info,#presentation-navigation{display:none}
-#presentation{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px;font:inherit}
+
 body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"]){height:100dvh;overflow:hidden}
 body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
 body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"]) .shell{display:block}
@@ -127,7 +127,7 @@ body[data-presentation="tokyo"] #category-current{letter-spacing:.3px}
 .favorite-badge{position:absolute;left:9px;top:9px;z-index:3;padding:4px 6px;background:var(--field);color:var(--accent);border-radius:4px;font-size:17px;pointer-events:none}
 body[data-presentation="tokyo"] .favorite-badge{left:38px;top:38px;font-size:12px;padding:0 3px}
 body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"]) #presentation-title{padding-right:285px}
-#presentation-sort{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px;font:inherit}
+
 @media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"]) #presentation-title{padding-right:0}}
 /* Seattle dashboard: horizontal shelves in a vertically scrollable collection. */
 #seattle-header,#seattle-categories{display:none}
@@ -215,3 +215,6 @@ body[data-typography=editorial] :is(h1,h2,.game-title,#category-strip button){le
 body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 0 20px 4px rgba(var(--cover-glow-rgb,150,160,150),.30),0 0 38px 8px rgba(var(--cover-glow-rgb,150,160,150),.13)}
 body[data-presentation=tokyo][data-cover-glow=true] .game.glow-selected .cover{box-shadow:none}
 #grid.fluid-motion .game.glow-selected .cover{box-shadow:none}
+
+/* One shared appearance for all settings dropdowns. */
+#settings-dialog .settings-row>select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px;font:inherit;width:190px;max-width:45%;flex-shrink:0}
