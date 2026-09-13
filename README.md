@@ -10,6 +10,10 @@ It is designed specifically for **launching Android games**. It is not intended 
 
 *Cupertino presentation theme · Amber Terminal color scheme.*
 
+![Wayfinder in the Vienna presentation theme, with Simulation & sandbox expanded, Junk Jack selected, and compact SHMUPS and Sports shelves above and below.](docs/screenshots/wayfinder-vienna.png)
+
+*Vienna presentation theme · Expandable category shelves.*
+
 ## Design philosophy
 
 Wayfinder aims to be aesthetically pleasing without becoming elaborate.
