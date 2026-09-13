@@ -28,7 +28,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Editable titles, categories, and cover artwork.**
 - **An integrated artwork picker:** retrieve images from Google Play, open Google Images or SteamGridDB searches, or choose a local image.
 - **Artwork fitting and cropping**, with options to fit or fill game tiles.
-- **Multiple color schemes**, including bright green and pink.
+- **Eleven color schemes**, including bright green and pink, warm Parchment, Midnight Blue, Sea Glass, Terracotta, and Graphite.
 - **Computer, Editorial, and Clean typography**, with fonts included for offline use.
 - **An optional soft glow** sampled from the selected cover.
 - **Optional interface sounds and background audio** from a user-selected file.

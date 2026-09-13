@@ -29,7 +29,7 @@ let draft=null,draftIsNew=false,installedApps=[],toastTimer,restoring=false;
 const defaultImages=new Map(window.GAMES.map(g=>[g.id,g.image.startsWith('art/')?g.image:(/^\d+$/.test(g.id)?'art/'+g.id+'.jpg':'icon/'+g.package)]));
 const native=window.Portal;
 function effect(name){const now=performance.now();if(!soundEnabled||restoring||!native?.sound||(now-lastSoundAt<65&&name!=='launch'))return;lastSoundAt=now;native.sound(name)}
-const palettes=['portal','hacker','pink','amber','cyan','violet'];
+const palettes=['portal','hacker','pink','amber','cyan','violet','parchment','midnight','seaglass','terracotta','graphite'];
 function setPalette(value){palette=palettes.includes(value)?value:'portal';document.body.dataset.palette=palette;$('#palette').value=palette;if(native?.setThemeColor){const rgb=getComputedStyle(document.body).getPropertyValue('--bg').trim();native.setThemeColor(rgb)}persist()}
 function setArtFit(value){artFit=value==='cover'?'cover':'contain';document.body.dataset.artFit=artFit;$('#art-fit').value=artFit;persist()}
 function toast(message){$('#toast').textContent=message;$('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').hidden=true,5000)}
