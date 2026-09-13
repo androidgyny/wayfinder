@@ -403,3 +403,11 @@ body[data-cover-brightness=even] .cupertino-preview-tile:not(.preview-placeholde
 
 /* Kyoto marks the cover itself; the enclosing button must not add a second ring. */
 body[data-presentation=kyoto] #grid .game:is(:focus,:focus-visible,.controller-selected){outline:none}
+
+/* One settings page, with clear groups and lighter appearance subheadings. */
+#settings-dialog>.settings-group{margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+#settings-dialog>.settings-group:first-of-type{margin-top:26px;padding-top:0;border-top:0}
+#settings-dialog .settings-group>h2{font-size:24px;line-height:1.25;margin:0 0 16px;color:var(--text)}
+#settings-dialog .settings-subheading{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin:26px 0 2px}
+#settings-dialog .settings-group>.settings-row:last-child{border-bottom:0}
+#settings-appearance #preset-options{margin:0 0 20px}
