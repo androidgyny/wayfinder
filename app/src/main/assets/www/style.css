@@ -256,3 +256,16 @@ body[data-presentation=kyoto] #grid{overflow:visible;clip-path:inset(-48px 0 -40
 body[data-presentation=seattle] .seattle-shelf{padding:56px 36px 56px;margin:-48px -30px -43px;scroll-padding-inline:36px}
 body[data-presentation=seattle] .seattle-shelf-heading{position:relative;z-index:1}
 @media(max-width:600px){body[data-presentation=seattle] .seattle-shelf{padding-inline:20px;margin-inline:-14px;scroll-padding-inline:20px}}
+
+/* Additional offline heading fonts. */
+@font-face{font-family:SpaceGrotesk;src:url('fonts/SpaceGrotesk.ttf') format('truetype');font-weight:300 700;font-display:swap}
+body[data-typography=spacegrotesk]{--display-font:SpaceGrotesk,sans-serif}
+@font-face{font-family:Outfit;src:url('fonts/Outfit.ttf') format('truetype');font-weight:100 900;font-display:swap}
+body[data-typography=outfit]{--display-font:Outfit,sans-serif}
+@font-face{font-family:Oxanium;src:url('fonts/Oxanium.ttf') format('truetype');font-weight:200 800;font-display:swap}
+body[data-typography=oxanium]{--display-font:Oxanium,sans-serif}
+@font-face{font-family:SpaceMono;src:url('fonts/SpaceMono.ttf') format('truetype');font-weight:400;font-display:swap}
+body[data-typography=spacemono]{--display-font:SpaceMono,sans-serif}
+@font-face{font-family:IBMPlexSans;src:url('fonts/IBMPlexSans.ttf') format('truetype');font-weight:100 700;font-display:swap}
+body[data-typography=ibmplexsans]{--display-font:IBMPlexSans,sans-serif}
+@font-face{font-family:SpaceMono;src:url('fonts/SpaceMono-Bold.ttf') format('truetype');font-weight:700;font-display:swap}

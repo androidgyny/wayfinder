@@ -1,7 +1,7 @@
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
 let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy';
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
-function setTypography(value){typography=['computer','editorial','clean'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
+function setTypography(value){typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').checked=coverGlow;queueCoverGlow();persist();}
 function queueCoverGlow(){clearTimeout(glowTimer);if(coverGlow)glowTimer=setTimeout(updateCoverGlow,100);}
 function coverColor(img){
