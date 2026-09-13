@@ -22,13 +22,13 @@ function coverColor(img){
 function updateCoverGlow(){
  if(!coverGlow)return;
  const grid=$('#grid');if(grid.classList.contains('fluid-motion'))return;
- const carousel=['kyoto','cupertino','tokyo','vienna'].includes(presentation);
+ const carousel=['kyoto','cupertino','tokyo','vienna','oxford'].includes(presentation);
  const selected=carousel?grid.querySelector('.presentation-selected'):(hoverGlowCard?.isConnected?hoverGlowCard:document.activeElement?.closest('#grid .game')||grid.querySelector('.controller-selected')||grid.querySelector('.game'));
  if(glowCard!==selected){glowCard?.classList.remove('glow-selected');glowCard=selected;if(selected)selected.classList.add('glow-selected');}
- const preview=$('#tokyo-art');const img=selected?.querySelector('.cover img');
+ const preview=$('#tokyo-art');const img=presentation==='oxford'?preview:selected?.querySelector('.cover img');
  const color=img?coverColor(img):null;
  if(selected){if(color)selected.style.setProperty('--cover-glow-rgb',color);else selected.style.removeProperty('--cover-glow-rgb');}
- preview.classList.toggle('glow-selected',presentation==='tokyo'&&!!selected);
+ preview.classList.toggle('glow-selected',(presentation==='tokyo'||presentation==='oxford')&&!!selected);
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
 }
 function initAppearance(value){
@@ -37,7 +37,7 @@ function initAppearance(value){
  new MutationObserver(refreshCupertinoControls).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
  $('#typography').onchange=e=>{setTypography(e.target.value);effect('select')};$('#cover-glow').onchange=e=>setCoverGlow(e.target.checked);
  const grid=$('#grid');new MutationObserver(queueCoverGlow).observe(grid,{childList:true,subtree:true,attributes:true,attributeFilter:['class','src']});
- grid.addEventListener('load',queueCoverGlow,true);grid.addEventListener('focusin',queueCoverGlow);
+ $('#tokyo-art').addEventListener('load',queueCoverGlow);grid.addEventListener('load',queueCoverGlow,true);grid.addEventListener('focusin',queueCoverGlow);
  grid.addEventListener('pointerover',e=>{if(e.pointerType==='mouse'){hoverGlowCard=e.target.closest('.game');queueCoverGlow();}});
  grid.addEventListener('pointerleave',()=>{hoverGlowCard=null;queueCoverGlow();});
 }
