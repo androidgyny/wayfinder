@@ -24,7 +24,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 
 ## Features
 
-- **Seven presentation themes:** Alexandria, Kyoto, Cupertino, Tokyo, Seattle, Vienna, and Oxford.
+- **Eight presentation themes:** Alexandria, Kyoto, Cupertino, Tokyo, Seattle, Vienna, Oxford, and Berlin.
 - **Categories, search, and sorting** for navigating large collections.
 - **Favorites and recently played games**, with sampled category shelves in Seattle.
 - **Touch and controller navigation**, including fast scrolling and page controls.

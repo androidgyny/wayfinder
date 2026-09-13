@@ -1,11 +1,11 @@
 // The carousel moves covers with transforms; browser scrolling must not move its stage.
 function resetPresentationScroll(){
- if(presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='oxford')return;
+ if(presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='oxford'||presentation==='berlin')return;
  for(const node of [$('#grid'),$('#main'),$('.shell'),document.scrollingElement]){if(node){node.scrollLeft=0;node.scrollTop=0}}
 }
 function presentationPageSize(){return Math.max(12,Math.ceil(filtered.length/10))}
 function sizePresentation(){
- if(presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='oxford')return;
+ if(presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='oxford'||presentation==='berlin')return;
  const height=$('#grid').clientHeight;
  const width=Math.max(32,Math.floor(Math.min(innerWidth*.38,(height-(presentation==='cupertino'?84:34))/1.5)));
  $('#grid').style.setProperty('--tile',width+'px');
@@ -14,7 +14,7 @@ function setPresentation(value){
  stopCarouselMotion();
  if(value==='vienna'){genre='';favoritesOnly=false;}
  if(value==='seattle'&&presentation!=='seattle'){genre='';favoritesOnly=false;query='';$('#search').value='';seattleBrowse=false;}
- const next=['kyoto','cupertino','tokyo','seattle','vienna','oxford'].includes(value)?value:'library';
+ const next=['kyoto','cupertino','tokyo','seattle','vienna','oxford','berlin'].includes(value)?value:'library';
  // Reuse cards only within a layout; shelf containers belong to Seattle.
  if(next!==presentation)$('#grid').replaceChildren();
  presentation=next;
@@ -30,7 +30,7 @@ function movePresentation(delta,focus=false){
  presentationId=filtered[index].id;renderPresentation();
  if(focus)controllerFocus($('#grid .presentation-selected'));queueCarouselSave();
 }
-function renderPresentation(){if(presentation==='oxford'){renderOxford();return;}if(presentation==='vienna'){renderVienna();return;}if(presentation==='seattle'){renderSeattle();return;}
+function renderPresentation(){if(presentation==='berlin'){renderBerlin();return;}if(presentation==='oxford'){renderOxford();return;}if(presentation==='vienna'){renderVienna();return;}if(presentation==='seattle'){renderSeattle();return;}
  let index=filtered.findIndex(g=>g.id===presentationId);if(index<0)index=0;
  const current=filtered[index];presentationId=current?.id||null;
  const options=sections(),gi=sectionIndex();
@@ -61,6 +61,7 @@ function renderPresentation(){if(presentation==='oxford'){renderOxford();return;
  $('#presentation-prev').disabled=!current||index===0;$('#presentation-next').disabled=!current||index===filtered.length-1;
 }
 function initPresentation(){
+ initBerlin();
  $('#presentation').onchange=e=>{setPresentation(e.target.value);effect('select')};
  $('#category-before').onclick=()=>controller('genrePrev');$('#category-after').onclick=()=>controller('genreNext');$('#category-current').onclick=()=>controller('genreNext');
  $('#presentation-prev').onclick=()=>movePresentation(-1,true);$('#presentation-next').onclick=()=>movePresentation(1,true);

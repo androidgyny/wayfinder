@@ -45,28 +45,28 @@ body[data-input="touch"] .genre:not(.active):hover{background:transparent;color:
 /* Presentation layouts retain the library's palette and native effects. */
 #category-strip,#presentation-info,#presentation-navigation{display:none}
 
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]){height:100dvh;overflow:hidden}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .shell{display:block}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) main{padding:0;height:calc(100dvh - 88px);position:relative;overflow:hidden}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #category-strip{display:flex;align-items:center;justify-content:center;height:64px;border-bottom:1px solid var(--line);gap:24px;padding:0 30px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]){height:100dvh;overflow:hidden}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .shell{display:block}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{padding:0;height:calc(100dvh - 88px);position:relative;overflow:hidden}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{display:flex;align-items:center;justify-content:center;height:64px;border-bottom:1px solid var(--line);gap:24px;padding:0 30px}
 #category-strip button{background:transparent;color:var(--muted);font-size:15px;max-width:28%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px}
 #category-strip #category-current{color:var(--accent);font-size:22px;font-weight:650;max-width:45%;border-bottom:3px solid var(--accent)}
 #category-before::before{content:'‹ ';}#category-after::after{content:' ›';}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-info{display:block;padding:22px 6%;height:145px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{display:block;padding:22px 6%;height:145px}
 #presentation-title{font-size:clamp(23px,3vw,38px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 8px}
 #presentation-info .eyebrow{margin-bottom:7px}#presentation-position{margin:0;color:var(--muted);font-size:13px}
 .presentation-actions{position:absolute;right:6%;top:164px;display:flex;gap:12px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #grid{display:block;position:absolute;left:0;right:0;top:218px;bottom:56px;perspective:1100px;overflow:hidden;touch-action:pan-y;--tile:min(31vh,260px)}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game{position:absolute;width:var(--tile);left:22%;top:12px;transform:translateX(calc(var(--offset) * (var(--tile) + 22px)));transition:transform .22s ease,opacity .22s ease;scroll-margin:0}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{display:block;position:absolute;left:0;right:0;top:218px;bottom:56px;perspective:1100px;overflow:hidden;touch-action:pan-y;--tile:min(31vh,260px)}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{position:absolute;width:var(--tile);left:22%;top:12px;transform:translateX(calc(var(--offset) * (var(--tile) + 22px)));transition:transform .22s ease,opacity .22s ease;scroll-margin:0}
 body[data-presentation="kyoto"] .cover{aspect-ratio:1;border-radius:3px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game-genre{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .presentation-selected .cover{outline:3px solid var(--accent);outline-offset:4px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game:not(.presentation-selected){opacity:.65}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-navigation{display:flex;position:absolute;bottom:12px;left:22px;right:22px;justify-content:space-between;z-index:12;pointer-events:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-genre{display:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-selected .cover{outline:3px solid var(--accent);outline-offset:4px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game:not(.presentation-selected){opacity:.65}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-navigation{display:flex;position:absolute;bottom:12px;left:22px;right:22px;justify-content:space-between;z-index:12;pointer-events:none}
 #presentation-navigation button{pointer-events:auto}#presentation-navigation button:disabled{opacity:.3}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) footer{position:absolute;bottom:0;left:80px;right:80px;padding:16px 0;font-size:11px;gap:15px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{position:absolute;bottom:0;left:80px;right:80px;padding:16px 0;font-size:11px;gap:15px}
 body[data-presentation="cupertino"] #presentation-info{text-align:center}
 body[data-presentation="cupertino"] #grid{top:206px;--tile:min(21vh,185px);overflow:hidden}
 body[data-presentation="cupertino"] .game{left:calc(50% - var(--tile)/2);transform:translateX(calc(var(--offset) * var(--tile) * var(--cupertino-pitch,.63) + var(--side) * var(--cupertino-gap,42px))) translateZ(calc(var(--distance) * -48px)) rotateY(calc(var(--side) * -48deg));transform-origin:center}
@@ -74,35 +74,35 @@ body[data-presentation="cupertino"] .game.presentation-selected{transform:transl
 body[data-presentation="cupertino"] .cover{border-radius:4px;-webkit-box-reflect:below 8px linear-gradient(transparent 60%,#ffffff24)}
 body[data-presentation="cupertino"] .game-title{display:none}
 body[data-presentation="cupertino"] .presentation-actions{top:135px;right:25px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game .cover::after{display:none}
-@media(max-height:560px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #grid{top:170px;--tile:25vh}body[data-presentation="cupertino"] #grid{--tile:18vh}#presentation-info .eyebrow{display:none}.presentation-actions{top:125px}}
-@media(max-width:760px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) main{height:calc(100dvh - 76px)}#category-strip button{font-size:12px}#category-strip #category-current{font-size:17px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) footer{display:none}.presentation-actions{position:static;margin-top:12px}body[data-presentation="cupertino"] .presentation-actions{justify-content:center}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #grid{top:250px;--tile:min(40vw,25vh)}body[data-presentation="cupertino"] #grid{--tile:min(30vw,20vh)}}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game .cover::after{display:none}
+@media(max-height:560px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:170px;--tile:25vh}body[data-presentation="cupertino"] #grid{--tile:18vh}#presentation-info .eyebrow{display:none}.presentation-actions{top:125px}}
+@media(max-width:760px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 76px)}#category-strip button{font-size:12px}#category-strip #category-current{font-size:17px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}.presentation-actions{position:static;margin-top:12px}body[data-presentation="cupertino"] .presentation-actions{justify-content:center}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:250px;--tile:min(40vw,25vh)}body[data-presentation="cupertino"] #grid{--tile:min(30vw,20vh)}}
 
 /* Fit complete portrait covers to the space left by compact browsing controls. */
 #presentation-scrub{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .topbar{height:60px;padding:0 22px;gap:18px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .topbar .search{height:38px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) main{height:calc(100dvh - 60px)}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #category-strip{height:48px;touch-action:pan-y;user-select:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar{height:60px;padding:0 22px;gap:18px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar .search{height:38px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 60px)}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{height:48px;touch-action:pan-y;user-select:none}
 #category-strip #category-current{font-size:19px;padding:7px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-info{height:72px;padding:12px 5%;text-align:left;position:relative}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-info .eyebrow{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-title{font-size:25px;margin:0 0 5px;padding-right:230px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .presentation-actions{position:absolute;top:15px;right:5%;margin:0}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #grid{top:120px;bottom:70px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:72px;padding:12px 5%;text-align:left;position:relative}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info .eyebrow{display:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:25px;margin:0 0 5px;padding-right:230px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:absolute;top:15px;right:5%;margin:0}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:120px;bottom:70px}
 body[data-presentation="kyoto"] .cover{aspect-ratio:2/3}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game{top:10px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game-title{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) footer{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-scrub{display:flex;position:absolute;bottom:12px;left:78px;right:78px;height:44px;align-items:center;gap:14px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{top:10px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{display:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{display:flex;position:absolute;bottom:12px;left:78px;right:78px;height:44px;align-items:center;gap:14px}
 #presentation-seek{min-width:30px;flex:1;accent-color:var(--accent);height:36px;touch-action:none}
 #presentation-seek-position{font-size:13px;color:var(--muted);min-width:72px;text-align:center;font-variant-numeric:tabular-nums}
 #presentation-scrub button{font-size:14px;min-height:44px}#presentation-scrub button:disabled{opacity:.3}
 #category-strip button{min-height:42px}
-@media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-title{font-size:20px;padding-right:0}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-info{height:112px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .presentation-actions{position:static;margin-top:8px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #grid{top:160px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-scrub{left:52px;right:52px;gap:3px}#presentation-scrub .text-button{padding:3px;font-size:12px}#presentation-seek-position{min-width:55px;font-size:11px}}
+@media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:20px;padding-right:0}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:112px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:static;margin-top:8px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:160px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{left:52px;right:52px;gap:3px}#presentation-scrub .text-button{padding:3px;font-size:12px}#presentation-seek-position{min-width:55px;font-size:11px}}
 
 /* A transformed carousel is a fixed stage, never a native scroll container. */
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #grid{overflow:clip;overflow-anchor:none}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{overflow:clip;overflow-anchor:none}
 
 /* Tokyo: horizontal categories crossing a vertical title list. */
 #tokyo-preview{display:none}
@@ -125,9 +125,9 @@ body[data-presentation="tokyo"] #category-current{letter-spacing:.3px}
 .favorite-toggle{min-width:44px;font-size:22px;padding:7px 12px;color:var(--accent)}.favorite-toggle[aria-pressed="true"]{background:var(--accent-soft)}
 .favorite-badge{position:absolute;left:9px;top:9px;z-index:3;padding:4px 6px;background:var(--field);color:var(--accent);border-radius:4px;font-size:17px;pointer-events:none}
 body[data-presentation="tokyo"] .favorite-badge{left:38px;top:38px;font-size:12px;padding:0 3px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-title{padding-right:285px}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:285px}
 
-@media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) #presentation-title{padding-right:0}}
+@media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:0}}
 /* Seattle dashboard: horizontal shelves in a vertically scrollable collection. */
 #seattle-header,#seattle-categories{display:none}
 body[data-presentation="seattle"] :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu,footer){display:none!important}
@@ -180,7 +180,7 @@ body[data-presentation="seattle"] .game-genre{display:none}
 
 /* Keep touch under direct finger control; controller steps remain discrete. */
 body:is([data-presentation="kyoto"],[data-presentation="cupertino"]) #grid{touch-action:none;user-select:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"]) .game{transition:transform .10s ease-out,opacity .10s ease-out}
+body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{transition:transform .10s ease-out,opacity .10s ease-out}
 #grid.fluid-motion .game{transition:none!important;will-change:transform}
 body[data-presentation="cupertino"] #grid.fluid-motion .game{transform:translateX(calc(var(--offset)*var(--tile)*var(--cupertino-pitch,.63) + var(--side)*var(--cupertino-gap,42px))) translateZ(calc(var(--depth)*1px)) rotateY(calc(var(--side)*-48deg))}
 #grid.fluid-motion .cover img{transform:none;transition:none}
@@ -312,3 +312,20 @@ body[data-presentation=oxford] #oxford-index{display:flex;position:absolute;left
 #oxford-index button:focus{outline:2px solid var(--accent);outline-offset:-2px}
 @media(max-width:760px){body[data-presentation=oxford] #grid .game-title{font-size:14px}#oxford-index button{font-size:12px}}
 @media(max-width:600px){body[data-presentation=oxford] #grid{top:164px}body[data-presentation=oxford] #tokyo-preview{top:174px}}
+
+/* Berlin paints a small window of rows inside a native scrolling cover wall. */
+body[data-presentation=berlin] #grid{display:grid;grid-template-columns:repeat(var(--berlin-columns,7),minmax(0,1fr));gap:8px;position:absolute;left:0;right:0;top:48px;bottom:76px;overflow-y:auto;overflow-x:hidden;padding:14px;perspective:none;align-content:start;touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:thin;overflow-anchor:none}
+body[data-presentation=berlin] #grid .game{position:relative;top:auto;left:auto;width:100%;height:var(--berlin-height);transform:none;transition:transform .12s ease;scroll-margin:14px;opacity:1;z-index:0;border-radius:4px}
+body[data-presentation=berlin] #grid .cover{width:100%;height:100%;aspect-ratio:2/3;border-radius:4px;outline:none}
+body[data-presentation=berlin] #grid .presentation-selected{transform:translateY(-2px) scale(1.025);z-index:2}
+body[data-presentation=berlin] #grid .presentation-selected .cover{outline:2px solid var(--accent);outline-offset:2px}
+body[data-presentation=berlin] #grid .game:focus{outline:none}
+body[data-presentation=berlin] #grid .game-title,body[data-presentation=berlin] #grid .game-genre{display:none}
+body[data-presentation=berlin] #grid .card-edit{display:none}
+body[data-presentation=berlin] #grid .presentation-selected .card-edit{display:block}
+.berlin-spacer{grid-column:1/-1;pointer-events:none}
+body[data-presentation=berlin] #presentation-info{position:absolute;left:0;right:0;bottom:0;height:76px;padding:13px 24px;border-top:1px solid var(--line);background:var(--bg);z-index:3}
+body[data-presentation=berlin] #presentation-info #presentation-title{font-size:22px;padding-right:310px;line-height:1.25}
+body[data-presentation=berlin] #presentation-info .presentation-actions{top:15px;right:24px}
+body[data-presentation=berlin] :is(#presentation-scrub,#presentation-navigation){display:none}
+@media(max-width:760px){body[data-presentation=berlin] #grid{gap:6px;padding:12px}body[data-presentation=berlin] #presentation-info #presentation-title{font-size:18px;padding-right:285px}}
