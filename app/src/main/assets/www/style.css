@@ -248,3 +248,11 @@ body[data-presentation=cupertino] #grid .game:focus{outline:none}
 body[data-presentation=cupertino] #grid .presentation-selected .cover{outline:2px solid var(--accent);outline-offset:3px}
 
 body[data-presentation=cupertino] #grid{overflow:visible;clip-path:inset(-24px 0 0)}
+
+/* Let halos fade outside the carousel stage without exposing offscreen tiles. */
+body[data-presentation=kyoto] #grid{overflow:visible;clip-path:inset(-48px 0 -40px)}
+/* Scrollable shelves need real paint space: overflow-y:visible would still clip
+   when overflow-x:auto. Compensating margins preserve card and heading positions. */
+body[data-presentation=seattle] .seattle-shelf{padding:56px 36px 56px;margin:-48px -30px -43px;scroll-padding-inline:36px}
+body[data-presentation=seattle] .seattle-shelf-heading{position:relative;z-index:1}
+@media(max-width:600px){body[data-presentation=seattle] .seattle-shelf{padding-inline:20px;margin-inline:-14px;scroll-padding-inline:20px}}
