@@ -29,8 +29,7 @@ final class StartupVideo {
         root.getChildAt(0).setVisibility(View.INVISIBLE);overlay=new FrameLayout(activity);overlay.setBackgroundColor(0xff151719);overlay.setClickable(true);overlay.setOnTouchListener((v,e)->{if(e.getAction()==android.view.MotionEvent.ACTION_UP)finishPlayback();return true;});
         video=new VideoView(activity);video.setFocusable(false);video.setOnTouchListener((v,e)->{if(e.getAction()==android.view.MotionEvent.ACTION_UP)finishPlayback();return true;});
         overlay.addView(video,new FrameLayout.LayoutParams(-1,-1,Gravity.CENTER));
-        TextView hint=new TextView(activity);hint.setText("Tap or press a button to skip");hint.setTextColor(0xffb8bcb7);hint.setTextSize(12);hint.setPadding(20,12,20,20);hint.setGravity(Gravity.CENTER);
-        overlay.addView(hint,new FrameLayout.LayoutParams(-1,-2,Gravity.BOTTOM));root.addView(overlay,new FrameLayout.LayoutParams(-1,-1));
+        root.addView(overlay,new FrameLayout.LayoutParams(-1,-1));
         final VideoView current=video;
         video.setOnPreparedListener(mp->{if(video!=current)return;handler.removeCallbacks(timeout);mp.setVolume(prefs.getBoolean("sound",true)?1:0,prefs.getBoolean("sound",true)?1:0);current.start();});
         video.setOnCompletionListener(mp->finishPlayback());video.setOnErrorListener((mp,what,extra)->{dismiss();Toast.makeText(activity,"Could not play startup video",Toast.LENGTH_SHORT).show();return true;});

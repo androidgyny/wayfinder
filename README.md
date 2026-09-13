@@ -20,7 +20,8 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 
 ## Features
 
-- **Five presentation themes:** Alexandria, Kyoto, Cupertino, Tokyo, and Seattle.
+- **Six presentation themes:** Alexandria, Kyoto, Cupertino, Tokyo, Seattle, and Vienna.
+- **Vienna category shelves:** Favorites first, with one expanded shelf and compact previews of the others. Use up/down to change category, left/right to select a game, and triggers to jump through the active shelf. Swipe covers or tap a shelf on the touchscreen; each category remembers its selection.
 - **Cupertino appearance controls:** Off, Subtle, or Classic reflections and Compact or Airy cover spacing, with a live settings preview.
 - **Categories, search, and sorting** for navigating large collections.
 - **Favorites and recently played games**, with sampled category shelves in Seattle.

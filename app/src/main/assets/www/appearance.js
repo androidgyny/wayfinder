@@ -22,7 +22,7 @@ function coverColor(img){
 function updateCoverGlow(){
  if(!coverGlow)return;
  const grid=$('#grid');if(grid.classList.contains('fluid-motion'))return;
- const carousel=['kyoto','cupertino','tokyo'].includes(presentation);
+ const carousel=['kyoto','cupertino','tokyo','vienna'].includes(presentation);
  const selected=carousel?grid.querySelector('.presentation-selected'):(hoverGlowCard?.isConnected?hoverGlowCard:document.activeElement?.closest('#grid .game')||grid.querySelector('.controller-selected')||grid.querySelector('.game'));
  if(glowCard!==selected){glowCard?.classList.remove('glow-selected');glowCard=selected;if(selected)selected.classList.add('glow-selected');}
  const preview=$('#tokyo-art');const img=selected?.querySelector('.cover img');
