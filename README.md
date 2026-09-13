@@ -4,7 +4,7 @@
 
 > **Beta software.** This is a vibe-coded app made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.25-beta.2)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.40-beta.3)
 
 Wayfinder makes a substantial library of Android games easy to browse with a touchscreen and game controller. It puts cover artwork, clear categories, and quick navigation at the center of the experience.
 
@@ -29,7 +29,8 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Artwork fitting and cropping**, with options to fit or fill game tiles.
 - **Eleven color schemes**, including bright green and pink, warm Parchment, Midnight Blue, Sea Glass, Terracotta, and Graphite.
 - **Eight typography choices:** Computer, Editorial, Clean, Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans, all included for offline use.
-- **An optional soft glow** sampled from the selected cover.
+- **Appearance controls:** cover halos, gradient backdrops, selection markers, cover corners, and brightness.
+- **Saved appearance presets**, including Default, Launchbiz, Niagaramond, iTomes, and Playrite.
 - **Optional interface sounds and background audio** from a user-selected file.
 - **An optional startup video**, with support for a custom replacement.
 - **An app drawer** for non-game Android apps, with customizable icons and rearrangeable pins.
@@ -78,35 +79,35 @@ Adding a library entry does not install the game. Games must already be installe
 
 ## Appearance gallery
 
-The same library, shown with different presentation themes, color schemes, and typography. These screenshots show an example collection; games and personal cover artwork are not bundled.
+The same library, shown in seven different presentation themes, color schemes, and typography choices. These captures use the current app interface in a browser with an example collection; games and personal cover artwork are not bundled.
 
-### Cupertino · Midnight Blue · Outfit
+### Cupertino · Graphite · Outfit
 
-![Cupertino · Midnight Blue · Outfit. Night in the Woods selected in coverflow, with subtle reflections and the title below the covers.](docs/screenshots/wayfinder-cupertino-midnight.png)
+![Night in the Woods in Coverflow, with classic reflections, a cover halo, and a gradient backdrop.](docs/screenshots/wayfinder-cupertino-graphite.png)
 
-### Vienna · Terracotta · Editorial
+### Berlin · Midnight Blue · Clean
 
-![Vienna · Terracotta · Editorial. Puzzle platformers expanded with Braid selected, between compact category shelves.](docs/screenshots/wayfinder-vienna-terracotta.png)
-
-### Berlin · Hacker Green · Computer
-
-![Berlin · Hacker Green · Computer. A dense contact sheet of All games, with Gravity Circuit selected.](docs/screenshots/wayfinder-berlin-hacker.png)
+![A Playrite-inspired cover grid with Katana ZERO selected.](docs/screenshots/wayfinder-berlin-midnight.png)
 
 ### Oxford · Parchment · Editorial
 
-![Oxford · Parchment · Editorial. A title list and large cover preview, with Broken Age selected.](docs/screenshots/wayfinder-oxford-parchment.png)
+![Tengami selected in the quiet Niagaramond title-list layout.](docs/screenshots/wayfinder-oxford-parchment.png)
 
 ### Tokyo · Hot Pink · Oxanium
 
-![Tokyo · Hot Pink · Oxanium. Gravity Circuit selected in a vertical list beside its glowing cover.](docs/screenshots/wayfinder-tokyo-pink.png)
+![Danmaku Unlimited 3 beside a vertical game list, with a neon palette and cover halo.](docs/screenshots/wayfinder-tokyo-pink.png)
 
-### Cupertino · Parchment · Editorial
+### Vienna · Terracotta · Editorial
 
-![Cupertino · Parchment · Editorial. Broken Age selected in a light coverflow layout with subtle reflections.](docs/screenshots/wayfinder-cupertino-parchment.png)
+![Braid on the expanded Puzzle platformers shelf, with compact previews and space between categories.](docs/screenshots/wayfinder-vienna-terracotta.png)
 
-### Kyoto · Sea Glass · Clean
+### Kyoto · Sea Glass · Space Grotesk
 
-![Kyoto · Sea Glass · Clean. Large game tiles with Braid selected and its title below the covers.](docs/screenshots/wayfinder-kyoto-seaglass.png)
+![Mimpi selected among large rounded covers, with its title below.](docs/screenshots/wayfinder-kyoto-seaglass.png)
+
+### Alexandria · Amber · IBM Plex Sans
+
+![Ara Fell selected in an amber cover grid with sidebar categories.](docs/screenshots/wayfinder-alexandria-amber.png)
 
 ## Local library, personal artwork
 
