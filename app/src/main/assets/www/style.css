@@ -337,8 +337,9 @@ body[data-presentation=berlin] :is(#presentation-scrub,#presentation-navigation)
 
 /* Layout preferences retain the same vertical space for artwork. */
 #title-placement-options[hidden],#berlin-options[hidden]{display:none}
-#berlin-cover-size{width:190px;max-width:45%;accent-color:var(--accent)}
-.density-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:0 0 18px auto;width:190px;max-width:45%}
+.density-control{width:190px;max-width:45%;flex-shrink:0}
+#berlin-cover-size{display:block;width:100%;max-width:none;accent-color:var(--accent)}
+.density-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:8px 0 0;width:100%;gap:10px}
 body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-placement=below] #presentation-info{position:absolute;left:0;right:0;bottom:70px;height:72px;z-index:10}
 body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-placement=below] #grid{top:48px;bottom:142px}
 @media(max-width:600px){
