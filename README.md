@@ -4,7 +4,7 @@
 
 > **Beta software.** This is a vibe-coded app made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.23-beta.1)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.25-beta.2)
 
 Wayfinder makes a substantial library of Android games easy to browse with a touchscreen and game controller. It puts cover artwork, clear categories, and quick navigation at the center of the experience.
 
