@@ -376,3 +376,17 @@ body:not([data-selection-style=glow]) .appearance-sample{box-shadow:var(--option
 
 #vienna-options[hidden]{display:none}
 body[data-presentation=vienna][data-vienna-separators=space] .vienna-section{border-bottom-color:transparent}
+
+#preset-options{padding:18px;border:1px solid var(--line);border-radius:8px;margin:20px 0;background:var(--panel)}
+#preset-options h3{margin-top:0}.preset-actions{display:flex;gap:10px;margin:12px 0}#preset-name{min-width:0;flex:1;background:var(--field);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:10px}#preset-status{color:var(--accent);font-size:13px}
+body[data-cover-corners=square]{--art-radius:0px}body[data-cover-corners=soft]{--art-radius:7px}body[data-cover-corners=rounded]{--art-radius:16px}
+body[data-cover-corners] #grid .game .cover,body[data-cover-corners] #tokyo-art,body[data-cover-corners] .appearance-sample,body[data-cover-corners] .cupertino-preview-tile{border-radius:var(--art-radius)}
+body[data-cover-corners] .vienna-preview img{border-radius:min(var(--art-radius),5px)}
+body[data-cover-brightness=even] #grid .game:not(.presentation-selected){opacity:1!important}body[data-cover-brightness=even] .vienna-preview img{opacity:1}
+body[data-cover-brightness=dimmed]:is([data-presentation=library],[data-presentation=seattle]) #grid:focus-within .game:not(:focus-within):not(.controller-selected){opacity:.65}
+body[data-menu-buttons=all] #grid .game .card-edit{display:block}
+body[data-menu-buttons=selected] #grid .game .card-edit{visibility:hidden;pointer-events:none}
+body[data-menu-buttons=selected] #grid .game:is(.presentation-selected,.controller-selected,:focus-within) .card-edit{display:block;visibility:visible;pointer-events:auto}
+
+body[data-cover-brightness=dimmed]:not([data-presentation=library]):not([data-presentation=seattle]) #grid .game:not(.presentation-selected){opacity:.65}
+body[data-cover-brightness=even] .cupertino-preview-tile:not(.preview-placeholder){opacity:1}

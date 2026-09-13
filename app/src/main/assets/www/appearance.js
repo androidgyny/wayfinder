@@ -1,3 +1,4 @@
+let coverCorners='soft',coverBrightness='dimmed',menuButtons='all',menuTouchId=null,appearancePresets=[];
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
 let viennaSeparators='lines';
 let backdrop='flat',selectionStyle='outline';
@@ -42,6 +43,12 @@ function setAtmosphere(background,selection){
 }
 function setViennaSeparators(value){viennaSeparators=value==='space'?'space':'lines';document.body.dataset.viennaSeparators=viennaSeparators;$('#vienna-separators').value=viennaSeparators;persist();}
 function initAppearance(value){
+ appearancePresets=Array.isArray(value.appearancePresets)?value.appearancePresets.filter(p=>p&&typeof p.name==='string'&&p.values&&typeof p.values==='object').slice(0,10):[];
+ setCoverOptions(value.coverCorners,value.coverBrightness,value.menuButtons);refreshPresets();
+ $('#cover-corners').onchange=$('#cover-brightness').onchange=$('#menu-buttons').onchange=()=>{setCoverOptions($('#cover-corners').value,$('#cover-brightness').value,$('#menu-buttons').value);effect('select')};
+ $('#preset-save').onclick=saveAppearancePreset;$('#preset-apply').onclick=applyAppearancePreset;$('#preset-delete').onclick=deleteAppearancePreset;
+ $('#appearance-presets').onchange=()=>{$('#preset-name').value=$('#appearance-presets').value;refreshPresetButtons()};
+
  setViennaSeparators(value.viennaSeparators);$('#vienna-separators').onchange=e=>{setViennaSeparators(e.target.value);effect('select')};
  setAtmosphere(value.backdrop,value.selectionStyle);
  $('#backdrop').onchange=$('#selection-style').onchange=()=>{setAtmosphere($('#backdrop').value,$('#selection-style').value);effect('select')};
@@ -91,4 +98,27 @@ function refreshLayoutControls(){
 function setBerlinCoverSize(value,save=true){
  berlinCoverSize=Math.max(64,Math.min(200,Number(value)||120));$('#berlin-cover-size').value=berlinCoverSize;
  if(presentation==='berlin')renderBerlin();if(save)persist();
+}
+
+function setCoverOptions(corners,brightness,menus){
+ coverCorners=['square','soft','rounded'].includes(corners)?corners:'soft';coverBrightness=brightness==='even'?'even':'dimmed';menuButtons=menus==='selected'?'selected':'all';
+ document.body.dataset.coverCorners=coverCorners;document.body.dataset.coverBrightness=coverBrightness;document.body.dataset.menuButtons=menuButtons;
+ $('#cover-corners').value=coverCorners;$('#cover-brightness').value=coverBrightness;$('#menu-buttons').value=menuButtons;persist();
+}
+function appearanceSnapshot(){return {presentation,palette,typography,coverGlow,backdrop,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
+function refreshPresetButtons(){const found=appearancePresets.some(p=>p.name===$('#appearance-presets').value);$('#preset-apply').disabled=$('#preset-delete').disabled=!found;}
+function refreshPresets(selected=''){
+ const select=$('#appearance-presets');select.replaceChildren(new Option('Choose a preset…',''));for(const p of appearancePresets)select.add(new Option(p.name,p.name));select.value=selected;refreshPresetButtons();
+}
+function saveAppearancePreset(){
+ const name=$('#preset-name').value.trim().slice(0,40);if(!name){$('#preset-status').textContent='Enter a name for these appearance settings.';return;}
+ const found=appearancePresets.find(p=>p.name.toLowerCase()===name.toLowerCase());if(!found&&appearancePresets.length>=10){$('#preset-status').textContent='You can save up to 10 presets. Delete one or reuse its name.';return;}
+ if(found){found.name=name;found.values=appearanceSnapshot()}else appearancePresets.push({name,values:appearanceSnapshot()});refreshPresets(name);persist();$('#preset-status').textContent='Saved “'+name+'”.';
+}
+function deleteAppearancePreset(){const name=$('#appearance-presets').value;appearancePresets=appearancePresets.filter(p=>p.name!==name);refreshPresets();$('#preset-name').value='';persist();$('#preset-status').textContent='Preset removed. Your current appearance is unchanged.';}
+function applyAppearancePreset(){
+ const preset=appearancePresets.find(p=>p.name===$('#appearance-presets').value);if(!preset)return;const v=preset.values,wasRestoring=restoring;restoring=true;
+ try{setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
+ finally{restoring=wasRestoring;persist()}
+ $('#preset-status').textContent='Applied “'+preset.name+'”.';
 }

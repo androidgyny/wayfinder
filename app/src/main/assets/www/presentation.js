@@ -115,7 +115,7 @@ function initCarouselMotion(){
   const tile=carouselMotion.tile;
   for(const b of grid.querySelectorAll('.game')){const offset=Number(b.dataset.carouselIndex)-position,distance=Math.abs(offset),side=Math.max(-1,Math.min(1,offset));
    b.style.transform=presentation==='cupertino'?`translate3d(${offset*tile*cupertinoPitch()+side*cupertinoGap()}px,0,${35*Math.max(0,1-distance)-48*distance}px) rotateY(${side*-48}deg)`:`translate3d(${offset*(tile+22)}px,0,0)`;
-   b.style.opacity=String(1-.35*Math.min(1,distance));b.style.zIndex=String(100-Math.round(distance*10));
+   b.style.opacity=String(coverBrightness==='even'?1:1-.35*Math.min(1,distance));b.style.zIndex=String(100-Math.round(distance*10));
   }
  }
  function settle(){if(!carouselMotion)return;const from=carouselMotion.position,to=Math.round(from),start=performance.now();function step(now){if(!carouselMotion)return;const t=Math.min(1,(now-start)/140);paint(from+(to-from)*(1-Math.pow(1-t,3)));if(t<1)carouselFrame=requestAnimationFrame(step);else{stopCarouselMotion();queueCarouselSave();}}carouselFrame=requestAnimationFrame(step);}
