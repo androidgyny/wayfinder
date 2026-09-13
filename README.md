@@ -2,6 +2,10 @@
 
 **A minimal, visually focused launcher for large Android game collections.**
 
+> **Beta software.** This is a vibe-coded app made with the help of **GPT-6 Astra**.
+
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.23-beta.1)
+
 Wayfinder makes a substantial library of Android games easy to browse with a touchscreen and game controller. It puts cover artwork, clear categories, and quick navigation at the center of the experience.
 
 It is designed specifically for **launching Android games**. It is not intended as a general-purpose retro-gaming frontend, emulator manager, or ROM organizer.
