@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 android {
  namespace 'com.androidgyny.wayfinder'
  compileSdk 35
- defaultConfig { applicationId 'com.androidgyny.wayfinder'; minSdk 26; targetSdk 35; versionCode 77; versionName '0.9.44' }
+ defaultConfig { applicationId 'com.androidgyny.wayfinder'; minSdk 26; targetSdk 35; versionCode 78; versionName '0.9.45' }
  buildFeatures { buildConfig true }
  buildTypes { release { minifyEnabled false; signingConfig signingConfigs.debug } }
  compileOptions { sourceCompatibility JavaVersion.VERSION_11; targetCompatibility JavaVersion.VERSION_11 }

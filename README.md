@@ -33,7 +33,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Saved appearance presets**, including Default, Launchbiz, Niagaramond, iTomes, and Playrite.
 - **A built-in Mountain dusk parallax background**, based on CC0 artwork by Luis Zuno (ansimuz).
 - **Custom image and animated WebP backgrounds**, with adjustable dimming. Animation stops while Wayfinder is in the background.
-- **Optional interface sounds and background audio** from a user-selected file.
+- **Optional interface sounds and background audio**, with a built-in Another August ambient loop or your own sound file. Music is off by default.
 - **An optional startup video**, with support for a custom replacement.
 - **An app drawer** for non-game Android apps, with customizable icons and rearrangeable pins.
 - **Optional Android home-screen integration.**
@@ -140,3 +140,5 @@ Fresh installations start with an empty library. The collection shown in the scr
 The Android application ID is `com.androidgyny.wayfinder`. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
 
 Typography uses Inter (Clean), Lora (Editorial), IBM Plex Mono (Computer), Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans under the SIL Open Font License. Notices are included in `app/src/main/assets/www/fonts/`.
+
+Bundled ambient music: **Another August** by **The Cynic Project / Alex Smith** ([cynicmusic.com](https://cynicmusic.com/), [Pixelsphere](https://pixelsphere.org/)), released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). [Original track](https://opengameart.org/node/73989). Wayfinder uses a 3:07 adaptation with a 20-second crossfade for continuous looping.

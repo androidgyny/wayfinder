@@ -179,6 +179,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void clearBackground(){worker.execute(()->{background.clear();emit("backgroundRemoved",new JSONObject());});}
         @JavascriptInterface public String ambientSettings(){return ambient.settings();}
         @JavascriptInterface public void configureAmbient(boolean enabled,int volume){runOnUiThread(()->ambient.configure(enabled,volume));}
+        @JavascriptInterface public void selectAmbient(String source){runOnUiThread(()->{ambient.select(source);emit("ambientChanged",new JSONObject());});}
         @JavascriptInterface public void clearAmbient(){runOnUiThread(()->{ambient.clear();emit("ambientChanged",new JSONObject());});}
         @JavascriptInterface public void chooseAmbient(){runOnUiThread(()->{try{startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("audio/*").addCategory(Intent.CATEGORY_OPENABLE),15);}catch(Exception e){notice("No audio file picker is available");}});}
         @JavascriptInterface public String startupSettings(){return startup.settings();}

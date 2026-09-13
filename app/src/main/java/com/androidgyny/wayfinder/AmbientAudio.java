@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-/** User-owned, local ambient audio. All playback state is confined to the main thread. */
+/** Bundled or user-owned local ambient audio. All playback state is confined to the main thread. */
 final class AmbientAudio {
     private final MainActivity activity;
     private final SharedPreferences prefs;
@@ -35,7 +35,13 @@ final class AmbientAudio {
         if(Build.VERSION.SDK_INT>=33)a.registerReceiver(noisy,filter,Context.RECEIVER_NOT_EXPORTED);else a.registerReceiver(noisy,filter);
     }
     private File file(){return new File(activity.getFilesDir(),prefs.getString("file","ambient-none"));}
-    String settings(){try{return new JSONObject().put("enabled",prefs.getBoolean("enabled",false)).put("volume",prefs.getInt("volume",20)).put("name",prefs.getString("name","")).put("custom",file().isFile()).toString();}catch(Exception e){return "{}";}}
+    private String source(){return prefs.getString("source",file().isFile()?"custom":"august");}
+    private boolean available(){return source().equals("august")||file().isFile();}
+    void select(String source){
+        if(!source.equals("august")&&!source.equals("custom"))return;
+        suspend();release();prefs.edit().putString("source",source).apply();blocked=audio.isMusicActive();
+    }
+    String settings(){try{return new JSONObject().put("enabled",prefs.getBoolean("enabled",false)).put("volume",prefs.getInt("volume",20)).put("name",prefs.getString("name","")).put("custom",file().isFile()).put("source",source()).put("available",available()).toString();}catch(Exception e){return "{}";}}
     void configure(boolean enabled,int volume){
         boolean was=prefs.getBoolean("enabled",false);
         prefs.edit().putBoolean("enabled",enabled).putInt("volume",Math.max(0,Math.min(100,volume))).apply();
@@ -49,14 +55,20 @@ final class AmbientAudio {
     private void release(){if(player!=null){player.release();player=null;}prepared=false;level=0;}
     private final Runnable tick=new Runnable(){public void run(){
         if(!resumed||destroyed)return;
-        if(!prefs.getBoolean("enabled",false)||startupActive.getAsBoolean()||blocked||!file().isFile()){pause();}
+        if(!prefs.getBoolean("enabled",false)||startupActive.getAsBoolean()||blocked||!available()){pause();}
         else if(!focus){
             if(audio.isMusicActive())blocked=true;
             else focus=audio.requestAudioFocus(request)==AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
         }else if(player==null){
             MediaPlayer next=new MediaPlayer();player=next;
             try{
-                next.setAudioAttributes(attributes);next.setDataSource(file().getAbsolutePath());next.setLooping(true);next.setVolume(0,0);
+                next.setAudioAttributes(attributes);
+                if(source().equals("august")){
+                    try(android.content.res.AssetFileDescriptor asset=activity.getResources().openRawResourceFd(R.raw.another_august)){
+                        next.setDataSource(asset.getFileDescriptor(),asset.getStartOffset(),asset.getLength());
+                    }
+                }else next.setDataSource(file().getAbsolutePath());
+                next.setLooping(true);next.setVolume(0,0);
                 next.setOnPreparedListener(mp->{if(player==mp)prepared=true;});
                 next.setOnErrorListener((mp,what,extra)->{failed();return true;});next.prepareAsync();
             }catch(Exception e){failed();}
@@ -82,7 +94,7 @@ final class AmbientAudio {
     String name(Uri uri){try(Cursor c=activity.getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME},null,null,null)){if(c!=null&&c.moveToFirst())return c.getString(0);}catch(Exception ignored){}return "Your audio file";}
     void accept(File next,String name){
         if(destroyed){next.delete();return;}suspend();release();File old=file();
-        prefs.edit().putString("file",next.getName()).putString("name",name).putBoolean("enabled",true).apply();old.delete();blocked=audio.isMusicActive();
+        prefs.edit().putString("file",next.getName()).putString("source","custom").putString("name",name).putBoolean("enabled",true).apply();old.delete();blocked=audio.isMusicActive();
     }
     void destroy(){destroyed=true;leave();release();activity.unregisterReceiver(noisy);}
 }
