@@ -216,7 +216,7 @@ body[data-presentation=tokyo][data-cover-glow=true] .game.glow-selected .cover{b
 #grid.fluid-motion .game.glow-selected .cover{box-shadow:none}
 
 /* One shared appearance for all settings dropdowns. */
-#settings-dialog .settings-row>select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px;font:inherit;width:190px;max-width:45%;flex-shrink:0}
+#settings-dialog .settings-row>select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px 30px 12px 12px;font:inherit;width:190px;max-width:45%;flex-shrink:0}
 
 /* Cupertino controls share the standard settings selectors. */
 #cupertino-options{padding:16px;margin:12px 0 20px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
@@ -390,3 +390,5 @@ body[data-menu-buttons=selected] #grid .game:is(.presentation-selected,.controll
 
 body[data-cover-brightness=dimmed]:not([data-presentation=library]):not([data-presentation=seattle]) #grid .game:not(.presentation-selected){opacity:.65}
 body[data-cover-brightness=even] .cupertino-preview-tile:not(.preview-placeholder){opacity:1}
+
+@media(max-width:450px){#settings-dialog .settings-row>select{width:100%;max-width:100%}}
