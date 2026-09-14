@@ -72,35 +72,49 @@ Adding a library entry does not install the game. Games must already be installe
 
 ## Appearance gallery
 
-The same library, shown in seven different presentation themes, color schemes, and typography choices. These captures use the current app interface in a browser with an example collection; games and personal cover artwork are not bundled.
+Seven looks from the same library, combining presentation themes, typography, palettes, and backgrounds. These are captures of the current app interface in a browser with an example collection; games and personal cover artwork are not bundled. Animated backgrounds are shown as still frames.
 
-### Cupertino · Graphite · Outfit
+### Cupertino · Violet · Outfit
 
-![Night in the Woods in Coverflow, with classic reflections, a cover halo, and a gradient backdrop.](docs/screenshots/wayfinder-cupertino-graphite.png)
+Urban skyline, matched to Violet, with classic reflections and a soft cover halo. Night in the Woods is selected.
 
-### Berlin · Midnight Blue · Clean
+![Urban skyline, matched to Violet, with classic reflections and a soft cover halo. Night in the Woods is selected.](docs/screenshots/wayfinder-cupertino-violet.png)
 
-![A Playrite-inspired cover grid with Katana ZERO selected.](docs/screenshots/wayfinder-berlin-midnight.png)
+### Berlin · Cyan · Space Grotesk
+
+A dense cover grid over a muted Another World backdrop, with Katana ZERO selected.
+
+![A dense cover grid over a muted Another World backdrop, with Katana ZERO selected.](docs/screenshots/wayfinder-berlin-cyan.png)
 
 ### Oxford · Parchment · Editorial
 
-![Tengami selected in the quiet Niagaramond title-list layout.](docs/screenshots/wayfinder-oxford-parchment.png)
+A quiet title list with Tengami selected, backed by Mountain dusk matched to the Parchment palette.
 
-### Tokyo · Hot Pink · Oxanium
+![A quiet title list with Tengami selected, backed by Mountain dusk matched to the Parchment palette.](docs/screenshots/wayfinder-oxford-parchment.png)
 
-![Danmaku Unlimited 3 beside a vertical game list, with a neon palette and cover halo.](docs/screenshots/wayfinder-tokyo-pink.png)
+### Tokyo · Hacker Green · Oxanium
 
-### Vienna · Terracotta · Editorial
+Danmaku Unlimited 3 beside a title list, with Alien Environment matched to Hacker Green.
 
-![Braid on the expanded Puzzle platformers shelf, with compact previews and space between categories.](docs/screenshots/wayfinder-vienna-terracotta.png)
+![Danmaku Unlimited 3 beside a title list, with Alien Environment matched to Hacker Green.](docs/screenshots/wayfinder-tokyo-hacker.png)
+
+### Vienna · Amber · Space Grotesk
+
+Braid on the expanded category shelf, with compact neighboring shelves and a muted Mountain dusk backdrop.
+
+![Braid on the expanded category shelf, with compact neighboring shelves and a muted Mountain dusk backdrop.](docs/screenshots/wayfinder-vienna-amber.png)
 
 ### Kyoto · Sea Glass · Space Grotesk
 
-![Mimpi selected among large rounded covers, with its title below.](docs/screenshots/wayfinder-kyoto-seaglass.png)
+Large rounded covers over Magical road in its original colors, with Mimpi selected and its title below.
 
-### Alexandria · Amber · IBM Plex Sans
+![Large rounded covers over Magical road in its original colors, with Mimpi selected and its title below.](docs/screenshots/wayfinder-kyoto-seaglass.png)
 
-![Ara Fell selected in an amber cover grid with sidebar categories.](docs/screenshots/wayfinder-alexandria-amber.png)
+### Alexandria · Hot Pink · IBM Plex Sans
+
+Ara Fell selected in a cover grid with sidebar categories, a soft gradient, and a cover halo.
+
+![Ara Fell selected in a cover grid with sidebar categories, a soft gradient, and a cover halo.](docs/screenshots/wayfinder-alexandria-pink.png)
 
 ## Local library, personal artwork
 
