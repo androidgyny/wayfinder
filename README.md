@@ -74,11 +74,11 @@ Adding a library entry does not install the game. Games must already be installe
 
 Seven looks from the same library, combining presentation themes, typography, palettes, and backgrounds. These are captures of the current app interface in a browser with an example collection; games and personal cover artwork are not bundled. Animated backgrounds are shown as still frames.
 
-### Cupertino · Violet · Outfit
+### Cupertino · Graphite · Outfit
 
-Urban skyline, matched to Violet, with classic reflections and a soft cover halo. Night in the Woods is selected.
+A quiet Graphite backdrop, airy cover spacing, and subtle reflections keep Night in the Woods in focus.
 
-![Urban skyline, matched to Violet, with classic reflections and a soft cover halo. Night in the Woods is selected.](docs/screenshots/wayfinder-cupertino-violet.png)
+![A quiet Graphite backdrop, airy cover spacing, and subtle reflections keep Night in the Woods in focus.](docs/screenshots/wayfinder-cupertino-graphite.png)
 
 ### Berlin · Cyan · Space Grotesk
 
