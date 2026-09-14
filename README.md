@@ -20,24 +20,15 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 
 ## Features
 
-- **Eight presentation themes:** Alexandria, Kyoto, Cupertino, Tokyo, Seattle, Vienna, Oxford, and Berlin.
-- **Categories, search, and sorting** for navigating large collections.
-- **Favorites and recently played games**, with sampled category shelves in Seattle.
-- **Touch and controller navigation**, including fast scrolling and page controls.
-- **Editable titles, categories, and cover artwork.**
-- **An integrated artwork picker:** retrieve images from Google Play, open Google Images or SteamGridDB searches, or choose a local image.
-- **Artwork fitting and cropping**, with options to fit or fill game tiles.
-- **Eleven color schemes**, including bright green and pink, warm Parchment, Midnight Blue, Sea Glass, Terracotta, and Graphite.
-- **Eight typography choices:** Computer, Editorial, Clean, Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans, all included for offline use.
-- **Appearance controls:** cover halos, gradient backdrops, selection markers, cover corners, and brightness.
-- **Saved appearance presets**, including Default, Launchbiz, Niagaramond, iTomes, and Playrite.
-- **Five built-in parallax backgrounds: Mountain dusk, Magical road, Urban landscape, Alien Environment, and Another World**, based on CC0 artwork by Luis Zuno (ansimuz). Keep their original colors, mute them, or match your palette; dimming remains independent.
-- **Custom image and animated WebP backgrounds**, with adjustable dimming. Animation stops while Wayfinder is in the background.
-- **Optional interface sounds and background audio**, with a built-in Another August ambient loop or your own sound file. Music is off by default.
-- **An optional responsive startup animation**, with synchronized audio and support for your own replacement video.
-- **An app drawer** for non-game Android apps, with customizable icons and rearrangeable pins.
-- **Optional Android home-screen integration.**
-- **Library and custom artwork backup and restore.**
+- **One library, many ways to browse.** Eight presentation themes offer cover grids, category shelves, title lists, and Cover Flow. Change the layout without reorganizing your games.
+- **Built for large collections.** Editable categories, title search, sorting, favorites, and recently played games help you find something quickly. Seattle adds shuffled selections from your categories for a little discovery.
+- **Touch and controller together.** Swipe through covers, navigate precisely with the D-pad, switch categories with the shoulder buttons, and jump through long lists with the triggers.
+- **One cover per game, chosen by you.** Edit titles and categories; find artwork through Google Play, Google Images, or SteamGridDB, or use a local image. Fit the whole image or fill the cover frame.
+- **Make the library your own.** Mix eleven color schemes and eight bundled typography choices with cover spacing, reflections, halos, and selection styles where supported. Start from a built-in appearance preset or save your own.
+- **Quiet or animated backgrounds.** Choose a flat color, soft gradient, one of five bundled parallax scenes, or your own still or animated image. Adjust dimming and keep the original colors, mute them, or match your palette.
+- **Optional sound and startup animation.** Retro computer sound effects, a bundled ambient music loop or your own audio, and a responsive opening animation with synchronized sound. You can also choose a custom startup video or turn the opening off.
+- **Your other Android apps, too.** A searchable app drawer includes editable icons and pins you can drag into order. Wayfinder can also be set as the device's default home screen.
+- **Keep your collection.** Back up and restore your library and custom artwork.
 
 ## Requirements
 
