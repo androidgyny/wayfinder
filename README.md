@@ -4,7 +4,7 @@
 
 > **Beta software.** This is a vibe-coded app made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.40-beta.3)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.55-beta.4)
 
 Wayfinder makes a substantial library of Android games easy to browse with a touchscreen and game controller. It puts cover artwork, clear categories, and quick navigation at the center of the experience.
 
@@ -31,10 +31,10 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Eight typography choices:** Computer, Editorial, Clean, Space Grotesk, Outfit, Oxanium, Space Mono, and IBM Plex Sans, all included for offline use.
 - **Appearance controls:** cover halos, gradient backdrops, selection markers, cover corners, and brightness.
 - **Saved appearance presets**, including Default, Launchbiz, Niagaramond, iTomes, and Playrite.
-- **Three built-in parallax backgrounds: Mountain dusk, Magical road, and Urban landscape**, based on CC0 artwork by Luis Zuno (ansimuz). Keep their original colors, mute them, or match your palette; dimming remains independent.
+- **Five built-in parallax backgrounds: Mountain dusk, Magical road, Urban landscape, Alien Environment, and Another World**, based on CC0 artwork by Luis Zuno (ansimuz). Keep their original colors, mute them, or match your palette; dimming remains independent.
 - **Custom image and animated WebP backgrounds**, with adjustable dimming. Animation stops while Wayfinder is in the background.
 - **Optional interface sounds and background audio**, with a built-in Another August ambient loop or your own sound file. Music is off by default.
-- **An optional startup video**, with support for a custom replacement.
+- **An optional responsive startup animation**, with synchronized audio and support for your own replacement video.
 - **An app drawer** for non-game Android apps, with customizable icons and rearrangeable pins.
 - **Optional Android home-screen integration.**
 - **Library and custom artwork backup and restore.**

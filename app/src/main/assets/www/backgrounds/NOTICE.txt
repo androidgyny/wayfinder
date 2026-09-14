@@ -22,3 +22,11 @@ Source: https://opengameart.org/content/urban-landscape
 License: CC0 1.0 Universal
 https://creativecommons.org/publicdomain/zero/1.0/
 Adapted for Wayfinder as a 60-second seamless parallax loop, 1152 x 648, 15 fps, cropped closely around the skyline.
+
+Alien Environment and Another World
+Artwork by Luis Zuno (ansimuz), Sideview Sci-Fi - Patreon Collection.
+Source: https://opengameart.org/content/sideview-sci-fi-patreon-collection
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+The included license states: "Public domain and free to use on whatever you want, personal or commercial. Credit is not required but appreciated."
+Adapted for Wayfinder: original background layers composed and cropped to 1152 x 648; 60-second, 15 fps parallax loops. Gameplay tiles and sprites omitted.

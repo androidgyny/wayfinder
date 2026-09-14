@@ -38,7 +38,7 @@ function updateCoverGlow(){
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
 }
 function setAtmosphere(background,selection){
- backdrop=['gradient','custom','mountain','magical','urban'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
+ backdrop=['gradient','custom','mountain','magical','urban','alien','another'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
  document.body.dataset.backdrop=backdrop;document.body.dataset.selectionStyle=selectionStyle;
  $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;syncCustomBackground();queueCoverGlow();persist();
 }
