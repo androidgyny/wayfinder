@@ -43,7 +43,15 @@ function berlinMove(action){
  let index=berlinIndex();const row=Math.floor(index/berlinColumns),first=Math.floor(grid.scrollTop/berlinPitch),last=Math.ceil((grid.scrollTop+grid.clientHeight)/berlinPitch)-1;
  if(row<first||row>last)index=first*berlinColumns;
  const delta={left:-1,right:1,up:-berlinColumns,down:berlinColumns,pageUp:-page,pageDown:page}[action]||0;
- index=Math.max(0,Math.min(filtered.length-1,index+delta));presentationId=filtered[index].id;renderBerlin();controllerFocus($('#grid .presentation-selected'));queueCarouselSave();
+ index=Math.max(0,Math.min(filtered.length-1,index+delta));
+ const id=filtered[index].id,target=[...grid.querySelectorAll('.game')].find(b=>b.dataset.id===id),top=Math.floor(index/berlinColumns)*berlinPitch;
+ presentationId=id;
+ // Within the visible rows, only the old and new selection need updating.
+ if(target&&top>=grid.scrollTop&&top+berlinPitch<=grid.scrollTop+grid.clientHeight){
+  const previous=grid.querySelector('.presentation-selected');if(previous!==target){if(previous){previous.classList.remove('presentation-selected');previous.tabIndex=-1}target.classList.add('presentation-selected');target.tabIndex=0;}
+  berlinHeader();queueCoverGlow();
+ }else renderBerlin();
+ controllerFocus($('#grid .presentation-selected'));queueCarouselSave();
 }
 function initBerlin(){
  const grid=$('#grid');let observedWidth=0,observedHeight=0,pinch=null,suppressClickUntil=0;

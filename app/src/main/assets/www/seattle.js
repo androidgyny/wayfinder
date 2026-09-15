@@ -33,12 +33,12 @@ function renderSeattle(){renderPinnedApps();
  for(const name of genres){const b=el('button','seattle-chip',name);b.onclick=()=>seattleOpen(name);chips.push(b)}
  chips.forEach((b,i)=>{const active=!home&&(i===0?!genre&&!favoritesOnly:i===1?favoritesOnly:genre===genres[i-2]);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
  $('#seattle-categories').replaceChildren(...chips);
- const fragment=document.createDocumentFragment();
+ const fragment=document.createDocumentFragment();let selectionPlaced=false;
  function shelf(title,items,limit,empty,more){
   const section=el('section','seattle-section'),heading=el('div','seattle-shelf-heading');heading.append(el('h2','',title));
   if(more){const button=el('button','text-button','View all →');button.onclick=more;heading.append(button)}section.append(heading);
   const row=el('div','seattle-shelf');row.setAttribute('aria-label',title);
-  for(const game of items.slice(0,limit)){const b=card(game);if(game.id===presentationId)b.classList.add('presentation-selected');row.append(b)}
+  for(const game of items.slice(0,limit)){const b=card(game);if(game.id===presentationId&&!selectionPlaced){b.classList.add('presentation-selected');selectionPlaced=true;}row.append(b)}
   if(!items.length)row.append(el('p','seattle-empty',empty));section.append(row);fragment.append(section);return section;
  }
  if(home){
@@ -72,4 +72,14 @@ function seattleMove(start,action){
  const target=index+delta;
  if(target>=cards.length&&(seattleBrowse||genre||favoritesOnly||query)&&visible<filtered.length){visible=Math.min(filtered.length,Math.max(visible+72,target+1));renderSeattle();const all=$('#grid .seattle-shelf').querySelectorAll('.game');controllerFocus(all[Math.min(target,all.length-1)]);return}
  controllerFocus(cards[Math.max(0,Math.min(cards.length-1,target))]);
+}
+
+function scrollSeattleSelection(card,previous){
+ const row=card.closest('.seattle-shelf');if(!row)return;
+ // Horizontal selection must not repeatedly reposition the document and header.
+ if(previous?.closest('.seattle-shelf')!==row){card.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});return;}
+ const bounds=card.getBoundingClientRect(),viewport=row.getBoundingClientRect(),padding=parseFloat(getComputedStyle(row).scrollPaddingLeft)||8;
+ const left=viewport.left+padding,right=viewport.right-padding;
+ if(bounds.left<left-1)row.scrollLeft+=bounds.left-left;
+ else if(bounds.right>right+1)row.scrollLeft+=bounds.right-right;
 }

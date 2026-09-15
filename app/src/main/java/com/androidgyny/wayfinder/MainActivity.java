@@ -26,9 +26,9 @@ import java.util.zip.*;
 
 public class MainActivity extends Activity {
     private static final String ORIGIN="https://appassets.androidplatform.net";
-    private static final int COVER=10, EXPORT=11, IMPORT=12, SHORTCUT=13;
+    private static final int COVER=10, EXPORT=11, IMPORT=12, SHORTCUT=13, UNINSTALL=19, FONT=20;
     private boolean startupTouch; private StartupVideo startup; private int startupSkipKey=-1; private WebView web; private Library db; private final ExecutorService worker=Executors.newSingleThreadExecutor();
-    private BackdropImage background; private AmbientAudio ambient; private Artwork artwork; private File covers; private String pickingId=""; private boolean ready=false; private long lastAxis=0;
+    private CustomFont customFont; private BackdropImage background; private AmbientAudio ambient; private Artwork artwork; private File covers; private String pickingId=""; private boolean ready=false; private long lastAxis=0;
     private final Handler directionHandler=new Handler(Looper.getMainLooper()); private String heldDirection; private int heldKey=-1; private long directionStarted;
     private final Runnable repeatDirection=new Runnable(){public void run(){if(heldDirection==null||!ready)return;key(heldDirection);directionHandler.postDelayed(this,SystemClock.uptimeMillis()-directionStarted>900?65:110);}};
     private void stopDirection(){directionHandler.removeCallbacks(repeatDirection);heldDirection=null;heldKey=-1;}
@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     private String result(boolean ok,String message){JSONObject o=data("ok",ok);try{o.put("message",message);}catch(Exception ignored){}return o.toString();}
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().setStatusBarColor(Color.rgb(17,22,21));getWindow().setNavigationBarColor(Color.rgb(17,22,21));
-        covers=new File(getFilesDir(),"covers");covers.mkdirs();artwork=new Artwork(this);background=new BackdropImage(this);db=new Library();db.getWritableDatabase();
+        covers=new File(getFilesDir(),"covers");covers.mkdirs();customFont=new CustomFont(this);artwork=new Artwork(this);background=new BackdropImage(this);db=new Library();db.getWritableDatabase();
         sounds=new SoundPool.Builder().setMaxStreams(3).setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()).build();
         sounds.setOnLoadCompleteListener((pool,id,status)->{if(status==0)loadedSounds.add(id);else Log.w("WayfinderSound","Could not load sound "+id);});
         for(String name:new String[]{"move","select","back","page","launch"})try(AssetFileDescriptor fd=getAssets().openFd("sounds/"+name+".ogg")){soundIds.put(name,sounds.load(fd,1));}catch(IOException e){Log.w("WayfinderSound","Could not load "+name,e);}
@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
                 Uri u=r.getUrl();if(!local(u))return response("text/plain",new byte[0],403);
                 String path=u.getPath();try{
                     if(path==null||path.contains("..")||path.contains("\\"))return response("text/plain",new byte[0],403);
+                    if(path.startsWith("/font/"))return customFont.response(path.substring(6));
                     if(path.startsWith("/background/"))return background.response(path.substring(12));
                     if(path.startsWith("/art-preview/"))return response("image/jpeg",artwork.preview(path.substring(13)),200);
                     if(path.equals("/art-remote/"))return response("image/jpeg",artwork.remote(u.getQueryParameter("url")),200);
@@ -71,7 +72,7 @@ public class MainActivity extends Activity {
                     Map<String,String> headers=new HashMap<>();headers.put("Content-Security-Policy","default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'");out.setResponseHeaders(headers);return out;
                 }catch(Exception e){return response("text/plain",new byte[0],404);}
             }
-            @Override public void onPageFinished(WebView v,String url){if(!ready){ready=true;focusStartupGame();}}
+            @Override public void onPageFinished(WebView v,String url){if(!ready){ready=true;finishUninstall(false);focusStartupGame();}}
         });web.loadUrl(ORIGIN+"/index.html");startup.initial();
     }
     @Override protected void onNewIntent(Intent intent){super.onNewIntent(intent);setIntent(intent);}
@@ -115,6 +116,21 @@ public class MainActivity extends Activity {
         synchronized void put(JSONObject g) throws Exception {validate(g);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());getWritableDatabase().insertWithOnConflict("games",null,v,SQLiteDatabase.CONFLICT_REPLACE);}
         synchronized void remove(String id){getWritableDatabase().delete("games","id=?",new String[]{id});}
         synchronized void replace(JSONArray a) throws Exception {SQLiteDatabase d=getWritableDatabase();d.beginTransaction();try{d.delete("games",null,null);for(int i=0;i<a.length();i++)put(a.getJSONObject(i));d.setTransactionSuccessful();}finally{d.endTransaction();}}
+    }
+    private boolean uninstallableRecord(JSONObject g){return "app".equals(g.optString("kind"))&&!g.has("intentUri")&&!getPackageName().equals(g.optString("package"));}
+    private boolean packageInstalled(String pkg) throws Exception {
+        try{return (getPackageManager().getApplicationInfo(pkg,0).flags&ApplicationInfo.FLAG_INSTALLED)!=0;}
+        catch(PackageManager.NameNotFoundException e){return false;}
+    }
+    private void finishUninstall(boolean returned){
+        String pkg=getPreferences(0).getString("pendingUninstall","");if(pkg.isEmpty())return;
+        try{
+            if(packageInstalled(pkg)){if(returned)getPreferences(0).edit().remove("pendingUninstall").commit();return;}
+            JSONArray records=db.all();for(int i=0;i<records.length();i++){JSONObject g=records.getJSONObject(i);if(pkg.equals(g.optString("package"))&&uninstallableRecord(g))db.remove(g.getString("id"));}
+            iconCache.keySet().removeIf(key->key.startsWith(pkg+"/"));
+            getPreferences(0).edit().remove("pendingUninstall").commit();
+            emit("appUninstalled",data("package",pkg));
+        }catch(Exception e){notice("Could not refresh the library after uninstalling. Please reopen Wayfinder.");}
     }
     private void normalizeRecord(JSONObject g) throws JSONException {
         g.put("favorite",g.optBoolean("favorite",false));
@@ -171,9 +187,24 @@ public class MainActivity extends Activity {
         @JavascriptInterface public String clearRecent(String id){try{JSONObject g=db.get(id);g.put("lastPlayed",0);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String favorite(String id,boolean value){try{JSONObject g=db.get(id);g.put("favorite",value);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String save(String raw){try{JSONObject g=obj(raw);validate(g);if(g.optString("kind").equals("app")&&g.has("component")){ActivityInfo a=getPackageManager().getActivityInfo(ComponentName.unflattenFromString(g.getString("component")),0);if(!a.exported)throw new IOException("App does not allow launching this screen");}db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
+        @JavascriptInterface public boolean canUninstall(String id){try{JSONObject g=db.get(id);return uninstallableRecord(g)&&packageInstalled(g.getString("package"));}catch(Exception e){return false;}}
+        @JavascriptInterface public void uninstallGame(String id){runOnUiThread(()->{
+            try{
+                JSONObject g=db.get(id);if(!uninstallableRecord(g)||!packageInstalled(g.getString("package")))throw new IOException("This entry is not an installed Android app");
+                String pkg=g.getString("package");
+                if(!getPreferences(0).getString("pendingUninstall","").isEmpty())throw new IOException("An uninstall request is already pending");
+                Intent request=new Intent(Intent.ACTION_UNINSTALL_PACKAGE,Uri.parse("package:"+pkg)).putExtra(Intent.EXTRA_RETURN_RESULT,true);
+                if(!getPreferences(0).edit().putString("pendingUninstall",pkg).commit())throw new IOException("Could not save uninstall request");
+                try{startActivityForResult(request,UNINSTALL);}catch(Exception e){getPreferences(0).edit().remove("pendingUninstall").commit();throw e;}
+            }catch(Exception e){notice("Could not open uninstall: "+e.getMessage());}
+        });}
         @JavascriptInterface public String remove(String id){db.remove(id);return result(true,"Removed from library");}
         @JavascriptInterface public void launch(String id){runOnUiThread(()->{try{JSONObject g=db.get(id);startActivity(target(g));g.put("lastPlayed",System.currentTimeMillis());db.put(g);emit("launched",data("id",id));}catch(Exception e){Log.w("WayfinderLaunch",id,e);notice("Could not launch: "+e.getMessage());}});}
         @JavascriptInterface public void installed(){worker.execute(()->{JSONArray a=new JSONArray();try{PackageManager pm=getPackageManager();List<ResolveInfo> found=pm.queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),0);for(ResolveInfo r:found){if(r.activityInfo==null||!r.activityInfo.exported||r.activityInfo.packageName.equals(getPackageName()))continue;JSONObject g=new JSONObject();g.put("title",r.loadLabel(pm).toString());g.put("package",r.activityInfo.packageName);g.put("component",new ComponentName(r.activityInfo.packageName,r.activityInfo.name).flattenToString());g.put("isGame",r.activityInfo.applicationInfo.category==ApplicationInfo.CATEGORY_GAME);a.put(g);}emit("installed",data("apps",a));}catch(Exception e){notice("Could not list apps: "+e.getMessage());}});}
+        @JavascriptInterface public String customFontSettings(){return customFont.settings();}
+        @JavascriptInterface public boolean acceptCustomFont(String file){return customFont.accept(file);}
+        @JavascriptInterface public void discardCustomFont(String file){customFont.discard(file);}
+        @JavascriptInterface public void chooseCustomFont(){runOnUiThread(()->{try{startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),FONT);}catch(Exception e){notice("No file picker is available");}});}
         @JavascriptInterface public String backgroundSettings(){return background.settings();}
         @JavascriptInterface public void chooseBackground(){runOnUiThread(()->{try{startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("image/*").addCategory(Intent.CATEGORY_OPENABLE),16);}catch(Exception e){notice("No image picker is available");}});}
         @JavascriptInterface public void clearBackground(){worker.execute(()->{background.clear();emit("backgroundRemoved",new JSONObject());});}
@@ -193,7 +224,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void createShortcut(){runOnUiThread(()->{try{startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_CREATE_SHORTCUT),"Add a game shortcut"),SHORTCUT);}catch(Exception e){notice("No apps offer shortcut creation on this device");}});}
         @JavascriptInterface public String launchAudit(){JSONArray a=new JSONArray();JSONArray all=db.all();for(int i=0;i<all.length();i++){try{JSONObject g=all.getJSONObject(i);JSONObject r=data("id",g.getString("id"));r.put("title",g.getString("title"));try{Intent intent=target(g);ActivityInfo info=getPackageManager().getActivityInfo(intent.getComponent(),0);r.put("ok",info.exported&&info.enabled);r.put("component",intent.getComponent().flattenToString());}catch(Exception e){r.put("ok",false);r.put("error",e.toString());}a.put(r);}catch(Exception ignored){}}return a.toString();}
     }
-    @Override protected void onActivityResult(int request,int result,Intent intent){super.onActivityResult(request,result,intent);if(result!=RESULT_OK||intent==null){if(request==COVER)emit("coverCanceled",new JSONObject());return;}if(request==14){Uri uri=intent.getData();if(uri!=null)worker.execute(()->{try{startup.importVideo(uri);emit("startupChanged",new JSONObject());notice("Startup video saved");}catch(Exception e){notice("Could not use video: "+e.getMessage());}});return;}
+    @Override protected void onActivityResult(int request,int result,Intent intent){super.onActivityResult(request,result,intent);if(request==UNINSTALL){finishUninstall(true);return;}if(request==FONT){if(result==RESULT_OK&&intent!=null&&intent.getData()!=null){Uri fontUri=intent.getData();worker.execute(()->{try{emit("customFontCandidate",customFont.stage(fontUri));}catch(Exception e){notice("Could not use font: "+e.getMessage());}});}return;}if(result!=RESULT_OK||intent==null){if(request==COVER)emit("coverCanceled",new JSONObject());return;}if(request==14){Uri uri=intent.getData();if(uri!=null)worker.execute(()->{try{startup.importVideo(uri);emit("startupChanged",new JSONObject());notice("Startup video saved");}catch(Exception e){notice("Could not use video: "+e.getMessage());}});return;}
         if(request==16){Uri uri=intent.getData();if(uri!=null)worker.execute(()->{try{background.importImage(uri);emit("backgroundChanged",new JSONObject());notice("Background saved");}catch(Exception e){notice("Could not use background: "+e.getMessage());}});return;}
         if(request==15){Uri audioUri=intent.getData();if(audioUri!=null){notice("Importing background audio…");worker.execute(()->{try{File staged=ambient.stage(audioUri);String name=ambient.name(audioUri);runOnUiThread(()->{ambient.accept(staged,name);emit("ambientChanged",new JSONObject());notice("Background audio saved");});}catch(Exception e){notice("Could not use audio: "+e.getMessage());}});}return;}
         if(request==SHORTCUT){captureShortcut(intent);return;}Uri uri=intent.getData();if(uri==null)return;

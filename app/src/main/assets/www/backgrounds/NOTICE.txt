@@ -30,3 +30,29 @@ License: CC0 1.0 Universal
 https://creativecommons.org/publicdomain/zero/1.0/
 The included license states: "Public domain and free to use on whatever you want, personal or commercial. Credit is not required but appreciated."
 Adapted for Wayfinder: original background layers composed and cropped to 1152 x 648; 60-second, 15 fps parallax loops. Gameplay tiles and sprites omitted.
+
+Fort of Illusion
+Source: https://opengameart.org/content/fort-of-illusion
+Adapted for Wayfinder: original scenery layers and a sparse repeating turret foreground, cropped to 1152 x 648; 60-second parallax loop at 15 fps.
+Included license:
+Artwork created by Luis Zuno (@ansimuz)
+
+
+LICENSE:
+You may use these assets in personal or commercial projects. You can modify these assets to suit your needs. You can re-distribute the file.
+Credit no required but appreciated it.
+
+____________________
+
+LINKS
+
+Twitter @ansimuz
+
+Support my work at Patreon https://www.patreon.com/ansimuz
+
+Buy my stuff https://ansimuz.itch.io/
+
+Get more Free Assetslike these at: http://www.ansimuz.com
+
+
+____________________

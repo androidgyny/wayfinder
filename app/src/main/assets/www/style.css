@@ -45,28 +45,28 @@ body[data-input="touch"] .genre:not(.active):hover{background:transparent;color:
 /* Presentation layouts retain the library's palette and native effects. */
 #category-strip,#presentation-info,#presentation-navigation{display:none}
 
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]){height:100dvh;overflow:hidden}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .shell{display:block}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{padding:0;height:calc(100dvh - 88px);position:relative;overflow:hidden}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{display:flex;align-items:center;justify-content:center;height:64px;border-bottom:1px solid var(--line);gap:24px;padding:0 30px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]){height:100dvh;overflow:hidden}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .shell{display:block}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{padding:0;height:calc(100dvh - 88px);position:relative;overflow:hidden}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{display:flex;align-items:center;justify-content:center;height:64px;border-bottom:1px solid var(--line);gap:24px;padding:0 30px}
 #category-strip button{background:transparent;color:var(--muted);font-size:15px;max-width:28%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px}
 #category-strip #category-current{color:var(--accent);font-size:22px;font-weight:650;max-width:45%;border-bottom:3px solid var(--accent)}
 #category-before::before{content:'‹ ';}#category-after::after{content:' ›';}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{display:block;padding:22px 6%;height:145px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{display:block;padding:22px 6%;height:145px}
 #presentation-title{font-size:clamp(23px,3vw,38px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 8px}
 #presentation-info .eyebrow{margin-bottom:7px}#presentation-position{margin:0;color:var(--muted);font-size:13px}
 .presentation-actions{position:absolute;right:6%;top:164px;display:flex;gap:12px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{display:block;position:absolute;left:0;right:0;top:218px;bottom:56px;perspective:1100px;overflow:hidden;touch-action:pan-y;--tile:min(31vh,260px)}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{position:absolute;width:var(--tile);left:22%;top:12px;transform:translateX(calc(var(--offset) * (var(--tile) + 22px)));transition:transform .22s ease,opacity .22s ease;scroll-margin:0}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{display:block;position:absolute;left:0;right:0;top:218px;bottom:56px;perspective:1100px;overflow:hidden;touch-action:pan-y;--tile:min(31vh,260px)}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{position:absolute;width:var(--tile);left:22%;top:12px;transform:translateX(calc(var(--offset) * (var(--tile) + 22px)));transition:transform .22s ease,opacity .22s ease;scroll-margin:0}
 body[data-presentation="kyoto"] .cover{aspect-ratio:1;border-radius:3px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-genre{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-selected .cover{outline:3px solid var(--accent);outline-offset:4px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game:not(.presentation-selected){opacity:.65}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-navigation{display:flex;position:absolute;bottom:12px;left:22px;right:22px;justify-content:space-between;z-index:12;pointer-events:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-genre{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-selected .cover{outline:3px solid var(--accent);outline-offset:4px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game:not(.presentation-selected){opacity:.65}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-navigation{display:flex;position:absolute;bottom:12px;left:22px;right:22px;justify-content:space-between;z-index:12;pointer-events:none}
 #presentation-navigation button{pointer-events:auto}#presentation-navigation button:disabled{opacity:.3}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{position:absolute;bottom:0;left:80px;right:80px;padding:16px 0;font-size:11px;gap:15px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{position:absolute;bottom:0;left:80px;right:80px;padding:16px 0;font-size:11px;gap:15px}
 body[data-presentation="cupertino"] #presentation-info{text-align:center}
 body[data-presentation="cupertino"] #grid{top:206px;--tile:min(21vh,185px);overflow:hidden}
 body[data-presentation="cupertino"] .game{left:calc(50% - var(--tile)/2);transform:translateX(calc(var(--offset) * var(--tile) * var(--cupertino-pitch,.63) + var(--side) * var(--cupertino-gap,42px))) translateZ(calc(var(--distance) * -48px)) rotateY(calc(var(--side) * -48deg));transform-origin:center}
@@ -74,35 +74,35 @@ body[data-presentation="cupertino"] .game.presentation-selected{transform:transl
 body[data-presentation="cupertino"] .cover{border-radius:4px;-webkit-box-reflect:below 8px linear-gradient(transparent 60%,#ffffff24)}
 body[data-presentation="cupertino"] .game-title{display:none}
 body[data-presentation="cupertino"] .presentation-actions{top:135px;right:25px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game .cover::after{display:none}
-@media(max-height:560px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:170px;--tile:25vh}body[data-presentation="cupertino"] #grid{--tile:18vh}#presentation-info .eyebrow{display:none}.presentation-actions{top:125px}}
-@media(max-width:760px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 76px)}#category-strip button{font-size:12px}#category-strip #category-current{font-size:17px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}.presentation-actions{position:static;margin-top:12px}body[data-presentation="cupertino"] .presentation-actions{justify-content:center}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:250px;--tile:min(40vw,25vh)}body[data-presentation="cupertino"] #grid{--tile:min(30vw,20vh)}}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game .cover::after{display:none}
+@media(max-height:560px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:170px;--tile:25vh}body[data-presentation="cupertino"] #grid{--tile:18vh}#presentation-info .eyebrow{display:none}.presentation-actions{top:125px}}
+@media(max-width:760px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 76px)}#category-strip button{font-size:12px}#category-strip #category-current{font-size:17px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}.presentation-actions{position:static;margin-top:12px}body[data-presentation="cupertino"] .presentation-actions{justify-content:center}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:250px;--tile:min(40vw,25vh)}body[data-presentation="cupertino"] #grid{--tile:min(30vw,20vh)}}
 
 /* Fit complete portrait covers to the space left by compact browsing controls. */
 #presentation-scrub{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar{height:60px;padding:0 22px;gap:18px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar .search{height:38px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 60px)}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{height:48px;touch-action:pan-y;user-select:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar{height:60px;padding:0 22px;gap:18px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar .search{height:38px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 60px)}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{height:48px;touch-action:pan-y;user-select:none}
 #category-strip #category-current{font-size:19px;padding:7px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:72px;padding:12px 5%;text-align:left;position:relative}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info .eyebrow{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:25px;margin:0 0 5px;padding-right:230px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:absolute;top:15px;right:5%;margin:0}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:120px;bottom:70px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:72px;padding:12px 5%;text-align:left;position:relative}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info .eyebrow{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:25px;margin:0 0 5px;padding-right:230px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:absolute;top:15px;right:5%;margin:0}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:120px;bottom:70px}
 body[data-presentation="kyoto"] .cover{aspect-ratio:2/3}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{top:10px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{display:flex;position:absolute;bottom:12px;left:78px;right:78px;height:44px;align-items:center;gap:14px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{top:10px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{display:flex;position:absolute;bottom:12px;left:78px;right:78px;height:44px;align-items:center;gap:14px}
 #presentation-seek{min-width:30px;flex:1;accent-color:var(--accent);height:36px;touch-action:none}
 #presentation-seek-position{font-size:13px;color:var(--muted);min-width:72px;text-align:center;font-variant-numeric:tabular-nums}
 #presentation-scrub button{font-size:14px;min-height:44px}#presentation-scrub button:disabled{opacity:.3}
 #category-strip button{min-height:42px}
-@media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:20px;padding-right:0}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:112px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:static;margin-top:8px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:160px}body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{left:52px;right:52px;gap:3px}#presentation-scrub .text-button{padding:3px;font-size:12px}#presentation-seek-position{min-width:55px;font-size:11px}}
+@media(max-width:600px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:20px;padding-right:0}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:112px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:static;margin-top:8px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:160px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{left:52px;right:52px;gap:3px}#presentation-scrub .text-button{padding:3px;font-size:12px}#presentation-seek-position{min-width:55px;font-size:11px}}
 
 /* A transformed carousel is a fixed stage, never a native scroll container. */
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{overflow:clip;overflow-anchor:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{overflow:clip;overflow-anchor:none}
 
 /* Tokyo: horizontal categories crossing a vertical title list. */
 #tokyo-preview{display:none}
@@ -125,9 +125,9 @@ body[data-presentation="tokyo"] #category-current{letter-spacing:.3px}
 .favorite-toggle{min-width:44px;font-size:22px;padding:7px 12px;color:var(--accent)}.favorite-toggle[aria-pressed="true"]{background:var(--accent-soft)}
 .favorite-badge{position:absolute;left:9px;top:9px;z-index:3;padding:4px 6px;background:var(--field);color:var(--accent);border-radius:4px;font-size:17px;pointer-events:none}
 body[data-presentation="tokyo"] .favorite-badge{left:38px;top:38px;font-size:12px;padding:0 3px}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:285px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:285px}
 
-@media(max-width:600px){body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:0}}
+@media(max-width:600px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:0}}
 /* Seattle dashboard: horizontal shelves in a vertically scrollable collection. */
 #seattle-header,#seattle-categories{display:none}
 body[data-presentation="seattle"] :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu,footer){display:none!important}
@@ -179,8 +179,8 @@ body[data-presentation="seattle"] .game-genre{display:none}
 #drawer-grid .pin-drop-target{outline:3px dashed var(--accent);outline-offset:2px;background:var(--accent-soft)}.pin-dragging{cursor:grabbing}
 
 /* Keep touch under direct finger control; controller steps remain discrete. */
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"]) #grid{touch-action:none;user-select:none}
-body:is([data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{transition:transform .10s ease-out,opacity .10s ease-out}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"]) #grid{touch-action:none;user-select:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{transition:transform .10s ease-out,opacity .10s ease-out}
 #grid.fluid-motion .game{transition:none!important;will-change:transform}
 body[data-presentation="cupertino"] #grid.fluid-motion .game{transform:translateX(calc(var(--offset)*var(--tile)*var(--cupertino-pitch,.63) + var(--side)*var(--cupertino-gap,42px))) translateZ(calc(var(--depth)*1px)) rotateY(calc(var(--side)*-48deg))}
 #grid.fluid-motion .cover img{transform:none;transition:none}
@@ -286,7 +286,7 @@ body[data-presentation=vienna] #grid{display:block}
 body[data-presentation=vienna] .vienna-row .game{flex:0 0 auto;width:clamp(100px,calc((100dvh - 360px)/1.5),190px);scroll-margin:0}
 body[data-presentation=vienna] .game-title,body[data-presentation=vienna] .game-genre{display:none}
 body[data-presentation=vienna] .game:focus{outline:none}
-body[data-presentation=vienna] .presentation-selected .cover{outline:2px solid var(--accent);outline-offset:4px}
+body:is([data-presentation=prague],[data-presentation=vienna]) .presentation-selected .cover{outline:2px solid var(--accent);outline-offset:4px}
 .vienna-status{padding:9px 36px;font-family:var(--display-font);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vienna-empty{color:var(--muted);padding:25px 0;max-width:650px;font-size:14px;line-height:1.6}
 
@@ -349,8 +349,8 @@ body:is([data-presentation=kyoto],[data-presentation=cupertino])[data-title-plac
 
 /* Cover-derived atmosphere sits behind content and never intercepts input. */
 body{isolation:isolate}
-body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 35% 35%,rgba(var(--backdrop-rgb,128,128,128),.18),transparent 75%);opacity:0;transition:opacity .3s}
-body[data-backdrop=gradient]::before{opacity:1}
+#soft-gradient{position:fixed;inset:0;z-index:-1;pointer-events:none;contain:strict;transform:translateZ(0);background:radial-gradient(ellipse at 35% 35%,rgba(var(--backdrop-rgb,128,128,128),.18),transparent 75%);opacity:0;transition:opacity .3s}
+body[data-backdrop=gradient] #soft-gradient{opacity:1}
 #appearance-preview{padding:20px;min-height:170px;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin:18px 0}
 body[data-backdrop=gradient] #appearance-preview{background:radial-gradient(ellipse at 35% 35%,rgba(var(--backdrop-rgb,128,128,128),.18),transparent 75%),var(--bg)}
 .appearance-sample{position:relative;width:68px;height:102px;margin:auto;border-radius:4px;background:var(--panel)}
@@ -372,7 +372,7 @@ body[data-selection-style=underline] #grid.fluid-motion .game .cover::before{dis
 
 /* Halo remains independently optional, including with the Glow marker. */
 body{--optional-halo:0 0 0 0 transparent}
-body[data-cover-glow=true] :is(.cover,#tokyo-art,.appearance-sample){--optional-halo:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
+body[data-cover-glow=true] :is(.cover,#tokyo-art,#ulm-cover,.appearance-sample){--optional-halo:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
 body:not([data-selection-style=glow]) .appearance-sample{box-shadow:var(--optional-halo)}
 
 #vienna-options[hidden]{display:none}
@@ -414,3 +414,127 @@ body[data-presentation=kyoto] #grid .game:is(:focus,:focus-visible,.controller-s
 
 body[data-background-color=muted] #custom-backdrop{filter:saturate(.25)}
 body[data-background-color=palette] #custom-backdrop{filter:url(#background-palette-filter)}
+
+/* Static appearance choices: no animation, blur, or extra image layers. */
+body[data-cover-border=hairline] :is(#grid .cover,#tokyo-art,.vienna-preview img,.appearance-sample,.cupertino-preview-tile){border:1px solid var(--line)}
+body[data-cover-border=matte] :is(#grid .cover,#tokyo-art,.vienna-preview img,.appearance-sample,.cupertino-preview-tile){border:6px solid var(--panel)}
+body[data-cover-border=matte] .vienna-preview img{border-width:2px}
+body[data-title-weight=regular]{--game-title-weight:400}
+body[data-title-weight=medium]{--game-title-weight:600}
+body[data-title-weight=bold]{--game-title-weight:700}
+body[data-title-weight] :is(.game-title,#presentation-title){font-weight:var(--game-title-weight)!important}
+
+#uninstall-control{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+
+body[data-typography=custom]{--display-font:var(--custom-font-family,WayfinderClean,sans-serif)}
+#custom-font-name{overflow-wrap:anywhere}
+
+/* Ulm: stable text rows and an optional single artwork panel. */
+#ulm-header,#ulm-footer,#ulm-preview{display:none}
+#ulm-menu{max-width:380px;padding:30px}#ulm-menu .secondary{display:block;width:100%;margin:12px 0}
+body[data-presentation=ulm]{height:100dvh;overflow:hidden}
+body[data-presentation=ulm] .topbar,body[data-presentation=ulm] .shell>aside{display:none!important}
+body[data-presentation=ulm] .shell{display:block;height:100dvh}
+body[data-presentation=ulm] #main{height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:24px 32px;overflow:hidden}
+body[data-presentation=ulm] #main>:not(#ulm-header):not(#grid):not(#ulm-preview):not(#ulm-footer){display:none!important}
+body[data-presentation=ulm] #ulm-header{display:flex;grid-column:1/-1;grid-row:1;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
+body[data-presentation=ulm] #ulm-heading{line-height:1.35;padding-block:3px;font-size:27px;letter-spacing:0;flex:1;min-width:80px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body[data-presentation=ulm] #ulm-header .secondary{font-size:14px;padding:10px 14px}
+body[data-presentation=ulm] #ulm-search{flex-basis:100%;width:100%;background:var(--panel);color:var(--text);border:1px solid var(--line);padding:10px;font:inherit;border-radius:4px}
+body[data-presentation=ulm] #grid{grid-column:1;grid-row:2;display:block;position:relative;inset:auto;width:auto;height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;padding:5px;scrollbar-width:thin;touch-action:pan-y;perspective:none;transform:none;contain:layout paint;scroll-padding:5px}
+body[data-presentation=ulm] #grid .ulm-row{display:flex!important;position:relative!important;inset:auto!important;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:54px;margin:0;padding:12px 18px;border:0!important;border-radius:3px!important;box-shadow:none!important;outline:none!important;transform:none!important;opacity:1!important;background:transparent!important;color:var(--text)!important;text-align:left;transition:none!important;touch-action:pan-y}
+body[data-presentation=ulm] #grid .ulm-row::before,body[data-presentation=ulm] #grid .ulm-row::after{display:none!important}
+body[data-presentation=ulm] #grid .ulm-row.ulm-selected{background:var(--accent)!important;color:var(--accent-ink)!important}
+body[data-presentation=ulm] #grid .ulm-row:focus-visible{outline:2px solid var(--text)!important;outline-offset:-3px!important}
+body[data-presentation=ulm] #grid .game-title,body[data-presentation=ulm] .ulm-title{display:block;position:static;flex:1;min-width:0;font-family:var(--display-font);font-size:23px;line-height:1.3;font-weight:var(--game-title-weight,600);margin:0;color:inherit!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:none}
+body[data-presentation=ulm] .ulm-count{font-size:15px;opacity:.75;font-variant-numeric:tabular-nums}
+body[data-presentation=ulm] .favorite-badge{position:static;background:none;box-shadow:none;color:inherit;font-size:17px;padding:0}
+body[data-presentation=ulm] #ulm-footer{display:flex;grid-column:1/-1;grid-row:3;justify-content:space-between;gap:16px;color:var(--muted);font-size:12px;line-height:1.5}
+body[data-presentation=ulm] #ulm-position{white-space:nowrap;font-variant-numeric:tabular-nums}
+body[data-presentation=ulm][data-ulm-preview=true] #main{grid-template-columns:minmax(0,1fr) minmax(160px,30%)}
+body[data-presentation=ulm] #ulm-preview{grid-column:2;grid-row:2;position:static;display:flex;align-items:center;justify-content:center;min-height:0;width:auto;height:auto;padding:12px;margin:0;border:0;overflow:hidden}
+body[data-presentation=ulm] #ulm-cover{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:0}
+body[data-presentation=ulm] .ulm-empty{padding:20px;color:var(--muted)}
+@media(max-height:500px){body[data-presentation=ulm] #main{padding:12px 20px;gap:8px}body[data-presentation=ulm] #grid .ulm-row{min-height:46px;padding:8px 14px}body[data-presentation=ulm] #grid .game-title,body[data-presentation=ulm] .ulm-title{font-size:20px}}
+
+
+@font-face{font-family:Nunito;src:url('fonts/Nunito.ttf') format('truetype');font-weight:200 1000;font-display:swap}
+body[data-typography=nunito]{--display-font:Nunito,sans-serif}
+
+/* Venice: overlapping portrait cards in a shallow, flat fan. */
+body[data-presentation=venice] #grid{top:48px;bottom:150px;perspective:none;overflow:visible;clip-path:inset(0 -0px -18px);touch-action:none}
+body[data-presentation=venice] #grid .game{left:calc(50% - var(--tile)/2);top:16px;transform-origin:50% 85%;transform:translate3d(calc(var(--offset)*var(--tile)*.57),calc(var(--distance)*12px),0) rotate(calc(var(--offset)*3deg)) scale(calc(1 - var(--distance)*.035));transition:transform .16s ease-out,opacity .16s ease-out}
+body[data-presentation=venice] #grid .game:is(:focus,:focus-visible,.controller-selected){outline:none}
+body[data-presentation=venice] .cover{aspect-ratio:2/3;-webkit-box-reflect:initial}
+body[data-presentation=venice] #presentation-info{position:absolute;left:0;right:0;bottom:68px;height:78px;text-align:center;padding:4px 24%;z-index:12}
+body[data-presentation=venice] #presentation-title{padding:0;margin:0 0 6px;font-size:clamp(18px,2.4vw,28px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=venice] #presentation-position{font-size:12px}
+body[data-presentation=venice] .presentation-actions{right:22px;top:12px;position:absolute;margin:0}
+body[data-presentation=venice] #presentation-play{display:none}
+body[data-presentation=venice] #grid .game:not(.presentation-selected) .card-edit{visibility:hidden;pointer-events:none}
+@media(prefers-reduced-motion:reduce){body[data-presentation=venice] #grid .game{transition:none}}
+
+/* Quiet, consistently shaped controller badges for Ulm. */
+body[data-presentation=ulm] #ulm-footer{align-items:center;padding-top:8px;gap:20px}
+#ulm-hints{display:flex;align-items:center;flex-wrap:wrap;gap:8px 20px;min-width:0}
+.ulm-hint{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.ulm-key{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;height:23px;min-width:23px;padding:0 6px;border:1px solid var(--muted);border-radius:5px;color:var(--text);font-family:WayfinderClean,sans-serif;font-size:10px;font-weight:600;line-height:1;letter-spacing:.03em}
+.ulm-key-round{width:23px;padding:0;border-radius:50%;font-size:12px;letter-spacing:0}
+.ulm-hint-label{color:var(--muted);font-size:12px}
+body[data-presentation=ulm] #ulm-position{margin-left:auto;flex-shrink:0;color:var(--muted)}
+@media(max-width:800px){#ulm-hints{gap:7px 12px}.ulm-hint{gap:5px}}
+
+/* Ulm's single cover shares the artwork treatment, not the list marker. */
+body[data-presentation=ulm] #ulm-preview{overflow:visible;background:transparent}
+body[data-presentation=ulm] #ulm-cover{border-radius:var(--art-radius,0px);box-shadow:var(--optional-halo)}
+body[data-presentation=ulm][data-cover-border=hairline] #ulm-cover{border:1px solid var(--line)}
+body[data-presentation=ulm][data-cover-border=matte] #ulm-cover{border:6px solid var(--panel)}
+
+/* Ulm previews the cover itself; selection remains on the text list. */
+body[data-presentation=ulm] .appearance-sample{border:0!important;border-radius:0!important;outline:none!important;box-shadow:none!important;background:transparent}
+body[data-presentation=ulm] .appearance-sample::after{display:none!important}
+
+/* Fixed cover canvas; Fit and Fill alter only the image inside it. */
+body[data-presentation=ulm] #ulm-cover{aspect-ratio:2/3;object-fit:contain;background:var(--panel);flex:none}
+body[data-presentation=ulm][data-art-fit=cover] #ulm-cover{object-fit:cover}
+
+body[data-presentation=tokyo] #tokyo-art{flex:none;aspect-ratio:2/3;width:var(--tokyo-cover-width);height:calc(var(--tokyo-cover-width)*1.5);background:var(--panel)}
+body[data-art-fit=contain] .vienna-preview img,body[data-art-fit=contain] .appearance-sample img{object-fit:contain}
+
+/* The library seek track follows the palette instead of the native gray rail. */
+#presentation-seek{-webkit-appearance:none;appearance:none;background:transparent;padding:0;cursor:pointer}
+#presentation-seek::-webkit-slider-runnable-track{height:4px;border:0;border-radius:999px;background:var(--muted)}
+#presentation-seek::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-6px;border:0;border-radius:50%;background:var(--accent)}
+#presentation-seek::-moz-range-track{height:4px;border:0;border-radius:999px;background:var(--muted)}
+#presentation-seek::-moz-range-progress{height:4px;border:0;border-radius:999px;background:var(--muted)}
+#presentation-seek::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:var(--accent)}
+#presentation-seek:disabled{opacity:.4;cursor:default}
+
+/* Prague: compact cover-and-title rows in equal-width category columns. */
+body[data-presentation=prague]{overflow:hidden}
+body[data-presentation=prague] .shell{display:block}
+body[data-presentation=prague] :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu,footer){display:none!important}
+body[data-presentation=prague] .topbar{height:64px;padding:0 24px;gap:18px}
+body[data-presentation=prague] main{padding:0;height:calc(100dvh - 64px)}
+body[data-presentation=prague] #grid{display:flex;position:relative;gap:0;height:100%;overflow-x:auto;overflow-y:hidden;align-items:stretch;padding:0 16px 12px;scrollbar-width:thin;touch-action:pan-x pan-y}
+.prague-column{flex:0 0 clamp(230px,25vw,310px);min-width:0;display:flex;flex-direction:column;position:relative;padding:0 4px}
+.prague-column:not(:last-child)::after{content:"";position:absolute;right:0;top:90px;bottom:34px;width:1px;background:var(--line);opacity:.45;pointer-events:none}
+.prague-heading{flex:none;display:flex;flex-direction:column;gap:3px;justify-content:flex-start;width:100%;height:82px;padding:14px 8px 2px;background:transparent;color:var(--muted);text-align:center;font:18px/1.3 var(--display-font);overflow:hidden}
+.prague-heading span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-height:47px;width:100%;overflow:hidden;flex-shrink:0}
+.prague-heading small{font:11px/1.3 WayfinderClean,sans-serif;color:var(--muted);flex-shrink:0}
+.expanded .prague-heading{color:var(--accent)}
+.prague-list{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;position:relative;overflow-y:auto;overflow-x:hidden;padding:10px 12px;scrollbar-width:thin;touch-action:pan-x pan-y;overscroll-behavior-y:contain}
+body[data-presentation=prague] .game{flex:none;width:100%;height:64px;display:flex;align-items:center;gap:12px;padding:3px 6px;border-radius:5px;scroll-margin:10px}
+body[data-presentation=prague] .game .cover{width:38px;height:57px;aspect-ratio:2/3;flex:none}
+body[data-presentation=prague] .game-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.35;margin:0;padding-right:18px;overflow-wrap:anywhere}
+body[data-presentation=prague] .game-genre,body[data-presentation=prague] .cover::after{display:none}
+body[data-presentation=prague] .game:focus{outline:none}
+body[data-presentation=prague] .presentation-selected{background:var(--accent-soft)}
+body[data-presentation=prague] .presentation-selected .game-title{color:var(--accent)}
+body[data-presentation=prague] .card-edit{top:50%;right:0;transform:translateY(-50%);font-size:13px;padding:5px 3px;background:transparent}
+body[data-presentation=prague] .favorite-badge{left:3px;top:3px;font-size:10px;padding:2px}
+.prague-column:not(.expanded) .card-edit{display:none!important}
+.prague-status{flex:none;height:30px;padding:5px 12px;text-align:center;overflow:hidden}
+.prague-status-title{display:none}
+.prague-status-count{color:var(--muted);font:11px/1.3 WayfinderClean,sans-serif}
+.prague-empty{font-size:14px;line-height:1.6;color:var(--muted);text-align:center}

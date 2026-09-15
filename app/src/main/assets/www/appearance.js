@@ -1,13 +1,35 @@
-const builtinAppearancePresets=[{"name":"Default","values":{"presentation":"library","palette":"portal","typography":"computer","coverGlow":true,"backdrop":"flat","selectionStyle":"outline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"soft","coverBrightness":"dimmed","menuButtons":"all"}},{"name":"Launchbiz","values":{"presentation":"library","palette":"graphite","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"outline","artFit":"cover","size":"compact","cupertinoReflections":"classic","cupertinoSpacing":"compact","berlinCoverSize":94.12526293442204,"kyotoTitlePlacement":"below","cupertinoTitlePlacement":"below","viennaSeparators":"space","coverCorners":"square","coverBrightness":"dimmed","menuButtons":"selected"}},{"name":"Niagaramond","values":{"presentation":"oxford","palette":"parchment","typography":"editorial","coverGlow":false,"backdrop":"flat","selectionStyle":"underline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"space","coverCorners":"soft","coverBrightness":"even","menuButtons":"selected"}},{"name":"iTomes","values":{"presentation":"cupertino","palette":"graphite","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"underline","artFit":"cover","size":"comfortable","cupertinoReflections":"classic","cupertinoSpacing":"compact","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"below","viennaSeparators":"space","coverCorners":"square","coverBrightness":"even","menuButtons":"selected"}},{"name":"Playrite","values":{"presentation":"berlin","palette":"midnight","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"outline","artFit":"cover","size":"compact","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"square","coverBrightness":"even","menuButtons":"selected"}}];
+const builtinAppearancePresets=[{"name":"Default","values":{"presentation":"library","palette":"portal","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"outline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"soft","coverBrightness":"even","menuButtons":"all","coverBorder":"none","interfaceContrast":"soft","titleWeight":"medium"}},{"name":"Fan Favorite","values":{"presentation":"venice","palette":"terracotta","typography":"outfit","coverGlow":false,"backdrop":"flat","selectionStyle":"underline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"soft","coverBrightness":"even","menuButtons":"selected","coverBorder":"hairline","interfaceContrast":"soft","titleWeight":"medium","backgroundColor":"original","backgroundDim":60}},{"name":"Folio Nova","values":{"presentation":"vienna","palette":"parchment","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"underline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"space","coverCorners":"square","coverBrightness":"even","menuButtons":"selected","coverBorder":"none","interfaceContrast":"soft","titleWeight":"bold","backgroundColor":"original","backgroundDim":60}},{"name":"iTomes","values":{"presentation":"cupertino","palette":"graphite","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"underline","artFit":"cover","size":"comfortable","cupertinoReflections":"classic","cupertinoSpacing":"compact","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"below","viennaSeparators":"space","coverCorners":"square","coverBrightness":"even","menuButtons":"selected","coverBorder":"hairline","interfaceContrast":"soft","titleWeight":"medium"}},{"name":"Launchbiz","values":{"presentation":"library","palette":"graphite","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"outline","artFit":"cover","size":"compact","cupertinoReflections":"classic","cupertinoSpacing":"compact","berlinCoverSize":94.12526293442204,"kyotoTitlePlacement":"below","cupertinoTitlePlacement":"below","viennaSeparators":"space","coverCorners":"square","coverBrightness":"dimmed","menuButtons":"selected","coverBorder":"hairline","interfaceContrast":"crisp","titleWeight":"medium"}},{"name":"Minuet","values":{"presentation":"ulm","palette":"graphite","typography":"nunito","coverGlow":false,"backdrop":"flat","selectionStyle":"outline","artFit":"contain","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"square","coverBrightness":"even","menuButtons":"selected","coverBorder":"none","interfaceContrast":"crisp","titleWeight":"medium","ulmArtwork":false,"backgroundColor":"original","backgroundDim":60}},{"name":"Niagaramond","values":{"presentation":"oxford","palette":"parchment","typography":"editorial","coverGlow":false,"backdrop":"flat","selectionStyle":"underline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"space","coverCorners":"soft","coverBrightness":"even","menuButtons":"selected","coverBorder":"none","interfaceContrast":"soft","titleWeight":"regular"}},{"name":"Playrite","values":{"presentation":"berlin","palette":"midnight","typography":"clean","coverGlow":false,"backdrop":"flat","selectionStyle":"outline","artFit":"cover","size":"compact","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":144,"kyotoTitlePlacement":"above","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"square","coverBrightness":"even","menuButtons":"selected","coverBorder":"none","interfaceContrast":"crisp","titleWeight":"bold"}}];
+let coverBorder='none',interfaceContrast='soft',titleWeight='medium';
 let coverCorners='soft',coverBrightness='dimmed',menuButtons='all',menuTouchId=null,appearancePresets=[];
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
 let viennaSeparators='lines';
 let backdrop='flat',selectionStyle='outline';
 let typography='computer',coverGlow=true,cupertinoReflections='subtle',cupertinoSpacing='airy',berlinCoverSize=120,kyotoTitlePlacement='above',cupertinoTitlePlacement='above';
 const glowColors=new Map();let glowTimer=0,glowCard=null,hoverGlowCard=null;
-function setTypography(value){typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;persist();}
+let customFontInfo={},customFontFace=null,customFontRequest=0;
+function refreshCustomFont(){try{customFontInfo=native?.customFontSettings?JSON.parse(native.customFontSettings()):{}}catch{customFontInfo={}}$('#custom-font-name').textContent=customFontInfo.name||'No font selected';}
+function chooseCustomFont(){if(native?.chooseCustomFont)native.chooseCustomFont();else toast('Choose a font in the Android app');}
+async function loadCustomFont(info,candidate=false){
+ const request=++customFontRequest;
+ try{
+  if(!/^font\/[a-f0-9-]{36}\.(ttf|otf)$/.test(info.url||''))throw Error('Choose a custom font first');
+  const face=new FontFace('WayfinderCustom'+request,'url("'+info.url+'")');await face.load();
+  if(request!==customFontRequest){if(candidate)native?.discardCustomFont?.(info.file);return;}
+  if(candidate&&!native.acceptCustomFont(info.file))throw Error('Could not save the font');
+  document.fonts.add(face);if(customFontFace)document.fonts.delete(customFontFace);customFontFace=face;customFontInfo=info;
+  document.body.style.setProperty('--custom-font-family','"'+face.family+'",sans-serif');
+  typography='custom';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=false;$('#custom-font-name').textContent=info.name||'Custom font';
+  sizePresentation();persist();if(candidate)toast('Custom font applied');
+ }catch(e){if(candidate)native?.discardCustomFont?.(info.file);if(request===customFontRequest){$('#typography').value=typography;toast(e.message==='Choose a custom font first'?e.message:'Could not load this font. Try another TTF or OTF file.');}}
+}
+function setTypography(value){
+ if(value==='exo2')value='clean';
+ if(value==='custom'){refreshCustomFont();if(customFontInfo.url){loadCustomFont(customFontInfo);return;}value='clean';toast('Choose a custom font to use this preset');}
+ customFontRequest++;typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans','nunito'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=true;persist();
+}
+
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').value=coverGlow?'subtle':'off';queueCoverGlow();persist();}
-function queueCoverGlow(){clearTimeout(glowTimer);glowTimer=setTimeout(updateCoverGlow,100);}
+function queueCoverGlow(){clearTimeout(glowTimer);glowTimer=setTimeout(()=>{updateAppearancePreview();updateCoverGlow()},100);}
 function coverColor(img){
  const key=img.currentSrc||img.src;if(glowColors.has(key))return glowColors.get(key);
  if(!img.complete||!img.naturalWidth)return null;
@@ -24,26 +46,30 @@ function coverColor(img){
  }catch{return null;}
 }
 function updateCoverGlow(){
+ if(presentation==='ulm'){syncUlmCoverAppearance();return;}
  const grid=$('#grid');if(grid.classList.contains('fluid-motion'))return;
- const carousel=['kyoto','cupertino','tokyo','vienna','oxford','berlin'].includes(presentation);
- const selected=carousel?grid.querySelector('.presentation-selected'):(hoverGlowCard?.isConnected?hoverGlowCard:document.activeElement?.closest('#grid .game')||grid.querySelector('.controller-selected')||grid.querySelector('.game'));
+ const carousel=['kyoto','cupertino','tokyo','vienna','prague','oxford','berlin','venice'].includes(presentation);
+ const selected=carousel?grid.querySelector('.presentation-selected'):(document.body.dataset.input!=='controller'&&hoverGlowCard?.isConnected?hoverGlowCard:document.activeElement?.closest('#grid .game')||grid.querySelector('.controller-selected')||grid.querySelector('.game'));
  if(glowCard!==selected){glowCard?.classList.remove('glow-selected');glowCard=selected;if(selected)selected.classList.add('glow-selected');}
  const preview=$('#tokyo-art');const img=presentation==='oxford'?preview:selected?.querySelector('.cover img');
  const color=img?coverColor(img):null;
- document.body.style.setProperty('--backdrop-rgb',color||'128,128,128');
- const sample=$('#appearance-preview img');if(img&&sample.getAttribute('src')!==img.getAttribute('src'))sample.src=img.src;sample.hidden=!img;
- $('#appearance-preview').style.setProperty('--cover-glow-rgb',color||'150,160,150');
+ if(backdrop==='gradient'){const layer=$('#soft-gradient'),rgb=color||'128,128,128';if(layer.style.getPropertyValue('--backdrop-rgb')!==rgb)layer.style.setProperty('--backdrop-rgb',rgb);if($('#settings-dialog').open)$('#appearance-preview').style.setProperty('--backdrop-rgb',rgb);}
  if(selected){if(color)selected.style.setProperty('--cover-glow-rgb',color);else selected.style.removeProperty('--cover-glow-rgb');}
  preview.classList.toggle('glow-selected',(presentation==='tokyo'||presentation==='oxford')&&!!selected);
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
 }
 function setAtmosphere(background,selection){
- backdrop=['gradient','custom','mountain','magical','urban','alien','another'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
+ // Retire the experimental layered renderer; preserve the same scene and controls.
+ if(background==='fortlayers')background='fort';
+ backdrop=['gradient','custom','mountain','magical','urban','alien','another','fort'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
  document.body.dataset.backdrop=backdrop;document.body.dataset.selectionStyle=selectionStyle;
  $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;syncCustomBackground();queueCoverGlow();persist();
 }
 function setViennaSeparators(value){viennaSeparators=value==='space'?'space':'lines';document.body.dataset.viennaSeparators=viennaSeparators;$('#vienna-separators').value=viennaSeparators;persist();}
 function initAppearance(value){
+ setUlmArtwork(value.ulmArtwork,false);
+ setLightAppearance(value.coverBorder,value.interfaceContrast,value.titleWeight);
+ for(const id of ['cover-border','interface-contrast','title-weight'])$('#'+id).onchange=()=>{setLightAppearance($('#cover-border').value,$('#interface-contrast').value,$('#title-weight').value);effect('select');};
  initCustomBackground(value);
  appearancePresets=Array.isArray(value.appearancePresets)?value.appearancePresets.filter(p=>p&&typeof p.name==='string'&&p.values&&typeof p.values==='object').slice(0,10):[];
  setCoverOptions(value.coverCorners,value.coverBrightness,value.menuButtons);refreshPresets();
@@ -60,11 +86,15 @@ function initAppearance(value){
  $('#title-placement').onchange=e=>{if(presentation==='kyoto')kyotoTitlePlacement=e.target.value;else cupertinoTitlePlacement=e.target.value;refreshLayoutControls();sizePresentation();persist();effect('select')};
  setTypography(value.typography);setCoverGlow(value.coverGlow);setCupertinoOptions(value.cupertinoReflections,value.cupertinoSpacing);
  $('#cupertino-reflections').onchange=$('#cupertino-spacing').onchange=()=>{setCupertinoOptions($('#cupertino-reflections').value,$('#cupertino-spacing').value);effect('select')};
- new MutationObserver(refreshCupertinoControls).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
- $('#typography').onchange=e=>{setTypography(e.target.value);effect('select')};$('#cover-glow').onchange=e=>setCoverGlow(e.target.value==='subtle');
+ const sample=$('#appearance-preview img');sample.hidden=true;sample.addEventListener('load',()=>{sample.hidden=false;updateAppearancePreview();$('#appearance-preview').style.setProperty('--cover-glow-rgb',coverColor(sample)||'150,160,150')});sample.addEventListener('error',()=>{sample.hidden=true});
+ new MutationObserver(updateAppearancePreview).observe(document.body,{attributes:true,attributeFilter:['data-cover-border','data-cover-corners','data-cover-glow','data-art-fit','data-palette','data-presentation','style']});
+ window.addEventListener('resize',updateAppearancePreview);
+ new MutationObserver(()=>{refreshCupertinoControls();refreshApplicableAppearanceControls();updateAppearancePreview()}).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
+ refreshCustomFont();$('#custom-font-choose').onclick=chooseCustomFont;$('#typography').onchange=e=>{if(e.target.value==='custom'){refreshCustomFont();if(customFontInfo.url)setTypography('custom');else{$('#typography').value=typography;chooseCustomFont();}}else setTypography(e.target.value);effect('select')};$('#cover-glow').onchange=e=>setCoverGlow(e.target.value==='subtle');
  const grid=$('#grid');new MutationObserver(queueCoverGlow).observe(grid,{childList:true,subtree:true,attributes:true,attributeFilter:['class','src']});
  $('#tokyo-art').addEventListener('load',queueCoverGlow);grid.addEventListener('load',queueCoverGlow,true);grid.addEventListener('focusin',queueCoverGlow);
- grid.addEventListener('pointerover',e=>{if(e.pointerType==='mouse'){hoverGlowCard=e.target.closest('.game');queueCoverGlow();}});
+ grid.addEventListener('pointerover',e=>{if(e.pointerType==='mouse'&&document.body.dataset.input!=='controller'){hoverGlowCard=e.target.closest('.game');queueCoverGlow();}});
+ grid.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&(e.movementX||e.movementY)){document.body.dataset.input='pointer';const card=e.target.closest('.game');if(hoverGlowCard!==card){hoverGlowCard=card;queueCoverGlow();}}});
  grid.addEventListener('pointerleave',()=>{hoverGlowCard=null;queueCoverGlow();});
 }
 
@@ -90,12 +120,14 @@ function refreshCupertinoControls(){
 }
 
 function refreshLayoutControls(){
+ $('#ulm-options').hidden=presentation!=='ulm';
  $('#vienna-options').hidden=presentation!=='vienna';
  const carousel=presentation==='kyoto'||presentation==='cupertino';
  $('#title-placement-options').hidden=!carousel;$('#berlin-options').hidden=presentation!=='berlin';
  const placement=presentation==='kyoto'?kyotoTitlePlacement:cupertinoTitlePlacement;
  document.body.dataset.titlePlacement=carousel?placement:'above';$('#title-placement').value=placement;
  $('#berlin-cover-size').value=berlinCoverSize;
+ refreshApplicableAppearanceControls();
 }
 function setBerlinCoverSize(value,save=true){
  berlinCoverSize=Math.max(64,Math.min(200,Number(value)||120));$('#berlin-cover-size').value=berlinCoverSize;
@@ -107,8 +139,8 @@ function setCoverOptions(corners,brightness,menus){
  document.body.dataset.coverCorners=coverCorners;document.body.dataset.coverBrightness=coverBrightness;document.body.dataset.menuButtons=menuButtons;
  $('#cover-corners').value=coverCorners;$('#cover-brightness').value=coverBrightness;$('#menu-buttons').value=menuButtons;persist();
 }
-function appearanceSnapshot(){return {presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
-function availableAppearancePresets(){return [...builtinAppearancePresets.filter(b=>!appearancePresets.some(p=>p.name.toLowerCase()===b.name.toLowerCase())),...appearancePresets]}
+function appearanceSnapshot(){return {ulmArtwork,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
+function availableAppearancePresets(){return [...builtinAppearancePresets.filter(b=>!appearancePresets.some(p=>p.name.toLowerCase()===b.name.toLowerCase())),...appearancePresets].sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base',numeric:true}))}
 function refreshPresetButtons(){const name=$('#appearance-presets').value;$('#preset-apply').disabled=!availableAppearancePresets().some(p=>p.name===name);$('#preset-delete').disabled=!appearancePresets.some(p=>p.name===name);}
 function refreshPresets(selected=''){
  const select=$('#appearance-presets');select.replaceChildren(new Option('Choose a preset…',''));for(const p of availableAppearancePresets())select.add(new Option(p.name+(builtinAppearancePresets.includes(p)?' · Built-in':''),p.name));select.value=selected;refreshPresetButtons();
@@ -121,7 +153,72 @@ function saveAppearancePreset(){
 function deleteAppearancePreset(){const name=$('#appearance-presets').value;appearancePresets=appearancePresets.filter(p=>p.name!==name);refreshPresets();$('#preset-name').value='';persist();$('#preset-status').textContent='Preset removed. Your current appearance is unchanged.';}
 function applyAppearancePreset(){
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;const v=preset.values,wasRestoring=restoring;restoring=true;
- try{setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
+ try{setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
  finally{restoring=wasRestoring;persist()}
  $('#preset-status').textContent='Applied “'+preset.name+'”.';
+}
+
+function updateInterfaceContrast(){
+ const body=document.body;body.style.removeProperty('--line');body.style.removeProperty('--muted');
+ if(interfaceContrast!=='crisp')return;
+ const style=getComputedStyle(body),rgb=name=>{const hex=style.getPropertyValue(name).trim().replace('#','');return [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16));},bg=rgb('--bg'),text=rgb('--text');
+ const mix=ratio=>'rgb('+text.map((v,i)=>Math.round(v*ratio+bg[i]*(1-ratio))).join(',')+')';
+ body.style.setProperty('--line',mix(.60));body.style.setProperty('--muted',mix(.90));
+}
+function setLightAppearance(border,contrast,weight){
+ coverBorder=['hairline','matte'].includes(border)?border:'none';interfaceContrast=contrast==='crisp'?'crisp':'soft';titleWeight=['regular','bold'].includes(weight)?weight:'medium';
+ document.body.dataset.coverBorder=coverBorder;document.body.dataset.interfaceContrast=interfaceContrast;document.body.dataset.titleWeight=titleWeight;
+ $('#cover-border').value=coverBorder;$('#interface-contrast').value=interfaceContrast;$('#title-weight').value=titleWeight;updateInterfaceContrast();persist();
+}
+
+// Settings previews use library records, independent of rendered cover tiles.
+// Load only while Settings is open, including when Ulm artwork is disabled.
+function updateAppearancePreview(){
+ if(!$('#settings-dialog').open)return;
+ if(backdrop==='gradient')$('#appearance-preview').style.setProperty('--backdrop-rgb',$('#soft-gradient').style.getPropertyValue('--backdrop-rgb')||'128,128,128');
+ const sample=$('#appearance-preview img');
+ const selectedId=presentation==='ulm'?presentationId:$('#grid .presentation-selected')?.dataset.id||$('#grid .controller-selected')?.dataset.id||glowCard?.dataset.id||presentationId;
+ const game=filtered.find(g=>g.id===selectedId)||filtered[0];
+ if(!game?.image){sample.hidden=true;sample.removeAttribute('src');return;}
+ if(sample.getAttribute('src')!==game.image){sample.hidden=true;sample.src=game.image;}
+ else sample.hidden=!(sample.complete&&sample.naturalWidth>0);
+ if(!sample.hidden)$('#appearance-preview').style.setProperty('--cover-glow-rgb',coverColor(sample)||'150,160,150');
+ syncUlmSettingsSample(sample);
+}
+
+function syncUlmSettingsSample(sample){
+ const frame=sample.closest('.appearance-sample');
+ if(presentation!=='ulm'){frame.removeAttribute('style');sample.removeAttribute('style');return;}
+ if(!sample.naturalWidth)return;
+ const actual=$('#ulm-cover'),style=getComputedStyle(actual),rect=actual.getBoundingClientRect();
+ const width=rect.width||Math.min(innerWidth*.25,sample.naturalWidth);
+ const height=rect.height||width*1.5;
+ const scale=Math.min(68/width,102/height);
+ frame.style.width=width*scale+'px';frame.style.height=height*scale+'px';
+ // Scale a full-size artwork treatment, including its border, corners and halo.
+ Object.assign(sample.style,{width:width+'px',height:height+'px',maxWidth:'none',maxHeight:'none',objectFit:artFit,background:style.backgroundColor,boxSizing:'border-box',border:style.border,borderRadius:style.borderRadius,transform:`scale(${scale})`,transformOrigin:'top left'});
+ const color=coverColor(sample)||'150,160,150';
+ sample.style.boxShadow=coverGlow?`0 0 22px 7px rgba(${color},.48),0 0 44px 12px rgba(${color},.24)`:'none';
+}
+
+// Visibility describes actual layout behavior; hidden values remain saved.
+function refreshApplicableAppearanceControls(){
+ const ulm=presentation==='ulm',artwork=!ulm||ulmArtwork;
+ const rows={
+  'presentation-sort':presentation!=='oxford',
+  'art-fit':artwork,'cover-border':artwork,'cover-corners':artwork,'cover-glow':artwork,
+  'cover-brightness':!ulm,'menu-buttons':!['ulm','venice'].includes(presentation),
+  'selection-style':!ulm
+ };
+ for(const [id,visible] of Object.entries(rows))$('#'+id).closest('.settings-row').hidden=!visible;
+ $('#appearance-preview').hidden=!artwork;
+ // Oxford dims neighboring text rows rather than separate cover tiles.
+ const brightness=$('#cover-brightness').closest('.settings-row');
+ brightness.querySelector('h3').textContent=presentation==='oxford'?'Unselected titles':'Unselected covers';
+ brightness.querySelector('p').textContent=presentation==='oxford'?'Keep neighboring titles equally bright or dim them to emphasize your selection.':'Keep neighboring artwork equally bright or dim it to emphasize your selection.';
+ for(const heading of document.querySelectorAll('#settings-appearance>.settings-subheading')){
+  let node=heading.nextElementSibling,visible=false;
+  while(node&&!node.classList.contains('settings-subheading')){if(!node.hidden)visible=true;node=node.nextElementSibling;}
+  heading.hidden=!visible;
+ }
 }
