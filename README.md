@@ -20,12 +20,13 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 
 ## Features
 
-- **One library, many ways to browse.** Choose from eleven presentation themes: Alexandria, Berlin, Cupertino, Kyoto, Oxford, Prague, Seattle, Tokyo, Ulm, Venice, and Vienna. They range from cover grids and shelves to an overlapping card fan, independently scrollable category columns, and a text-first browser with optional artwork. Change the layout without reorganizing your games.
+- **One library, many ways to browse.** Choose from thirteen presentation themes: Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Tokyo, Ulm, Venice, and Vienna. They range from cover grids and shelves to an overlapping card fan, independently scrollable category columns, and a text-first browser with optional artwork. Cambridge adds a persistent category directory beside a game list, using IBM Plex Mono and an optional cover pane. Change the layout without reorganizing your games.
+- **A table for discovery.** Copenhagen deals twelve picks from across your categories. Drag covers to swap their positions, shuffle the table, replace one suggestion, or keep a pick in place for the next deal. Your arrangement is remembered.
 - **Built for large collections.** Editable categories, title search, sorting, favorites, and recently played games help you find something quickly. Seattle adds shuffled selections from your categories for a little discovery.
 - **Touch and controller together.** Swipe through covers, navigate precisely with the D-pad, switch categories with the shoulder buttons, and jump through long lists with the triggers.
 - **One cover per game, chosen by you.** Edit titles and categories; find artwork through Google Play, Google Images, or SteamGridDB, or use a local image. Fit the whole image or fill the cover frame.
 - **Make the library your own.** Mix eleven color schemes and nine bundled fonts, or import a TTF or OTF font. Adjust cover borders, corners, halos, selection markers, contrast, and title weight; layout-specific controls appear only where they apply. Start from one of eight built-in presets or save up to ten of your own.
-- **Quiet or animated backgrounds.** Choose a flat color, soft gradient, one of six bundled parallax scenes, or your own still or animated image. Adjust dimming and keep the original colors, mute them, or match your palette.
+- **Quiet or animated backgrounds.** Choose a flat color, soft gradient, one of eight bundled parallax scenes, or your own still or animated image. Adjust dimming and keep the original colors, mute them, or match your palette.
 - **Optional sound and startup animation.** Retro computer sound effects, a bundled ambient music loop or your own audio, and a responsive opening animation with synchronized sound. You can also choose a custom startup video or turn the opening off.
 - **Your other Android apps, too.** A searchable app drawer includes editable icons and pins you can drag into order. Wayfinder can also be set as the device's default home screen.
 - **Manage installed games.** Open Android’s uninstall confirmation from an installed app’s edit menu. Shortcut entries do not offer uninstall.
@@ -73,49 +74,29 @@ Adding a library entry does not install the game. Games must already be installe
 
 ## Appearance gallery
 
-Seven looks from the same library, combining presentation themes, typography, palettes, and backgrounds. These are captures of the current app interface in a browser with an example collection; games and personal cover artwork are not bundled. Animated backgrounds are shown as still frames.
+Three ways to make the same collection feel at home. **[Explore all ten looks →](docs/SCREENSHOTS.md)**
 
-### Cupertino · Graphite · Outfit
+Captured from the current development interface in a browser with a curated example collection. Games and personal cover artwork are not bundled; animated backdrops appear as still frames. See the full gallery for details.
 
-A restrained Cover Flow presentation with subtle reflections and a cover-colored halo.
+### Cupertino
 
-![A restrained Cover Flow presentation with subtle reflections and a cover-colored halo.](docs/screenshots/wayfinder-cupertino.png)
+Sculpted cover flow, subtle reflections, and a soft halo around Dream Machine.
 
-### Berlin · Cyan · Space Grotesk
+![Cupertino: Sculpted cover flow, subtle reflections, and a soft halo around Dream Machine.](docs/screenshots/wayfinder-cupertino.png)
 
-A dense contact sheet with crisp cyan accents over a muted Another World backdrop.
+### Vienna
 
-![A dense contact sheet with crisp cyan accents over a muted Another World backdrop.](docs/screenshots/wayfinder-berlin.png)
+A generous favorites shelf above compact category previews, framed by a dim forest backdrop.
 
-### Kyoto · Sea Glass · Space Grotesk
+![Vienna: A generous favorites shelf above compact category previews, framed by a dim forest backdrop.](docs/screenshots/wayfinder-vienna.png)
 
-Large rounded covers and the Magical road backdrop, with the selected title below.
+### Ulm
 
-![Large rounded covers and the Magical road backdrop, with the selected title below.](docs/screenshots/wayfinder-kyoto.png)
+A warm, readable title list with Tengami’s paper-world artwork as its single focal point.
 
-### Vienna · Amber · IBM Plex Sans
+![Ulm: A warm, readable title list with Tengami’s paper-world artwork as its single focal point.](docs/screenshots/wayfinder-ulm.png)
 
-Warm category shelves with a larger active row and Mountain dusk behind the collection.
-
-![Warm category shelves with a larger active row and Mountain dusk behind the collection.](docs/screenshots/wayfinder-vienna.png)
-
-### Venice · Terracotta · Outfit
-
-An overlapping fan of story-adventure covers against a soft, cover-derived gradient.
-
-![An overlapping fan of story-adventure covers against a soft, cover-derived gradient.](docs/screenshots/wayfinder-venice.png)
-
-### Ulm · Graphite · Nunito
-
-A quiet, readable game list with optional cover artwork and compact controller hints.
-
-![A quiet, readable game list with optional cover artwork and compact controller hints.](docs/screenshots/wayfinder-ulm.png)
-
-### Prague · Parchment · Editorial
-
-Compact cover-and-title rows in category columns, each directly scrollable by touch.
-
-![Compact cover-and-title rows in category columns, each directly scrollable by touch.](docs/screenshots/wayfinder-prague.png)
+[See the complete ten-screenshot gallery →](docs/SCREENSHOTS.md)
 
 ## Local library, personal artwork
 
