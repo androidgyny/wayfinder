@@ -9,13 +9,14 @@ function renderPrague(){
  for(const column of pragueColumns){
   const active=column.key===pragueKey,section=el('section','prague-column');section.dataset.category=column.key;section.classList.toggle('expanded',active);
   const heading=el('button','prague-heading');heading.append(el('span','',column.label),el('small','',column.items.length+' games'));heading.setAttribute('aria-expanded',String(active));heading.onclick=()=>pragueOpen(column.key,true);section.append(heading);
-  const list=el('div','prague-list');list.setAttribute('aria-label',column.label);const chosen=column.items.find(g=>g.id===praguePositions[column.key])||column.items[0];
+  const list=el('div','prague-list');list.setAttribute('aria-label',column.label);const chosen=rememberedCategoryGame(column.items,praguePositions[column.key],'prague:'+column.key);
   for(const g of column.items){const row=card(g);row.tabIndex=active&&g===chosen?0:-1;row.classList.toggle('presentation-selected',active&&g===chosen);list.append(row)}
   if(!chosen)list.append(el('p','prague-empty',query?'No games match this search.':'Press Select on a game to add it to Favorites.'));
   if(active)presentationId=chosen?.id||null;if(chosen)praguePositions[column.key]=chosen.id;
   const status=el('div','prague-status');pragueStatus(status,chosen,column);section.append(list,status);
-  list.addEventListener('scroll',()=>{if(performance.now()<(list.ignoreUntil||0))return;clearTimeout(pragueScrollTimer);pragueScrollTimer=setTimeout(()=>{
-   if(presentation!=='prague'||!list.isConnected)return;
+  list.addEventListener('wheel',()=>{document.body.dataset.input='pointer'},{passive:true});
+  list.addEventListener('scroll',()=>{if(document.body.dataset.input==='controller'||performance.now()<(list.ignoreUntil||0))return;clearTimeout(pragueScrollTimer);pragueScrollTimer=setTimeout(()=>{
+   if(presentation!=='prague'||!list.isConnected||document.body.dataset.input==='controller')return;
    const y=list.scrollTop+10;let best=null,distance=Infinity;
    for(const row of list.children){if(!row.matches('.game'))continue;const d=Math.abs(row.offsetTop-y);if(d<distance){distance=d;best=row}}
    if(best){pragueActivate(column.key);pragueSelect(best.dataset.id,false,false)}
@@ -30,12 +31,12 @@ function renderPrague(){
 }
 function pragueReveal(target){const list=target.parentElement;list.ignoreUntil=performance.now()+250;const top=target.offsetTop-10,bottom=target.offsetTop+target.offsetHeight+10;if(top<list.scrollTop)list.scrollTop=Math.max(0,top);else if(bottom>list.scrollTop+list.clientHeight)list.scrollTop=bottom-list.clientHeight;}
 function pragueOpen(key,focus=false){
- pragueActivate(key);const remembered=praguePositions[key],column=pragueCurrent();if(column?.items.length)pragueSelect(remembered||column.items[0].id,false,true);const section=$('#grid .prague-column.expanded'),grid=$('#grid');
+ clearTimeout(pragueScrollTimer);pragueActivate(key);const remembered=praguePositions[key],column=pragueCurrent();if(column?.items.length)pragueSelect(rememberedCategoryGame(column.items,remembered,'prague:'+key)?.id,false,true);const section=$('#grid .prague-column.expanded'),grid=$('#grid');
  if(section)grid.scrollLeft=Math.max(0,section.offsetLeft-(grid.clientWidth-section.offsetWidth)/2);
  if(focus)controllerFocus(section?.querySelector('.presentation-selected')||section?.querySelector('.prague-heading'),true);persist();
 }
 function pragueSelect(id,focus=true,scroll=true){
- const column=pragueCurrent(),g=column?.items.find(g=>g.id===id);if(!g)return;clearTimeout(pragueScrollTimer);presentationId=id;praguePositions[pragueKey]=id;
+ const column=pragueCurrent(),g=column?.items.find(g=>g.id===id);if(!g)return;clearTimeout(pragueScrollTimer);presentationId=id;praguePositions[pragueKey]=id;rememberCategoryIndex(column.items,id,'prague:'+pragueKey);
  let target;for(const b of document.querySelectorAll('.prague-column.expanded .prague-list .game')){const chosen=b.dataset.id===id;b.classList.toggle('presentation-selected',chosen);if(!chosen)b.classList.remove('controller-selected');b.tabIndex=chosen?0:-1;if(chosen)target=b;}
  pragueStatus($('.prague-column.expanded .prague-status'),g,column);
  if(focus)controllerFocus(target);else if(document.activeElement?.closest('.prague-list')){target.focus({preventScroll:true});controllerGameId=id;}

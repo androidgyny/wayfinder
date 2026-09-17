@@ -66,7 +66,7 @@ function initBerlin(){
  },{passive:false});
  const endPinch=e=>{if(!pinch)return;e.preventDefault();suppressClickUntil=performance.now()+500;if(!e.touches.length){pinch=null;persist()}};
  grid.addEventListener('touchend',endPinch,{passive:false});grid.addEventListener('touchcancel',endPinch,{passive:false});
- grid.addEventListener('click',e=>{if(pinch||performance.now()<suppressClickUntil){e.preventDefault();e.stopImmediatePropagation()}},true);
+ grid.addEventListener('click',e=>{if(e.detail!==0&&(pinch||performance.now()<suppressClickUntil)){e.preventDefault();e.stopImmediatePropagation()}},true);
  new ResizeObserver(()=>{if(presentation!=='berlin'||!grid.clientWidth||!grid.clientHeight)return;if(grid.clientWidth!==observedWidth||grid.clientHeight!==observedHeight){observedWidth=grid.clientWidth;observedHeight=grid.clientHeight;renderBerlin();}}).observe(grid);
  grid.addEventListener('scroll',()=>{
   if(presentation!=='berlin')return;if(!berlinFrame)berlinFrame=requestAnimationFrame(()=>{berlinFrame=0;paintBerlin()});

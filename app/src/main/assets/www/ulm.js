@@ -32,7 +32,7 @@ function ulmSelect(id,focus=false){
  const old=$('#grid .ulm-selected');const row=ulmRows.get(id);
  if(old!==row){old?.classList.remove('ulm-selected','presentation-selected');if(old)old.tabIndex=-1;row?.classList.add('ulm-selected');if(row)row.tabIndex=0;}
  if(ulmLevel==='games'){
-  presentationId=id;controllerGameId=id;ulmPositions[ulmSection]=id;row?.classList.add('presentation-selected');
+  presentationId=id;controllerGameId=id;ulmPositions[ulmSection]=id;rememberCategoryIndex(filtered,id,'ulm:'+ulmSection);row?.classList.add('presentation-selected');
   const i=filtered.findIndex(g=>g.id===id);$('#ulm-position').textContent=filtered.length?`${i+1} / ${filtered.length.toLocaleString()}`:'0 / 0';
  }else{ulmCategoryKey=id;const list=ulmSections();$('#ulm-position').textContent=`${Math.max(0,list.findIndex(s=>s.key===id))+1} / ${list.length}`;}
  ulmPreview();if(focus)ulmFocus(true);queueCarouselSave();
@@ -63,8 +63,8 @@ function renderUlm(){
   grid.replaceChildren(frag);
   if(!category&&!filtered.length){const msg=el('p','ulm-empty',query?'No matching titles.':ulmSection==='favorites'?'No favorites yet.':ulmSection==='recent'?'No recently played games.':'No games in this category.');grid.append(msg);}
  }
- const id=category?(list.some(s=>s.key===ulmCategoryKey)?ulmCategoryKey:'all'):(filtered.some(g=>g.id===presentationId)?presentationId:filtered.some(g=>g.id===ulmPositions[ulmSection])?ulmPositions[ulmSection]:filtered[0]?.id||null);
- ulmSelect(id);$('#load').hidden=true;$('#empty').hidden=true;
+ const id=category?(list.some(s=>s.key===ulmCategoryKey)?ulmCategoryKey:'all'):(filtered.some(g=>g.id===presentationId)?presentationId:filtered.some(g=>g.id===ulmPositions[ulmSection])?ulmPositions[ulmSection]:rememberedCategoryGame(filtered,ulmPositions[ulmSection],'ulm:'+ulmSection)?.id||null);
+ ulmSelect(id);revealCategoryItem(grid,ulmRows.get(id));$('#load').hidden=true;$('#empty').hidden=true;
 }
 function ulmController(action){
  document.body.dataset.input='controller';
@@ -107,6 +107,8 @@ function syncUlmCoverAppearance(){
  const img=$('#ulm-cover');
  const color=ulmArtwork&&img.hasAttribute('src')&&img.complete&&img.naturalWidth?coverColor(img):null;
  if(color)img.style.setProperty('--cover-glow-rgb',color);else img.style.removeProperty('--cover-glow-rgb');
+ if(backdrop==='gradient'){const layer=$('#soft-gradient'),rgb=color||'128,128,128';if(layer.style.getPropertyValue('--backdrop-rgb')!==rgb)layer.style.setProperty('--backdrop-rgb',rgb);if($('#settings-dialog').open)$('#appearance-preview').style.setProperty('--backdrop-rgb',rgb);}
+
 }
 
 function sizeUlmCover(){

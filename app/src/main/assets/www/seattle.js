@@ -21,17 +21,14 @@ function shuffleDiscovery(category=null){
  }
  window.scrollTo({left:x,top:y,behavior:'instant'});effect('page');persist();
 }
-function seattleDashboard(){seattleBrowse=false;reset();window.scrollTo(0,0);persist()}
+function seattleDashboard(){seattleBrowse=false;reset();persist()}
 function seattleOpen(g='',favorite=false){seattleBrowse=true;favoritesOnly=favorite;setGenre(g,true);persist()}
 function renderSeattle(){renderPinnedApps();
  const home=!seattleBrowse&&!genre&&!favoritesOnly&&!query;
  $('#seattle-title').textContent=home?'Welcome back.':sectionLabel();
  $('#seattle-subtitle').textContent=home?'Pick up where you left off, or find your next favorite.':`${filtered.length.toLocaleString()} games${query?' matching “'+query+'”':''}`;
  $('#seattle-home').onclick=seattleDashboard;$('#seattle-home').hidden=home;
- const chips=[el('button','seattle-chip','All games'),el('button','seattle-chip','★ Favorites')];
- chips[0].onclick=()=>seattleOpen();chips[1].onclick=()=>seattleOpen('',true);
- for(const name of genres){const b=el('button','seattle-chip',name);b.onclick=()=>seattleOpen(name);chips.push(b)}
- chips.forEach((b,i)=>{const active=!home&&(i===0?!genre&&!favoritesOnly:i===1?favoritesOnly:genre===genres[i-2]);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+ const chips=seattleSections().map((section,i)=>{const b=el('button','seattle-chip',section.label);b.onclick=()=>seattleChooseSection(section);const active=i===seattleSectionIndex();b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));return b;});
  $('#seattle-categories').replaceChildren(...chips);
  const fragment=document.createDocumentFragment();let selectionPlaced=false;
  function shelf(title,items,limit,empty,more){
@@ -54,9 +51,8 @@ function renderSeattle(){renderPinnedApps();
    const shuffle=el('button','text-button category-shuffle','Shuffle');shuffle.setAttribute('aria-label','Shuffle '+name);shuffle.onclick=()=>shuffleDiscovery(name);
    actions.append(shuffle,heading.querySelector('button'));heading.append(actions);
   }
- }else shelf(sectionLabel(),filtered,visible,favoritesOnly&&!query?'No favorites yet. Use the star in game details or press Select to add one.':'No games match this search.');
+ }else shelf(sectionLabel(),filtered,filtered.length,favoritesOnly&&!query?'No favorites yet. Use the star in game details or press Select to add one.':'No games match this search.');
  $('#grid').replaceChildren(fragment);$('#load').hidden=true;$('#empty').hidden=true;
- if(!home&&visible<filtered.length){const more=el('button','load-button seattle-more','Show more games');more.onclick=()=>{const at=visible;visible+=72;renderSeattle();controllerFocus($('#grid .seattle-shelf').children[at]);persist()};$('#grid').append(more)}
 }
 function seattleMove(start,action){
  const rows=[...document.querySelectorAll('.seattle-shelf')].filter(r=>r.querySelector('.game'));
@@ -70,16 +66,47 @@ function seattleMove(start,action){
  }
  const delta={left:-1,right:1,pageUp:-8,pageDown:8}[action]||0;
  const target=index+delta;
- if(target>=cards.length&&(seattleBrowse||genre||favoritesOnly||query)&&visible<filtered.length){visible=Math.min(filtered.length,Math.max(visible+72,target+1));renderSeattle();const all=$('#grid .seattle-shelf').querySelectorAll('.game');controllerFocus(all[Math.min(target,all.length-1)]);return}
  controllerFocus(cards[Math.max(0,Math.min(cards.length-1,target))]);
 }
 
 function scrollSeattleSelection(card,previous){
  const row=card.closest('.seattle-shelf');if(!row)return;
  // Horizontal selection must not repeatedly reposition the document and header.
- if(previous?.closest('.seattle-shelf')!==row){card.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});return;}
+ const vertical=card.getBoundingClientRect();
+ if(previous?.closest('.seattle-shelf')!==row||vertical.top<$('.topbar').offsetHeight||vertical.bottom>innerHeight){card.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});return;}
  const bounds=card.getBoundingClientRect(),viewport=row.getBoundingClientRect(),padding=parseFloat(getComputedStyle(row).scrollPaddingLeft)||8;
  const left=viewport.left+padding,right=viewport.right-padding;
  if(bounds.left<left-1)row.scrollLeft+=bounds.left-left;
  else if(bounds.right>right+1)row.scrollLeft+=bounds.right-right;
 }
+
+function revealSeattleCategory(node){
+ revealCategoryItem($('#seattle-categories'),node,true);
+ const rect=node.getBoundingClientRect(),top=$('.topbar').getBoundingClientRect().bottom+8,bottom=innerHeight-8;
+ let delta=0;
+ if(rect.top<top)delta=rect.top-top;
+ else if(rect.bottom>bottom)delta=rect.bottom-bottom;
+ if(delta)window.scrollTo({top:Math.max(0,scrollY+delta),behavior:'instant'});
+}
+
+function seattleCategoryController(action){
+ const focused=document.activeElement,bar=$('#seattle-categories');
+ if(!focused?.matches('.seattle-chip')||!bar.contains(focused))return false;
+ if(['left','right','genrePrev','genreNext'].includes(action)){
+  const list=seattleSections(),index=[...bar.children].indexOf(focused),delta=action==='left'||action==='genrePrev'?-1:1;
+  const next=list[(index+delta+list.length)%list.length];
+  effect('page');seattleChooseSection(next);
+  controllerFocus($('#seattle-categories .active'),true);return true;
+ }
+ if(action==='down'){
+  const cards=[...$('#grid').querySelectorAll('.game')];
+  controllerFocus(cards.find(n=>n.dataset.id===presentationId)||cards[0],true);return true;
+ }
+ if(action==='up'){controllerFocus($('#search'));return true;}
+ return false;
+}
+
+function seattleSections(){return [{label:'Home',home:true},...sections()]}
+function seattleSectionIndex(){return !seattleBrowse&&!genre&&!favoritesOnly&&!query?0:sectionIndex()+1}
+function seattleChooseSection(section){if(section.home)seattleDashboard();else seattleOpen(section.genre,section.favorite)}
+function seattleStepSection(delta){const list=seattleSections();seattleChooseSection(list[(seattleSectionIndex()+delta+list.length)%list.length])}

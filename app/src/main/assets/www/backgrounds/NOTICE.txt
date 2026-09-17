@@ -56,3 +56,59 @@ Get more Free Assetslike these at: http://www.ansimuz.com
 
 
 ____________________
+
+
+Underwater Diving and Forest of Illusion
+Original pixel artwork: Luis Zuno (Ansimuz)
+https://opengameart.org/content/underwater-diving-pack
+https://opengameart.org/content/sunnyland-forest-of-illusion
+Both artwork packs are listed as CC0 on their author-uploaded OpenGameArt pages.
+Original archive license notices are reproduced below.
+
+Adaptation for Wayfinder: background layers composited, cropped to 16:9,
+and scrolled at different speeds into seamless 48-second animated WebP loops.
+768 x 432, 12.5 fps, lossless WebP, infinite repeat, no audio.
+No bundled music, code, characters, or enemies from either pack are included.
+
+Original included notice (forest_of_illusion_files):
+Artwork created by Luis Zuno (@ansimuz)
+
+
+LICENSE:
+You may use these assets in personal or commercial projects. You can modify these assets to suit your needs. You can re-distribute the file.
+Credit no required but appreciated it.
+
+____________________
+
+LINKS
+
+Twitter @ansimuz
+
+Support my work at Patreon https://www.patreon.com/ansimuz
+
+Buy my stuff https://ansimuz.itch.io/
+
+Get more Free Assetslike these at: http://www.ansimuz.com
+
+
+____________________
+
+
+
+Original included notice (underwater-diving-files):
+Artwork created by Luis Zuno @ansimuz
+
+License for Everyone.
+
+Public domain and free to use on whatever you want, personal or commercial. Credit is not required but appreciated.
+
+Feeling Grateful?
+You can support my work at https://www.patreon.com/ansimuz
+
+Get more Free Assetslike these at: http://www.pixelgameart.org
+
+Additional credits
+Demo Music by Pascal Belisle
+
+pacethemusician@hotmail.com
+https://soundcloud.com/pascalbelisle

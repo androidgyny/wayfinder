@@ -10,7 +10,7 @@ function renderVienna(){
   const active=shelf.key===viennaKey,section=el('section','vienna-section');section.dataset.shelf=shelf.key;section.classList.toggle('expanded',active);
   const heading=el('button','vienna-heading');heading.setAttribute('aria-expanded',String(active));heading.append(el('span','',shelf.label),el('small','',shelf.items.length+' games'));heading.onclick=()=>viennaOpen(shelf.key,true);section.append(heading);
   if(active){
-   const row=el('div','vienna-row');row.setAttribute('aria-label',shelf.label);const remembered=viennaPositions[shelf.key];const chosen=shelf.items.find(g=>g.id===remembered)||shelf.items[0];
+   const row=el('div','vienna-row');row.setAttribute('aria-label',shelf.label);const remembered=viennaPositions[shelf.key];const chosen=rememberedCategoryGame(shelf.items,remembered,'vienna:'+shelf.key);
    for(const g of shelf.items){const b=card(g);b.tabIndex=g===chosen?0:-1;b.classList.toggle('presentation-selected',g===chosen);row.append(b)}
    section.append(row);
    const status=el('div','vienna-status');section.append(status);
@@ -37,7 +37,7 @@ function viennaOpen(key,focus=false){
 function viennaSelect(id,focus=true,scroll=true){
  clearTimeout(viennaScrollTimer);
  const shelf=viennaCurrent(),g=shelf?.items.find(g=>g.id===id);if(!g)return;
- presentationId=id;viennaPositions[viennaKey]=id;
+ presentationId=id;viennaPositions[viennaKey]=id;rememberCategoryIndex(shelf.items,id,'vienna:'+viennaKey);
  let target=null;for(const b of document.querySelectorAll('.vienna-row .game')){const chosen=b.dataset.id===id;b.classList.toggle('presentation-selected',chosen);b.tabIndex=chosen?0:-1;if(chosen)target=b;}
  $('.vienna-status').textContent=g.title+' · '+(shelf.items.indexOf(g)+1)+' / '+shelf.items.length;
  if(focus)controllerFocus(target);
