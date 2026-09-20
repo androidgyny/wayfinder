@@ -1,133 +1,113 @@
 # <img src="docs/branding/wayfinder-icon.png" width="64" height="64" alt=""> Wayfinder
 
-**A minimal, visually focused launcher for large Android game collections.**
+**A personal home for your Android game collection.**
 
-> **Beta software.** This is a vibe-coded app made with the help of **GPT-6 Astra**.
+> **Beta software.** Made with the help of **GPT-6 Astra**.
 
 [Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.134-beta.7)
 
-Wayfinder gives a large Android game collection several different ways to feel at home: cover grids, shelves, Cover Flow, a card fan, compact category columns, or a quiet title list. Browse with a touchscreen and game controller, keeping the same library, categories, and artwork as you change the presentation.
+Wayfinder is an Android game launcher: an app for organizing, browsing, and opening games you already have installed. It brings your collection together with cover artwork, categories, search, and controller navigation, so choosing what to play feels like browsing a library.
 
-It is designed specifically for **launching Android games**. It is not intended as a general-purpose retro-gaming frontend, emulator manager, or ROM organizer.
+It is built for Android handhelds with a touchscreen and a game controller. You can open it like any other app or make it your Android home screen.
 
-## Design philosophy
+![Cupertino: Night in the Woods centered among seven favorite games, with a soft green glow and reflections.](docs/screenshots/01-cupertino.png)
 
-Wayfinder aims to be aesthetically pleasing without becoming elaborate.
+*Cupertino · Midnight palette · a cover-led view of your favorites.*
 
-**One picture per game.** A title’s cover is its visual identity. The interface keeps attention on the collection rather than adding layers of trailers, logos, screenshots, and metadata.
+[Explore all ten app screenshots →](docs/GALLERY.md)
 
-The goal is simple: make a library of hundreds—or thousands—of Android games inviting to explore and straightforward to launch.
+## What you can do
 
-## Features
+- **Build your library.** Add installed games, edit their titles, and organize them into categories that make sense to you.
+- **Find something to play.** Search your collection, sort it, mark favorites, or revisit recently played games.
+- **Give each game a cover.** Find artwork through Google Play, open Google Images or SteamGridDB searches, or choose an image from your device. Adjust how it fits the tile.
+- **Choose how you browse.** Switch between cover grids, shelves, carousels, dashboards, and text-focused layouts.
+- **Make it your own.** Customize colors, fonts, backgrounds, selection effects, and sound. Preview appearance presets or save your own combinations.
+- **Keep other apps close.** Open the app drawer for non-game apps and pin the ones you use most.
+- **Back up your collection.** Export your library and custom covers, then restore them from a saved backup.
 
-- **One library, many ways to browse.** Choose from thirteen presentation themes: Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Tokyo, Ulm, Venice, and Vienna. They range from cover grids and shelves to an overlapping card fan, independently scrollable category columns, and a text-first browser with optional artwork. Cambridge adds a persistent category directory beside a game list, using IBM Plex Mono and an optional cover pane. Change the layout without reorganizing your games.
-- **A table for discovery.** Copenhagen deals twelve picks from across your categories. Drag covers to swap their positions, shuffle the table, replace one suggestion, or keep a pick in place for the next deal. Your arrangement is remembered.
-- **Built for large collections.** Editable categories, title search, sorting, favorites, and recently played games help you find something quickly. Seattle adds a Home dashboard with shuffled selections from your categories; View all opens the complete category. Categories remember your selected game.
-- **Touch and controller together.** Swipe through covers, navigate precisely with the D-pad, switch categories with the shoulder buttons, and jump through long lists with the triggers.
-- **One cover per game, chosen by you.** Edit titles and categories; find artwork through Google Play, Google Images, or SteamGridDB, or use a local image. Fit the whole image or fill the cover frame.
-- **Make the library your own.** Mix eleven color schemes and nine bundled fonts, or import a TTF or OTF font. Adjust cover borders, corners, halos, selection markers, contrast, and title weight; layout-specific controls appear only where they apply. Audition a complete preset in your library before keeping it. Start from one of nine built-in presets or save up to ten of your own.
-- **Quiet or animated backgrounds.** Choose a flat color, soft gradient, one of eleven bundled animations (including Digital Rain, Fireflies, and Contour Lines), or your own still or animated image. Adjust dimming and keep the original colors, mute them, or match your palette.
-- **Optional sound and startup animation.** Retro computer sound effects, a bundled ambient music loop or your own audio, and a responsive opening animation with synchronized sound. You can also choose a custom startup video or turn the opening off.
-- **Your other Android apps, too.** A searchable app drawer includes editable icons and pins you can drag into order. Wayfinder can also be set as the device's default home screen.
-- **Manage installed games.** Open Android’s uninstall confirmation from an installed app’s edit menu. Shortcut entries do not offer uninstall.
-- **Keep your collection.** Back up and restore your library, cover artwork, and app-drawer customizations.
+Wayfinder focuses on the collection itself: one cover per game, clear organization, and quick access to play. Games are supplied and installed separately. Wayfinder does not install games, run emulators, or manage ROM collections.
 
-## Requirements
-
-Wayfinder is designed for an **Android device with both a touchscreen and a game controller**.
-
-Both are part of the intended experience: the controller handles everyday browsing and launching, while the touchscreen supports setup, editing, artwork selection, and direct navigation.
+## What you need
 
 - Android 8.0 or later.
-- A touchscreen.
-- A game controller with a D-pad, shoulder buttons, and triggers.
-- Landscape display orientation.
+- A touchscreen and a game controller.
+- A landscape display.
+- Some installed games to add to your library.
 
-A television or controller-only setup is not the intended target.
+The controller is intended for everyday browsing and launching. The touchscreen is also part of the experience, especially for setup, editing, and choosing artwork. Television and controller-only setups are not the intended target.
 
 ## Getting started
 
-1. Install Wayfinder on your Android device.
-2. Add installed Android games to your library.
-3. Organize them into categories and choose their cover images.
-4. Select a presentation theme and color scheme.
-5. Browse with touch or controller and launch a game.
+1. **Install the Wayfinder APK** on your Android device. If Android asks, allow installation from the app you used to open the file.
+2. **Open Wayfinder and choose Add game.** Add a game that is already installed on the device.
+3. **Choose its title, category, and cover.** You can return to the game editor to change these later.
+4. **Open Settings to choose a look.** Start with an appearance preset, or select a presentation theme and adjust it yourself.
+5. **Select a game and launch it.** Browse using touch or your controller.
 
-To use Wayfinder as your home screen, choose **Set as default launcher** in Settings.
+To open Wayfinder whenever you press Home, go to **Settings → Home & startup → Set as default launcher**. Using it as your home screen is optional.
 
-Adding a library entry does not install the game. Games must already be installed on the device.
+## Choose your layout
 
-## Controller controls
+A **presentation theme** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style that layout separately.
+
+The current layouts are Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Tokyo, Ulm, Venice, and Vienna. They range from artwork-led browsing to compact text lists, so you can choose what suits your collection and screen.
+
+You can also enable interface sounds, play the included background music or your own audio, and choose a startup video. These options are available in Settings.
+
+![Kyoto: Braid and neighboring puzzle platformer covers against a violet landscape.](docs/screenshots/02-kyoto.png)
+
+*Kyoto · Violet palette · large covers against the Magical Road backdrop.*
+
+![Ulm: a warm parchment title list with Tengami’s cover beside it.](docs/screenshots/03-ulm.png)
+
+*Ulm · Parchment palette · a quiet list with one selected cover.*
+
+These screenshots come directly from the app running on a Pimax Portal. Games and personal cover artwork are not bundled. [See all ten layouts and their appearance settings in the gallery.](docs/GALLERY.md)
+
+## Controller reference
+
+These are the default controls. Navigation adapts to the active layout or menu.
 
 | Control | Action |
 |---|---|
 | D-pad | Navigate |
-| A | Activate or play |
-| B | Back |
-| X | Edit game |
+| A | Select or launch |
+| B | Go back |
+| X | Edit the selected game |
 | Y | Search |
 | LB / RB | Previous / next category |
 | LT / RT | Page up / page down |
-| Left stick click | Open apps |
-| Select | Toggle favorite |
-| Start | Open settings or the layout menu |
+| Left stick click | Open the app drawer |
+| Select / Back button | Toggle favorite |
+| Start | Open settings |
 
-## Appearance gallery
+## Your library and backups
 
-Three ways to make the same collection feel at home. **[Explore all ten looks →](docs/SCREENSHOTS.md)**
+Your library and saved artwork stay on your device. You can browse them offline; finding new artwork online requires an internet connection.
 
-Captured from the current development interface in a browser with a curated example collection. Games and personal cover artwork are not bundled; animated backdrops appear as still frames. See the full gallery for details.
-
-### Cupertino
-
-Sculpted cover flow, subtle reflections, and a soft halo around Dream Machine.
-
-![Cupertino: Sculpted cover flow, subtle reflections, and a soft halo around Dream Machine.](docs/screenshots/wayfinder-cupertino.png)
-
-### Vienna
-
-A generous favorites shelf above compact category previews, framed by a dim forest backdrop.
-
-![Vienna: A generous favorites shelf above compact category previews, framed by a dim forest backdrop.](docs/screenshots/wayfinder-vienna.png)
-
-### Ulm
-
-A warm, readable title list with Tengami’s paper-world artwork as its single focal point.
-
-![Ulm: A warm, readable title list with Tengami’s paper-world artwork as its single focal point.](docs/screenshots/wayfinder-ulm.png)
-
-[See the complete ten-screenshot gallery →](docs/SCREENSHOTS.md)
-
-## Local library, personal artwork
-
-Your library and selected artwork are stored on the device. Browsing does not require an internet connection; retrieving online artwork does.
-
-You supply your games and media. Artwork remains the property of its respective creators. Interface sounds include Kenney assets and original Wayfinder Soft Terminal sounds, released under CC0.
+Use **Settings → Library → Back up** to export your titles, categories, and custom covers. **Restore** replaces the current library with the contents of a backup. A library backup does not include installed games or their save files.
 
 ## Project status
 
-Wayfinder is an evolving personal project, developed and tested with a large Android game collection on a handheld device. Compatibility across other devices and controllers is still being established.
+Wayfinder is an actively evolving personal project, developed and tested with a large game collection on a Pimax Portal. Support for other Android devices and controllers is still being established.
 
-Its scope is deliberately narrow: **a beautiful, minimal home for Android games.**
+If you report a problem, include your device, Android version, Wayfinder version, controller, selected layout, and the steps that reproduce it.
+
+## Credits
+
+Game artwork belongs to its respective creators. Interface audio includes Kenney assets and original Wayfinder Soft Terminal sounds. The included background track, *Another August*, is by The Cynic Project / Alex Smith. These audio assets are provided under CC0; attribution details are included with the project assets.
 
 ## Build from source
 
-Use Android Studio with JDK 17 or later and Android SDK 35. Open this folder as a Gradle project and let Android Studio configure your local SDK path.
-
-Build a debug APK:
+Open this folder in Android Studio with JDK 17 or later and Android SDK 35. Let Android Studio configure your local SDK path, then build a debug APK:
 
 ```sh
 ./gradlew assembleDebug
 ```
 
-On Windows, use `gradlew.bat assembleDebug`. The APK is written to `app/build/outputs/apk/debug/`.
+On Windows, use `gradlew.bat assembleDebug`. The APK is written to `app/build/outputs/apk/debug/`. Fresh installations start with an empty library.
 
-Fresh installations start with an empty library. The collection shown in the screenshots is an example; its games and cover files are not bundled.
+The application ID is `com.androidgyny.wayfinder`. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in the repository.
 
-The Android application ID is `com.androidgyny.wayfinder`. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in this repository.
-
-Typography uses Inter (Clean), Lora (Editorial), IBM Plex Mono (Computer), Space Grotesk, Outfit, Oxanium, Space Mono, IBM Plex Sans, and Nunito under the SIL Open Font License. Notices are included in `app/src/main/assets/www/fonts/`.
-
-Bundled ambient music: **Another August** by **The Cynic Project / Alex Smith** ([cynicmusic.com](https://cynicmusic.com/), [Pixelsphere](https://pixelsphere.org/)), released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). [Original track](https://opengameart.org/node/73989). Wayfinder uses a 3:07 adaptation with a 20-second crossfade for continuous looping.
-
-The built-in six-second startup animation adapts to the screen proportions and includes the original Wayfinder jingle. You can disable it, mute its sound, or choose your own startup video.
+Bundled fonts use the SIL Open Font License. Their notices are included in `app/src/main/assets/www/fonts/`.
