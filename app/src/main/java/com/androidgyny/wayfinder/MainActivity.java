@@ -121,6 +121,40 @@ public class MainActivity extends Activity {
             if(a<2){try{JSONArray records=new JSONArray();try(Cursor c=d.rawQuery("SELECT record FROM games",null)){while(c.moveToNext())records.put(new JSONObject(c.getString(0)));}for(int i=0;i<records.length();i++){JSONObject g=records.getJSONObject(i);normalizeRecord(g);ContentValues v=new ContentValues();v.put("record",g.toString());d.update("games",v,"id=?",new String[]{g.getString("id")});}}catch(Exception e){throw new RuntimeException("Could not upgrade library",e);}}
         }
         synchronized JSONArray all(){JSONArray a=new JSONArray();try(Cursor c=getReadableDatabase().rawQuery("SELECT record FROM games ORDER BY id",null)){while(c.moveToNext())try{a.put(new JSONObject(c.getString(0)));}catch(Exception e){throw new RuntimeException(e);}}return a;}
+        // Run on the JavaScript bridge thread, before returning the library. Original
+        // personal builds kept covers in the APK; updates must not own user artwork.
+        synchronized void migrateBundledCovers(){
+            JSONArray records=all();Map<String,String> migrated=new HashMap<>();List<JSONObject> updates=new ArrayList<>();
+            for(int i=0;i<records.length();i++){
+                JSONObject game=records.optJSONObject(i);String image=game.optString("image");
+                if(!image.matches("art/[0-9]+\\.jpg"))continue;
+                File temporary=null;
+                try{
+                    String stored=migrated.get(image);
+                    if(stored==null){
+                        String name=UUID.randomUUID()+".jpg";File target=new File(covers,name);
+                        temporary=File.createTempFile("cover-migration-",".tmp",covers);
+                        try(InputStream in=getAssets().open("www/"+image);FileOutputStream out=new FileOutputStream(temporary)){
+                            byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)out.write(buffer,0,n);out.getFD().sync();
+                        }
+                        BitmapFactory.Options options=new BitmapFactory.Options();options.inJustDecodeBounds=true;
+                        BitmapFactory.decodeFile(temporary.getPath(),options);
+                        if(options.outWidth<=0||options.outHeight<=0)throw new IOException("Invalid bundled cover");
+                        if(!temporary.renameTo(target))throw new IOException("Could not store cover");
+                        stored="user/"+name;migrated.put(image,stored);
+                    }
+                    game.put("image",stored);updates.add(game);
+                }catch(Exception e){Log.w("WayfinderCovers","Keeping original cover reference: "+image,e);}
+                finally{if(temporary!=null&&temporary.exists())temporary.delete();}
+            }
+            if(updates.isEmpty())return;
+            SQLiteDatabase database=getWritableDatabase();database.beginTransaction();
+            try{
+                for(JSONObject game:updates){ContentValues values=new ContentValues();values.put("record",game.toString());database.update("games",values,"id=?",new String[]{game.optString("id")});}
+                database.setTransactionSuccessful();
+                Log.i("WayfinderCovers","Moved "+updates.size()+" cover references into permanent storage");
+            }finally{database.endTransaction();}
+        }
         synchronized JSONObject get(String id) throws Exception {try(Cursor c=getReadableDatabase().rawQuery("SELECT record FROM games WHERE id=?",new String[]{id})){if(c.moveToFirst())return new JSONObject(c.getString(0));}throw new IOException("This game is no longer in the library");}
         synchronized void put(JSONObject g) throws Exception {validate(g);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());getWritableDatabase().insertWithOnConflict("games",null,v,SQLiteDatabase.CONFLICT_REPLACE);}
         synchronized void remove(String id){getWritableDatabase().delete("games","id=?",new String[]{id});}
@@ -202,7 +236,7 @@ public class MainActivity extends Activity {
             catch(Exception e){try{startActivity(new Intent(android.provider.Settings.ACTION_HOME_SETTINGS));}catch(Exception ignored){notice("Open Android Settings to choose your default home app");}}
         });}
         @JavascriptInterface public void androidSettings(){runOnUiThread(()->{try{startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));}catch(Exception e){notice("Android Settings is unavailable");}});}
-        @JavascriptInterface public String library(){return db.all().toString();}
+        @JavascriptInterface public String library(){db.migrateBundledCovers();return db.all().toString();}
         @JavascriptInterface public String view(){return getPreferences(0).getString("view","{}");}
         @JavascriptInterface public void showKeyboard(){runOnUiThread(()->{if(web==null)return;web.requestFocus();web.post(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);});});}
         @JavascriptInterface public void saveView(String value){if(value!=null&&value.length()<=512000)getPreferences(0).edit().putString("view",value).apply();else notice("Could not save settings: navigation history is too large");}
@@ -230,7 +264,23 @@ public class MainActivity extends Activity {
             try{g.put("lastPlayed",System.currentTimeMillis());db.put(g);emit("launched",data("id",id));}
             catch(Exception e){Log.w("WayfinderLaunch","Could not record launch",e);}
         });}
-        @JavascriptInterface public void installed(){worker.execute(()->{JSONArray a=new JSONArray();try{PackageManager pm=getPackageManager();List<ResolveInfo> found=pm.queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),0);for(ResolveInfo r:found){if(r.activityInfo==null||!r.activityInfo.exported||r.activityInfo.packageName.equals(getPackageName()))continue;JSONObject g=new JSONObject();g.put("title",r.loadLabel(pm).toString());g.put("package",r.activityInfo.packageName);g.put("component",new ComponentName(r.activityInfo.packageName,r.activityInfo.name).flattenToString());g.put("isGame",r.activityInfo.applicationInfo.category==ApplicationInfo.CATEGORY_GAME);a.put(g);}emit("installed",data("apps",a));}catch(Exception e){notice("Could not list apps: "+e.getMessage());}});}
+        @JavascriptInterface public void installed(){worker.execute(()->{
+            JSONArray apps=new JSONArray();
+            try{
+                PackageManager pm=getPackageManager();Set<String> seen=new HashSet<>();
+                List<ResolveInfo> found=pm.queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),0);
+                for(ResolveInfo entry:found){
+                    if(entry.activityInfo==null||!entry.activityInfo.exported||entry.activityInfo.packageName.equals(getPackageName()))continue;
+                    String component=new ComponentName(entry.activityInfo.packageName,entry.activityInfo.name).flattenToString();
+                    // Multiple matching intent filters may return the same launch activity.
+                    // Preserve distinct activities, even when they belong to the same package.
+                    if(!seen.add(component))continue;
+                    JSONObject app=new JSONObject();app.put("title",entry.loadLabel(pm).toString());app.put("package",entry.activityInfo.packageName);
+                    app.put("component",component);app.put("isGame",entry.activityInfo.applicationInfo.category==ApplicationInfo.CATEGORY_GAME);apps.put(app);
+                }
+                emit("installed",data("apps",apps));
+            }catch(Exception e){notice("Could not list apps: "+e.getMessage());}
+        });}
         @JavascriptInterface public String customFontSettings(){return customFont.settings();}
         @JavascriptInterface public boolean acceptCustomFont(String file){return customFont.accept(file);}
         @JavascriptInterface public void discardCustomFont(String file){customFont.discard(file);}

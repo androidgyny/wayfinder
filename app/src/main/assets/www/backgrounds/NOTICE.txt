@@ -112,3 +112,11 @@ Demo Music by Pascal Belisle
 
 pacethemusician@hotmail.com
 https://soundcloud.com/pascalbelisle
+
+Digital Rain
+Original procedural animation created for Wayfinder. No movie assets used.
+16 seconds, 960 x 540, 15 fps. Glyphs rendered using Space Mono, licensed under the SIL Open Font License (see ../fonts).
+
+Fireflies and Contour Lines
+Original procedural animations created for Wayfinder. No third-party imagery or map data used.
+Both are seamless 16-second loops at 960 x 540, 15 fps.

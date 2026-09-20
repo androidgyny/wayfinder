@@ -61,7 +61,7 @@ function updateCoverGlow(){
 function setAtmosphere(background,selection){
  // Retire the experimental layered renderer; preserve the same scene and controls.
  if(background==='fortlayers')background='fort';
- backdrop=['gradient','custom','mountain','magical','urban','alien','another','fort','forest','underwater'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
+ backdrop=['gradient','custom','mountain','magical','urban','alien','another','fort','forest','underwater','digital','fireflies','contours'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
  document.body.dataset.backdrop=backdrop;document.body.dataset.selectionStyle=selectionStyle;
  $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;syncCustomBackground();queueCoverGlow();persist();
 }

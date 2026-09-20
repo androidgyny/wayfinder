@@ -4,7 +4,7 @@
 
 > **Beta software.** This is a vibe-coded app made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.129-beta.6)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.134-beta.7)
 
 Wayfinder gives a large Android game collection several different ways to feel at home: cover grids, shelves, Cover Flow, a card fan, compact category columns, or a quiet title list. Browse with a touchscreen and game controller, keeping the same library, categories, and artwork as you change the presentation.
 
@@ -26,7 +26,7 @@ The goal is simple: make a library of hundreds—or thousands—of Android games
 - **Touch and controller together.** Swipe through covers, navigate precisely with the D-pad, switch categories with the shoulder buttons, and jump through long lists with the triggers.
 - **One cover per game, chosen by you.** Edit titles and categories; find artwork through Google Play, Google Images, or SteamGridDB, or use a local image. Fit the whole image or fill the cover frame.
 - **Make the library your own.** Mix eleven color schemes and nine bundled fonts, or import a TTF or OTF font. Adjust cover borders, corners, halos, selection markers, contrast, and title weight; layout-specific controls appear only where they apply. Audition a complete preset in your library before keeping it. Start from one of nine built-in presets or save up to ten of your own.
-- **Quiet or animated backgrounds.** Choose a flat color, soft gradient, one of eight bundled parallax scenes, or your own still or animated image. Adjust dimming and keep the original colors, mute them, or match your palette.
+- **Quiet or animated backgrounds.** Choose a flat color, soft gradient, one of eleven bundled animations (including Digital Rain, Fireflies, and Contour Lines), or your own still or animated image. Adjust dimming and keep the original colors, mute them, or match your palette.
 - **Optional sound and startup animation.** Retro computer sound effects, a bundled ambient music loop or your own audio, and a responsive opening animation with synchronized sound. You can also choose a custom startup video or turn the opening off.
 - **Your other Android apps, too.** A searchable app drawer includes editable icons and pins you can drag into order. Wayfinder can also be set as the device's default home screen.
 - **Manage installed games.** Open Android’s uninstall confirmation from an installed app’s edit menu. Shortcut entries do not offer uninstall.
