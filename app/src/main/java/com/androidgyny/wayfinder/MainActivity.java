@@ -208,6 +208,28 @@ public class MainActivity extends Activity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);return intent;
     }
     public class Bridge {
+        @JavascriptInterface public void libraryInfo(String request){worker.execute(()->{
+            try{
+                JSONObject info=data("request",request);JSONArray missing=new JSONArray(),icons=new JSONArray();
+                JSONArray records=db.all();
+                for(int i=0;i<records.length();i++){
+                    JSONObject g=records.getJSONObject(i);String image=g.optString("image");boolean valid=false,isIcon=image.startsWith("icon/")||image.startsWith("art-icon/")||g.optBoolean("fallback");
+                    try{
+                        if(image.startsWith("icon/")||image.startsWith("art-icon/")){getPackageManager().getApplicationIcon(image.substring(image.indexOf('/')+1));valid=true;}
+                        else if(image.matches("user/[a-zA-Z0-9-]+\\.jpg")||image.startsWith("art/")){
+                            try(InputStream in=image.startsWith("user/")?new FileInputStream(new File(covers,image.substring(5))):getAssets().open("www/"+image)){
+                                BitmapFactory.Options o=new BitmapFactory.Options();o.inJustDecodeBounds=true;BitmapFactory.decodeStream(in,null,o);valid=o.outWidth>0&&o.outHeight>0;
+                            }
+                        }
+                    }catch(Exception ignored){}
+                    if(!valid)missing.put(g.getString("id"));else if(isIcon)icons.put(g.getString("id"));
+                }
+                info.put("missing",missing);info.put("icons",icons);info.put("coverBytes",directoryBytes(covers));
+                File database=getDatabasePath("library.db");long databaseBytes=database.length()+new File(database.getPath()+"-wal").length()+new File(database.getPath()+"-shm").length();
+                info.put("dataBytes",databaseBytes+directoryBytes(new File(getApplicationInfo().dataDir,"shared_prefs")));
+                info.put("lastBackup",getPreferences(0).getLong("lastSuccessfulBackup",0));emit("libraryInfo",info);
+            }catch(Exception e){emit("libraryInfo",data("request",request));}
+        });}
         @JavascriptInterface public String appVersion(){return BuildConfig.VERSION_NAME;}
         @JavascriptInterface public void artworkSearch(String session,String pkg){worker.execute(()->{try{JSONObject event=data("session",session);event.put("items",artwork.playImages(pkg));emit("artworkResults",event);}catch(Exception e){JSONObject event=data("session",session);try{event.put("message","No artwork could be retrieved. Try opening the store page or another source.");}catch(Exception ignored){}emit("artworkError",event);}});}
         @JavascriptInterface public void artworkDownload(String session,String url){worker.execute(()->{try{JSONObject event=data("session",session);event.put("image",artwork.importBytes(artwork.download(url,20000000)));emit("artworkImage",event);}catch(Exception e){JSONObject event=data("session",session);try{event.put("message","Could not load that image. Use a direct HTTPS image link, or download it and choose the file.");}catch(Exception ignored){}emit("artworkError",event);}});}
@@ -311,6 +333,7 @@ public class MainActivity extends Activity {
         if(request==COVER){final String id=pickingId;worker.execute(()->{try{byte[] raw=bytes(getContentResolver().openInputStream(uri),32000000);if(id.startsWith("artwork_")){JSONObject event=data("session",id.substring(8));event.put("image",artwork.importBytes(raw));emit("artworkImage",event);return;}BitmapFactory.Options opts=new BitmapFactory.Options();opts.inJustDecodeBounds=true;BitmapFactory.decodeByteArray(raw,0,raw.length,opts);if(opts.outWidth<=0||opts.outHeight<=0)throw new IOException("Choose a supported image");int sample=1;while(Math.max(opts.outWidth,opts.outHeight)/sample>1800)sample*=2;opts.inJustDecodeBounds=false;opts.inSampleSize=sample;Bitmap b=BitmapFactory.decodeByteArray(raw,0,raw.length,opts);if(b==null)throw new IOException("Could not read image");String name=UUID.randomUUID()+".jpg";try(FileOutputStream f=new FileOutputStream(new File(covers,name))){b.compress(Bitmap.CompressFormat.JPEG,93,f);}b.recycle();JSONObject event=data("id",id);event.put("image","user/"+name);emit("cover",event);}catch(Exception e){if(id.startsWith("artwork_")){JSONObject event=data("session",id.substring(8));try{event.put("message","Could not read this image. Choose another file.");}catch(Exception ignored){}emit("artworkError",event);}else notice("Could not select cover: "+e.getMessage());}});}
         else if(request==EXPORT)worker.execute(()->exportZip(uri));else if(request==IMPORT)worker.execute(()->importZip(uri));
     }
+    private long directoryBytes(File file){if(file.isFile())return file.length();long total=0;File[] children=file.listFiles();if(children!=null)for(File child:children)total+=directoryBytes(child);return total;}
     private void exportZip(Uri uri){
         notice("Creating backup…");
         try(ZipOutputStream zip=new ZipOutputStream(getContentResolver().openOutputStream(uri))){
@@ -330,14 +353,21 @@ public class MainActivity extends Activity {
                 zip.putNextEntry(new ZipEntry(image.getValue()));try(InputStream in=getAssets().open("www/"+image.getKey())){byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)zip.write(buffer,0,n);}zip.closeEntry();
             }
             for(String image:custom){zip.putNextEntry(new ZipEntry(image));Files.copy(new File(covers,image.substring(5)).toPath(),zip);zip.closeEntry();}
-            notice("Backup saved, including your edits and cover artwork");
-        }catch(Exception e){notice("Backup failed: "+e.getMessage());}
+        }catch(Exception e){notice("Backup failed: "+e.getMessage());return;}
+        getPreferences(0).edit().putLong("lastSuccessfulBackup",System.currentTimeMillis()).apply();
+        emit("backupCompleted",data("ok",true));
+        notice("Backup saved, including your edits and cover artwork");
     }
-    private void importZip(Uri uri){if(restoreBusy){notice("Finish or cancel the current restore first");return;}restoreBusy=true;notice("Checking backup…");File stage=new File(getCacheDir(),"restore-"+UUID.randomUUID());stage.mkdirs();try(ZipInputStream zip=new ZipInputStream(getContentResolver().openInputStream(uri))){JSONArray records=null,apps=null;ZipEntry entry;int total=0;Set<String> names=new HashSet<>();while((entry=zip.getNextEntry())!=null){String name=entry.getName();if(entry.isDirectory())continue;if(!names.add(name))throw new IOException("Duplicate backup entry");if(!name.equals("library.json")&&!name.matches("user/[a-zA-Z0-9-]+\\.jpg"))throw new IOException("Unexpected backup file");ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[32768];int n,count=0;while((n=zip.read(buf))!=-1){count+=n;total+=n;if(count>16000000||total>512000000)throw new IOException("Backup exceeds size limit");out.write(buf,0,n);}if(name.equals("library.json")){JSONObject backup=obj(out.toString("UTF-8"));if(!backup.optString("format").equals("portal-library")||(backup.optInt("version")!=1&&backup.optInt("version")!=2))throw new IOException("Unsupported backup format");records=backup.getJSONArray("games");apps=backup.optJSONArray("apps");if(backup.optInt("version")==2&&apps==null)throw new IOException("Missing app preferences");}else{try(FileOutputStream f=new FileOutputStream(new File(stage,name.substring(5)))){out.writeTo(f);}}}
+    private void importZip(Uri uri){if(restoreBusy){notice("Finish or cancel the current restore first");return;}restoreBusy=true;notice("Checking backup…");File stage=new File(getCacheDir(),"restore-"+UUID.randomUUID());stage.mkdirs();try(ZipInputStream zip=new ZipInputStream(getContentResolver().openInputStream(uri))){JSONArray records=null,apps=null;ZipEntry entry;int total=0;Set<String> names=new HashSet<>();while((entry=zip.getNextEntry())!=null){String name=entry.getName();if(entry.isDirectory())continue;if(!names.add(name))throw new IOException("Duplicate backup entry");if(!name.equals("library.json")&&!name.matches("user/[a-zA-Z0-9-]+\\.jpg"))throw new IOException("Unexpected backup file");ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[32768];int n,count=0;while((n=zip.read(buf))!=-1){count+=n;total+=n;if(count>16000000||total>512000000)throw new IOException("Backup exceeds size limit");out.write(buf,0,n);}if(name.equals("library.json")){JSONObject backup=obj(out.toString("UTF-8"));if(!backup.optString("format").equals("portal-library")||(backup.optInt("version")!=1&&backup.optInt("version")!=2))throw new IOException("Unsupported backup format");records=backup.getJSONArray("games");apps=backup.optJSONArray("apps");if(backup.optInt("version")==2&&apps==null)throw new IOException("Missing app preferences");}else{File imageFile=new File(stage,name.substring(5));try(FileOutputStream f=new FileOutputStream(imageFile)){out.writeTo(f);}BitmapFactory.Options imageBounds=new BitmapFactory.Options();imageBounds.inJustDecodeBounds=true;BitmapFactory.decodeFile(imageFile.getPath(),imageBounds);if(imageBounds.outWidth<=0||imageBounds.outHeight<=0)throw new IOException("Backup contains unreadable artwork");}}
         if(records==null||records.length()>20000)throw new IOException("No valid library in backup");Set<String> ids=new HashSet<>();for(int i=0;i<records.length();i++){JSONObject g=records.getJSONObject(i);validate(g);if(!ids.add(g.getString("id")))throw new IOException("Duplicate game ID");String image=g.getString("image");if(image.startsWith("user/")&&!new File(stage,image.substring(5)).isFile())throw new IOException("Missing custom cover");if(image.startsWith("art/"))try(InputStream in=getAssets().open("www/"+image)){} }
         if(apps!=null){validateAppPreferences(apps);for(int i=0;i<apps.length();i++){String image=apps.getJSONObject(i).optString("image");if(!image.isEmpty()&&!new File(stage,image.substring(5)).isFile())throw new IOException("Missing custom app icon");}}
         pendingAppPreferences=apps;pendingImport=records;pendingDir=stage;final int count=records.length();runOnUiThread(()->{if(isFinishing()||isDestroyed()){clearStage();return;}new AlertDialog.Builder(this).setTitle("Restore library?").setMessage("Replace this library with the "+count+" games in the backup? "+(pendingAppPreferences!=null?"App pins, appearance and app history will also be restored. ":"")+"Your installed games and their save data are not changed.").setNegativeButton("Cancel",(d,w)->clearStage()).setOnCancelListener(d->clearStage()).setPositiveButton("Restore",(d,w)->worker.execute(this::completeRestore)).show();});
     }catch(Exception e){File[] fs=stage.listFiles();if(fs!=null)for(File f:fs)f.delete();stage.delete();restoreBusy=false;notice("Could not restore: "+e.getMessage());}}
+    private byte[] fileDigest(File file) throws Exception {
+        java.security.MessageDigest digest=java.security.MessageDigest.getInstance("SHA-256");
+        try(InputStream in=new FileInputStream(file)){byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)digest.update(buffer,0,n);}
+        return digest.digest();
+    }
     private void completeRestore(){
         List<File> created=new ArrayList<>();boolean complete=false;
         try{
@@ -350,9 +380,11 @@ public class MainActivity extends Activity {
                     JSONObject entry=list.getJSONObject(i);String image=entry.optString("image");if(!image.startsWith("user/"))continue;
                     String next=remapped.get(image);
                     if(next==null){
-                        File destination=new File(covers,UUID.randomUUID()+".jpg");created.add(destination);
-                        Files.copy(new File(pendingDir,image.substring(5)).toPath(),destination.toPath());
-                        next="user/"+destination.getName();remapped.put(image,next);
+                        File source=new File(pendingDir,image.substring(5)),existing=new File(covers,image.substring(5));
+                        if(existing.isFile()&&existing.length()==source.length()&&java.security.MessageDigest.isEqual(fileDigest(existing),fileDigest(source)))next=image;
+                        else{File destination=new File(covers,UUID.randomUUID()+".jpg");created.add(destination);
+                            Files.copy(source.toPath(),destination.toPath());next="user/"+destination.getName();}
+                        remapped.put(image,next);
                     }
                     entry.put("image",next);
                 }

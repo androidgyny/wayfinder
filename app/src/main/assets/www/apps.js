@@ -26,7 +26,20 @@ function renderDrawer(){
  if(focusedTab)[...$('#drawer-tabs').children].find(b=>b.dataset.drawerView===focusedTab)?.focus({preventScroll:true});
 }
 function drawerChangePage(delta){drawerPage+=delta;renderDrawer();controllerFocus($('#drawer-grid .drawer-app')||$('#drawer-search'))}
-function editDrawerApp(pkg){const a=drawerCatalog.find(a=>a.package===pkg);if(!a)return;appearanceDraft={...appPreference(pkg)};$('#appearance-name').value=drawerName(a);$('#appearance-class').value=appearanceDraft.classification||'auto';$('#appearance-pinned').checked=!!appearanceDraft.pinned;const pins=drawerPreferences.filter(a=>a.pinned).sort((a,b)=>(a.order||0)-(b.order||0));$('#appearance-order').value=appearanceDraft.pinned?pins.findIndex(a=>a.package===pkg)+1:pins.length+1;$('#appearance-image').src=drawerImage(a);$('#appearance-error').textContent='';showDialog('#app-appearance')}
+function editDrawerApp(pkg){const a=drawerCatalog.find(a=>a.package===pkg);if(!a)return;appearanceDraft={...appPreference(pkg)};$('#appearance-name').value=drawerName(a);$('#appearance-class').value=appearanceDraft.classification||'auto';$('#appearance-pinned').checked=!!appearanceDraft.pinned;const pins=drawerPreferences.filter(a=>a.pinned).sort((a,b)=>(a.order||0)-(b.order||0));$('#appearance-order').value=appearanceDraft.pinned?pins.findIndex(a=>a.package===pkg)+1:pins.length+1;$('#appearance-image').src=drawerImage(a);$('#appearance-error').textContent='';refreshAppGameAction();showDialog('#app-appearance')}
+// Shortcuts can share a host package without representing the app itself.
+function drawerGameEntry(pkg){return games.find(g=>g.package===pkg&&g.kind!=='shortcut'&&!g.intentUri)}
+function refreshAppGameAction(){
+ $('#appearance-game').textContent=drawerGameEntry(appearanceDraft?.package)?'Edit game entry':'Add to game library';
+}
+function editDrawerGame(){
+ const a=drawerCatalog.find(a=>a.package===appearanceDraft?.package);if(!a){$('#appearance-error').textContent='This app is no longer available. Close this editor to refresh the app list.';return;}
+ const existing=drawerGameEntry(a.package);
+ if(existing){editGame(existing);return}
+ editGame({id:'new_'+Date.now()+'_'+Math.floor(Math.random()*100000),
+  title:$('#appearance-name').value.trim()||drawerName(a),genre:'Uncategorized',kind:'app',
+  package:a.package,action:'android.intent.action.MAIN',image:appearanceDraft.image||'icon/'+a.package,lastPlayed:0},true);
+}
 function renderPinnedApps(){const root=$('#seattle-apps');if(!root)return;const focusedPackage=document.activeElement?.closest('.pinned-app')?.dataset.package;const apps=drawerCatalog.filter(a=>appPreference(a.package).pinned).sort((a,b)=>(appPreference(a.package).order||0)-(appPreference(b.package).order||0));root.replaceChildren();if(!apps.length)return;root.append(el('p','eyebrow','PINNED APPS'));const row=el('div','pinned-apps-row');for(const a of apps){const b=el('button','pinned-app');b.dataset.package=a.package;const im=el('img');im.src=drawerImage(a);im.alt='';b.append(im,el('span','',drawerName(a)));b.onclick=e=>{if(e.detail===0||performance.now()>pinIgnoreClickUntil)openDrawerApp(a)};b.oncontextmenu=e=>{e.preventDefault();if(!pinDrag?.active&&performance.now()>pinIgnoreClickUntil)editDrawerApp(a.package)};row.append(b)}root.append(row);if(focusedPackage)[...root.querySelectorAll('.pinned-app')].find(b=>b.dataset.package===focusedPackage)?.focus({preventScroll:true});}
 function appsEvent(event,data){
  if(event==='drawerInstalled'){drawerLoading=false;drawerCatalog=[...new Map(data.apps.map(a=>[a.package,a])).values()];loadDrawerPreferences();if($('#apps-drawer').open)renderDrawer();renderPinnedApps();return true}
@@ -50,9 +63,11 @@ function initApps(){
  $('#open-apps').onclick=openApps;$('#close-apps').onclick=()=>hideDialog('#apps-drawer');$('#android-settings').onclick=()=>native?.androidSettings?.();
  $('#drawer-search').oninput=()=>{drawerPage=0;$('#drawer-letter').value='';renderDrawer()};$('#drawer-letter').replaceChildren(...['','#',...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(l=>{const o=el('option','',l||'All');o.value=l;return o}));$('#drawer-letter').onchange=()=>{drawerPage=0;renderDrawer()};
  $('#drawer-prev').onclick=()=>drawerChangePage(-1);$('#drawer-next').onclick=()=>drawerChangePage(1);
- $('#close-appearance').onclick=()=>hideDialog('#app-appearance');$('#app-appearance').addEventListener('close',()=>appearanceDraft=null);
+ $('#close-appearance').onclick=()=>hideDialog('#app-appearance');$('#app-appearance').addEventListener('close',()=>{if(!$('#app-appearance').open)appearanceDraft=null});
  $('#appearance-choose').onclick=()=>native?.chooseCover?.('app_'+appearanceDraft.package);
  $('#appearance-reset').onclick=()=>{const a=drawerCatalog.find(a=>a.package===appearanceDraft?.package);if(!a){$('#appearance-error').textContent='This app is no longer available. Close this editor to refresh the app list.';return}delete appearanceDraft.image;delete appearanceDraft.title;$('#appearance-name').value=a.title;$('#appearance-image').src='icon/'+a.package};
+ $('#appearance-game').onclick=editDrawerGame;
+ $('#editor').addEventListener('close',()=>{if($('#app-appearance').open){refreshAppGameAction();if($('#apps-drawer').open)renderDrawer()}});
  $('#appearance-info').onclick=()=>native?.appInfo?.(appearanceDraft.package);
  $('#app-appearance-form').onsubmit=e=>{e.preventDefault();const a=drawerCatalog.find(a=>a.package===appearanceDraft?.package);if(!a){$('#appearance-error').textContent='This app is no longer available. Close this editor to refresh the app list.';return}const title=$('#appearance-name').value.trim();if(!title){$('#appearance-error').textContent='Enter a name.';return}const value={...appearanceDraft,title:title===a.title?'':title,classification:$('#appearance-class').value,pinned:$('#appearance-pinned').checked};
  const pinned=drawerPreferences.filter(x=>x.pinned&&x.package!==a.package).sort((a,b)=>(a.order||0)-(b.order||0));const position=Math.max(0,Math.min(pinned.length,Number($('#appearance-order').value)-1||0));value.order=pinned.length===0?0:position===0?(pinned[0].order||0)-1:position>=pinned.length?(pinned[pinned.length-1].order||0)+1:((pinned[position-1].order||0)+(pinned[position].order||0))/2;
