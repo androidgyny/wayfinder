@@ -10,9 +10,9 @@ Wayfinder is an Android game launcher: an app for organizing, browsing, and open
 
 It is built for Android handhelds with a touchscreen and a game controller. You can open it like any other app or make it your Android home screen.
 
-![Cupertino: Night in the Woods centered among seven favorite games, with a soft green glow and reflections.](docs/screenshots/01-cupertino.png)
+![Copenhagen: twelve covers arranged on a green felt table with KAMI selected.](docs/screenshots/10-copenhagen.png)
 
-*Cupertino · Midnight palette · a cover-led view of your favorites.*
+*Copenhagen · Full House preset · a table of games to discover.*
 
 [Explore all ten app screenshots →](docs/GALLERY.md)
 
@@ -55,13 +55,13 @@ The current layouts are Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Ky
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video. These options are available in Settings.
 
-![Kyoto: Braid and neighboring puzzle platformer covers against a violet landscape.](docs/screenshots/02-kyoto.png)
+![Cupertino: Night in the Woods centered in a carousel of favorites with soft reflections and a green glow.](docs/screenshots/01-cupertino.png)
 
-*Kyoto · Violet palette · large covers against the Magical Road backdrop.*
+*Cupertino · Midnight palette · a carousel of favorites with artwork glow and reflections.*
 
-![Ulm: a warm parchment title list with Tengami’s cover beside it.](docs/screenshots/03-ulm.png)
+![Ulm: Tengami beside a spacious parchment title list with soft cover shadows.](docs/screenshots/03-ulm.png)
 
-*Ulm · Parchment palette · a quiet list with one selected cover.*
+*Ulm · Parchment palette · a quiet title list with one selected cover and soft shadows.*
 
 These screenshots come directly from the app running on a Pimax Portal. Games and personal cover artwork are not bundled. [See all ten layouts and their appearance settings in the gallery.](docs/GALLERY.md)
 
