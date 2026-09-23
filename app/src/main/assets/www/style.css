@@ -301,7 +301,7 @@ body[data-presentation=oxford] #grid .card-edit{top:9px;right:8px;font-size:15px
 body[data-presentation=oxford] #grid .favorite-badge{position:static;background:transparent;margin-left:8px;padding:0;font-size:14px}
 body[data-presentation=oxford] #tokyo-preview{display:flex;position:absolute;left:57%;width:36%;top:130px;bottom:82px;justify-content:center;align-items:center}
 body[data-presentation=oxford] #tokyo-preview p{display:none}
-body[data-presentation=oxford] #tokyo-art{flex:none;width:auto;height:100%;max-width:100%;object-fit:contain;aspect-ratio:2/3;border-radius:6px}
+body[data-presentation=oxford] #tokyo-art{flex:none;width:var(--tokyo-cover-width);height:calc(var(--tokyo-cover-width)*1.5);max-width:100%;object-fit:contain;aspect-ratio:2/3;border-radius:6px}
 body[data-presentation=oxford] #tokyo-art[hidden]{display:none}
 body[data-presentation=oxford][data-art-fit=cover] #tokyo-art{object-fit:cover}
 body[data-presentation=oxford] :is(#presentation-scrub,#presentation-navigation){display:none}
@@ -353,7 +353,7 @@ body{isolation:isolate}
 body[data-backdrop=gradient] #soft-gradient{opacity:1}
 #appearance-preview{padding:20px;min-height:170px;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin:18px 0}
 body[data-backdrop=gradient] #appearance-preview{background:radial-gradient(ellipse at 35% 35%,rgba(var(--backdrop-rgb,128,128,128),.18),transparent 75%),var(--bg)}
-.appearance-sample{position:relative;width:68px;height:102px;margin:auto;border-radius:4px;background:var(--panel)}
+.appearance-sample{position:relative;width:102px;height:153px;margin:auto;border-radius:4px;background:var(--panel)}
 .appearance-sample img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
 #appearance-preview p{font-size:12px;color:var(--muted);margin:14px 0 0}
 body[data-selection-style=outline] .appearance-sample{outline:2px solid var(--accent);outline-offset:3px}
@@ -582,8 +582,8 @@ body[data-presentation=copenhagen] #copenhagen-footer{display:flex;align-items:c
 #controller-choice p{font-size:12px;margin:12px 0 0}
 
 /* Scale miniature treatments together so borders and halos keep their proportions. */
-.appearance-sample-space{width:68px;height:102px;margin:auto;position:relative;z-index:1}
-#appearance-preview{position:relative;isolation:isolate}
+.appearance-sample-space{width:102px;height:153px;margin:auto;position:relative;z-index:1}
+#appearance-preview{position:relative;isolation:isolate;overflow:hidden}
 .preview-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;z-index:0;pointer-events:none}
 #appearance-preview>p{position:relative;z-index:1}
 .cupertino-preview-tile img{border-radius:inherit}
@@ -672,3 +672,49 @@ body[data-presentation=cambridge] #cambridge-categories .cambridge-category:focu
 @media(max-width:600px){#library-info{padding:20px}.library-info-game{gap:8px}.library-info-game button{padding:10px}}
 
 .app-game-action{margin-top:16px}
+
+.artwork-options-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.artwork-option{min-width:0;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}#artwork-dialog .artwork-option h3,#artwork-dialog .artwork-option>label{font-size:14px;font-weight:600;margin:0}.artwork-option .field-note{margin:7px 0 12px;color:var(--muted)}#artwork-dialog .artwork-option input{margin:0}.artwork-option button{font-size:13px;padding:10px 12px}#artwork-url-form{flex-wrap:wrap;gap:8px}#artwork-url-form input{flex:1 1 130px;min-width:0}@media(max-width:700px){.artwork-options-grid{grid-template-columns:1fr}}
+
+/* Category management remains a small, controller-friendly part of Settings. */
+#category-manager,#category-members{width:min(850px,94vw);padding:28px;max-height:92dvh}
+#category-manager h2,#category-members h2{padding-right:35px;overflow-wrap:anywhere}
+.category-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+#category-members input,#category-members select{background:var(--field);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:11px;min-width:0;font:inherit}
+.category-tools input,.category-tools select{flex:1;min-width:180px!important;max-width:100%}
+#category-game-search{width:100%}#category-members hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.category-manager-row{display:flex;align-items:center;gap:8px;margin:9px 0}
+.category-manager-row>[data-category-action="open"]{flex:1;min-width:0;text-align:left;overflow-wrap:anywhere;display:flex;justify-content:space-between;gap:15px}
+.category-manager-row small{flex-shrink:0;color:var(--muted)}
+#category-games{max-height:40vh;overflow:auto;padding:6px;overscroll-behavior:contain}
+.category-game{display:flex;align-items:center;gap:12px;width:100%;padding:10px;text-align:left;background:transparent;border-bottom:1px solid var(--line);color:var(--text);overflow-wrap:anywhere}
+.category-game[aria-pressed=true]{background:var(--accent-soft);color:var(--accent)}
+.category-game>span:first-child{flex:none;width:22px;font-size:20px}.category-feedback{overflow-wrap:anywhere}
+#category-manager button:disabled,#category-members button:disabled{opacity:.45;cursor:default}
+
+.category-manager-row{position:relative}
+.category-drag-handle{display:flex;align-items:center;justify-content:center;align-self:stretch;flex:0 0 40px;min-height:44px;color:var(--muted);font-size:26px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.category-drag-source{opacity:.4}
+.category-drag-ghost{position:fixed;z-index:5;pointer-events:none;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;border:2px solid var(--accent);border-radius:10px;background:var(--bg);color:var(--text);box-shadow:0 5px 18px #0006;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.category-drop-before::before,.category-drop-after::after{content:"";position:absolute;left:40px;right:0;height:3px;background:var(--accent);pointer-events:none;border-radius:2px}
+.category-drop-before::before{top:-6px}.category-drop-after::after{bottom:-6px}
+
+.category-manager-row button{scroll-margin-block:12px}
+
+/* Neutral cover depth composes with, rather than replaces, selection feedback.
+   Overlapping carousels keep their existing renderer. */
+body[data-cover-shadow-active=true]{--cover-depth:0 0 0 0 transparent}
+body[data-cover-shadow-active=true][data-cover-shadow=soft]{--cover-depth:0 10px 18px #0004,0 2px 5px #0002}
+body[data-cover-shadow-active=true][data-cover-shadow=crisp]{--cover-depth:6px 7px 0 #0005}
+body[data-cover-shadow-active=true][data-cover-shadow] :is(#grid .game .cover,#tokyo-art,#ulm-cover,#cambridge-cover){
+ --depth-halo:0 0 0 0 transparent;--depth-ring:0 0 0 0 transparent;
+ box-shadow:var(--depth-ring),var(--depth-halo),var(--cover-depth);
+}
+body[data-cover-shadow-active=true][data-cover-glow=true] :is(#grid .game.glow-selected .cover,#tokyo-art.glow-selected,#ulm-cover,#cambridge-cover){--depth-halo:var(--optional-halo)}
+body[data-cover-shadow-active=true][data-selection-style=glow] :is(#grid .game:is(.presentation-selected,.controller-selected,:focus-visible) .cover,#tokyo-art.glow-selected){--depth-ring:0 0 5px 2px var(--accent)}
+/* Small list thumbnails need less depth than full-size cover cards. */
+body:is([data-presentation=tokyo],[data-presentation=prague])[data-cover-shadow=soft] #grid .game .cover{--cover-depth:0 2px 4px #0004,0 .5px 1px #0002}
+body:is([data-presentation=tokyo],[data-presentation=prague])[data-cover-shadow=crisp] #grid .game .cover{--cover-depth:1.2px 1.4px 0 #0005}
+body[data-presentation=tokyo][data-cover-shadow-active=true][data-cover-glow=true] #grid .game.glow-selected .cover{--depth-halo:0 0 0 0 transparent}
+
+/* Full House: deep green felt with warm ivory lettering and accents. */
+body[data-palette="felt"]{--bg:#103b2d;--panel:#194b39;--field:#143f30;--hover:#285e48;--line:#51735d;--muted:#bcc7ad;--accent:#efdfb5;--text:#f6eedc;--accent-soft:#345541;--accent-ink:#183426;--glow:#efdfb555;}

@@ -55,5 +55,12 @@ function pragueStatus(node,g,column){node.replaceChildren();if(g)node.append(el(
 // Change selection without replacing scroll containers, preserving touch momentum.
 function pragueActivate(key){
  if(pragueKey===key)return;pragueKey=key;presentationId=null;
- for(const section of document.querySelectorAll('.prague-column')){const active=section.dataset.category===key;section.classList.toggle('expanded',active);section.querySelector('.prague-heading').setAttribute('aria-expanded',String(active));if(!active)for(const row of section.querySelectorAll('.game')){row.classList.remove('presentation-selected','controller-selected','glow-selected');row.tabIndex=-1;}}
+ for(const section of document.querySelectorAll('.prague-column')){
+  const active=section.dataset.category===key;
+  if(section.classList.contains('expanded')===active)continue;
+  section.classList.toggle('expanded',active);section.querySelector('.prague-heading').setAttribute('aria-expanded',String(active));
+  // Only the old selection can need clearing; untouched columns already have
+  // inactive rows. Avoid rewriting every game in a large library on each step.
+  if(!active)for(const row of section.querySelectorAll('.game.presentation-selected,.game.controller-selected,.game.glow-selected,.game[tabindex="0"]')){row.classList.remove('presentation-selected','controller-selected','glow-selected');row.tabIndex=-1;}
+ }
 }

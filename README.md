@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.134-beta.7)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.146-beta.8)
 
 Wayfinder is an Android game launcher: an app for organizing, browsing, and opening games you already have installed. It brings your collection together with cover artwork, categories, search, and controller navigation, so choosing what to play feels like browsing a library.
 
@@ -18,12 +18,13 @@ It is built for Android handhelds with a touchscreen and a game controller. You 
 
 ## What you can do
 
-- **Build your library.** Add installed games, edit their titles, and organize them into categories that make sense to you.
+- **Build your library.** Add installed games, edit their titles, and organize them into categories that make sense to you. Rename or merge categories, move several games at once, and drag categories into your preferred order.
 - **Find something to play.** Search your collection, sort it, mark favorites, or revisit recently played games.
 - **Give each game a cover.** Find artwork through Google Play, open Google Images or SteamGridDB searches, or choose an image from your device. Adjust how it fits the tile.
 - **Choose how you browse.** Switch between cover grids, shelves, carousels, dashboards, and text-focused layouts.
-- **Make it your own.** Customize colors, fonts, backgrounds, selection effects, and sound. Preview appearance presets or save your own combinations.
+- **Make it your own.** Customize colors, fonts, backgrounds, cover borders and shadows, selection effects, and sound. Try a complete appearance preset before keeping it, or save your own combination.
 - **Keep other apps close.** Open the app drawer for non-game apps and pin the ones you use most.
+- **Check your library.** See library counts and storage use, then jump directly to entries that need attention.
 - **Back up your collection.** Export your library and custom covers, then restore them from a saved backup.
 
 Wayfinder focuses on the collection itself: one cover per game, clear organization, and quick access to play. Games are supplied and installed separately. Wayfinder does not install games, run emulators, or manage ROM collections.
@@ -86,7 +87,7 @@ These are the default controls. Navigation adapts to the active layout or menu.
 
 Your library and saved artwork stay on your device. You can browse them offline; finding new artwork online requires an internet connection.
 
-Use **Settings → Library → Back up** to export your titles, categories, and custom covers. **Restore** replaces the current library with the contents of a backup. A library backup does not include installed games or their save files.
+Use **Settings → Library → Back up** to export your titles, categories, category order, custom covers, and app drawer preferences. **Restore** replaces the current library with the contents of a backup. A library backup does not include installed games or their save files.
 
 ## Project status
 

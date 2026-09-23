@@ -1,0 +1,48 @@
+/* Run with Node and Playwright installed; BROWSER_CHANNEL defaults to msedge.
+   Uses a synthetic library and images. No device or personal files are required. */
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const http=require('node:http');
+const path=require('node:path');
+const {chromium}=require('playwright');
+const root=path.resolve(__dirname,'../app/src/main/assets/www');
+const fixture={id:'audit',title:'Audit & Cover',genre:'Puzzles',kind:'app',package:'test.audit',image:'audit-image.svg',lastPlayed:0};
+const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rect width="600" height="900" fill="#357a62"/></svg>';
+(async()=>{
+ const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http://localhost').pathname;
+ if(pathname.includes('audit-image')||pathname.startsWith('/icon/')||pathname.startsWith('/art-icon/')){res.setHeader('Content-Type','image/svg+xml');res.end(svg);return;}
+ if(pathname==='/games.js'){res.setHeader('Content-Type','application/javascript');res.end('window.GAMES='+JSON.stringify([fixture]));return;}
+ const file=path.join(root,pathname==='/'?'index.html':pathname);try{res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.ttf')?'font/ttf':'text/html');res.end(fs.readFileSync(file));}catch{res.statusCode=404;res.end();}});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:1097,height:700}}),errors=[],passed=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ try{
+ await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>'{}',saveView:()=>{},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
+ await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
+ const open=async()=>{await page.evaluate(()=>{editGame(games[0]);$('#choose-cover').click()});await page.waitForFunction(()=>!$('#artwork-use').disabled)};
+ const session=()=>page.evaluate(()=>calls.search.at(-1)[0]);
+ const event=(name,data)=>page.evaluate(({name,data})=>nativeEvent(name,data),{name,data});
+ await open();const first=await session();assert.equal(await page.evaluate(()=>calls.search.length),1);assert.equal(await page.isEnabled('#artwork-steam'),true);assert.equal(await page.isEnabled('#artwork-use'),true);passed.push('Automatic lookup does not block other choices');
+ await page.evaluate(()=>{$('#artwork-search-options').open=true;$('#artwork-query').value='Custom & special / title'});await page.click('#artwork-google');await page.click('#artwork-steam');await page.click('#artwork-store');const sources=await page.evaluate(()=>calls.browser);
+ assert.equal(new URL(sources[0][1]).searchParams.get('q'),'Custom & special / title');assert.equal(new URL(sources[1][1]).searchParams.get('term'),'Custom & special / title');assert.equal(new URL(sources[2][1]).searchParams.get('id'),'test.audit');passed.push('Search text is encoded; store lookup remains package-based');
+ await event('artworkResults',{session:first,items:[{image:'audit-image.svg',thumbnail:'audit-image.svg',label:'Store icon'}]});assert.equal(await page.locator('.artwork-candidate').count(),3);
+ await page.click('#artwork-play');await event('artworkResults',{session:first,items:[{image:'audit-image.svg',thumbnail:'audit-image.svg',label:'Store icon'}]});assert.equal(await page.locator('.artwork-candidate').count(),3);passed.push('Retry retains originals without duplicating Play results');
+ await page.fill('#artwork-url','http://example.com/image.jpg');await page.locator('#artwork-url-form').evaluate(f=>f.requestSubmit());assert.equal(await page.evaluate(()=>calls.download.length),0);
+ await page.fill('#artwork-url','https://example.com/image.jpg');await page.locator('#artwork-url-form').evaluate(f=>f.requestSubmit());assert.equal(await page.isDisabled('#artwork-use'),true);await event('artworkResults',{session:first,items:[]});assert.equal(await page.isDisabled('#artwork-use'),true);await event('artworkError',{session:first,message:'Failed download'});assert.equal(await page.isEnabled('#artwork-use'),true);passed.push('Invalid links rejected; background results cannot unlock a download; failures recover');
+ await page.click('#artwork-file');assert.deepEqual(await page.evaluate(()=>calls.files.at(-1)),['artwork_'+first]);await event('coverCanceled',{});assert.equal(await page.evaluate(()=>draft.image),'audit-image.svg');passed.push('File picker uses the current session; cancellation preserves draft');
+ await event('artworkImage',{session:first,image:'audit-image.svg?selected'});await page.waitForFunction(()=>!$('#artwork-use').disabled);await page.click('#artwork-use');assert.equal(await page.evaluate(()=>calls.save.length),1);assert.equal(await page.isDisabled('#artwork-use'),true);
+ await page.evaluate(()=>{$('#artwork-close').click();nativeEvent('artworkSaved',{session:calls.search.at(-1)[0],image:'user/canceled.jpg'})});assert.equal(await page.evaluate(()=>draft.image),'audit-image.svg');passed.push('Save completion after cancel cannot modify the editor');
+ await page.evaluate(()=>$('#choose-cover').click());await page.waitForFunction(()=>!$('#artwork-use').disabled);const second=await session();await event('artworkImage',{session:first,image:'bad'});await event('artworkSearchError',{session:first});assert.equal(await page.locator('.artwork-candidate').count(),2);
+ await event('artworkImage',{session:second,image:'audit-image.svg?new'});await page.waitForFunction(()=>!$('#artwork-use').disabled);await page.click('#artwork-use');await event('artworkSaved',{session:second,image:'user/staged.jpg'});assert.equal(await page.evaluate(()=>draft.image),'user/staged.jpg');assert.equal(await page.evaluate(()=>games[0].image),'audit-image.svg');await page.evaluate(()=>cancelEditor());passed.push('Old sessions ignored; Use artwork changes only the draft');
+ await open();await page.evaluate(()=>{$('#artwork-close').click();$('#choose-cover').click()});await page.waitForTimeout(80);assert.equal(await page.locator('.artwork-candidate').count(),2);await page.waitForFunction(()=>!$('#artwork-use').disabled);passed.push('Immediate close/reopen survives queued close events');
+ await page.evaluate(()=>{$('#artwork-close').click();cancelEditor()});await page.waitForTimeout(30);
+ let release;const gate=new Promise(r=>release=r);await page.route('**/*slow-original*',async route=>{await gate;await route.fulfill({contentType:'image/svg+xml',body:svg})});
+ await page.evaluate(()=>{editGame({...games[0],image:'audit-image.svg?slow-original'});$('#choose-cover').click();$('#artwork-search-options').open=true;$('#artwork-url').value='https://example.com/slow.jpg';$('#artwork-url-form').requestSubmit()});release();await page.waitForFunction(()=>$('#artwork-dimensions').textContent.includes('600'));assert.equal(await page.isDisabled('#artwork-use'),true);await event('artworkError',{session:await session(),message:'Canceled test download'});passed.push('Late original preview cannot unlock an active download');
+ for(const width of [1920,1097,800,700,600,480,360]){
+ await page.setViewportSize({width,height:700});const report=await page.evaluate(()=>{const root=$('#artwork-dialog');$('#artwork-search-options').open=true;const all=dialogControls(root),queue=[$('#artwork-search-options summary')],seen=new Set(queue);while(queue.length){const from=queue.shift();for(const direction of ['up','down','left','right']){controllerFocus(from,true);controller(direction);const next=document.activeElement;if(root.contains(next)&&!seen.has(next)){seen.add(next);queue.push(next)}}}const missing=all.filter(n=>!seen.has(n)).map(n=>n.id);$('#artwork-search-options').open=false;const hidden=dialogControls(root).filter(n=>n.closest('.artwork-options-grid')).map(n=>n.id);return {missing,hidden,overflow:root.scrollWidth>root.clientWidth+1}});assert.deepEqual(report,{missing:[],hidden:[],overflow:false},'Layout/controller width '+width);
+ }passed.push('Seven screen widths: every control reachable, collapsed controls excluded, no overflow');
+ await page.setViewportSize({width:1097,height:700});await page.evaluate(()=>{$('#artwork-close').click();cancelEditor()});await page.waitForTimeout(30);await page.evaluate(()=>{drawerCatalog=[{package:'test.audit',title:'Audit app'}];openApps();editDrawerApp('test.audit');$('#appearance-choose').click()});await page.waitForFunction(()=>!$('#artwork-use').disabled);assert.deepEqual(await page.evaluate(()=>[$('#artwork-canvas').width,$('#artwork-canvas').height]),[600,600]);await page.click('[data-artwork-mode=compose]');await page.click('#artwork-use');await event('artworkSaved',{session:await session(),image:'user/app-staged.jpg'});assert.equal(await page.evaluate(()=>appearanceDraft.image),'user/app-staged.jpg');assert.equal(await page.evaluate(()=>Portal.appsPreferences()),'[]');passed.push('App artwork remains square and is staged until its editor is saved');
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({passed,errors},null,2));
+ }finally{await browser.close();await new Promise(r=>server.close(r));}
+})().catch(error=>{console.error(error);process.exitCode=1});

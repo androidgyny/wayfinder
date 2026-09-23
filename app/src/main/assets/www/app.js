@@ -28,19 +28,24 @@ let palette="portal",soundEnabled=true,artFit="contain",lastSoundAt=0;
 let draft=null,draftIsNew=false,installedApps=[],toastTimer,restoring=false;
 const defaultImages=new Map(window.GAMES.map(g=>[g.id,g.image.startsWith('art/')?g.image:(/^\d+$/.test(g.id)?'art/'+g.id+'.jpg':'icon/'+g.package)]));
 const native=window.Portal;
+let categoryOrder=[];
+function loadCategoryOrder(){try{const value=native?.categoryOrder?JSON.parse(native.categoryOrder()):categoryOrder;categoryOrder=Array.isArray(value)?value.filter(n=>typeof n==='string'):[]}catch{categoryOrder=[]}}
+loadCategoryOrder();
+function orderedCategories(names){const ranks=new Map(categoryOrder.map((name,i)=>[name,i]));return [...names].sort((a,b)=>(ranks.get(a)??Infinity)-(ranks.get(b)??Infinity)||a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));}
+
 $('#app-version').textContent='WAYFINDER'+(native?.appVersion?' · '+native.appVersion():'');
 function effect(name){const now=performance.now();if(!soundEnabled||restoring||!native?.sound||(now-lastSoundAt<65&&name!=='launch'))return;lastSoundAt=now;native.sound(name)}
-const palettes=['portal','hacker','pink','amber','cyan','violet','parchment','midnight','seaglass','terracotta','graphite'];
+const palettes=['felt','portal','hacker','pink','amber','cyan','violet','parchment','midnight','seaglass','terracotta','graphite'];
 function setPalette(value){palette=palettes.includes(value)?value:'portal';document.body.dataset.palette=palette;$('#palette').value=palette;updateInterfaceContrast();updateBackgroundPalette();if(native?.setThemeColor){const rgb=getComputedStyle(document.body).getPropertyValue('--bg').trim();native.setThemeColor(rgb)}persist()}
 function setArtFit(value){artFit=value==='cover'?'cover':'contain';document.body.dataset.artFit=artFit;$('#art-fit').value=artFit;persist()}
 function toast(message){$('#toast').textContent=message;$('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').hidden=true,5000)}
-function persist(){rememberCategoryPlace();trimCategoryHistory();clearTimeout(carouselSaveTimer);if(native&&!restoring&&!window.appearanceAudition)native.saveView(JSON.stringify({categoryPlaces,cambridgeArtwork,cambridgeSection,cambridgePane,cambridgePositions,ulmArtwork,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,coverBorder,interfaceContrast,titleWeight,favoritesOnly,genre,query,sort,size,palette,presentation,presentationId,seattleBrowse,copenhagenIds,copenhagenKept,pragueKey,praguePositions,viennaKey,viennaPositions,soundEnabled,artFit,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons,appearancePresets,visible,scroll:window.scrollY,focus:presentation!=='library'?presentationId:document.activeElement?.closest('.game')?.dataset.id||lastTrigger?.dataset.id||null}))}
+function persist(){rememberCategoryPlace();trimCategoryHistory();clearTimeout(carouselSaveTimer);if(native&&!restoring&&!window.appearanceAudition)native.saveView(JSON.stringify({categoryPlaces,cambridgeArtwork,cambridgeSection,cambridgePane,cambridgePositions,ulmArtwork,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,coverShadow,coverBorder,interfaceContrast,titleWeight,favoritesOnly,genre,query,sort,size,palette,presentation,presentationId,seattleBrowse,copenhagenIds,copenhagenKept,pragueKey,praguePositions,viennaKey,viennaPositions,soundEnabled,artFit,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons,appearancePresets,visible,scroll:window.scrollY,focus:presentation!=='library'?presentationId:document.activeElement?.closest('.game')?.dataset.id||lastTrigger?.dataset.id||null}))}
 window.saveView=persist;
-function rebuildGenres(){genres=[...new Set(games.map(g=>g.genre))].sort();counts=Object.fromEntries(genres.map(g=>[g,games.filter(x=>x.genre===g).length]));$('#genres').replaceChildren();for(const g of genres){const b=el('button','genre');b.dataset.genre=g;b.append(el('span','',g),el('span','',counts[g]));b.addEventListener('click',()=>setGenre(g));$('#genres').append(b)}$('.all>span:last-child').textContent=games.length.toLocaleString();$('.genre-label>span').textContent=genres.length;$('#category-options').replaceChildren(...['',...genres].map(g=>{const o=el('option');o.value=g;o.textContent=g||'All categories…';return o}));if(genre&&!genres.includes(genre))genre=''}
+function rebuildGenres(){genres=orderedCategories(new Set(games.map(g=>g.genre)));counts=Object.fromEntries(genres.map(g=>[g,games.filter(x=>x.genre===g).length]));$('#genres').replaceChildren();for(const g of genres){const b=el('button','genre');b.dataset.genre=g;b.append(el('span','',g),el('span','',counts[g]));b.addEventListener('click',()=>setGenre(g));$('#genres').append(b)}$('.all>span:last-child').textContent=games.length.toLocaleString();$('.genre-label>span').textContent=genres.length;$('#category-options').replaceChildren(...['',...genres].map(g=>{const o=el('option');o.value=g;o.textContent=g||'All categories…';return o}));if(genre&&!genres.includes(genre))genre=''}
 function reloadLibrary(){const focusId=document.activeElement?.closest('#grid .game')?.dataset.id;if(native)games=JSON.parse(native.library());rebuildGenres();update();if(focusId)controllerFocus(libraryFocusTarget(focusId),true);persist();window.dispatchEvent(new Event('librarychange'))}
 function play(id,trigger){if(presentation==='seattle')presentationId=id;if(!native){toast('Launching is available in the Android app');return}lastTrigger=trigger||lastTrigger;effect('launch');persist();native.launch(String(id))}
 function topDialog(){return [...document.querySelectorAll('dialog[open]')].sort((a,b)=>(a._openedOrder||0)-(b._openedOrder||0)).pop()}
-function focusableControl(node){return !!node&&node.isConnected&&!node.disabled&&node.getClientRects().length>0&&getComputedStyle(node).visibility!=='hidden'&&!node.closest('[inert]')}
+function focusableControl(node){return !!node&&node.isConnected&&!node.disabled&&node.getClientRects().length>0&&getComputedStyle(node).visibility!=='hidden'&&!node.closest('[inert]')&&!node.closest('details:not([open]) > :not(summary)')}
 function libraryFocusTarget(preferredId){
  const preferred=preferredId?[...document.querySelectorAll('#grid .game')].find(n=>n.dataset.id===preferredId):null;
  return [presentation==='cambridge'&&cambridgePane==='categories'?$('#cambridge-categories .current'):null,preferred,$('#grid .presentation-selected'),$('#grid .controller-selected'),$('#grid .ulm-selected'),$('#grid .expanded .vienna-heading'),$('#grid .expanded .prague-heading'),$('#grid .game'),$('#ulm-back'),$('#category-current'),$('#search')].find(focusableControl);
@@ -151,6 +156,7 @@ window.controller=action=>{document.querySelector('.skip')?.classList.remove('ke
  if(modal?.id==='artwork-dialog'&&window.artworkController?.(action))return;
  if(modal?.id==='apps-drawer'&&appsController(action))return;
  if(modal?.id==='library-info'&&typeof libraryInfoController==='function'&&libraryInfoController(action))return;
+ if(modal?.id==='category-members'&&typeof categoryManagerController==='function'&&categoryManagerController(action))return;
  if(!modal&&presentation==='seattle'&&seattleCategoryController(action))return;
  if(!modal&&presentation==='cambridge'&&cambridgeController(action))return;
  if(!modal&&presentation==='ulm'&&ulmController(action))return;
@@ -172,7 +178,7 @@ window.controller=action=>{document.querySelector('.skip')?.classList.remove('ke
   const start=current||cards.find(c=>{const r=c.getBoundingClientRect();return r.bottom>$('.topbar').offsetHeight&&r.top<innerHeight})||cards[0];
   if(start)gridMove(start,action);return;
  }
- if(action==='back'){if(!nativeBack())toast('Press Android Back to leave the library');return}
+ if(action==='back'){nativeBack();return}
  if(action==='search'){if(!modal){controllerFocus($('#search'));native?.showKeyboard?.();}return}
  if(action==='menu'){if(!modal)showDialog('#settings-dialog');return}
  const current=currentGame();

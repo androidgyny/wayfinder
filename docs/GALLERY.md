@@ -4,7 +4,7 @@
 
 One cover per game, ten different ways to explore. From a quiet title list to a card table, carousel, or wall of artwork, these views show how differently the same collection can feel.
 
-Captured directly on a Pimax Portal at **1920 × 1080** on September 23, 2026. These are unretouched screenshots of the current development build; some appearance details may be newer than the published beta. Favorites, recent-game selections, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
+Captured directly on a Pimax Portal at **1920 × 1080** on September 23, 2026. These are unretouched screenshots of the app, showing the layouts and appearance options included in Beta 8. Favorites, recent-game selections, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
 
 [Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Prague](#prague) · [Seattle](#seattle) · [Vienna](#vienna)
 

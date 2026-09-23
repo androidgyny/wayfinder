@@ -5,7 +5,7 @@ function resetPresentationScroll(){
 }
 function presentationPageSize(){return Math.max(12,Math.ceil(filtered.length/10))}
 function sizePresentation(){
- if(presentation==='tokyo')sizeTokyoCover();
+ if(['tokyo','oxford'].includes(presentation))sizeTokyoCover();
  if(presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge')return;
  const height=$('#grid').clientHeight;
  const width=Math.max(32,Math.floor(Math.min(innerWidth*(presentation==='venice'?.23:.38),(height-(presentation==='venice'?60:presentation==='cupertino'?84:34))/1.5)));
@@ -152,8 +152,9 @@ function syncGameCard(b,g){
 function veniceTransform(offset,tile){const d=Math.abs(offset);return `translate3d(${offset*tile*.57}px,${d*12}px,0) rotate(${offset*3}deg) scale(${1-Math.min(d,4)*.035})`;}
 
 function sizeTokyoCover(){
- if(presentation!=='tokyo')return;
+ if(!['tokyo','oxford'].includes(presentation))return;
  const panel=$('#tokyo-preview'),caption=panel.querySelector('p');
- const width=Math.max(0,Math.floor(Math.min(panel.clientWidth,(panel.clientHeight-caption.offsetHeight-12)/1.5)));
+ const captionSpace=presentation==='tokyo'?caption.offsetHeight+12:0;
+ const width=Math.max(0,Math.floor(Math.min(panel.clientWidth,(panel.clientHeight-captionSpace)/1.5)));
  panel.style.setProperty('--tokyo-cover-width',width+'px');
 }

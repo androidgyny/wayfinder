@@ -29,6 +29,8 @@ public class MainActivity extends Activity {
     private static final String ORIGIN="https://appassets.androidplatform.net";
     private static final int COVER=10, EXPORT=11, IMPORT=12, SHORTCUT=13, UNINSTALL=19, FONT=20;
     private boolean startupTouch; private StartupVideo startup; private int startupSkipKey=-1; private WebView web; private Library db; private final ExecutorService worker=Executors.newSingleThreadExecutor();
+    private ArtworkBrowser artworkBrowser; private final ExecutorService artworkWorker=Executors.newFixedThreadPool(2);
+    private final ExecutorService artworkLookupWorker=Executors.newSingleThreadExecutor(); private Future<?> artworkLookupTask;
     private CustomFont customFont; private BackdropImage background; private AmbientAudio ambient; private Artwork artwork; private File covers; private String pickingId=""; private boolean ready=false; private long lastAxis=0;
     private final Handler directionHandler=new Handler(Looper.getMainLooper()); private String heldDirection; private int heldKey=-1; private long directionStarted;
     private final Runnable repeatDirection=new Runnable(){public void run(){if(heldDirection==null||!ready)return;key(heldDirection);directionHandler.postDelayed(this,SystemClock.uptimeMillis()-directionStarted>900?65:110);}};
@@ -42,7 +44,7 @@ public class MainActivity extends Activity {
         public void onInputDeviceRemoved(int id){cancelControllerInput();}
     };
     private SoundPool sounds; private final Map<String,Integer> soundIds=new ConcurrentHashMap<>(); private final Set<Integer> loadedSounds=ConcurrentHashMap.newKeySet();
-    private volatile boolean restoreBusy; private JSONArray pendingAppPreferences; private JSONArray pendingImport; private File pendingDir;
+    private volatile boolean restoreBusy; private JSONArray pendingCategoryOrder; private JSONArray pendingAppPreferences; private JSONArray pendingImport; private File pendingDir;
     private final Map<String,byte[]> iconCache=new ConcurrentHashMap<>();
     private static JSONObject obj(String raw) throws JSONException { return new JSONObject(raw); }
     private String read(InputStream in,int max) throws IOException { return new String(bytes(in,max),StandardCharsets.UTF_8); }
@@ -91,7 +93,7 @@ public class MainActivity extends Activity {
     private byte[] icon(String pkg,int size) throws Exception {String cacheKey=pkg+"/"+size;byte[] found=iconCache.get(cacheKey);if(found!=null)return found;Drawable d=getPackageManager().getApplicationIcon(pkg);Bitmap b=Bitmap.createBitmap(size,size,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);d.setBounds(0,0,size,size);d.draw(c);ByteArrayOutputStream out=new ByteArrayOutputStream();b.compress(Bitmap.CompressFormat.PNG,100,out);b.recycle();byte[] a=out.toByteArray();if(iconCache.size()<300)iconCache.put(cacheKey,a);return a;}
     @Override protected void onResume(){super.onResume();if(ambient!=null)ambient.resume();if(web!=null)web.onResume();if(ready){web.evaluateJavascript("window.onNativeResume&&window.onNativeResume()",null);emit("homeStatus",new JSONObject());}}
     @Override protected void onPause(){if(ambient!=null)ambient.leave();cancelControllerInput();if(startup!=null)startup.dismiss();if(web!=null){web.evaluateJavascript("window.onNativePause&&window.onNativePause();window.persist&&window.persist()",null);web.onPause();}leftTriggerKey=rightTriggerKey=leftTriggerAxis=rightTriggerAxis=false;super.onPause();}
-    @Override protected void onDestroy(){cancelControllerInput();if(inputManager!=null)inputManager.unregisterInputDeviceListener(inputDevices);if(ambient!=null)ambient.destroy();if(startup!=null)startup.dismiss();if(web!=null){web.removeJavascriptInterface("Portal");web.destroy();web=null;}if(sounds!=null){sounds.release();sounds=null;}worker.shutdown();db.close();super.onDestroy();}
+    @Override protected void onDestroy(){cancelControllerInput();if(inputManager!=null)inputManager.unregisterInputDeviceListener(inputDevices);if(ambient!=null)ambient.destroy();if(startup!=null)startup.dismiss();if(web!=null){web.removeJavascriptInterface("Portal");web.destroy();web=null;}if(sounds!=null){sounds.release();sounds=null;}if(artworkBrowser!=null)artworkBrowser.dismiss();artworkWorker.shutdownNow();artworkLookupWorker.shutdownNow();worker.shutdown();db.close();super.onDestroy();}
     @Override public void onBackPressed(){if(startup.active()){startup.finishPlayback();return;}web.evaluateJavascript("window.nativeBack&&window.nativeBack()",value->{if(!"true".equals(value))moveTaskToBack(true);});}
     private void key(String key){web.evaluateJavascript("window.controller&&window.controller("+JSONObject.quote(key)+")",null);}
     @Override public boolean dispatchTouchEvent(MotionEvent e){if(startup!=null&&(startup.active()||startupTouch)){startupTouch=true;if(e.getActionMasked()==MotionEvent.ACTION_UP||e.getActionMasked()==MotionEvent.ACTION_CANCEL){startup.finishPlayback();startupTouch=false;}return true;}return super.dispatchTouchEvent(e);}
@@ -156,20 +158,37 @@ public class MainActivity extends Activity {
             }finally{database.endTransaction();}
         }
         synchronized JSONObject get(String id) throws Exception {try(Cursor c=getReadableDatabase().rawQuery("SELECT record FROM games WHERE id=?",new String[]{id})){if(c.moveToFirst())return new JSONObject(c.getString(0));}throw new IOException("This game is no longer in the library");}
-        synchronized void put(JSONObject g) throws Exception {validate(g);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());getWritableDatabase().insertWithOnConflict("games",null,v,SQLiteDatabase.CONFLICT_REPLACE);}
+        synchronized void put(JSONObject g) throws Exception {validate(g);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());if(getWritableDatabase().insertWithOnConflict("games",null,v,SQLiteDatabase.CONFLICT_REPLACE)==-1)throw new IOException("Could not save game");}
         synchronized void remove(String id){getWritableDatabase().delete("games","id=?",new String[]{id});}
+        synchronized void categories(JSONObject change) throws Exception {
+            JSONArray moves=change.getJSONArray("moves"),order=change.getJSONArray("order");validateCategoryOrder(order);
+            if(moves.length()>20000)throw new IOException("Too many games");
+            SQLiteDatabase d=getWritableDatabase();String previous=getPreferences(0).getString("categoryOrder","[]");boolean touched=false,complete=false;
+            try{d.beginTransaction();try{Set<String> ids=new HashSet<>();
+                for(int i=0;i<moves.length();i++){JSONObject move=moves.getJSONObject(i);String id=move.getString("id"),to=move.getString("to").trim();
+                    if(!ids.add(id)||to.isEmpty()||to.length()>100)throw new IOException("Invalid category change");
+                    JSONObject game=get(id);if(!game.getString("genre").equals(move.getString("from")))throw new IOException("A game's category changed. Reopen Manage categories and try again.");
+                    game.put("genre",to);put(game);
+                }
+                touched=true;if(!getPreferences(0).edit().putString("categoryOrder",order.toString()).commit())throw new IOException("Could not save category order");
+                d.setTransactionSuccessful();
+            }finally{d.endTransaction();}complete=true;
+            }finally{if(touched&&!complete)getPreferences(0).edit().putString("categoryOrder",previous).commit();}
+        }
         synchronized void replace(JSONArray a) throws Exception {replace(a,null);}
-        synchronized void replace(JSONArray a,JSONArray apps) throws Exception {
-            SQLiteDatabase d=getWritableDatabase();String previous=apps==null?null:getPreferences(0).getString("apps","[]");boolean preferencesTouched=false,complete=false;
+        synchronized void replace(JSONArray a,JSONArray apps) throws Exception {replace(a,apps,null);}
+        synchronized void replace(JSONArray a,JSONArray apps,JSONArray order) throws Exception {
+            SQLiteDatabase d=getWritableDatabase();String previous=apps==null?null:getPreferences(0).getString("apps","[]");String previousOrder=getPreferences(0).getString("categoryOrder","[]");boolean orderTouched=false;boolean preferencesTouched=false,complete=false;
             try{
                 d.beginTransaction();
                 try{
                     d.delete("games",null,null);for(int i=0;i<a.length();i++)put(a.getJSONObject(i));
                     if(apps!=null){preferencesTouched=true;if(!getPreferences(0).edit().putString("apps",apps.toString()).commit())throw new IOException("Could not save app preferences");}
+                    if(order!=null){orderTouched=true;if(!getPreferences(0).edit().putString("categoryOrder",order.toString()).commit())throw new IOException("Could not save category order");}
                     d.setTransactionSuccessful();
                 }finally{d.endTransaction();}
                 complete=true;
-            }finally{if(!complete&&preferencesTouched)getPreferences(0).edit().putString("apps",previous).commit();}
+            }finally{if(!complete&&preferencesTouched)getPreferences(0).edit().putString("apps",previous).commit();if(!complete&&orderTouched)getPreferences(0).edit().putString("categoryOrder",previousOrder).commit();}
         }
     }
     private boolean uninstallableRecord(JSONObject g){return "app".equals(g.optString("kind"))&&!g.has("intentUri")&&!getPackageName().equals(g.optString("package"));}
@@ -207,7 +226,14 @@ public class MainActivity extends Activity {
         else{intent=getPackageManager().getLaunchIntentForPackage(pkg);if(intent==null)throw new ActivityNotFoundException("This app is not installed or has no launch screen");}
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);return intent;
     }
+    private void validateCategoryOrder(JSONArray order) throws Exception {
+        if(order.length()>20000)throw new IOException("Too many categories");Set<String> names=new HashSet<>();
+        for(int i=0;i<order.length();i++){Object value=order.get(i);if(!(value instanceof String))throw new IOException("Invalid category order");String name=(String)value;if(name.trim().isEmpty()||name.length()>100||!names.add(name))throw new IOException("Invalid category order");}
+    }
     public class Bridge {
+        @JavascriptInterface public String categoryOrder(){return getPreferences(0).getString("categoryOrder","[]");}
+        @JavascriptInterface public String changeCategories(String raw){try{db.categories(obj(raw));return result(true,"Categories updated");}catch(Exception e){return result(false,e.getMessage());}}
+
         @JavascriptInterface public void libraryInfo(String request){worker.execute(()->{
             try{
                 JSONObject info=data("request",request);JSONArray missing=new JSONArray(),icons=new JSONArray();
@@ -231,10 +257,20 @@ public class MainActivity extends Activity {
             }catch(Exception e){emit("libraryInfo",data("request",request));}
         });}
         @JavascriptInterface public String appVersion(){return BuildConfig.VERSION_NAME;}
-        @JavascriptInterface public void artworkSearch(String session,String pkg){worker.execute(()->{try{JSONObject event=data("session",session);event.put("items",artwork.playImages(pkg));emit("artworkResults",event);}catch(Exception e){JSONObject event=data("session",session);try{event.put("message","No artwork could be retrieved. Try opening the store page or another source.");}catch(Exception ignored){}emit("artworkError",event);}});}
+        @JavascriptInterface public synchronized void artworkSearch(String session,String pkg){if(artworkLookupTask!=null)artworkLookupTask.cancel(true);artworkLookupTask=artworkLookupWorker.submit(()->{try{JSONObject event=data("session",session);event.put("items",artwork.playImages(pkg));emit("artworkResults",event);}catch(Exception e){JSONObject event=data("session",session);try{event.put("message","No artwork could be retrieved. Try opening the store page or another source.");}catch(Exception ignored){}emit("artworkSearchError",event);}});}
         @JavascriptInterface public void artworkDownload(String session,String url){worker.execute(()->{try{JSONObject event=data("session",session);event.put("image",artwork.importBytes(artwork.download(url,20000000)));emit("artworkImage",event);}catch(Exception e){JSONObject event=data("session",session);try{event.put("message","Could not load that image. Use a direct HTTPS image link, or download it and choose the file.");}catch(Exception ignored){}emit("artworkError",event);}});}
         @JavascriptInterface public void artworkSave(String session,String encoded){worker.execute(()->{try{if(encoded==null||encoded.length()>8000000||!encoded.startsWith("data:image/jpeg;base64,"))throw new IOException();byte[] raw=android.util.Base64.decode(encoded.substring(23),android.util.Base64.DEFAULT);String image=artwork.save(raw,covers);JSONObject event=data("session",session);event.put("image",image);emit("artworkSaved",event);}catch(Exception e){JSONObject event=data("session",session);try{event.put("message","Could not save artwork. Please try again.");}catch(Exception ignored){}emit("artworkError",event);}});}
-        @JavascriptInterface public void openArtworkLink(String url){runOnUiThread(()->{try{Uri u=Uri.parse(url);String h=u.getHost();if(!"https".equals(u.getScheme())||!("www.google.com".equals(h)||"play.google.com".equals(h)||"www.steamgriddb.com".equals(h)))return;startActivity(new Intent(Intent.ACTION_VIEW,u).addCategory(Intent.CATEGORY_BROWSABLE));}catch(Exception e){notice("No browser is available to open this search");}});}
+        @JavascriptInterface public void openArtworkBrowser(String session,String url){runOnUiThread(()->{
+            Uri u=Uri.parse(url);String h=u.getHost();if(!"https".equals(u.getScheme())||!("www.google.com".equals(h)||"play.google.com".equals(h)||"www.steamgriddb.com".equals(h)))return;
+            if(artworkBrowser!=null)artworkBrowser.dismiss();
+            final ArtworkBrowser[] current=new ArtworkBrowser[1];
+            current[0]=new ArtworkBrowser(MainActivity.this,url,imageUrl->artworkWorker.execute(()->{
+                try{String image=artwork.importBytes(artwork.download(imageUrl,20000000));runOnUiThread(()->{
+                    if(!current[0].isShowing())return;current[0].dismiss();JSONObject event=data("session",session);try{event.put("image",image);}catch(Exception ignored){}emit("artworkImage",event);
+                });}catch(Exception e){runOnUiThread(()->current[0].failed());}
+            }));
+            artworkBrowser=current[0];artworkBrowser.show();
+        });}
 
         @JavascriptInterface public void setThemeColor(String color){if(color!=null&&color.matches("#[0-9a-fA-F]{6}"))runOnUiThread(()->{int value=Color.parseColor(color);getWindow().setStatusBarColor(value);getWindow().setNavigationBarColor(value);if(startup!=null)startup.matchBackground(value);View decor=getWindow().getDecorView();int flags=decor.getSystemUiVisibility(),light=View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;boolean bright=(Color.red(value)*.2126+Color.green(value)*.7152+Color.blue(value)*.0722)>160;decor.setSystemUiVisibility(bright?flags|light:flags&~light);});}
 
@@ -347,7 +383,7 @@ public class MainActivity extends Activity {
                 }else if(image.startsWith("user/"))custom.add(image);
             }
             for(int i=0;i<apps.length();i++){String image=apps.getJSONObject(i).optString("image");if(image.startsWith("user/"))custom.add(image);}
-            JSONObject backup=data("format","portal-library");backup.put("version",2);backup.put("games",records);backup.put("apps",apps);
+            JSONObject backup=data("format","portal-library");backup.put("version",2);backup.put("games",records);backup.put("apps",apps);backup.put("categoryOrder",new JSONArray(getPreferences(0).getString("categoryOrder","[]")));
             zip.putNextEntry(new ZipEntry("library.json"));zip.write(backup.toString().getBytes(StandardCharsets.UTF_8));zip.closeEntry();
             for(Map.Entry<String,String> image:bundled.entrySet()){
                 zip.putNextEntry(new ZipEntry(image.getValue()));try(InputStream in=getAssets().open("www/"+image.getKey())){byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)zip.write(buffer,0,n);}zip.closeEntry();
@@ -358,10 +394,10 @@ public class MainActivity extends Activity {
         emit("backupCompleted",data("ok",true));
         notice("Backup saved, including your edits and cover artwork");
     }
-    private void importZip(Uri uri){if(restoreBusy){notice("Finish or cancel the current restore first");return;}restoreBusy=true;notice("Checking backup…");File stage=new File(getCacheDir(),"restore-"+UUID.randomUUID());stage.mkdirs();try(ZipInputStream zip=new ZipInputStream(getContentResolver().openInputStream(uri))){JSONArray records=null,apps=null;ZipEntry entry;int total=0;Set<String> names=new HashSet<>();while((entry=zip.getNextEntry())!=null){String name=entry.getName();if(entry.isDirectory())continue;if(!names.add(name))throw new IOException("Duplicate backup entry");if(!name.equals("library.json")&&!name.matches("user/[a-zA-Z0-9-]+\\.jpg"))throw new IOException("Unexpected backup file");ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[32768];int n,count=0;while((n=zip.read(buf))!=-1){count+=n;total+=n;if(count>16000000||total>512000000)throw new IOException("Backup exceeds size limit");out.write(buf,0,n);}if(name.equals("library.json")){JSONObject backup=obj(out.toString("UTF-8"));if(!backup.optString("format").equals("portal-library")||(backup.optInt("version")!=1&&backup.optInt("version")!=2))throw new IOException("Unsupported backup format");records=backup.getJSONArray("games");apps=backup.optJSONArray("apps");if(backup.optInt("version")==2&&apps==null)throw new IOException("Missing app preferences");}else{File imageFile=new File(stage,name.substring(5));try(FileOutputStream f=new FileOutputStream(imageFile)){out.writeTo(f);}BitmapFactory.Options imageBounds=new BitmapFactory.Options();imageBounds.inJustDecodeBounds=true;BitmapFactory.decodeFile(imageFile.getPath(),imageBounds);if(imageBounds.outWidth<=0||imageBounds.outHeight<=0)throw new IOException("Backup contains unreadable artwork");}}
+    private void importZip(Uri uri){if(restoreBusy){notice("Finish or cancel the current restore first");return;}restoreBusy=true;notice("Checking backup…");File stage=new File(getCacheDir(),"restore-"+UUID.randomUUID());stage.mkdirs();try(ZipInputStream zip=new ZipInputStream(getContentResolver().openInputStream(uri))){JSONArray records=null,apps=null,order=null;ZipEntry entry;int total=0;Set<String> names=new HashSet<>();while((entry=zip.getNextEntry())!=null){String name=entry.getName();if(entry.isDirectory())continue;if(!names.add(name))throw new IOException("Duplicate backup entry");if(!name.equals("library.json")&&!name.matches("user/[a-zA-Z0-9-]+\\.jpg"))throw new IOException("Unexpected backup file");ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[32768];int n,count=0;while((n=zip.read(buf))!=-1){count+=n;total+=n;if(count>16000000||total>512000000)throw new IOException("Backup exceeds size limit");out.write(buf,0,n);}if(name.equals("library.json")){JSONObject backup=obj(out.toString("UTF-8"));if(!backup.optString("format").equals("portal-library")||(backup.optInt("version")!=1&&backup.optInt("version")!=2))throw new IOException("Unsupported backup format");records=backup.getJSONArray("games");apps=backup.optJSONArray("apps");if(backup.has("categoryOrder")){order=backup.getJSONArray("categoryOrder");validateCategoryOrder(order);}if(backup.optInt("version")==2&&apps==null)throw new IOException("Missing app preferences");}else{File imageFile=new File(stage,name.substring(5));try(FileOutputStream f=new FileOutputStream(imageFile)){out.writeTo(f);}BitmapFactory.Options imageBounds=new BitmapFactory.Options();imageBounds.inJustDecodeBounds=true;BitmapFactory.decodeFile(imageFile.getPath(),imageBounds);if(imageBounds.outWidth<=0||imageBounds.outHeight<=0)throw new IOException("Backup contains unreadable artwork");}}
         if(records==null||records.length()>20000)throw new IOException("No valid library in backup");Set<String> ids=new HashSet<>();for(int i=0;i<records.length();i++){JSONObject g=records.getJSONObject(i);validate(g);if(!ids.add(g.getString("id")))throw new IOException("Duplicate game ID");String image=g.getString("image");if(image.startsWith("user/")&&!new File(stage,image.substring(5)).isFile())throw new IOException("Missing custom cover");if(image.startsWith("art/"))try(InputStream in=getAssets().open("www/"+image)){} }
         if(apps!=null){validateAppPreferences(apps);for(int i=0;i<apps.length();i++){String image=apps.getJSONObject(i).optString("image");if(!image.isEmpty()&&!new File(stage,image.substring(5)).isFile())throw new IOException("Missing custom app icon");}}
-        pendingAppPreferences=apps;pendingImport=records;pendingDir=stage;final int count=records.length();runOnUiThread(()->{if(isFinishing()||isDestroyed()){clearStage();return;}new AlertDialog.Builder(this).setTitle("Restore library?").setMessage("Replace this library with the "+count+" games in the backup? "+(pendingAppPreferences!=null?"App pins, appearance and app history will also be restored. ":"")+"Your installed games and their save data are not changed.").setNegativeButton("Cancel",(d,w)->clearStage()).setOnCancelListener(d->clearStage()).setPositiveButton("Restore",(d,w)->worker.execute(this::completeRestore)).show();});
+        pendingCategoryOrder=order;pendingAppPreferences=apps;pendingImport=records;pendingDir=stage;final int count=records.length();runOnUiThread(()->{if(isFinishing()||isDestroyed()){clearStage();return;}new AlertDialog.Builder(this).setTitle("Restore library?").setMessage("Replace this library with the "+count+" games in the backup? "+(pendingAppPreferences!=null?"App pins, appearance and app history will also be restored. ":"")+"Your installed games and their save data are not changed.").setNegativeButton("Cancel",(d,w)->clearStage()).setOnCancelListener(d->clearStage()).setPositiveButton("Restore",(d,w)->worker.execute(this::completeRestore)).show();});
     }catch(Exception e){File[] fs=stage.listFiles();if(fs!=null)for(File f:fs)f.delete();stage.delete();restoreBusy=false;notice("Could not restore: "+e.getMessage());}}
     private byte[] fileDigest(File file) throws Exception {
         java.security.MessageDigest digest=java.security.MessageDigest.getInstance("SHA-256");
@@ -389,11 +425,11 @@ public class MainActivity extends Activity {
                     entry.put("image",next);
                 }
             }
-            db.replace(records,apps);complete=true;emit("restored",new JSONObject());
+            db.replace(records,apps,pendingCategoryOrder);complete=true;emit("restored",new JSONObject());
         }catch(Exception e){notice("Restore failed: "+e.getMessage());}
         finally{if(!complete)for(File file:created)file.delete();clearStage();}
     }
-    private void clearStage(){if(pendingDir!=null){File[] f=pendingDir.listFiles();if(f!=null)for(File x:f)x.delete();pendingDir.delete();}pendingDir=null;pendingImport=null;pendingAppPreferences=null;restoreBusy=false;}
+    private void clearStage(){if(pendingDir!=null){File[] f=pendingDir.listFiles();if(f!=null)for(File x:f)x.delete();pendingDir.delete();}pendingDir=null;pendingImport=null;pendingAppPreferences=null;pendingCategoryOrder=null;restoreBusy=false;}
     private synchronized JSONArray appPreferences() throws JSONException {return new JSONArray(getPreferences(0).getString("apps","[]"));}
     private void validateAppPreferences(JSONArray list) throws Exception {
         if(list.length()>20000)throw new IOException("Too many app preferences");Set<String> seen=new HashSet<>();
