@@ -3,7 +3,7 @@ let pragueKey='favorites',praguePositions={},pragueColumns=[],pragueScrollTimer=
 function pragueCurrent(){return pragueColumns.find(s=>s.key===pragueKey)}
 function renderPrague(){
  clearTimeout(pragueScrollTimer);
- pragueColumns=[{key:'favorites',label:'★ Favorites',items:filtered.filter(g=>g.favorite)},...genres.map(name=>({key:'genre:'+name,label:name,items:filtered.filter(g=>g.genre===name)})).filter(s=>s.items.length)];
+ pragueColumns=[{key:'favorites',label:'★ Favorites',items:filtered.filter(g=>g.favorite)},...genres.map(name=>({key:'genre:'+name,label:name,items:filtered.filter(g=>g.genre===name)})).filter(s=>s.items.length||!!query)];
  if(!pragueCurrent())pragueKey=pragueColumns[0].key;
  const grid=$('#grid'),oldLeft=grid.scrollLeft,fragment=document.createDocumentFragment();
  for(const column of pragueColumns){
@@ -27,11 +27,11 @@ function renderPrague(){
  const active=grid.querySelector('.expanded');if(active&&(active.offsetLeft<grid.scrollLeft||active.offsetLeft+active.offsetWidth>grid.scrollLeft+grid.clientWidth))grid.scrollLeft=Math.max(0,active.offsetLeft-(grid.clientWidth-active.offsetWidth)/2);
  $('#load').hidden=true;$('#empty').hidden=true;
  for(const section of grid.querySelectorAll('.prague-column')){const id=praguePositions[section.dataset.category],target=[...section.querySelectorAll('.game')].find(b=>b.dataset.id===id);if(target)pragueReveal(target);}
- queueCoverGlow();
+ queueCoverGlow();syncSearchFeedback();
 }
 function pragueReveal(target){const list=target.parentElement;list.ignoreUntil=performance.now()+250;const top=target.offsetTop-10,bottom=target.offsetTop+target.offsetHeight+10;if(top<list.scrollTop)list.scrollTop=Math.max(0,top);else if(bottom>list.scrollTop+list.clientHeight)list.scrollTop=bottom-list.clientHeight;}
 function pragueOpen(key,focus=false){
- clearTimeout(pragueScrollTimer);pragueActivate(key);const remembered=praguePositions[key],column=pragueCurrent();if(column?.items.length)pragueSelect(rememberedCategoryGame(column.items,remembered,'prague:'+key)?.id,false,true);const section=$('#grid .prague-column.expanded'),grid=$('#grid');
+ clearTimeout(pragueScrollTimer);pragueActivate(key);const remembered=praguePositions[key],column=pragueCurrent();if(column?.items.length)pragueSelect(rememberedCategoryGame(column.items,remembered,'prague:'+key)?.id,false,true);syncSearchFeedback();const section=$('#grid .prague-column.expanded'),grid=$('#grid');
  if(section)grid.scrollLeft=Math.max(0,section.offsetLeft-(grid.clientWidth-section.offsetWidth)/2);
  if(focus)controllerFocus(section?.querySelector('.presentation-selected')||section?.querySelector('.prague-heading'),true);persist();
 }

@@ -30,5 +30,5 @@ function renderOxford(){
  setFavoriteButton($('#presentation-favorite'),current);$('#presentation-play').disabled=!current;$('#presentation-edit').disabled=!current;
  const preview=$('#tokyo-art');preview.hidden=!current;if(current&&preview.getAttribute('src')!==current.image)preview.src=current.image;preview.alt=current?current.title+' cover':'';
  const letter=current?oxfordLetter(current.title):null;for(const b of $('#oxford-index').children)b.setAttribute('aria-current',String(b.textContent===letter));
- $('#load').hidden=true;$('#empty').hidden=true;queueCoverGlow();
+ $('#load').hidden=true;$('#empty').hidden=true;queueCoverGlow();syncSearchFeedback();
 }

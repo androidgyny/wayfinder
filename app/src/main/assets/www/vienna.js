@@ -3,7 +3,7 @@ let viennaKey='favorites',viennaPositions={},viennaShelves=[],viennaScrollTimer=
 function viennaCurrent(){return viennaShelves.find(s=>s.key===viennaKey)}
 function renderVienna(){
  clearTimeout(viennaScrollTimer);
- viennaShelves=[{key:'favorites',label:'★ Favorites',items:filtered.filter(g=>g.favorite)},...genres.map(name=>({key:'genre:'+name,label:name,items:filtered.filter(g=>g.genre===name)})).filter(s=>s.items.length)];
+ viennaShelves=[{key:'favorites',label:'★ Favorites',items:filtered.filter(g=>g.favorite)},...genres.map(name=>({key:'genre:'+name,label:name,items:filtered.filter(g=>g.genre===name)})).filter(s=>s.items.length||!!query)];
  if(!viennaShelves.some(s=>s.key===viennaKey))viennaKey=viennaShelves[0].key;
  const fragment=document.createDocumentFragment();
  for(const shelf of viennaShelves){
@@ -23,7 +23,7 @@ function renderVienna(){
   }
   fragment.append(section);
  }
- $('#grid').replaceChildren(fragment);refreshViennaPreviews();$('#load').hidden=true;$('#empty').hidden=true;
+ $('#grid').replaceChildren(fragment);refreshViennaPreviews();syncSearchFeedback();$('#load').hidden=true;$('#empty').hidden=true;
  const selected=$('#grid .presentation-selected'),row=selected?.parentElement;
  if(selected&&row){row.viennaIgnoreUntil=performance.now()+250;row.scrollLeft=Math.max(0,selected.offsetLeft-36);}
  queueCoverGlow();

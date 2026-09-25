@@ -35,7 +35,7 @@ function renderBerlin(){
  berlinHeader();
  if(changed){grid.scrollTop=0;paintBerlin();grid.scrollTop=Math.floor(berlinIndex()/berlinColumns)*berlinPitch;}
  else{const top=Math.floor(berlinIndex()/berlinColumns)*berlinPitch;if(top<grid.scrollTop)grid.scrollTop=top;else if(top+berlinPitch>grid.scrollTop+grid.clientHeight)grid.scrollTop=top+berlinPitch-grid.clientHeight+14;}
- paintBerlin();$('#load').hidden=true;$('#empty').hidden=true;
+ paintBerlin();$('#load').hidden=true;$('#empty').hidden=true;syncSearchFeedback();
 }
 function berlinMove(action){
  if(!filtered.length)return;

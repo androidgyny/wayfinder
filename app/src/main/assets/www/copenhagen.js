@@ -13,7 +13,7 @@ function copenhagenFill(){
 }
 function renderCopenhagen(){
  finishCopenhagenDrag(true);
- const signature=JSON.stringify([query,genre,favoritesOnly]);if(copenhagenFilter!==signature){copenhagenIds=copenhagenIds.filter(id=>copenhagenKept.includes(id));copenhagenFilter=signature;}
+ const signature=JSON.stringify([query,genre,favoritesOnly]);if(copenhagenFilter!==signature){copenhagenIds=[...new Set([...copenhagenIds.filter(id=>copenhagenKept.includes(id)),...copenhagenKept])];copenhagenFilter=signature;}
  copenhagenKept=copenhagenKept.filter(id=>games.some(g=>g.id===id));copenhagenFill();
  if(!copenhagenIds.includes(presentationId))presentationId=copenhagenIds[0]||null;
  const grid=$('#grid'),existing=new Map([...grid.querySelectorAll('.game')].map(b=>[b.dataset.id,b]));

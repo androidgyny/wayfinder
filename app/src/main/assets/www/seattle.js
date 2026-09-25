@@ -52,7 +52,7 @@ function renderSeattle(){renderPinnedApps();
    actions.append(shuffle,heading.querySelector('button'));heading.append(actions);
   }
  }else shelf(sectionLabel(),filtered,filtered.length,favoritesOnly&&!query?'No favorites yet. Use the star in game details or press Select to add one.':'No games match this search.');
- $('#grid').replaceChildren(fragment);$('#load').hidden=true;$('#empty').hidden=true;
+ $('#grid').replaceChildren(fragment);$('#load').hidden=true;$('#empty').hidden=true;syncSearchFeedback();
 }
 function seattleMove(start,action){
  const rows=[...document.querySelectorAll('.seattle-shelf')].filter(r=>r.querySelector('.game'));

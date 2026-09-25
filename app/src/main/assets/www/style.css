@@ -718,3 +718,21 @@ body[data-presentation=tokyo][data-cover-shadow-active=true][data-cover-glow=tru
 
 /* Full House: deep green felt with warm ivory lettering and accents. */
 body[data-palette="felt"]{--bg:#103b2d;--panel:#194b39;--field:#143f30;--hover:#285e48;--line:#51735d;--muted:#bcc7ad;--accent:#efdfb5;--text:#f6eedc;--accent-soft:#345541;--accent-ink:#183426;--glow:#efdfb555;}
+
+/* Empty search results remain actionable in every presentation. */
+.search-no-match:not(.active):not(.current):not(.ulm-selected){opacity:.45}
+body[data-presentation="library"] #grid.search-empty-grid{position:relative;min-height:180px}
+#grid .search-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;color:var(--muted);z-index:3}
+.search-empty p{margin:0}.search-empty button{margin-top:8px;flex-shrink:0}
+
+body[data-presentation="seattle"] #grid .search-empty{position:static;flex:1;min-width:0;min-height:180px;border:1px dashed var(--line);border-radius:12px}
+
+/* Empty feedback belongs to the result surface, never the whole viewport. */
+body[data-presentation=copenhagen] #grid.search-empty-grid{position:relative}
+body:is([data-presentation=vienna],[data-presentation=prague]) #grid .search-empty{position:relative;inset:auto;min-height:180px;width:100%;white-space:normal}
+body[data-presentation=prague] #grid .search-empty{padding:16px 10px;font-size:14px}
+.search-empty p{max-width:100%;overflow-wrap:anywhere}
+.search-no-results #presentation-info,.search-no-results #tokyo-preview,.search-no-results #presentation-navigation,.search-no-results #presentation-scrub,.search-no-results #copenhagen-footer{visibility:hidden;pointer-events:none}
+#category-current.search-no-match{opacity:1}
+
+body.search-no-results[data-presentation=prague] .prague-empty{visibility:hidden}

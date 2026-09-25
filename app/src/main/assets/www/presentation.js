@@ -14,9 +14,11 @@ function sizePresentation(){
 function setPresentation(value){
  rememberCategoryPlace();renderedCategoryKey=null;
  finishCopenhagenDrag(true);stopCarouselMotion();
- if(value==='ulm'&&presentation!=='ulm'){ulmLevel='categories';query='';$('#search').value='';ulmSearchOpen=false;}
+ const previousSection=presentation==='cambridge'?cambridgeSection:presentation==='ulm'&&ulmLevel==='games'?ulmSection:favoritesOnly?'favorites':genre?'genre:'+genre:'all';
+ if(value==='cambridge'&&presentation!=='cambridge')cambridgeSection=previousSection;
+ if(value==='ulm'&&presentation!=='ulm'){ulmSection=previousSection;ulmCategoryKey=previousSection;ulmLevel=query||previousSection!=='all'?'games':'categories';ulmSearchOpen=!!query;}
  if(value==='vienna'||value==='prague'||value==='copenhagen'){genre='';favoritesOnly=false;}
- if(value==='seattle'&&presentation!=='seattle'){genre='';favoritesOnly=false;query='';$('#search').value='';seattleBrowse=false;}
+ if(value==='seattle'&&presentation!=='seattle')seattleBrowse=!!(query||genre||favoritesOnly);
  const next=['kyoto','cupertino','tokyo','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge'].includes(value)?value:'library';
  // Reuse cards only within a layout; shelf containers belong to Seattle.
  if(next!==presentation)$('#grid').replaceChildren();
@@ -38,8 +40,8 @@ function renderPresentation(){if(presentation==='cambridge'){renderCambridge();r
  let index=filtered.findIndex(g=>g.id===presentationId);if(index<0)index=0;
  const current=filtered[index];presentationId=current?.id||null;
  const options=sections(),gi=sectionIndex();
- const categoryLabel=sectionLabel(),changed=$('#category-current').textContent!==categoryLabel;
- $('#category-current').textContent=categoryLabel;
+ const categoryLabel=sectionLabel(),changed=$('#category-current').dataset.sectionLabel!==categoryLabel;
+ $('#category-current').dataset.sectionLabel=categoryLabel;$('#category-current').textContent=categoryLabel;
  if(changed&&!matchMedia('(prefers-reduced-motion: reduce)').matches)$('#category-current').animate([{opacity:.2,transform:'translateX(25px)'},{opacity:1,transform:'translateX(0)'}],{duration:200});
  $('#category-before').textContent=options[(gi-1+options.length)%options.length].label;
  $('#category-after').textContent=options[(gi+1)%options.length].label;
@@ -63,7 +65,7 @@ function renderPresentation(){if(presentation==='cambridge'){renderCambridge();r
   b.querySelector('img').loading='eager';keep.add(b);b.dataset.carouselIndex=i;if(b.parentElement!==$('#grid'))$('#grid').append(b);
  }
  for(const b of existing.values())if(!keep.has(b))b.remove();resetPresentationScroll();$('#load').hidden=true;$('#empty').hidden=true;
- $('#presentation-prev').disabled=!current||index===0;$('#presentation-next').disabled=!current||index===filtered.length-1;
+ $('#presentation-prev').disabled=!current||index===0;$('#presentation-next').disabled=!current||index===filtered.length-1;syncSearchFeedback();
 }
 function initPresentation(){
  initBerlin();initUlm();initCopenhagen();initCambridge();

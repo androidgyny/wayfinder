@@ -199,7 +199,7 @@ function syncUlmSettingsSample(sample){
   const selected=$('#grid .presentation-selected')||$('#grid .controller-selected')||$('#grid .game');
   const actual=['tokyo','oxford'].includes(presentation)?$('#tokyo-art'):selected?.querySelector('.cover');
   sample.removeAttribute('style');frame.removeAttribute('style');frame.dataset.previewUnderline=String(!!actual&&!actual.matches('img')&&getComputedStyle(actual,'::before').content!=='none');
-  if(actual){const style=getComputedStyle(actual),width=actual.offsetWidth||180,height=actual.offsetHeight||width*1.5,scale=Math.min(102/width,153/height);Object.assign(frame.style,{width:width+'px',height:height+'px',transform:`scale(${scale})`,transformOrigin:'top left',border:style.border,borderRadius:style.borderRadius,background:style.backgroundColor,overflow:style.overflow,boxShadow:style.boxShadow,outline:style.outline,outlineOffset:style.outlineOffset});}
+  if(actual){const style=getComputedStyle(actual),width=actual.offsetWidth||180,height=actual.offsetHeight||width*1.5,scale=Math.min(102/width,153/height);Object.assign(frame.style,{width:width+'px',height:height+'px',margin:'0',left:(102-width*scale)/2+'px',transform:`scale(${scale})`,transformOrigin:'top left',border:style.border,borderRadius:style.borderRadius,background:style.backgroundColor,overflow:style.overflow,boxShadow:style.boxShadow,outline:style.outline,outlineOffset:style.outlineOffset});}
   return;
  }
  frame.removeAttribute('style');frame.dataset.previewUnderline='false';sample.removeAttribute('style');
@@ -210,7 +210,7 @@ function syncUlmSettingsSample(sample){
  const scale=Math.min(102/width,153/height);
  frame.style.transform='none';frame.style.width=width*scale+'px';frame.style.height=height*scale+'px';
  // Scale a full-size artwork treatment, including its border, corners and halo.
- Object.assign(sample.style,{width:width+'px',height:height+'px',maxWidth:'none',maxHeight:'none',objectFit:artFit,background:style.backgroundColor,boxSizing:'border-box',border:style.border,borderRadius:style.borderRadius,transform:`scale(${scale})`,transformOrigin:'top left'});
+ Object.assign(sample.style,{display:'block',margin:'0',width:width+'px',height:height+'px',maxWidth:'none',maxHeight:'none',objectFit:artFit,background:style.backgroundColor,boxSizing:'border-box',border:style.border,borderRadius:style.borderRadius,transform:`scale(${scale})`,transformOrigin:'top left'});
  sample.style.boxShadow=style.boxShadow;
 }
 

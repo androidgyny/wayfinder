@@ -1,7 +1,7 @@
 // Ulm uses text rows; only the optional selected cover is loaded.
 let ulmArtwork=false,ulmLevel='categories',ulmSection='all',ulmPositions={},ulmCategoryKey='all',ulmSearchOpen=false;
 let ulmRendered=null,ulmRows=new Map();
-function ulmSections(){return [{key:'favorites',label:'Favorites',count:games.filter(g=>g.favorite).length},{key:'recent',label:'Recently played',count:games.filter(g=>g.lastPlayed>0).length},{key:'all',label:'All games',count:games.length},...genres.map(g=>({key:'genre:'+g,label:g,count:counts[g]||0}))]}
+function ulmSections(){return [{key:'favorites',label:'Favorites',count:games.filter(g=>g.favorite).length},{key:'recent',label:'Recently played',count:games.filter(g=>g.lastPlayed>0).length},{key:'all',label:'All games',count:games.length},...genres.map(g=>({key:'genre:'+g,label:g,count:counts[g]||0}))].map(s=>({...s,count:searchSectionCount(s.key,s.count)}))}
 function ulmApplyFilter(){
  if(presentation!=='ulm')return;
  if(!ulmSections().some(s=>s.key===ulmSection))ulmSection='all';
@@ -16,7 +16,7 @@ function ulmPreview(){
 }
 function ulmFocus(buffer=false){
  const grid=$('#grid'),row=grid.querySelector('.ulm-selected');
- if(!row){$('#ulm-back').focus({preventScroll:true});return;}
+ if(!row){($('#grid .show-all-matches')||$('#ulm-back')).focus({preventScroll:true});return;}
  row.focus({preventScroll:true});
  if(!buffer){row.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});return;}
  // Keep two neighboring rows visible during controller navigation. On short
@@ -37,7 +37,7 @@ function ulmSelect(id,focus=false){
  }else{ulmCategoryKey=id;const list=ulmSections();$('#ulm-position').textContent=`${Math.max(0,list.findIndex(s=>s.key===id))+1} / ${list.length}`;}
  ulmPreview();if(focus)ulmFocus(true);queueCarouselSave();
 }
-function ulmOpen(key,focus=true){ulmSection=key;ulmCategoryKey=key;ulmLevel='games';query='';$('#search').value='';$('#ulm-search').value='';ulmSearchOpen=false;presentationId=ulmPositions[key]||null;update();if(focus)ulmFocus();persist();}
+function ulmOpen(key,focus=true){ulmSection=key;ulmCategoryKey=key;ulmLevel='games';ulmSearchOpen=!!query;presentationId=ulmPositions[key]||null;update();if(focus)ulmFocus();persist();}
 function ulmBack(){
  if(query||ulmSearchOpen){query='';$('#search').value='';$('#ulm-search').value='';ulmSearchOpen=false;$('#ulm-search').blur();update();ulmFocus();persist();return true;}
  if(ulmLevel==='games'){ulmLevel='categories';update();ulmFocus();persist();return true;}
