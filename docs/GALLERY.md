@@ -2,11 +2,11 @@
 
 [← Back to the README](../README.md)
 
-One cover per game, ten different ways to explore. From a quiet title list to a card table, carousel, or wall of artwork, these views show how differently the same collection can feel.
+Nine library views and a home for everyday apps. From a quiet title list to a card table, carousel, or wall of artwork, these ten screenshots show how differently the same collection can feel.
 
-Captured directly on a Pimax Portal at **1920 × 1080** on September 23, 2026. These are unretouched screenshots of the app, showing the layouts and appearance options included in Beta 8. Favorites, recent-game selections, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
+Captured directly on a Pimax Portal at **1920 × 1080** on September 27, 2026. These are unretouched screenshots of the app, showing the layouts and appearance options included in **v0.9.148 Beta 10**. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
 
-[Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Prague](#prague) · [Seattle](#seattle) · [Vienna](#vienna)
+[Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Oxford](#oxford) · [Apps](#apps) · [Vienna](#vienna)
 
 ## Copenhagen
 
@@ -64,21 +64,23 @@ Sixteen covers fit into two complete rows. Disjoint is selected in a dense, easy
 
 ![Berlin: Sixteen covers fit into two complete rows. Disjoint is selected in a dense, easy-to-scan category grid.](screenshots/06-berlin.png)
 
-## Prague
+## Oxford
 
-**The paper catalogue** — Parchment · Editorial · Flat · Soft shadows
+**After Hours** — Midnight · Outfit · Fireflies
 
-Four category columns put favorites, action adventures, action RPGs, and arcade games side by side, with small covers and readable titles.
+A clear list of favorites pairs with large cover art and a faint scattering of fireflies. Night in the Woods sets the mood for an evening of browsing.
 
-![Prague: Four category columns put favorites, action adventures, action RPGs, and arcade games side by side, with small covers and readable titles.](screenshots/07-prague.png)
+![Oxford: Night in the Woods beside a spacious favorites list, with a midnight palette and subtle fireflies.](screenshots/07-oxford.png)
 
-## Seattle
+## Apps
 
-**Pick up a favorite** — Midnight · Outfit · Soft Gradient · Soft shadows
+**Everyday essentials** — Midnight · Outfit · Phosphor section icons
 
-The dashboard brings recently played games and favorites together, with category navigation close at hand.
+News, Media, Social, Tools, and System sit above a dock of pinned apps. Colorful controller hints and customized app icons complete the screen.
 
-![Seattle: The dashboard brings recently played games and favorites together, with category navigation close at hand.](screenshots/08-seattle.png)
+![Apps: Five illustrated sections, a row of seven pinned apps, and colorful controller hints.](screenshots/08-apps.png)
+
+App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
 ## Vienna
 
