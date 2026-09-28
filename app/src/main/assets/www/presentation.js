@@ -5,7 +5,7 @@ function resetPresentationScroll(){
 }
 function presentationPageSize(){return Math.max(12,Math.ceil(filtered.length/10))}
 function sizePresentation(){
- if(['tokyo','oxford'].includes(presentation))sizeTokyoCover();
+ if(['oxford'].includes(presentation))sizeOxfordCover();
  if(presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge')return;
  const height=$('#grid').clientHeight;
  const width=Math.max(32,Math.floor(Math.min(innerWidth*(presentation==='venice'?.23:.38),(height-(presentation==='venice'?60:presentation==='cupertino'?84:34))/1.5)));
@@ -19,7 +19,7 @@ function setPresentation(value){
  if(value==='ulm'&&presentation!=='ulm'){ulmSection=previousSection;ulmCategoryKey=previousSection;ulmLevel=query||previousSection!=='all'?'games':'categories';ulmSearchOpen=!!query;}
  if(value==='vienna'||value==='prague'||value==='copenhagen'){genre='';favoritesOnly=false;}
  if(value==='seattle'&&presentation!=='seattle')seattleBrowse=!!(query||genre||favoritesOnly);
- const next=['kyoto','cupertino','tokyo','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge'].includes(value)?value:'library';
+ const next=['kyoto','cupertino','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge'].includes(value)?value:'library';
  // Reuse cards only within a layout; shelf containers belong to Seattle.
  if(next!==presentation)$('#grid').replaceChildren();
  presentation=next;
@@ -46,10 +46,9 @@ function renderPresentation(){if(presentation==='cambridge'){renderCambridge();r
  $('#category-before').textContent=options[(gi-1+options.length)%options.length].label;
  $('#category-after').textContent=options[(gi+1)%options.length].label;
  $('#presentation-title').textContent=current?.title||(favoritesOnly&&!query?'No favorites yet':'No games found');setFavoriteButton($('#presentation-favorite'),current);
- const preview=$('#tokyo-art');preview.hidden=!current;
- if(presentation==='tokyo'&&current&&preview.getAttribute('src')!==current.image)preview.src=current.image;
+ const preview=$('#catalogue-art');preview.hidden=!current;
  preview.alt=current?current.title+' cover':'';
- $('#presentation-prev').textContent=presentation==='tokyo'?'↑':'‹';$('#presentation-next').textContent=presentation==='tokyo'?'↓':'›';
+ $('#presentation-prev').textContent='‹';$('#presentation-next').textContent='›';
 
  $('#presentation-position').textContent=current?`${index+1} / ${filtered.length.toLocaleString()} · ${current.genre}`:(favoritesOnly&&!query?'Choose a game and press its star or press Select.':'Try another search or category');
  $('#presentation-seek').max=Math.max(1,filtered.length);$('#presentation-seek').value=index+1;$('#presentation-seek').disabled=!current;$('#presentation-seek-position').textContent=current?`${index+1} / ${filtered.length}`:'0 / 0';$('#presentation-first').disabled=!current||index===0;$('#presentation-last').disabled=!current||index===filtered.length-1;
@@ -77,26 +76,15 @@ function initPresentation(){
  $('#presentation-seek').oninput=e=>{const index=Number(e.target.value)-1;if(filtered[index]){presentationId=filtered[index].id;renderPresentation();persist()}};
  $('#presentation-first').onclick=()=>movePresentation(-filtered.length,true);
  $('#presentation-last').onclick=()=>movePresentation(filtered.length,true);
- function swipeSurface(surface,category){
+ function swipeCategories(surface){
   let start=null,ignoreUntil=0;
-  surface.addEventListener('pointerdown',e=>{if((category||presentation==='tokyo')&&presentation!=='library'&&presentation!=='seattle'&&(e.pointerType==='touch'||!e.pointerType)){start={x:e.clientX,y:e.clientY,time:performance.now()}}});
-  surface.addEventListener('pointerup',e=>{
-   if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y,elapsed=Math.max(1,performance.now()-start.time);start=null;
-   if(!category&&presentation==='tokyo'&&Math.abs(dy)>35&&Math.abs(dy)>Math.abs(dx)){
-    ignoreUntil=performance.now()+450;
-    const steps=Math.min(presentationPageSize(),Math.max(1,Math.round(Math.abs(dy)/75*(elapsed<250?2:1))));
-    movePresentation((dy<0?1:-1)*steps,true);
-   }else if(Math.abs(dx)>35&&Math.abs(dx)>Math.abs(dy)){
-    ignoreUntil=performance.now()+450;
-    if(category||presentation==='tokyo')controller(dx<0?'genreNext':'genrePrev');
-    else {const steps=Math.min(presentationPageSize(),Math.max(1,Math.round(Math.abs(dx)/90*(elapsed<250?2:1))));movePresentation((dx<0?1:-1)*steps,true)}
-   }
-  });
+  surface.addEventListener('pointerdown',e=>{if(presentation!=='library'&&presentation!=='seattle'&&(e.pointerType==='touch'||!e.pointerType))start={x:e.clientX,y:e.clientY};});
+  surface.addEventListener('pointerup',e=>{if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;start=null;if(Math.abs(dx)>35&&Math.abs(dx)>Math.abs(dy)){ignoreUntil=performance.now()+450;controller(dx<0?'genreNext':'genrePrev');}});
   surface.addEventListener('pointercancel',()=>start=null);
-  surface.addEventListener('click',e=>{if(e.detail!==0&&performance.now()<ignoreUntil){e.stopImmediatePropagation();e.preventDefault()}},true);
+  surface.addEventListener('click',e=>{if(e.detail!==0&&performance.now()<ignoreUntil){e.stopImmediatePropagation();e.preventDefault();}},true);
  }
- initCarouselMotion();swipeSurface($('#grid'),false);swipeSurface($('#category-strip'),true);
- new ResizeObserver(sizeTokyoCover).observe($('#tokyo-preview'));
+ initCarouselMotion();swipeCategories($('#category-strip'));
+ new ResizeObserver(sizeOxfordCover).observe($('#catalogue-preview'));
  new ResizeObserver(sizePresentation).observe($('#grid'));
  window.addEventListener('resize',sizePresentation);
 }
@@ -153,10 +141,10 @@ function syncGameCard(b,g){
 // Flat fan: translation and a small in-plane tilt, shared by touch motion.
 function veniceTransform(offset,tile){const d=Math.abs(offset);return `translate3d(${offset*tile*.57}px,${d*12}px,0) rotate(${offset*3}deg) scale(${1-Math.min(d,4)*.035})`;}
 
-function sizeTokyoCover(){
- if(!['tokyo','oxford'].includes(presentation))return;
- const panel=$('#tokyo-preview'),caption=panel.querySelector('p');
- const captionSpace=presentation==='tokyo'?caption.offsetHeight+12:0;
+function sizeOxfordCover(){
+ if(!['oxford'].includes(presentation))return;
+ const panel=$('#catalogue-preview'),caption=panel.querySelector('p');
+ const captionSpace=0;
  const width=Math.max(0,Math.floor(Math.min(panel.clientWidth,(panel.clientHeight-captionSpace)/1.5)));
- panel.style.setProperty('--tokyo-cover-width',width+'px');
+ panel.style.setProperty('--catalogue-cover-width',width+'px');
 }

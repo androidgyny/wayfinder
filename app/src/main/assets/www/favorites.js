@@ -56,7 +56,7 @@ function revealActiveCategory(){
 // Each layout owns its reading position; search results never replace the unfiltered one.
 let categoryPlaces={},renderedCategoryKey=null;
 function categoryPlaceKey(){
- if(!['library','seattle','kyoto','cupertino','tokyo','oxford','berlin','venice','copenhagen'].includes(presentation))return null;
+ if(!['library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen'].includes(presentation))return null;
  return JSON.stringify([presentation,presentation==='copenhagen'?'table':presentation==='seattle'&&!seattleBrowse&&!genre&&!favoritesOnly&&!query?'dashboard':favoritesOnly?'favorites':genre||'all',query]);
 }
 function rememberCategoryPlace(){

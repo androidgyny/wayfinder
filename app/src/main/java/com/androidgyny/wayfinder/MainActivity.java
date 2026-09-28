@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
     };
     private SoundPool sounds; private final Map<String,Integer> soundIds=new ConcurrentHashMap<>(); private final Set<Integer> loadedSounds=ConcurrentHashMap.newKeySet();
     private volatile boolean restoreBusy; private JSONArray pendingCategoryOrder; private JSONArray pendingAppPreferences; private JSONArray pendingImport; private File pendingDir;
+    private final AppIconPacks appIconPacks=new AppIconPacks(this);
     private final Map<String,byte[]> iconCache=new ConcurrentHashMap<>();
     private static JSONObject obj(String raw) throws JSONException { return new JSONObject(raw); }
     private String read(InputStream in,int max) throws IOException { return new String(bytes(in,max),StandardCharsets.UTF_8); }
@@ -75,6 +76,7 @@ public class MainActivity extends Activity {
                     if(path.equals("/art-remote/"))return response("image/jpeg",artwork.remote(u.getQueryParameter("url")),200);
                     if(path.startsWith("/user/")){String n=path.substring(6);if(!n.matches("[a-zA-Z0-9-]+\\.jpg"))throw new IOException();return new WebResourceResponse("image/jpeg",null,new FileInputStream(new File(covers,n)));}
                     if(path.startsWith("/art-icon/")){String pkg=path.substring(10);if(!pkg.matches("[a-zA-Z0-9_.]+"))throw new IOException();return response("image/png",icon(pkg,512),200);}
+                    if(path.startsWith("/app-icon/")){String pkg=path.substring(10);if(!pkg.matches("[a-zA-Z0-9_.]+"))throw new IOException();byte[] packed=null;try{String name=r.getUrl().getQueryParameter("drawable");packed=name==null?appIconPacks.icon(r.getUrl().getQueryParameter("pack"),pkg):appIconPacks.named(r.getUrl().getQueryParameter("pack"),name);}catch(Exception ignored){}if(packed==null&&"1".equals(r.getUrl().getQueryParameter("preview")))return response("text/plain",new byte[0],404);return response("image/png",packed==null?icon(pkg):packed,200);}
                     if(path.startsWith("/icon/")){String pkg=path.substring(6);if(!pkg.matches("[a-zA-Z0-9_.]+"))throw new IOException();return response("image/png",icon(pkg),200);}
                     String file=path.equals("/")?"www/index.html":"www"+path;
                     String mime=path.endsWith(".ttf")?"font/ttf":path.endsWith(".js")?"application/javascript":path.endsWith(".css")?"text/css":path.endsWith(".jpg")?"image/jpeg":path.endsWith(".webp")?"image/webp":"text/html";
@@ -277,6 +279,8 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface public int sound(String name){Integer id=soundIds.get(name);SoundPool pool=sounds;if(pool==null||id==null||!loadedSounds.contains(id))return 0;return pool.play(id,name.equals("move")?.22f:.35f,name.equals("move")?.22f:.35f,1,0,1f);}
 
+        @JavascriptInterface public void iconPackCatalog(String pack,String token){worker.execute(()->{JSONObject result=data("token",token);try{result.put("icons",appIconPacks.catalog(pack));}catch(Exception e){try{result.put("error","Could not read this pack’s icon catalog.");}catch(Exception ignored){}}emit("iconPackCatalog",result);});}
+        @JavascriptInterface public void iconPacks(){worker.execute(()->emit("iconPacks",data("packs",appIconPacks.installed())));}
         @JavascriptInterface public String appsPreferences(){try{return appPreferences().toString();}catch(Exception e){return "[]";}}
         @JavascriptInterface public String reorderApps(String raw){try{synchronized(MainActivity.this){JSONArray ids=new JSONArray(raw),list=appPreferences();Map<String,JSONObject> pins=new HashMap<>();for(int i=0;i<list.length();i++){JSONObject a=list.getJSONObject(i);if(a.optBoolean("pinned"))pins.put(a.getString("package"),a);}if(ids.length()!=pins.size())throw new IOException("Pinned apps changed; try again");for(int i=0;i<ids.length();i++){JSONObject a=pins.remove(ids.getString(i));if(a==null)throw new IOException("Invalid pinned order");a.put("order",i);}if(!getPreferences(0).edit().putString("apps",list.toString()).commit())throw new IOException("Could not save order");return result(true,"Saved");}}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String saveApp(String raw){try{storeAppPreference(obj(raw));return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
@@ -296,22 +300,22 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void androidSettings(){runOnUiThread(()->{try{startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));}catch(Exception e){notice("Android Settings is unavailable");}});}
         @JavascriptInterface public String library(){db.migrateBundledCovers();return db.all().toString();}
         @JavascriptInterface public String view(){return getPreferences(0).getString("view","{}");}
+        @JavascriptInterface public void hideKeyboard(){runOnUiThread(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(web.getWindowToken(),0);});}
         @JavascriptInterface public void showKeyboard(){runOnUiThread(()->{if(web==null)return;web.requestFocus();web.post(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);});});}
         @JavascriptInterface public void saveView(String value){if(value!=null&&value.length()<=512000)getPreferences(0).edit().putString("view",value).apply();else notice("Could not save settings: navigation history is too large");}
         @JavascriptInterface public String clearRecent(String id){try{JSONObject g=db.get(id);g.put("lastPlayed",0);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String favorite(String id,boolean value){try{JSONObject g=db.get(id);g.put("favorite",value);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String save(String raw){try{JSONObject g=obj(raw);validate(g);if(g.optString("kind").equals("app")&&g.has("component")){ActivityInfo a=getPackageManager().getActivityInfo(ComponentName.unflattenFromString(g.getString("component")),0);if(!a.exported)throw new IOException("App does not allow launching this screen");}db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public boolean canUninstall(String id){try{JSONObject g=db.get(id);return uninstallableRecord(g)&&packageInstalled(g.getString("package"));}catch(Exception e){return false;}}
-        @JavascriptInterface public void uninstallGame(String id){runOnUiThread(()->{
-            try{
-                JSONObject g=db.get(id);if(!uninstallableRecord(g)||!packageInstalled(g.getString("package")))throw new IOException("This entry is not an installed Android app");
-                String pkg=g.getString("package");
-                if(!getPreferences(0).getString("pendingUninstall","").isEmpty())throw new IOException("An uninstall request is already pending");
-                Intent request=new Intent(Intent.ACTION_UNINSTALL_PACKAGE,Uri.parse("package:"+pkg)).putExtra(Intent.EXTRA_RETURN_RESULT,true);
-                if(!getPreferences(0).edit().putString("pendingUninstall",pkg).commit())throw new IOException("Could not save uninstall request");
-                try{startActivityForResult(request,UNINSTALL);}catch(Exception e){getPreferences(0).edit().remove("pendingUninstall").commit();throw e;}
-            }catch(Exception e){notice("Could not open uninstall: "+e.getMessage());}
-        });}
+        @JavascriptInterface public boolean canUninstallApp(String pkg){try{if(pkg==null||!pkg.matches("[a-zA-Z0-9_.]+")||getPackageName().equals(pkg)||!packageInstalled(pkg))return false;ApplicationInfo info=getPackageManager().getApplicationInfo(pkg,0);return (info.flags&ApplicationInfo.FLAG_SYSTEM)==0;}catch(Exception e){return false;}}
+        @JavascriptInterface public void uninstallApp(String pkg){runOnUiThread(()->{try{if(!canUninstallApp(pkg))throw new IOException("This app cannot be uninstalled");requestUninstall(pkg);}catch(Exception e){notice("Could not open uninstall: "+e.getMessage());}});}
+        @JavascriptInterface public void uninstallGame(String id){runOnUiThread(()->{try{JSONObject g=db.get(id);if(!uninstallableRecord(g)||!packageInstalled(g.getString("package")))throw new IOException("This entry is not an installed Android app");requestUninstall(g.getString("package"));}catch(Exception e){notice("Could not open uninstall: "+e.getMessage());}});}
+        private void requestUninstall(String pkg) throws Exception {
+            if(!getPreferences(0).getString("pendingUninstall","").isEmpty())throw new IOException("An uninstall request is already pending");
+            Intent request=new Intent(Intent.ACTION_UNINSTALL_PACKAGE,Uri.parse("package:"+pkg)).putExtra(Intent.EXTRA_RETURN_RESULT,true);
+            if(!getPreferences(0).edit().putString("pendingUninstall",pkg).commit())throw new IOException("Could not save uninstall request");
+            try{startActivityForResult(request,UNINSTALL);}catch(Exception e){getPreferences(0).edit().remove("pendingUninstall").commit();throw e;}
+        }
         @JavascriptInterface public String remove(String id){try{db.remove(id);return result(true,"Removed from library");}catch(Exception e){return result(false,"Could not remove this entry. Please try again.");}}
         @JavascriptInterface public void launch(String id){runOnUiThread(()->{
             JSONObject g;
@@ -434,6 +438,7 @@ public class MainActivity extends Activity {
     private void validateAppPreferences(JSONArray list) throws Exception {
         if(list.length()>20000)throw new IOException("Too many app preferences");Set<String> seen=new HashSet<>();
         for(int i=0;i<list.length();i++){JSONObject a=list.getJSONObject(i);String pkg=a.getString("package"),image=a.optString("image");
+            if(a.has("packIcon")){JSONObject chosen=a.getJSONObject("packIcon");if(!chosen.optString("pack").matches("[a-zA-Z0-9_.]+")||!chosen.optString("name").matches("[a-zA-Z0-9_]+"))throw new IOException("Invalid pack icon");}
             if(!pkg.matches("[a-zA-Z0-9_.]+")||!seen.add(pkg)||a.optString("title").length()>250||(!image.isEmpty()&&!image.matches("user/[a-zA-Z0-9-]+\\.jpg")))throw new IOException("Invalid app appearance");
             if(!Arrays.asList("auto","app","game").contains(a.optString("classification","auto")))throw new IOException("Invalid app classification");
         }

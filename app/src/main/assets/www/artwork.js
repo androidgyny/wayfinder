@@ -24,7 +24,7 @@
  }
  function external(url){if(!state||state.busy)return;if(native?.openArtworkBrowser)native.openArtworkBrowser(state.session,url);else window.open(url,'_blank','noopener')}
  $('#choose-cover').onclick=()=>open({title:$('#edit-title').value.trim()||draft.title,pkg:draft.package,image:draft.image,square:false,apply:image=>{if(draft){draft.image=image;draft.fallback=false;$('#edit-image').src=image}}});
- $('#appearance-choose').onclick=()=>open({title:$('#appearance-name').value.trim(),pkg:appearanceDraft.package,image:$('#appearance-image').getAttribute('src'),square:true,apply:image=>{if(appearanceDraft){appearanceDraft.image=image;$('#appearance-image').src=image}}});
+ window.chooseAppImage=()=>{if(!appearanceDraft)return;open({title:$('#appearance-name').value.trim(),pkg:appearanceDraft.package,image:$('#appearance-image').getAttribute('src'),square:true,apply:image=>{if(appearanceDraft){appearanceDraft.image=image;delete appearanceDraft.packIcon;$('#appearance-image').src=image}}});$('#artwork-file').click();};
  $('#artwork-close').onclick=()=>hideDialog('#artwork-dialog');dialog.addEventListener('close',()=>{if(dialog.open)return;state=null;drag=null;$('#artwork-gallery').replaceChildren()});
  $('#artwork-installed').onclick=()=>{if(state&&!state.busy)select('art-icon/'+state.pkg)};
  function searchPlay(){if(!state||state.searching||!native?.artworkSearch)return;state.searching=true;$('#artwork-play').disabled=true;message('Looking for Google Play images. You can keep choosing artwork.');native.artworkSearch(state.session,state.pkg)}

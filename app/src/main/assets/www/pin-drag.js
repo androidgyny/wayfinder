@@ -1,11 +1,12 @@
 let pinDrag=null,pinIgnoreClickUntil=0,pinDragFrame=0;
-function canDragPins(){return drawerView==='pinned'&&!$('#drawer-search').value.trim()&&!$('#drawer-letter').value}
+function canDragPins(){return (drawerView==='pinned'||drawerView==='home')&&!$('#drawer-search').value.trim()&&!$('#drawer-letter').value}
 function startPinDrag(e,pkg){
+ if(drawerView==='home'&&!e.target.closest('#app-dock'))return;
  if(!canDragPins()||e.button>0||e.isPrimary===false||pinDrag)return;
  pinDrag={pkg,id:e.pointerId,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,active:false,ghost:null,hover:null,hoverAt:0};
 
 }
-function pinTarget(){return document.elementFromPoint(pinDrag.x,pinDrag.y)?.closest('.drawer-app')}
+function pinTarget(){return document.elementFromPoint(pinDrag.x,pinDrag.y)?.closest(drawerView==='home'?'#app-dock .drawer-app':'#drawer-grid .drawer-app')}
 function pinDragTick(){
  if(!pinDrag?.active)return;
  const d=pinDrag,dialog=$('#apps-drawer'),r=dialog.getBoundingClientRect();
@@ -26,20 +27,20 @@ function finishPinDrag(cancel=false){
  const ids=pins.map(a=>a.package),from=ids.indexOf(d.pkg),to=ids.indexOf(target.dataset.package);if(from<0||to<0)return;
  ids.splice(from,1);ids.splice(to,0,d.pkg);
  try{if(native?.reorderApps){const result=JSON.parse(native.reorderApps(JSON.stringify(ids)));if(!result.ok)throw Error(result.message)}else if(native)throw Error('Reordering is unavailable');
-  ids.forEach((pkg,i)=>appPreference(pkg).order=i);renderDrawer();renderPinnedApps();const moved=[...document.querySelectorAll('.drawer-app')].find(b=>b.dataset.package===d.pkg);moved?.focus({preventScroll:true});effect('select');
+  ids.forEach((pkg,i)=>appPreference(pkg).order=i);renderDrawer();renderPinnedApps();const moved=[...document.querySelectorAll(drawerView==='home'?'#app-dock .drawer-app':'#drawer-grid .drawer-app')].find(b=>b.dataset.package===d.pkg);moved?.focus({preventScroll:true});effect('select');
  }catch(e){toast(e.message||'Could not save pinned order');loadDrawerPreferences();renderDrawer()}
 }
 function initPinDrag(){
- const grid=$('#drawer-grid');
+ const grid=$('#apps-drawer');
  grid.addEventListener('pointermove',e=>{const d=pinDrag;if(!d||e.pointerId!==d.id)return;d.x=e.clientX;d.y=e.clientY;
-  if(!d.active&&Math.hypot(d.x-d.startX,d.y-d.startY)>10){d.active=true;grid.setPointerCapture(e.pointerId);const source=[...grid.querySelectorAll('.drawer-app')].find(b=>b.dataset.package===d.pkg);if(!source){finishPinDrag(true);return;}d.ghost=source.cloneNode(true);d.ghost.removeAttribute('data-package');d.ghost.className='pin-drag-ghost';d.ghost.setAttribute('aria-hidden','true');$('#apps-drawer').append(d.ghost);document.body.classList.add('pin-dragging');pinIgnoreClickUntil=performance.now()+500;pinDragTick()}
+  if(!d.active&&Math.hypot(d.x-d.startX,d.y-d.startY)>10){d.active=true;grid.setPointerCapture(e.pointerId);const source=[...grid.querySelectorAll(drawerView==='home'?'#app-dock .drawer-app':'#drawer-grid .drawer-app')].find(b=>b.dataset.package===d.pkg);if(!source){finishPinDrag(true);return;}d.ghost=source.cloneNode(true);d.ghost.removeAttribute('data-package');d.ghost.className='pin-drag-ghost';d.ghost.setAttribute('aria-hidden','true');$('#apps-drawer').append(d.ghost);document.body.classList.add('pin-dragging');pinIgnoreClickUntil=performance.now()+500;pinDragTick()}
   if(d.active)e.preventDefault();
  });
- grid.addEventListener('pointerup',e=>{if(pinDrag?.id===e.pointerId)finishPinDrag()});grid.addEventListener('pointercancel',e=>{if(pinDrag?.id===e.pointerId)finishPinDrag(true)});
+ document.addEventListener('pointerup',e=>{if(pinDrag?.id===e.pointerId)finishPinDrag()},true);document.addEventListener('pointercancel',e=>{if(pinDrag?.id===e.pointerId)finishPinDrag(true)},true);
  grid.addEventListener('lostpointercapture',e=>{if(e.target===grid&&pinDrag?.id===e.pointerId)finishPinDrag(true)});
  window.addEventListener('blur',()=>finishPinDrag(true));window.addEventListener('resize',()=>finishPinDrag(true));
  document.addEventListener('visibilitychange',()=>{if(document.hidden)finishPinDrag(true)});
  $('#apps-drawer').addEventListener('close',()=>finishPinDrag(true));
  grid.addEventListener('click',e=>{if(e.detail!==0&&performance.now()<pinIgnoreClickUntil){e.preventDefault();e.stopImmediatePropagation()}},true);
- const observer=new MutationObserver(()=>{grid.classList.toggle('pins-draggable',canDragPins())});observer.observe($('#drawer-tabs'),{childList:true});
+ const observer=new MutationObserver(()=>{$('#drawer-grid').classList.toggle('pins-draggable',drawerView==='pinned'&&canDragPins());$('#app-dock').classList.toggle('pins-draggable',canDragPins())});observer.observe($('#drawer-tabs'),{childList:true});
 }

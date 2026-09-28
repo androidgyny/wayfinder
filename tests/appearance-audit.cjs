@@ -45,10 +45,10 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  passed.push('Custom preset save/apply; audition is not persisted; cancel restores and Keep saves');
  for(const width of [360,600,1097,1920]){
   await page.setViewportSize({width,height:800});
-  for(const mode of ['library','berlin','seattle','vienna','prague','copenhagen','tokyo','oxford','ulm','cambridge','kyoto','cupertino','venice']){
+  for(const mode of ['library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice']){
    await page.evaluate(mode=>{setPresentation(mode);setUlmArtwork(true);setCambridgeArtwork(true);setCoverShadow('crisp');setCoverGlow(true);$('#settings-dialog').showModal();updateCoverGlow();updateAppearancePreview()},mode);
    await page.waitForFunction(()=>$('.appearance-sample img').complete&&$('.appearance-sample img').naturalWidth>0);
-   const report=await page.evaluate(()=>{updateAppearancePreview();const sample=$('.appearance-sample img'),frame=sample.parentElement,space=$('.appearance-sample-space');const actual=['ulm','cambridge'].includes(presentation)?$('#'+presentation+'-cover'):['tokyo','oxford'].includes(presentation)?$('#tokyo-art'):$('#grid .presentation-selected .cover')||$('#grid .cover');const preview=['ulm','cambridge'].includes(presentation)?sample:frame;return {width:preview.getBoundingClientRect().width,height:preview.getBoundingClientRect().height,space:space.getBoundingClientRect().width,shadow:getComputedStyle(preview).boxShadow,actualShadow:getComputedStyle(actual).boxShadow,overflow:$('#settings-dialog').scrollWidth-$('#settings-dialog').clientWidth};});
+   const report=await page.evaluate(()=>{updateAppearancePreview();const sample=$('.appearance-sample img'),frame=sample.parentElement,space=$('.appearance-sample-space');const actual=['ulm','cambridge'].includes(presentation)?$('#'+presentation+'-cover'):['oxford'].includes(presentation)?$('#catalogue-art'):$('#grid .presentation-selected .cover')||$('#grid .cover');const preview=['ulm','cambridge'].includes(presentation)?sample:frame;return {width:preview.getBoundingClientRect().width,height:preview.getBoundingClientRect().height,space:space.getBoundingClientRect().width,shadow:getComputedStyle(preview).boxShadow,actualShadow:getComputedStyle(actual).boxShadow,overflow:$('#settings-dialog').scrollWidth-$('#settings-dialog').clientWidth};});
    assert.ok(report.width>90&&report.width<=103,mode+' preview width @'+width+' '+JSON.stringify(report));
    if(mode==='oxford')assert.ok(Math.abs(report.width/report.height-2/3)<.01,'Oxford portrait aspect ratio @'+width);
    assert.ok(report.height>140&&report.height<=154,mode+' preview height @'+width);
@@ -63,10 +63,6 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   assert.equal(result.off,result.on);assert.equal(result.hidden,true);
  }
  passed.push('Hidden shadow settings have no effect on the three overlapping layouts');
- await page.evaluate(()=>{setPresentation('tokyo');setCoverShadow('crisp');setCoverGlow(true);updateCoverGlow()});
- const shadows=await page.evaluate(()=>({small:getComputedStyle($('#grid .cover')).boxShadow,large:getComputedStyle($('#tokyo-art')).boxShadow}));
- assert.ok(shadows.small.includes('1.2px 1.4px'));assert.ok(shadows.large.includes('6px 7px'));assert.ok(!shadows.small.includes('22px'));
- passed.push('Tokyo thumbnail offset stays small; large cover retains its shadow and halo');
  await page.setViewportSize({width:1097,height:700});
  await page.evaluate(()=>{setPresentation('library');setCoverShadow('off');showDialog('#settings-dialog');controllerFocus($('#cover-shadow'),true);controller('right')});
  assert.equal(await page.evaluate(()=>coverShadow),'soft');

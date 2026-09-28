@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.147-beta.9)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.148-beta.10)
 
 Wayfinder is an Android game launcher: an app for organizing, browsing, and opening games you already have installed. It brings your collection together with cover artwork, categories, search, and controller navigation, so choosing what to play feels like browsing a library.
 
@@ -23,7 +23,7 @@ It is built for Android handhelds with a touchscreen and a game controller. You 
 - **Give each game a cover.** Find artwork through Google Play, open Google Images or SteamGridDB searches, or choose an image from your device. Adjust how it fits the tile.
 - **Choose how you browse.** Switch between cover grids, shelves, carousels, dashboards, and text-focused layouts.
 - **Make it your own.** Customize colors, fonts, backgrounds, cover borders and shadows, selection effects, and sound. Try a complete appearance preset before keeping it, or save your own combination.
-- **Keep other apps close.** Open the app drawer for non-game apps and pin the ones you use most.
+- **Keep other apps close.** Browse News, Media, Social, Tools, and System sections, or use All apps and the Non-game apps filter. Pin up to eight favorites in the dock. Customize app icons with installed Android icon packs or your own images.
 - **Check your library.** See library counts and storage use, then jump directly to entries that need attention.
 - **Back up your collection.** Export your library and custom covers, then restore them from a saved backup.
 
@@ -52,7 +52,7 @@ To open Wayfinder whenever you press Home, go to **Settings → Home & startup �
 
 A **presentation theme** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style that layout separately.
 
-The current layouts are Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Tokyo, Ulm, Venice, and Vienna. They range from artwork-led browsing to compact text lists, so you can choose what suits your collection and screen.
+The current layouts are Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Ulm, Venice, and Vienna. They range from artwork-led browsing to compact text lists, so you can choose what suits your collection and screen.
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video. These options are available in Settings.
 
@@ -89,6 +89,8 @@ Your library and saved artwork stay on your device. You can browse them offline;
 
 Use **Settings → Library → Back up** to export your titles, categories, category order, custom covers, and app drawer preferences. **Restore** replaces the current library with the contents of a backup. A library backup does not include installed games or their save files.
 
+App drawer preferences include names, pins and their order, section assignments, hidden-from-section choices, custom images, and individually selected pack icons. Icon packs themselves are not included; reinstall them separately. Missing pack icons fall back to the app's original icon. Overall appearance settings—including the global icon pack, layout, and theme—and custom background, music, font, and startup media are not included. Restoring a library leaves those device settings in place.
+
 ## Project status
 
 Wayfinder is an actively evolving personal project, developed and tested with a large game collection on a Pimax Portal. Support for other Android devices and controllers is still being established.
@@ -98,6 +100,8 @@ If you report a problem, include your device, Android version, Wayfinder version
 ## Credits
 
 Game artwork belongs to its respective creators. Interface audio includes Kenney assets and original Wayfinder Soft Terminal sounds. The included background track, *Another August*, is by The Cynic Project / Alex Smith. These audio assets are provided under CC0; attribution details are included with the project assets.
+
+App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
 
 ## Build from source
 

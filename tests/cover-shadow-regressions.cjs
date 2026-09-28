@@ -20,7 +20,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  try{
  await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>'{}',saveView:()=>{},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
- const modes=['library','berlin','seattle','vienna','prague','copenhagen','tokyo','oxford','ulm','cambridge','kyoto','cupertino','venice'];
+ const modes=['library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice'];
  for(const mode of modes){
   await page.evaluate(mode=>{setPresentation(mode);setUlmArtwork(true);setCambridgeArtwork(true);setCoverGlow(false);setCoverShadow('soft');$('#settings-dialog').showModal();refreshApplicableAppearanceControls()},mode);
   const expected=!['kyoto','cupertino','venice'].includes(mode);
@@ -29,7 +29,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
    for(const border of ['none','hairline','matte'])for(const selection of ['outline','underline','glow'])for(const halo of [false,true]){
     const report=await page.evaluate(({border,selection,halo})=>{
      setLightAppearance(border,'soft','medium');setAtmosphere('flat',selection);setCoverGlow(halo);updateCoverGlow();
-     const actual=['ulm','cambridge'].includes(presentation)?$('#'+presentation+'-cover'):['tokyo','oxford'].includes(presentation)?$('#tokyo-art'):$('#grid .game .cover');
+     const actual=['ulm','cambridge'].includes(presentation)?$('#'+presentation+'-cover'):['oxford'].includes(presentation)?$('#catalogue-art'):$('#grid .game .cover');
      if(!actual)return null;
      const result={};for(const shadow of ['off','soft','crisp']){setCoverShadow(shadow);updateAppearancePreview();result[shadow]=getComputedStyle(actual).boxShadow;}
      result.border=getComputedStyle(actual).borderTopWidth;
@@ -50,7 +50,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  }
  const state=await page.evaluate(()=>{setCoverShadow('crisp');const saved=appearanceSnapshot();applyAppearanceValues({...saved,coverShadow:'soft'});const applied=coverShadow;applyAppearanceValues(saved);const restored=coverShadow;applyAppearanceValues({});return {saved:saved.coverShadow,applied,restored,legacy:coverShadow}});
  assert.deepEqual(state,{saved:'crisp',applied:'soft',restored:'crisp',legacy:'off'});
- assert.deepEqual(errors,[]);console.log('PASS: 13 layouts; 180 border/selection/halo combinations; artwork visibility; preset save/apply/revert and legacy defaults.');
+ assert.deepEqual(errors,[]);console.log('PASS: 12 layouts; 180 border/selection/halo combinations; artwork visibility; preset save/apply/revert and legacy defaults.');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});
 

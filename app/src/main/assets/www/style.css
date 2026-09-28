@@ -45,28 +45,28 @@ body[data-input="touch"] .genre:not(.active):hover{background:transparent;color:
 /* Presentation layouts retain the library's palette and native effects. */
 #category-strip,#presentation-info,#presentation-navigation{display:none}
 
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]){height:100dvh;overflow:hidden}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .shell{display:block}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{padding:0;height:calc(100dvh - 88px);position:relative;overflow:hidden}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{display:flex;align-items:center;justify-content:center;height:64px;border-bottom:1px solid var(--line);gap:24px;padding:0 30px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]){height:100dvh;overflow:hidden}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu){display:none!important}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .shell{display:block}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) main{padding:0;height:calc(100dvh - 88px);position:relative;overflow:hidden}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{display:flex;align-items:center;justify-content:center;height:64px;border-bottom:1px solid var(--line);gap:24px;padding:0 30px}
 #category-strip button{background:transparent;color:var(--muted);font-size:15px;max-width:28%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px}
 #category-strip #category-current{color:var(--accent);font-size:22px;font-weight:650;max-width:45%;border-bottom:3px solid var(--accent)}
 #category-before::before{content:'‹ ';}#category-after::after{content:' ›';}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{display:block;padding:22px 6%;height:145px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{display:block;padding:22px 6%;height:145px}
 #presentation-title{font-size:clamp(23px,3vw,38px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 8px}
 #presentation-info .eyebrow{margin-bottom:7px}#presentation-position{margin:0;color:var(--muted);font-size:13px}
 .presentation-actions{position:absolute;right:6%;top:164px;display:flex;gap:12px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{display:block;position:absolute;left:0;right:0;top:218px;bottom:56px;perspective:1100px;overflow:hidden;touch-action:pan-y;--tile:min(31vh,260px)}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{position:absolute;width:var(--tile);left:22%;top:12px;transform:translateX(calc(var(--offset) * (var(--tile) + 22px)));transition:transform .22s ease,opacity .22s ease;scroll-margin:0}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{display:block;position:absolute;left:0;right:0;top:218px;bottom:56px;perspective:1100px;overflow:hidden;touch-action:pan-y;--tile:min(31vh,260px)}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{position:absolute;width:var(--tile);left:22%;top:12px;transform:translateX(calc(var(--offset) * (var(--tile) + 22px)));transition:transform .22s ease,opacity .22s ease;scroll-margin:0}
 body[data-presentation="kyoto"] .cover{aspect-ratio:1;border-radius:3px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-genre{display:none}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-selected .cover{outline:3px solid var(--accent);outline-offset:4px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game:not(.presentation-selected){opacity:.65}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-navigation{display:flex;position:absolute;bottom:12px;left:22px;right:22px;justify-content:space-between;z-index:12;pointer-events:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-genre{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-selected .cover{outline:3px solid var(--accent);outline-offset:4px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game:not(.presentation-selected){opacity:.65}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-navigation{display:flex;position:absolute;bottom:12px;left:22px;right:22px;justify-content:space-between;z-index:12;pointer-events:none}
 #presentation-navigation button{pointer-events:auto}#presentation-navigation button:disabled{opacity:.3}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{position:absolute;bottom:0;left:80px;right:80px;padding:16px 0;font-size:11px;gap:15px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{position:absolute;bottom:0;left:80px;right:80px;padding:16px 0;font-size:11px;gap:15px}
 body[data-presentation="cupertino"] #presentation-info{text-align:center}
 body[data-presentation="cupertino"] #grid{top:206px;--tile:min(21vh,185px);overflow:hidden}
 body[data-presentation="cupertino"] .game{left:calc(50% - var(--tile)/2);transform:translateX(calc(var(--offset) * var(--tile) * var(--cupertino-pitch,.63) + var(--side) * var(--cupertino-gap,42px))) translateZ(calc(var(--distance) * -48px)) rotateY(calc(var(--side) * -48deg));transform-origin:center}
@@ -74,60 +74,47 @@ body[data-presentation="cupertino"] .game.presentation-selected{transform:transl
 body[data-presentation="cupertino"] .cover{border-radius:4px;-webkit-box-reflect:below 8px linear-gradient(transparent 60%,#ffffff24)}
 body[data-presentation="cupertino"] .game-title{display:none}
 body[data-presentation="cupertino"] .presentation-actions{top:135px;right:25px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game .cover::after{display:none}
-@media(max-height:560px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:170px;--tile:25vh}body[data-presentation="cupertino"] #grid{--tile:18vh}#presentation-info .eyebrow{display:none}.presentation-actions{top:125px}}
-@media(max-width:760px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 76px)}#category-strip button{font-size:12px}#category-strip #category-current{font-size:17px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}.presentation-actions{position:static;margin-top:12px}body[data-presentation="cupertino"] .presentation-actions{justify-content:center}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:250px;--tile:min(40vw,25vh)}body[data-presentation="cupertino"] #grid{--tile:min(30vw,20vh)}}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game .cover::after{display:none}
+@media(max-height:560px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:170px;--tile:25vh}body[data-presentation="cupertino"] #grid{--tile:18vh}#presentation-info .eyebrow{display:none}.presentation-actions{top:125px}}
+@media(max-width:760px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 76px)}#category-strip button{font-size:12px}#category-strip #category-current{font-size:17px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}.presentation-actions{position:static;margin-top:12px}body[data-presentation="cupertino"] .presentation-actions{justify-content:center}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:250px;--tile:min(40vw,25vh)}body[data-presentation="cupertino"] #grid{--tile:min(30vw,20vh)}}
 
 /* Fit complete portrait covers to the space left by compact browsing controls. */
 #presentation-scrub{display:none}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar{height:60px;padding:0 22px;gap:18px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar .search{height:38px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 60px)}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{height:48px;touch-action:pan-y;user-select:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar{height:60px;padding:0 22px;gap:18px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .topbar .search{height:38px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) main{height:calc(100dvh - 60px)}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #category-strip{height:48px;touch-action:pan-y;user-select:none}
 #category-strip #category-current{font-size:19px;padding:7px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:72px;padding:12px 5%;text-align:left;position:relative}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info .eyebrow{display:none}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:25px;margin:0 0 5px;padding-right:230px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:absolute;top:15px;right:5%;margin:0}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:120px;bottom:70px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:72px;padding:12px 5%;text-align:left;position:relative}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info .eyebrow{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:25px;margin:0 0 5px;padding-right:230px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:absolute;top:15px;right:5%;margin:0}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:120px;bottom:70px}
 body[data-presentation="kyoto"] .cover{aspect-ratio:2/3}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{top:10px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{display:none}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{display:flex;position:absolute;bottom:12px;left:78px;right:78px;height:44px;align-items:center;gap:14px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{top:10px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game-title{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) footer{display:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{display:flex;position:absolute;bottom:12px;left:78px;right:78px;height:44px;align-items:center;gap:14px}
 #presentation-seek{min-width:30px;flex:1;accent-color:var(--accent);height:36px;touch-action:none}
 #presentation-seek-position{font-size:13px;color:var(--muted);min-width:72px;text-align:center;font-variant-numeric:tabular-nums}
 #presentation-scrub button{font-size:14px;min-height:44px}#presentation-scrub button:disabled{opacity:.3}
 #category-strip button{min-height:42px}
-@media(max-width:600px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:20px;padding-right:0}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:112px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:static;margin-top:8px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:160px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{left:52px;right:52px;gap:3px}#presentation-scrub .text-button{padding:3px;font-size:12px}#presentation-seek-position{min-width:55px;font-size:11px}}
+@media(max-width:600px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{font-size:20px;padding-right:0}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-info{height:112px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .presentation-actions{position:static;margin-top:8px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{top:160px}body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-scrub{left:52px;right:52px;gap:3px}#presentation-scrub .text-button{padding:3px;font-size:12px}#presentation-seek-position{min-width:55px;font-size:11px}}
 
 /* A transformed carousel is a fixed stage, never a native scroll container. */
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{overflow:clip;overflow-anchor:none}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #grid{overflow:clip;overflow-anchor:none}
 
-/* Tokyo: horizontal categories crossing a vertical title list. */
-#tokyo-preview{display:none}
-body[data-presentation="tokyo"] main{background:radial-gradient(ellipse at 15% 50%,var(--accent-soft),transparent 65%)}
-body[data-presentation="tokyo"] #tokyo-preview{display:flex;position:absolute;left:5%;width:31%;top:126px;bottom:72px;flex-direction:column;align-items:center;gap:12px}
-#tokyo-art{display:block;min-height:0;flex:1;width:100%;object-fit:contain;border-radius:6px}
-#tokyo-preview p{flex:none;color:var(--muted);font-size:12px;margin:0;white-space:nowrap}
-body[data-art-fit="cover"] #tokyo-art{object-fit:cover;aspect-ratio:2/3;width:auto;max-width:100%}
-body[data-presentation="tokyo"] #grid{left:42%;right:4%;top:124px;bottom:70px;perspective:none;touch-action:none;mask-image:linear-gradient(transparent,black 8%,black 92%,transparent)}
-body[data-presentation="tokyo"] #grid .game{left:6px;top:calc(50% - 33px);width:calc(100% - 14px);height:66px;display:flex;align-items:center;gap:18px;padding:7px 16px;transform:translateY(calc(var(--offset) * 76px));border-radius:8px;border:1px solid transparent;text-align:left}
-body[data-presentation="tokyo"] #grid .game .cover{width:34px;height:51px;aspect-ratio:2/3;flex:none;outline:none;border-radius:3px}
-body[data-presentation="tokyo"] #grid .game .cover img{transform:none}
-body[data-presentation="tokyo"] #grid .game .game-title{display:block;font-size:18px;font-weight:500;margin:0;padding-right:25px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-body[data-presentation="tokyo"] #grid .game .card-edit{top:20px;right:9px;font-size:15px;padding:4px}
-body[data-presentation="tokyo"] #grid .game.presentation-selected{background:var(--accent-soft);border-color:var(--accent)}
-body[data-presentation="tokyo"] #grid .game.presentation-selected .game-title{color:var(--accent)}
-body[data-presentation="tokyo"] #grid .game:not(.presentation-selected){opacity:.55}
-body[data-presentation="tokyo"] #category-current{letter-spacing:.3px}
-@media(max-width:600px){body[data-presentation="tokyo"] #tokyo-preview{left:4%;width:29%;top:173px;bottom:80px}#tokyo-preview p{white-space:normal;text-align:center;font-size:11px}body[data-presentation="tokyo"] #grid{left:36%;right:2%;top:170px}body[data-presentation="tokyo"] #grid .game{padding:6px;gap:8px}body[data-presentation="tokyo"] #grid .game .game-title{font-size:14px}body[data-presentation="tokyo"] #grid .game .cover{width:28px;height:42px}}
+
+#catalogue-preview{display:none}
+#catalogue-art{display:block;min-height:0;flex:1;width:100%;object-fit:contain;border-radius:6px}
+#catalogue-preview p{flex:none;color:var(--muted);font-size:12px;margin:0;white-space:nowrap}
+body[data-art-fit="cover"] #catalogue-art{object-fit:cover;aspect-ratio:2/3;width:auto;max-width:100%}
+@media(max-width:600px){#catalogue-preview p{white-space:normal;text-align:center;font-size:11px}}
 .favorite-toggle{min-width:44px;font-size:22px;padding:7px 12px;color:var(--accent)}.favorite-toggle[aria-pressed="true"]{background:var(--accent-soft)}
 .favorite-badge{position:absolute;left:9px;top:9px;z-index:3;padding:4px 6px;background:var(--field);color:var(--accent);border-radius:4px;font-size:17px;pointer-events:none}
-body[data-presentation="tokyo"] .favorite-badge{left:38px;top:38px;font-size:12px;padding:0 3px}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:285px}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:285px}
 
-@media(max-width:600px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:0}}
+@media(max-width:600px){body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) #presentation-title{padding-right:0}}
 /* Seattle dashboard: horizontal shelves in a vertically scrollable collection. */
 #seattle-header,#seattle-categories{display:none}
 body[data-presentation="seattle"] :is(aside,.heading,.toolbar,.load-area,#active-filter,#menu,footer){display:none!important}
@@ -180,7 +167,7 @@ body[data-presentation="seattle"] .game-genre{display:none}
 
 /* Keep touch under direct finger control; controller steps remain discrete. */
 body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"]) #grid{touch-action:none;user-select:none}
-body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="tokyo"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{transition:transform .10s ease-out,opacity .10s ease-out}
+body:is([data-presentation="venice"],[data-presentation="kyoto"],[data-presentation="cupertino"],[data-presentation="oxford"],[data-presentation="berlin"]) .game{transition:transform .10s ease-out,opacity .10s ease-out}
 #grid.fluid-motion .game{transition:none!important;will-change:transform}
 body[data-presentation="cupertino"] #grid.fluid-motion .game{transform:translateX(calc(var(--offset)*var(--tile)*var(--cupertino-pitch,.63) + var(--side)*var(--cupertino-gap,42px))) translateZ(calc(var(--depth)*1px)) rotateY(calc(var(--side)*-48deg))}
 #grid.fluid-motion .cover img{transform:none;transition:none}
@@ -211,8 +198,7 @@ body[data-typography] :is(h1,h2,.game-title,#category-strip button,.seattle-shel
 body[data-typography=computer] :is(h1,h2,.game-title,#category-strip button){font-weight:400;letter-spacing:-.025em}
 body[data-typography=editorial] :is(h1,h2,.game-title,#category-strip button){letter-spacing:0}
 /* One static shadow on the selection; no duplicate artwork or full-screen filter. */
-body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #tokyo-art.glow-selected{box-shadow:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
-body[data-presentation=tokyo][data-cover-glow=true] .game.glow-selected .cover{box-shadow:none}
+body[data-cover-glow=true] .game.glow-selected .cover,body[data-cover-glow=true] #catalogue-art.glow-selected{box-shadow:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
 #grid.fluid-motion .game.glow-selected .cover{box-shadow:none}
 
 /* One shared appearance for all settings dropdowns. */
@@ -299,11 +285,11 @@ body[data-presentation=oxford] #grid .presentation-selected{background:var(--acc
 body[data-presentation=oxford] #grid .game:focus{outline:none}
 body[data-presentation=oxford] #grid .card-edit{top:9px;right:8px;font-size:15px;padding:5px}
 body[data-presentation=oxford] #grid .favorite-badge{position:static;background:transparent;margin-left:8px;padding:0;font-size:14px}
-body[data-presentation=oxford] #tokyo-preview{display:flex;position:absolute;left:57%;width:36%;top:130px;bottom:82px;justify-content:center;align-items:center}
-body[data-presentation=oxford] #tokyo-preview p{display:none}
-body[data-presentation=oxford] #tokyo-art{flex:none;width:var(--tokyo-cover-width);height:calc(var(--tokyo-cover-width)*1.5);max-width:100%;object-fit:contain;aspect-ratio:2/3;border-radius:6px}
-body[data-presentation=oxford] #tokyo-art[hidden]{display:none}
-body[data-presentation=oxford][data-art-fit=cover] #tokyo-art{object-fit:cover}
+body[data-presentation=oxford] #catalogue-preview{display:flex;position:absolute;left:57%;width:36%;top:130px;bottom:82px;justify-content:center;align-items:center}
+body[data-presentation=oxford] #catalogue-preview p{display:none}
+body[data-presentation=oxford] #catalogue-art{flex:none;width:var(--catalogue-cover-width);height:calc(var(--catalogue-cover-width)*1.5);max-width:100%;object-fit:contain;aspect-ratio:2/3;border-radius:6px}
+body[data-presentation=oxford] #catalogue-art[hidden]{display:none}
+body[data-presentation=oxford][data-art-fit=cover] #catalogue-art{object-fit:cover}
 body[data-presentation=oxford] :is(#presentation-scrub,#presentation-navigation){display:none}
 body[data-presentation=oxford] #oxford-index{display:flex;position:absolute;left:3%;right:3%;bottom:12px;gap:2px;align-items:center;height:44px}
 #oxford-index button{flex:1;min-width:0;height:44px;padding:0;background:transparent;border-radius:5px;font-family:var(--display-font);font-size:15px;color:var(--muted)}
@@ -311,7 +297,7 @@ body[data-presentation=oxford] #oxford-index{display:flex;position:absolute;left
 #oxford-index button[aria-current=true]{background:var(--accent-soft);color:var(--accent)}
 #oxford-index button:focus{outline:2px solid var(--accent);outline-offset:-2px}
 @media(max-width:760px){body[data-presentation=oxford] #grid .game-title{font-size:14px}#oxford-index button{font-size:12px}}
-@media(max-width:600px){body[data-presentation=oxford] #grid{top:164px}body[data-presentation=oxford] #tokyo-preview{top:174px}}
+@media(max-width:600px){body[data-presentation=oxford] #grid{top:164px}body[data-presentation=oxford] #catalogue-preview{top:174px}}
 
 /* Berlin paints a small window of rows inside a native scrolling cover wall. */
 body[data-presentation=berlin] #grid{display:grid;grid-template-columns:repeat(var(--berlin-columns,7),minmax(0,1fr));gap:8px;position:absolute;left:0;right:0;top:48px;bottom:76px;overflow-y:auto;overflow-x:hidden;padding:14px;perspective:none;align-content:start;touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:thin;overflow-anchor:none}
@@ -359,20 +345,20 @@ body[data-backdrop=gradient] #appearance-preview{background:radial-gradient(elli
 body[data-selection-style=outline] .appearance-sample{outline:2px solid var(--accent);outline-offset:3px}
 body:is([data-selection-style=underline],[data-selection-style=glow]) #grid .game,
 body:is([data-selection-style=underline],[data-selection-style=glow]) #grid .game .cover{outline:none!important}
-body:is([data-selection-style=underline],[data-selection-style=glow]):is([data-presentation=tokyo],[data-presentation=oxford]) #grid .presentation-selected{border-color:transparent}
+body:is([data-selection-style=underline],[data-selection-style=glow]):is([data-presentation=oxford]) #grid .presentation-selected{border-color:transparent}
 body[data-selection-style=underline] #grid .game:is(.presentation-selected,.controller-selected,:focus-visible) .cover::before,
 body[data-selection-style=underline] .appearance-sample::after{content:'';position:absolute;bottom:0;left:12%;right:12%;height:3px;background:var(--accent);z-index:3;border-radius:3px;pointer-events:none}
-body[data-selection-style=underline]:is([data-presentation=tokyo],[data-presentation=oxford]) #grid .game.presentation-selected{box-shadow:inset 0 -3px var(--accent)}
+body[data-selection-style=underline]:is([data-presentation=oxford]) #grid .game.presentation-selected{box-shadow:inset 0 -3px var(--accent)}
 body[data-selection-style=glow] #grid .game:is(.presentation-selected,.controller-selected,:focus-visible) .cover,
 body[data-selection-style=glow] .appearance-sample,
-body[data-selection-style=glow] #tokyo-art.glow-selected{box-shadow:0 0 5px 2px var(--accent),var(--optional-halo)}
-body[data-selection-style=glow]:is([data-presentation=tokyo],[data-presentation=oxford]) #grid .game.presentation-selected{box-shadow:inset 0 0 8px var(--accent)}
+body[data-selection-style=glow] #catalogue-art.glow-selected{box-shadow:0 0 5px 2px var(--accent),var(--optional-halo)}
+body[data-selection-style=glow]:is([data-presentation=oxford]) #grid .game.presentation-selected{box-shadow:inset 0 0 8px var(--accent)}
 body:is([data-selection-style=underline],[data-selection-style=glow]) #grid.fluid-motion .game .cover{box-shadow:none}
 body[data-selection-style=underline] #grid.fluid-motion .game .cover::before{display:none}
 
 /* Halo remains independently optional, including with the Glow marker. */
 body{--optional-halo:0 0 0 0 transparent}
-body[data-cover-glow=true] :is(.cover,#tokyo-art,#ulm-cover,.appearance-sample){--optional-halo:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
+body[data-cover-glow=true] :is(.cover,#catalogue-art,#ulm-cover,.appearance-sample){--optional-halo:0 0 22px 7px rgba(var(--cover-glow-rgb,150,160,150),.48),0 0 44px 12px rgba(var(--cover-glow-rgb,150,160,150),.24)}
 body:not([data-selection-style=glow]) .appearance-sample{box-shadow:var(--optional-halo)}
 
 #vienna-options[hidden]{display:none}
@@ -381,7 +367,7 @@ body[data-presentation=vienna][data-vienna-separators=space] .vienna-section{bor
 #preset-options{padding:18px;border:1px solid var(--line);border-radius:8px;margin:20px 0;background:var(--panel)}
 #preset-options h3{margin-top:0}.preset-actions{display:flex;gap:10px;margin:12px 0}#preset-name{min-width:0;flex:1;background:var(--field);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:10px}#preset-status{color:var(--accent);font-size:13px}
 body[data-cover-corners=square]{--art-radius:0px}body[data-cover-corners=soft]{--art-radius:7px}body[data-cover-corners=rounded]{--art-radius:16px}
-body[data-cover-corners] #grid .game .cover,body[data-cover-corners] #tokyo-art,body[data-cover-corners] .appearance-sample,body[data-cover-corners] .cupertino-preview-tile{border-radius:var(--art-radius)}
+body[data-cover-corners] #grid .game .cover,body[data-cover-corners] #catalogue-art,body[data-cover-corners] .appearance-sample,body[data-cover-corners] .cupertino-preview-tile{border-radius:var(--art-radius)}
 body[data-cover-corners] .vienna-preview img{border-radius:min(var(--art-radius),5px)}
 body[data-cover-brightness=even] #grid .game:not(.presentation-selected){opacity:1!important}body[data-cover-brightness=even] .vienna-preview img{opacity:1}
 body[data-cover-brightness=dimmed]:is([data-presentation=library],[data-presentation=seattle]) #grid:focus-within .game:not(:focus-within):not(.controller-selected){opacity:.65}
@@ -416,8 +402,8 @@ body[data-background-color=muted] #custom-backdrop{filter:saturate(.25)}
 body[data-background-color=palette] #custom-backdrop{filter:url(#background-palette-filter)}
 
 /* Static appearance choices: no animation, blur, or extra image layers. */
-body[data-cover-border=hairline] :is(#grid .cover,#tokyo-art,.vienna-preview img,.appearance-sample,.cupertino-preview-tile){border:1px solid var(--line)}
-body[data-cover-border=matte] :is(#grid .cover,#tokyo-art,.vienna-preview img,.appearance-sample,.cupertino-preview-tile){border:6px solid var(--panel)}
+body[data-cover-border=hairline] :is(#grid .cover,#catalogue-art,.vienna-preview img,.appearance-sample,.cupertino-preview-tile){border:1px solid var(--line)}
+body[data-cover-border=matte] :is(#grid .cover,#catalogue-art,.vienna-preview img,.appearance-sample,.cupertino-preview-tile){border:6px solid var(--panel)}
 body[data-cover-border=matte] .vienna-preview img{border-width:2px}
 body[data-title-weight=regular]{--game-title-weight:400}
 body[data-title-weight=medium]{--game-title-weight:600}
@@ -497,8 +483,6 @@ body[data-presentation=ulm] .appearance-sample::after{display:none!important}
 /* Fixed cover canvas; Fit and Fill alter only the image inside it. */
 body[data-presentation=ulm] #ulm-cover{aspect-ratio:2/3;object-fit:contain;background:var(--panel);flex:none}
 body[data-presentation=ulm][data-art-fit=cover] #ulm-cover{object-fit:cover}
-
-body[data-presentation=tokyo] #tokyo-art{flex:none;aspect-ratio:2/3;width:var(--tokyo-cover-width);height:calc(var(--tokyo-cover-width)*1.5);background:var(--panel)}
 body[data-art-fit=contain] .vienna-preview img,body[data-art-fit=contain] .appearance-sample img{object-fit:contain}
 
 /* The library seek track follows the palette instead of the native gray rail. */
@@ -705,16 +689,15 @@ body[data-presentation=cambridge] #cambridge-categories .cambridge-category:focu
 body[data-cover-shadow-active=true]{--cover-depth:0 0 0 0 transparent}
 body[data-cover-shadow-active=true][data-cover-shadow=soft]{--cover-depth:0 10px 18px #0004,0 2px 5px #0002}
 body[data-cover-shadow-active=true][data-cover-shadow=crisp]{--cover-depth:6px 7px 0 #0005}
-body[data-cover-shadow-active=true][data-cover-shadow] :is(#grid .game .cover,#tokyo-art,#ulm-cover,#cambridge-cover){
+body[data-cover-shadow-active=true][data-cover-shadow] :is(#grid .game .cover,#catalogue-art,#ulm-cover,#cambridge-cover){
  --depth-halo:0 0 0 0 transparent;--depth-ring:0 0 0 0 transparent;
  box-shadow:var(--depth-ring),var(--depth-halo),var(--cover-depth);
 }
-body[data-cover-shadow-active=true][data-cover-glow=true] :is(#grid .game.glow-selected .cover,#tokyo-art.glow-selected,#ulm-cover,#cambridge-cover){--depth-halo:var(--optional-halo)}
-body[data-cover-shadow-active=true][data-selection-style=glow] :is(#grid .game:is(.presentation-selected,.controller-selected,:focus-visible) .cover,#tokyo-art.glow-selected){--depth-ring:0 0 5px 2px var(--accent)}
+body[data-cover-shadow-active=true][data-cover-glow=true] :is(#grid .game.glow-selected .cover,#catalogue-art.glow-selected,#ulm-cover,#cambridge-cover){--depth-halo:var(--optional-halo)}
+body[data-cover-shadow-active=true][data-selection-style=glow] :is(#grid .game:is(.presentation-selected,.controller-selected,:focus-visible) .cover,#catalogue-art.glow-selected){--depth-ring:0 0 5px 2px var(--accent)}
 /* Small list thumbnails need less depth than full-size cover cards. */
-body:is([data-presentation=tokyo],[data-presentation=prague])[data-cover-shadow=soft] #grid .game .cover{--cover-depth:0 2px 4px #0004,0 .5px 1px #0002}
-body:is([data-presentation=tokyo],[data-presentation=prague])[data-cover-shadow=crisp] #grid .game .cover{--cover-depth:1.2px 1.4px 0 #0005}
-body[data-presentation=tokyo][data-cover-shadow-active=true][data-cover-glow=true] #grid .game.glow-selected .cover{--depth-halo:0 0 0 0 transparent}
+body:is([data-presentation=prague])[data-cover-shadow=soft] #grid .game .cover{--cover-depth:0 2px 4px #0004,0 .5px 1px #0002}
+body:is([data-presentation=prague])[data-cover-shadow=crisp] #grid .game .cover{--cover-depth:1.2px 1.4px 0 #0005}
 
 /* Full House: deep green felt with warm ivory lettering and accents. */
 body[data-palette="felt"]{--bg:#103b2d;--panel:#194b39;--field:#143f30;--hover:#285e48;--line:#51735d;--muted:#bcc7ad;--accent:#efdfb5;--text:#f6eedc;--accent-soft:#345541;--accent-ink:#183426;--glow:#efdfb555;}
@@ -732,7 +715,59 @@ body[data-presentation=copenhagen] #grid.search-empty-grid{position:relative}
 body:is([data-presentation=vienna],[data-presentation=prague]) #grid .search-empty{position:relative;inset:auto;min-height:180px;width:100%;white-space:normal}
 body[data-presentation=prague] #grid .search-empty{padding:16px 10px;font-size:14px}
 .search-empty p{max-width:100%;overflow-wrap:anywhere}
-.search-no-results #presentation-info,.search-no-results #tokyo-preview,.search-no-results #presentation-navigation,.search-no-results #presentation-scrub,.search-no-results #copenhagen-footer{visibility:hidden;pointer-events:none}
+.search-no-results #presentation-info,.search-no-results #catalogue-preview,.search-no-results #presentation-navigation,.search-no-results #presentation-scrub,.search-no-results #copenhagen-footer{visibility:hidden;pointer-events:none}
 #category-current.search-no-match{opacity:1}
 
 body.search-no-results[data-presentation=prague] .prague-empty{visibility:hidden}
+
+/* A short, scrollable guide shares the active appearance palette. */
+#help-dialog{width:min(680px,94vw);max-height:88dvh;padding:30px;overflow:auto}
+#help-title{margin-right:35px}#help-dialog section{margin-top:22px}#help-dialog h3{font-size:18px;margin:0 0 8px}#help-dialog p,#help-dialog dd{font-size:15px;line-height:1.6;color:var(--muted)}#help-dialog strong{color:var(--text)}#help-dialog p{margin:0}#help-dialog .help-controls{display:grid;grid-template-columns:minmax(100px,1fr) 2fr;gap:7px 18px;margin:0 0 12px}#help-dialog dt{font-size:15px}#help-dialog dd{margin:0}
+
+/* Apps: quiet category cards and a direct-launch dock. */
+#apps-drawer{max-width:1400px;width:calc(100% - 32px);height:94dvh;box-sizing:border-box;overflow-y:auto}
+.apps-heading h2{display:flex;align-items:center;gap:18px;font-weight:400;font-size:24px}.apps-heading h2 small{font-size:20px;letter-spacing:.12em;font-weight:650;border-right:1px solid var(--line);padding-right:18px}
+#app-sections{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin:12px 0}
+#app-sections[hidden],#app-dock[hidden],#drawer-grid[hidden],.drawer-pages[hidden]{display:none}
+.app-section{--section-tone:116,182,237;text-align:left;display:flex;flex-direction:column;min-width:0;padding:20px;border:1px solid rgba(var(--section-tone),.25);border-radius:18px;background:linear-gradient(135deg,rgba(var(--section-tone),.16),var(--panel));color:var(--text);gap:8px}
+.app-section[data-section=media]{--section-tone:178,154,237}.app-section[data-section=tools]{--section-tone:124,191,163}.app-section[data-section=system]{--section-tone:173,184,202}
+.app-section[aria-expanded=true]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.section-art{color:rgb(var(--section-tone));display:block;width:58px;height:58px;margin-bottom:4px}.section-art svg{width:100%;height:100%}
+.app-section strong{text-transform:uppercase;letter-spacing:.04em;font-size:clamp(19px,2.4vw,30px);font-weight:550}.section-note{color:var(--muted);font-size:14px;min-height:1.2em}.section-icons{display:flex;align-items:center;gap:9px;min-height:34px;margin-top:12px;width:100%}.section-icons img{width:30px;height:30px;object-fit:contain;border-radius:7px}.section-count{font-size:12px;color:var(--muted);margin-left:auto}
+.sections-home #drawer-grid{max-height:29dvh;overflow-y:auto;padding:12px;border:1px solid var(--line);border-radius:14px;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));scroll-padding:12px}
+.sections-home #drawer-grid .drawer-app{background:transparent}
+#app-dock{display:flex;justify-content:center;gap:18px;padding:15px 0 2px;position:sticky;bottom:0;background:var(--bg);z-index:2}
+#app-dock .drawer-item{width:76px}#app-dock .drawer-app{background:transparent;padding:6px 3px;gap:5px}#app-dock img{width:44px;height:44px}#app-dock .drawer-app span{visibility:hidden;font-size:11px}#app-dock .drawer-app:focus span,#app-dock .drawer-app:hover span{visibility:visible}
+#app-dock.pins-draggable .drawer-app{touch-action:none;user-select:none}#app-dock img{pointer-events:none;-webkit-user-drag:none}#app-dock .pin-drop-target{outline:2px dashed var(--accent)}
+@media(max-height:650px){.app-section{padding:12px;gap:4px}.section-art{width:42px;height:42px}.section-icons{margin-top:6px}.sections-home #drawer-grid{max-height:26dvh}#apps-drawer{padding:18px 24px}.drawer-tools{margin:8px 0}#drawer-status{margin:8px 0}}
+@media(max-width:650px){#app-sections{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.app-section{padding:14px}.section-note{font-size:12px}#app-dock{gap:3px}#app-dock .drawer-item{width:calc((100% - 21px)/8)}.apps-heading h2 small{font-size:14px}.section-icons{gap:5px}.section-icons img{width:24px;height:24px}}
+
+#app-dock{background:transparent;position:relative}
+
+.section-expanded .app-section{flex-direction:row;align-items:center;gap:12px;padding:12px}.section-expanded .section-art{width:32px;height:32px;margin:0;flex-shrink:0}.section-expanded .section-note,.section-expanded .section-icons{display:none}.section-expanded .app-section strong{font-size:20px}
+.sections-home #drawer-grid .drawer-app{padding-top:28px}.sections-home #drawer-grid .drawer-edit{background:transparent;font-size:12px;padding:3px 6px;top:0;right:0}
+
+.apps-controller-hints{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px 22px;margin:20px 0 0;color:var(--muted);font-size:13px}
+.apps-controller-hint{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.apps-button-symbol{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:26px;height:26px;border:1.5px solid currentColor;border-radius:50%;font-weight:700;line-height:1;font-size:14px;background:var(--bg)}
+.apps-button-symbol.a{color:#66c969}.apps-button-symbol.b{color:#f26a7a}.apps-button-symbol.x{color:#64b5f6}.apps-button-symbol.y{color:#f4cc55}
+.apps-button-symbol.stick{font-size:10px}.apps-button-symbol.shoulder{border-radius:5px;padding:0 5px;font-size:10px}
+@media(max-height:650px){.apps-controller-hints{margin-top:14px;gap:8px 18px}}
+
+.app-section[data-section=social]{--section-tone:231,151,140}
+@media(min-width:651px) and (max-width:1150px){.app-section{padding:12px}.section-icons{gap:5px}.section-icons img{width:25px;height:25px}.section-note{font-size:12px}.section-expanded .app-section{gap:8px}.section-expanded .app-section strong{font-size:18px}}
+#pack-icon-picker{width:calc(100% - 40px);max-width:1000px;padding:28px}#pack-picker-source,#pack-picker-search{max-width:100%;margin:0 12px 12px 0;padding:10px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px}#pack-picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:12px;max-height:48dvh;overflow:auto;padding:8px}.pack-icon-choice{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--panel);color:var(--text);padding:10px;min-width:0;border-radius:8px}.pack-icon-choice img{width:56px;height:56px;object-fit:contain}.pack-icon-choice span{font-size:12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#appearance-pack{margin-top:8px}
+
+#appearance-choose,#appearance-pack{display:block;width:100%;box-sizing:border-box;white-space:normal;padding:10px 8px;font-size:13px;line-height:1.4}
+
+.pack-icon-choice .pack-icon-unavailable{width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;white-space:normal;font-size:10px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;box-sizing:border-box}.pack-icon-choice:disabled{cursor:default}
+
+/* Reserve a separate edit row: the launch button never occupies the edit target. */
+#drawer-grid .drawer-item{padding-top:48px}
+#drawer-grid .drawer-edit,.sections-home #drawer-grid .drawer-edit{top:0;right:0;width:48px;height:48px;min-width:48px;padding:0;display:flex;align-items:center;justify-content:center;background:transparent;font-size:16px;border-radius:8px}
+.sections-home #drawer-grid .drawer-app{padding:8px 7px}.sections-home #drawer-grid .drawer-app img{width:48px;height:48px}.sections-home #drawer-grid{max-height:32dvh}
+#apps-drawer::backdrop{background:var(--bg);backdrop-filter:none}
+#apps-drawer{box-shadow:none}
+.sections-home #drawer-grid{max-height:27dvh}
+
+.icon-source-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}#appearance-reset-name{margin:-6px 0 14px;padding:4px 0}#appearance-reset{display:block;margin-top:8px}

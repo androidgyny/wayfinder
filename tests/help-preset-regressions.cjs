@@ -20,29 +20,25 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  try{
  await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>'{}',saveView:()=>{},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
- const modes=['library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice'];
 
- for(const viewport of [{width:1097,height:700},{width:640,height:600}]){
+ for(const viewport of [{width:1097,height:592},{width:480,height:600}]){
  await page.setViewportSize(viewport);
- for(const mode of modes){
- await page.evaluate(mode=>{setPresentation(mode);setUlmArtwork(true);setCambridgeArtwork(true);if(mode==='ulm')ulmOpen('all');$('#settings-dialog').showModal();updateAppearancePreview();},mode);
- await page.waitForFunction(()=>$('.appearance-sample img').complete&&$('.appearance-sample img').naturalWidth>0);
- for(const size of ['normal','small','large']){
- const report=await page.evaluate(size=>{
- const selected=$('#grid .presentation-selected')||$('#grid .controller-selected')||$('#grid .game');
- const actual=['ulm','cambridge'].includes(presentation)?$('#'+presentation+'-cover'):['oxford'].includes(presentation)?$('#catalogue-art'):selected?.querySelector('.cover');
- if(actual&&size!=='normal'){actual.style.width=(size==='small'?38:300)+'px';actual.style.height=(size==='small'?57:450)+'px';}
- updateAppearancePreview();const frame=$('.appearance-sample'),image=$('.appearance-sample img'),caption=$('#appearance-preview>p'),space=$('.appearance-sample-space');
- const r=(['ulm','cambridge'].includes(presentation)?image:frame).getBoundingClientRect(),c=caption.getBoundingClientRect(),w=space.getBoundingClientRect();
- return {delta:Math.abs(r.x+r.width/2-c.x-c.width/2),inside:r.left>=w.left-1&&r.right<=w.right+1,width:r.width};
- },size);
- assert.ok(report.delta<1,mode+' '+size+' at '+viewport.width+': '+JSON.stringify(report));assert.equal(report.inside,true,mode+' fits reserved preview space');
+ await page.evaluate(()=>{$('#settings-button').click();$('#open-help').focus();$('#open-help').click();});
+ assert.equal(await page.evaluate(()=>topDialog().id),'help-dialog');
+ await page.evaluate(()=>controller('down'));assert.ok(await page.evaluate(()=>$('#help-dialog').scrollTop)>0);
+ await page.evaluate(()=>controller('pageDown'));assert.ok(await page.evaluate(()=>$('#help-dialog').scrollWidth<=$('#help-dialog').clientWidth+1));
+ await page.evaluate(()=>controller('back'));assert.equal(await page.evaluate(()=>topDialog().id),'settings-dialog');assert.equal(await page.evaluate(()=>document.activeElement.id),'open-help');
+ await page.evaluate(()=>{$('#open-help').click();});assert.equal(await page.evaluate(()=>$('#help-dialog').scrollTop),0);
+ await page.evaluate(()=>{$('#close-help').click();hideDialog('#settings-dialog');});
  }
- await page.evaluate(()=>$('#settings-dialog').close());
- }
- }
- assert.deepEqual(errors,[]);console.log('PASS: centered appearance previews across 12 layouts, two viewport sizes, and small/normal/large source covers');
+ const before=await page.evaluate(()=>appearanceSnapshot());
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='After Hours').values);});
+ assert.deepEqual(await page.evaluate(()=>[presentation,backdrop,backgroundDim,palette,selectionStyle,coverShadow]),['oxford','fireflies',75,'midnight','underline','off']);
+ await page.evaluate(()=>{showDialog('#settings-dialog');$('#appearance-presets').value='After Hours';refreshPresetButtons();$('#preset-preview').click();});
+ assert.equal(await page.evaluate(()=>topDialog().id),'preset-audition');
+ await page.evaluate(()=>finishAppearanceAudition(false));
+ assert.equal(await page.evaluate(()=>topDialog().id),'settings-dialog');
+ await page.setViewportSize({width:1097,height:592});await page.evaluate(()=>$('#open-help').click());await page.screenshot({path:'output/after-hours-help-check.png'});
+ assert.deepEqual(errors,[]);console.log('PASS: Help navigation, After Hours audition, and Oxford appearance');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});
-
-
