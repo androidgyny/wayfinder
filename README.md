@@ -113,7 +113,11 @@ If you report a problem, include your device, Android version, Wayfinder version
 
 ## Credits
 
-Game artwork belongs to its respective creators. Interface audio includes Kenney assets and original Wayfinder Soft Terminal sounds. The included background track, *Another August*, is by The Cynic Project / Alex Smith. These audio assets are provided under CC0; attribution details are included with the project assets.
+Game artwork belongs to its respective creators. Interface audio includes [Interface Sounds by Kenney](https://kenney.nl/assets/interface-sounds) and original Wayfinder Soft Terminal sounds. The included background track, [*Another August*](https://opengameart.org/node/73989), is by [The Cynic Project / Alex Smith](https://cynicmusic.com/). These audio assets are provided under CC0; attribution details are included with the project assets.
+
+Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
+
+Bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
 
 App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
 
@@ -128,5 +132,3 @@ Open this folder in Android Studio with JDK 17 or later and Android SDK 35. Let 
 On Windows, use `gradlew.bat assembleDebug`. The APK is written to `app/build/outputs/apk/debug/`. Fresh installations start with an empty library.
 
 The application ID is `com.androidgyny.wayfinder`. Local release builds currently use the debug signing configuration; use your own signing key for distribution. No signing keys are included in the repository.
-
-Bundled fonts use the SIL Open Font License. Their notices are included in `app/src/main/assets/www/fonts/`.
