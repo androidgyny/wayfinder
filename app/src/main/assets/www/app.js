@@ -36,7 +36,7 @@ function orderedCategories(names){const ranks=new Map(categoryOrder.map((name,i)
 
 $('#app-version').textContent='WAYFINDER'+(native?.appVersion?' · '+native.appVersion():'');
 function effect(name){const now=performance.now();if(!soundEnabled||restoring||!native?.sound||(now-lastSoundAt<65&&name!=='launch'))return;lastSoundAt=now;native.sound(name)}
-const palettes=['felt','portal','hacker','pink','amber','cyan','violet','parchment','midnight','seaglass','terracotta','graphite'];
+const palettes=['daylight','felt','portal','hacker','pink','amber','cyan','violet','parchment','midnight','seaglass','terracotta','graphite'];
 function syncSystemBarColor(){
  if(!native?.setThemeColor)return;
  const drawer=$('#apps-drawer');
@@ -348,6 +348,7 @@ function showAllSearchMatches(){
  update();closeMenu();const target=$('#grid .game');if(target)controllerFocus(target,true);persist();
 }
 function syncSearchFeedback(){
+ document.body.classList.toggle("search-active",!!query);
  function countButton(b,key,total){if(!b)return;const count=searchSectionCount(key,total),span=b.lastElementChild;if(span)span.textContent=count.toLocaleString();b.classList.toggle('search-no-match',!!searchSummary&&!count);b.setAttribute('aria-label',(key==='all'?'All games':key==='favorites'?'Favorites':key.slice(6))+', '+count+(searchSummary?' matches':' games'));}
  for(const b of document.querySelectorAll('#genres [data-genre]'))countButton(b,'genre:'+b.dataset.genre,counts[b.dataset.genre]||0);
  countButton($('.all'),'all',games.length);countButton($('#favorites-section'),'favorites',games.filter(g=>g.favorite===true).length);

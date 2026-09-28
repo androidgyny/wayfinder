@@ -1,0 +1,48 @@
+/* Kyoto keeps the shared carousel and controls, with a compact console-style frame. */
+body[data-palette=daylight]{--bg:#eff6f3;--panel:#f9fcfa;--field:#e5eeeb;--hover:#d8e7e2;--line:#c4d5cf;--muted:#586b68;--accent:#007f93;--text:#172b30;--accent-soft:#d3eff0;--accent-ink:#fff;--glow:#00cbe044;color-scheme:light}
+#kyoto-dock{display:none}
+body[data-presentation=kyoto] .topbar{height:60px;padding:0 4%;border-bottom:0;background:var(--bg)}
+body[data-presentation=kyoto] .brand{min-width:0;font-size:20px;gap:10px}
+body[data-presentation=kyoto] .brand-sub{display:none}
+body[data-presentation=kyoto] .mark{width:34px;height:34px;font-size:27px}
+body[data-presentation=kyoto] .app-actions{margin-left:auto}
+body[data-presentation=kyoto] .app-actions button{font-size:14px}
+body[data-presentation=kyoto] .topbar .search{position:absolute;left:26%;right:28%;width:auto;min-width:0;opacity:0;pointer-events:none;z-index:20;background:var(--panel);box-shadow:0 4px 16px #0002}
+body[data-presentation=kyoto].search-active .topbar .search,body[data-presentation=kyoto] .topbar .search:focus-within{opacity:1;pointer-events:auto}
+body[data-presentation=kyoto] #category-strip{height:48px;border:0;gap:28px}
+body[data-presentation=kyoto] #category-before::before{content:'LB';margin-right:12px;font-size:11px;border:1px solid var(--line);border-radius:12px;padding:4px 7px}
+body[data-presentation=kyoto] #category-after::after{content:'RB';margin-left:12px;font-size:11px;border:1px solid var(--line);border-radius:12px;padding:4px 7px}
+body[data-presentation=kyoto] #category-current{font-size:23px}
+body[data-presentation=kyoto] #grid{top:116px;bottom:86px}
+body[data-presentation=kyoto][data-title-placement=below] #grid{top:48px;bottom:154px}
+body[data-presentation=kyoto] #presentation-info,body[data-presentation=kyoto][data-title-placement=below] #presentation-info{height:68px;padding:10px 5%;text-align:center}
+body[data-presentation=kyoto][data-title-placement=below] #presentation-info{bottom:86px}
+body[data-presentation=kyoto] #presentation-title{font-size:23px;padding:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=kyoto] #presentation-position{font-size:13px;margin-top:3px}
+body[data-presentation=kyoto] .presentation-actions{display:none}
+body[data-presentation=kyoto] #kyoto-dock{display:flex;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);gap:20px;align-items:center;padding:8px 22px;border:1px solid var(--line);border-radius:40px;background:var(--panel);box-shadow:0 8px 18px #0002;z-index:15;white-space:nowrap}
+.kyoto-command{display:flex;align-items:center;gap:9px;background:transparent;color:var(--text);font:inherit;font-size:14px;padding:4px;min-height:38px;border-radius:24px}
+.kyoto-button{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font-size:18px;font-weight:700;color:white;text-shadow:0 1px 1px #0004}
+.kyoto-button.a{background:#05aa2e;box-shadow:0 0 12px #05aa2e38}.kyoto-button.b{background:#ff173c;box-shadow:0 0 12px #ff173c38}.kyoto-button.x{background:#007aff;box-shadow:0 0 12px #007aff38}.kyoto-button.y{background:radial-gradient(circle at 35% 25%,#ffda35,#ffbb00 58%,#ffad00);color:#fff;text-shadow:0 1px 1px #b56c0026;box-shadow:0 0 14px #ffbf0050}
+body[data-presentation=kyoto] #presentation-scrub{left:24px;right:auto;width:15%;bottom:23px;gap:0}
+body[data-presentation=kyoto] #presentation-scrub :is(button,output){display:none}
+body[data-presentation=kyoto] #presentation-navigation{left:auto;right:24px;bottom:25px;gap:12px}
+body[data-presentation=kyoto] #presentation-navigation button{width:34px;height:34px;font-size:25px}
+body[data-presentation=kyoto][data-palette=daylight][data-selection-style=outline] .presentation-selected .cover{outline-color:#00bcd4}
+@media(max-width:800px){
+ body[data-presentation=kyoto] .topbar{padding:0 16px}
+ body[data-presentation=kyoto] #kyoto-dock{gap:10px;padding:6px 14px}
+ body[data-presentation=kyoto] #presentation-scrub{display:none}
+ body[data-presentation=kyoto] #presentation-navigation{right:10px;gap:4px}
+ body[data-presentation=kyoto] #category-strip{gap:10px;padding:0 12px}
+ body[data-presentation=kyoto] #category-current{font-size:18px}
+ body[data-presentation=kyoto] #category-before::before,body[data-presentation=kyoto] #category-after::after{display:none}
+ body[data-presentation=kyoto] .topbar .search{left:12px;right:12px}
+}
+@media(max-width:540px){body[data-presentation=kyoto] #presentation-navigation{display:none}body[data-presentation=kyoto] #kyoto-dock{gap:8px}.kyoto-command{font-size:12px;gap:5px}body[data-presentation=kyoto] #presentation-title{font-size:20px}}
+
+body[data-presentation=kyoto][data-palette=daylight][data-selection-style=outline] .presentation-selected .cover{filter:drop-shadow(0 0 5px #00cbe044)}
+body[data-presentation=kyoto] .presentation-actions{display:flex;position:absolute;right:5%;top:12px;margin:0}
+body[data-presentation=kyoto] .presentation-actions :is(#presentation-play,#presentation-edit){display:none}
+body[data-presentation=kyoto] #presentation-favorite{min-width:38px;width:38px;height:38px;padding:4px;font-size:23px;background:transparent;border:0}
+body[data-presentation=kyoto] #presentation-title{margin-left:44px;margin-right:44px}

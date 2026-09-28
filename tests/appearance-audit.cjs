@@ -25,7 +25,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  assert.deepEqual(presetNames,[...presetNames].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base',numeric:true})));
  for(const name of presetNames){
   const result=await page.evaluate(name=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name===name).values);return {shadow:coverShadow,hidden:$('#cover-shadow').closest('.settings-row').hidden}},name);
-  const shadow=name==='Full House'?'crisp':['Folio Nova','Launchbiz','Niagaramond','Playrite'].includes(name)?'soft':'off';
+  const shadow=name==='Full House'?'crisp':['Folio Nova','Smitchish','Launchbiz','Niagaramond','Playrite'].includes(name)?'soft':'off';
   assert.equal(result.shadow,shadow,name);
  }
  passed.push('Every built-in preset applies its intended shadow; alphabetical ordering');

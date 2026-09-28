@@ -52,7 +52,7 @@ function renderPresentation(){if(presentation==='cambridge'){renderCambridge();r
 
  $('#presentation-position').textContent=current?`${index+1} / ${filtered.length.toLocaleString()} · ${current.genre}`:(favoritesOnly&&!query?'Choose a game and press its star or press Select.':'Try another search or category');
  $('#presentation-seek').max=Math.max(1,filtered.length);$('#presentation-seek').value=index+1;$('#presentation-seek').disabled=!current;$('#presentation-seek-position').textContent=current?`${index+1} / ${filtered.length}`:'0 / 0';$('#presentation-first').disabled=!current||index===0;$('#presentation-last').disabled=!current||index===filtered.length-1;
- $('#presentation-play').disabled=!current;$('#presentation-edit').disabled=!current;
+ $('#presentation-play').disabled=!current;$('#presentation-edit').disabled=!current;for(const b of document.querySelectorAll('#kyoto-dock [data-game-action]'))b.disabled=!current;
  const existing=new Map([...document.querySelectorAll('#grid .game')].map(b=>[b.dataset.id,b]));
  const keep=new Set();
  const radius=presentation==='venice'?3:5;
@@ -67,7 +67,7 @@ function renderPresentation(){if(presentation==='cambridge'){renderCambridge();r
  $('#presentation-prev').disabled=!current||index===0;$('#presentation-next').disabled=!current||index===filtered.length-1;syncSearchFeedback();
 }
 function initPresentation(){
- initBerlin();initUlm();initCopenhagen();initCambridge();
+ initBerlin();initUlm();initCopenhagen();initCambridge();initKyotoDock();
  $('#presentation').onchange=e=>{setPresentation(e.target.value);effect('select')};
  $('#category-before').onclick=()=>controller('genrePrev');$('#category-after').onclick=()=>controller('genreNext');$('#category-current').onclick=()=>controller('genreNext');
  $('#presentation-prev').onclick=()=>movePresentation(-1,true);$('#presentation-next').onclick=()=>movePresentation(1,true);
@@ -147,4 +147,16 @@ function sizeOxfordCover(){
  const captionSpace=0;
  const width=Math.max(0,Math.floor(Math.min(panel.clientWidth,(panel.clientHeight-captionSpace)/1.5)));
  panel.style.setProperty('--catalogue-cover-width',width+'px');
+}
+
+// Touch actions mirror the controller hints without depending on the focused card.
+function initKyotoDock(){
+ const dock=el('nav','');dock.id='kyoto-dock';dock.setAttribute('aria-label','Game controls');
+ for(const [letter,label,action] of [['A','Play','play'],['B','Back','back'],['X','Edit','edit'],['Y','Search','search']]){
+  const b=el('button','kyoto-command');b.type='button';b.setAttribute('aria-label',label);
+  const badge=el('span','kyoto-button '+letter.toLowerCase(),letter);badge.setAttribute('aria-hidden','true');b.append(badge,el('span','',label));
+  if(action==='play'||action==='edit')b.dataset.gameAction=action;
+  b.onclick=()=>{if(action==='play')$('#presentation-play').click();else if(action==='edit')$('#presentation-edit').click();else controller(action);};dock.append(b);
+ }
+ $('#main').append(dock);
 }

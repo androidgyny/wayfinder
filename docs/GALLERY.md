@@ -4,7 +4,7 @@
 
 Nine library views and a home for everyday apps. From a quiet title list to a card table, carousel, or wall of artwork, these ten screenshots show how differently the same collection can feel.
 
-Captured directly on a Pimax Portal at **1920 × 1080** on September 27, 2026. These are unretouched screenshots of the app, showing the layouts and appearance options included in **v0.9.148 Beta 10**. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
+Captured directly on a Pimax Portal at **1920 × 1080** on September 27–28, 2026. These are unretouched screenshots of the app. Most show **v0.9.148 Beta 10**; Kyoto was refreshed on September 28 to show the newer development build and Smitchish preset, not yet included in the Beta 10 APK. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
 
 [Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Oxford](#oxford) · [Vienna](#vienna)
 
@@ -52,11 +52,11 @@ Categories, titles, and artwork occupy three clear panes. KAMI brings a little c
 
 ## Kyoto
 
-**A little magic** — Violet · Space Grotesk · Magical Road
+**Smitchish** — Daylight · Outfit · Flat · Soft shadows
 
-Large upright covers fill a shelf of puzzle platformers, with Dream Machine selected against a dim pixel-art landscape.
+A pale, spacious shelf puts portrait artwork first. Dream Machine has a cyan selection outline, while a floating dock brings Play, Back, Edit, and Search together with colorful controller badges.
 
-![Kyoto: Large upright covers fill a shelf of puzzle platformers, with Dream Machine selected against a dim pixel-art landscape.](screenshots/02-kyoto.png)
+![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](screenshots/02-kyoto.png)
 
 ## Berlin
 

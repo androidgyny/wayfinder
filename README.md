@@ -64,9 +64,9 @@ Wayfinder includes twelve layouts: Alexandria, Berlin, Cambridge, Copenhagen, Cu
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video. These options are available in Settings.
 
-![Cupertino: Night in the Woods centered in a carousel of favorites with soft reflections and a green glow.](docs/screenshots/01-cupertino.png)
+![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/02-kyoto.png)
 
-*Cupertino · Midnight palette · a carousel of favorites with artwork glow and reflections.*
+*Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock. Shown in the current development build; not yet in the Beta 10 APK.*
 
 ![Ulm: Tengami beside a spacious parchment title list with soft cover shadows.](docs/screenshots/03-ulm.png)
 
