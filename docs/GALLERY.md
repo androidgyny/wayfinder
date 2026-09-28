@@ -6,7 +6,9 @@ Nine library views and a home for everyday apps. From a quiet title list to a ca
 
 Captured directly on a Pimax Portal at **1920 × 1080** on September 27, 2026. These are unretouched screenshots of the app, showing the layouts and appearance options included in **v0.9.148 Beta 10**. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
 
-[Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Oxford](#oxford) · [Apps](#apps) · [Vienna](#vienna)
+[Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Oxford](#oxford) · [Vienna](#vienna)
+
+[Beyond the game library: Apps](#beyond-the-game-library)
 
 ## Copenhagen
 
@@ -72,7 +74,17 @@ A clear list of favorites pairs with large cover art and a faint scattering of f
 
 ![Oxford: Night in the Woods beside a spacious favorites list, with a midnight palette and subtle fireflies.](screenshots/07-oxford.png)
 
-## Apps
+## Vienna
+
+**Woodland shelves** — Sea Glass · Outfit · Forest Illusion · Soft shadows
+
+An expanded shelf of puzzle platformers sits between compact previews of neighboring categories over a subdued forest backdrop.
+
+![Vienna: An expanded shelf of puzzle platformers sits between compact previews of neighboring categories over a subdued forest backdrop.](screenshots/09-vienna.png)
+
+## Beyond the game library
+
+Wayfinder also keeps your everyday Android apps close at hand, with grouped sections and a favorites dock.
 
 **Everyday essentials** — Midnight · Outfit · Phosphor section icons
 
@@ -81,13 +93,5 @@ News, Media, Social, Tools, and System sit above a dock of pinned apps. Colorful
 ![Apps: Five illustrated sections, a row of seven pinned apps, and colorful controller hints.](screenshots/08-apps.png)
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
-
-## Vienna
-
-**Woodland shelves** — Sea Glass · Outfit · Forest Illusion · Soft shadows
-
-An expanded shelf of puzzle platformers sits between compact previews of neighboring categories over a subdued forest backdrop.
-
-![Vienna: An expanded shelf of puzzle platformers sits between compact previews of neighboring categories over a subdued forest backdrop.](screenshots/09-vienna.png)
 
 [← Back to the README](../README.md)
