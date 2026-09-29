@@ -4,7 +4,7 @@ const categoryTitleSort=new Intl.Collator(undefined,{numeric:true,sensitivity:'b
 function categoryMessage(message){for(const p of document.querySelectorAll('.category-feedback'))p.textContent=message;}
 function categoryUndoControls(){for(const b of document.querySelectorAll('.category-undo')){b.disabled=!categoryUndo.length;b.textContent=categoryUndo.length?'Undo '+categoryUndo.at(-1).label:'Undo';}}
 function categorySourceGames(){return games.filter(g=>g.genre===categorySource).sort((a,b)=>categoryTitleSort.compare(a.title,b.title));}
-function categoryShownGames(){const q=normalize($('#category-game-search').value).trim();return categorySourceGames().filter(g=>normalize(g.title).includes(q));}
+function categoryShownGames(){const q=normalize($('#category-game-search').value).trim();return categorySourceGames().filter(g=>searchableTitle(g).includes(q));}
 function categoryFollow(from,to){
  if(genre===from)genre=to;
  const old='genre:'+from,next='genre:'+to;

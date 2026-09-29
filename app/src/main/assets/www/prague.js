@@ -37,7 +37,9 @@ function pragueOpen(key,focus=false){
 }
 function pragueSelect(id,focus=true,scroll=true){
  const column=pragueCurrent(),g=column?.items.find(g=>g.id===id);if(!g)return;clearTimeout(pragueScrollTimer);presentationId=id;praguePositions[pragueKey]=id;rememberCategoryIndex(column.items,id,'prague:'+pragueKey);
- let target;for(const b of document.querySelectorAll('.prague-column.expanded .prague-list .game')){const chosen=b.dataset.id===id;b.classList.toggle('presentation-selected',chosen);if(!chosen)b.classList.remove('controller-selected');b.tabIndex=chosen?0:-1;if(chosen)target=b;}
+ const list=$('.prague-column.expanded .prague-list'),target=list.querySelector('.game[data-id="'+CSS.escape(String(id))+'"]');
+ for(const b of list.querySelectorAll('.game.presentation-selected,.game.controller-selected,.game[tabindex="0"]'))if(b!==target){b.classList.remove('presentation-selected','controller-selected');b.tabIndex=-1;}
+ if(target){target.classList.add('presentation-selected');target.tabIndex=0;}
  pragueStatus($('.prague-column.expanded .prague-status'),g,column);
  if(focus)controllerFocus(target);else if(document.activeElement?.closest('.prague-list')){target.focus({preventScroll:true});controllerGameId=id;}
  if(scroll)pragueReveal(target);queueCoverGlow();persist();

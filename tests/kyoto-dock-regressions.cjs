@@ -40,6 +40,16 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  for(const style of ['above','below']){await page.evaluate(style=>{kyotoTitlePlacement=style;setPalette('midnight');refreshLayoutControls();sizePresentation();},style);await page.waitForTimeout(100);const overlap=await page.evaluate(()=>$('#grid .presentation-selected .cover').getBoundingClientRect().bottom>$('#kyoto-dock').getBoundingClientRect().top);assert.equal(overlap,false);}
  await page.evaluate(()=>{setPalette('daylight');});
  await page.screenshot({path:'output/kyoto-daylight-check.png'});
+ await page.evaluate(()=>{controllerFocus($('#grid .presentation-selected'));$('#presentation-seek').focus();$('#presentation-seek').value='8';$('#presentation-seek').dispatchEvent(new Event('input'));window.expectedEdit=presentationId;controller('edit');});
+ assert.equal(await page.evaluate(()=>draft?.id),await page.evaluate(()=>expectedEdit),'controller Edit follows scrubbed cover');
+ await page.evaluate(()=>hideDialog('#editor'));
+ await page.evaluate(()=>{games.forEach(g=>{g.title='A remarkably long adventure title that should never collide with the favorite button';g.genre='An exceptionally long category name for testing text containment and wrapping';});rebuildGenres();genre='';kyotoTitlePlacement='below';refreshLayoutControls();update();});
+ for(const width of [480,640,1097]){
+  await page.setViewportSize({width,height:592});await page.waitForTimeout(100);
+  const bounds=await page.evaluate(()=>{const p=$('#presentation-position').getBoundingClientRect(),dock=$('#kyoto-dock').getBoundingClientRect(),info=$('#presentation-info').getBoundingClientRect();return {textBottom:p.bottom,infoBottom:info.bottom,dockTop:dock.top};});
+  assert.ok(bounds.textBottom<=bounds.infoBottom+1,JSON.stringify(bounds));
+ }
+ await page.screenshot({path:'output/kyoto-audit-long-title.png'});
  await page.evaluate(()=>setPresentation('cupertino'));assert.equal(await page.locator('#kyoto-dock').isVisible(),false);
  assert.deepEqual(errors,[]);console.log('PASS Kyoto dock, search, empty results, edit, navigation, responsive geometry, other layout isolation');
  }finally{await browser.close();await new Promise(r=>server.close(r));}

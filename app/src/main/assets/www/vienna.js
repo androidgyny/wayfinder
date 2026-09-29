@@ -38,7 +38,9 @@ function viennaSelect(id,focus=true,scroll=true){
  clearTimeout(viennaScrollTimer);
  const shelf=viennaCurrent(),g=shelf?.items.find(g=>g.id===id);if(!g)return;
  presentationId=id;viennaPositions[viennaKey]=id;rememberCategoryIndex(shelf.items,id,'vienna:'+viennaKey);
- let target=null;for(const b of document.querySelectorAll('.vienna-row .game')){const chosen=b.dataset.id===id;b.classList.toggle('presentation-selected',chosen);b.tabIndex=chosen?0:-1;if(chosen)target=b;}
+ const row=$('.vienna-row'),target=row.querySelector('.game[data-id="'+CSS.escape(String(id))+'"]');
+ for(const b of row.querySelectorAll('.game.presentation-selected,.game[tabindex="0"]'))if(b!==target){b.classList.remove('presentation-selected');b.tabIndex=-1;}
+ if(target){target.classList.add('presentation-selected');target.tabIndex=0;}
  $('.vienna-status').textContent=g.title+' · '+(shelf.items.indexOf(g)+1)+' / '+shelf.items.length;
  if(focus)controllerFocus(target);
  else if(target&&document.activeElement?.closest('.vienna-row')){target.focus({preventScroll:true});controllerGameId=id;}

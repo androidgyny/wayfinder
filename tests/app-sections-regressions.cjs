@@ -24,6 +24,13 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
 
  await page.evaluate(()=>{window.appSaved=[];native.saveApp=raw=>{window.appSaved.push(JSON.parse(raw));return '{"ok":true}'};native.launchApp=p=>window.launched=p;drawerCatalog=Array.from({length:65},(_,i)=>({package:'test.app'+i,title:'Utility '+i}));drawerPreferences=drawerCatalog.slice(0,8).map((a,i)=>({package:a.package,pinned:true,order:i}));native.appsPreferences=()=>JSON.stringify(drawerPreferences);openApps()});
  assert.equal(await page.locator('.app-section').count(),5);
+ assert.equal(await page.locator('#drawer-status').isVisible(),false,'overview has no explanatory line');
+ for(const viewport of [{width:1097,height:592},{width:640,height:360}]){
+  await page.setViewportSize(viewport);
+  const fit=await page.evaluate(()=>{const cards=$('#app-sections').getBoundingClientRect(),dock=$('#app-dock').getBoundingClientRect(),hints=$('.apps-controller-hints').getBoundingClientRect();return {cards:cards.bottom<=dock.top,hints:dock.bottom<=hints.top,overflow:$('#apps-drawer').scrollWidth>$('#apps-drawer').clientWidth+1};});
+  assert.deepEqual(fit,{cards:true,hints:true,overflow:false},JSON.stringify(viewport));
+ }
+ await page.setViewportSize({width:1097,height:592});
  const bars=await page.evaluate(async()=>{const results=[];native.setThemeColor=color=>window.barColor=color;const hex=node=>'#'+getComputedStyle(node,node.id==='apps-drawer'?'::backdrop':null).backgroundColor.match(/\d+/g).slice(0,3).map(v=>Number(v).toString(16).padStart(2,'0')).join('');for(const p of ['parchment','midnight']){setPalette(p);results.push(barColor===hex($('#apps-drawer')));showDialog('#app-appearance');hideDialog('#app-appearance');results.push(barColor===hex($('#apps-drawer')));hideDialog('#apps-drawer');results.push(barColor===hex(document.body));openApps();results.push(barColor===hex($('#apps-drawer')));$('#apps-drawer').close();await new Promise(r=>setTimeout(r,30));results.push(barColor===hex(document.body));openApps();}hideDialog('#apps-drawer');openApps();await new Promise(r=>setTimeout(r,30));results.push(barColor===hex($('#apps-drawer')));setPalette('portal');return results});
  assert.ok(bars.every(Boolean),'system bars follow Apps surface, palette changes, nested dialogs, close and immediate reopen');
  assert.deepEqual(await page.evaluate(()=>['Beeper','Reddit','Telegram','WhatsApp','Signal','Discord'].map(title=>appSection({title,package:'test.social'}))),Array(6).fill('social'));
@@ -31,6 +38,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  assert.equal(await page.locator('#app-dock .drawer-app').count(),8);
  await page.locator('[data-section="tools"]').click();
  assert.equal(await page.locator('#drawer-grid .drawer-app').count(),65,'category has every app');
+ assert.equal(await page.locator('#drawer-status').isVisible(),true,'expanded section retains status');
  await page.evaluate(()=>{appsController('down');appsController('pageDown');nativeBack()});
  assert.equal(await page.evaluate(()=>drawerSection),'');assert.equal(await page.evaluate(()=>document.activeElement.dataset.section),'tools');
  await page.evaluate(()=>appsController('down'));assert.ok(await page.evaluate(()=>!!document.activeElement.closest('#app-dock')));

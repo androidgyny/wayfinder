@@ -4,7 +4,7 @@
 
 Nine library views and a home for everyday apps. From a quiet title list to a card table, carousel, or wall of artwork, these ten screenshots show how differently the same collection can feel.
 
-Captured directly on a Pimax Portal at **1920 × 1080** on September 27–28, 2026. These are unretouched screenshots of the app. Most show **v0.9.148 Beta 10**; Kyoto was refreshed on September 28 to show the newer development build and Smitchish preset, not yet included in the Beta 10 APK. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
+Captured directly on a Pimax Portal at **1920 × 1080** on September 27–28, 2026. These are unretouched screenshots of the app. Most show **v0.9.148 Beta 10**; Kyoto was refreshed on September 28 to show the refreshed layout and Smitchish preset now included in Beta 11. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
 
 [Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Oxford](#oxford) · [Vienna](#vienna)
 

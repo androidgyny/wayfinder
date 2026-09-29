@@ -771,3 +771,13 @@ body.search-no-results[data-presentation=prague] .prague-empty{visibility:hidden
 .sections-home #drawer-grid{max-height:27dvh}
 
 .icon-source-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}#appearance-reset-name{margin:-6px 0 14px;padding:4px 0}#appearance-reset{display:block;margin-top:8px}
+
+/* Use the overview's former explanatory line for breathing room between groups. */
+#apps-drawer.sections-home:not(.section-expanded) #app-sections{margin-top:22px;margin-bottom:22px}
+#apps-drawer.sections-home:not(.section-expanded) #app-dock{padding-top:24px}
+#apps-drawer.sections-home:not(.section-expanded) .apps-controller-hints{margin-top:24px}
+@media(max-height:450px){
+ #apps-drawer.sections-home:not(.section-expanded) #app-sections{margin-top:14px;margin-bottom:14px}
+ #apps-drawer.sections-home:not(.section-expanded) #app-dock{padding-top:16px}
+ #apps-drawer.sections-home:not(.section-expanded) .apps-controller-hints{margin-top:16px}
+}

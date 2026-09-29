@@ -4,6 +4,21 @@ The browser suites use synthetic data, Node.js, Playwright, and Microsoft Edge
 (`BROWSER_CHANNEL` can select another installed Playwright browser).
 Run each `tests/*.cjs` file with Node. They do not connect to the handheld.
 
+## Responsiveness checks
+
+`responsiveness-benchmark.cjs` reports median update times for a synthetic
+1,200-game library and 500 installed apps. It also checks sorting equivalence,
+search-cache invalidation after renames, and release of temporary app lookups.
+
+`navigation-performance.cjs` measures selection updates in Cambridge, Prague,
+and Vienna. It verifies bounded row mutations, unique selection and keyboard
+focus, paging, favorite changes, empty searches, and unusual game IDs.
+
+Run benchmarks individually, without other test suites competing for CPU.
+Compare timings on the same device and browser; timing values are diagnostic,
+not pass/fail thresholds. These measurements exclude cold startup and artwork
+decoding.
+
 ## Isolated Android backup and upgrade audit
 
 Build with the audit initializer:

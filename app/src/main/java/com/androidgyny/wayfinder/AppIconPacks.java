@@ -39,16 +39,17 @@ final class AppIconPacks {
         return null;
     }
     JSONArray installed() {
-        JSONArray result=new JSONArray();PackageManager pm=context.getPackageManager();
+        List<JSONObject> packs=new ArrayList<>();PackageManager pm=context.getPackageManager();
         List<ApplicationInfo> apps=pm.getInstalledApplications(0);
-        apps.sort((a,b)->pm.getApplicationLabel(a).toString().compareToIgnoreCase(pm.getApplicationLabel(b).toString()));
         for(ApplicationInfo app:apps)try{
             Resources res=pm.getResourcesForApplication(app);
             boolean found=res.getIdentifier("appfilter","xml",app.packageName)!=0;
             if(!found)try(InputStream in=res.getAssets().open("appfilter.xml")){found=true;}catch(IOException ignored){}
-            if(found){JSONObject item=new JSONObject();item.put("package",app.packageName);item.put("title",pm.getApplicationLabel(app).toString());result.put(item);}
+            if(found){JSONObject item=new JSONObject();item.put("package",app.packageName);item.put("title",pm.getApplicationLabel(app).toString());packs.add(item);}
         }catch(Exception ignored){}
-        return result;
+        // Only matching packs need labels and sorting, not every installed app.
+        packs.sort((a,b)->a.optString("title").compareToIgnoreCase(b.optString("title")));
+        return new JSONArray(packs);
     }
     private void read(XmlPullParser xml) throws Exception {
         int count=0;

@@ -20,8 +20,10 @@ function renderAppSections(home){
  const root=$('#app-sections'),dock=$('#app-dock');
  const sectionFocus=document.activeElement?.dataset.section,dockFocus=document.activeElement?.closest('#app-dock .drawer-app')?.dataset.package;
  root.hidden=!home;root.replaceChildren();
+ const grouped=new Map(appSections.map(s=>[s.id,[]]));
+ if(home)for(const a of drawerCatalog){if(!appPreference(a.package).hideFromSections)grouped.get(appSection(a))?.push(a);}
  if(home)for(const section of appSections){
-  const apps=drawerCatalog.filter(a=>appSection(a)===section.id&&!appPreference(a.package).hideFromSections).sort((a,b)=>drawerName(a).localeCompare(drawerName(b)));
+  const apps=grouped.get(section.id).sort((a,b)=>drawerName(a).localeCompare(drawerName(b)));
   const b=el('button','app-section');b.dataset.section=section.id;b.setAttribute('aria-expanded',String(drawerSection===section.id));b.setAttribute('aria-controls','drawer-grid');
   const art=el('span','section-art');art.innerHTML=appSectionIcons[section.icon];
   b.append(art,el('strong','',section.name),el('span','section-note',section.note));
@@ -29,7 +31,7 @@ function renderAppSections(home){
   row.append(el('span','section-count',String(apps.length)));b.append(row);
   b.onclick=()=>{drawerSection=drawerSection===section.id?'':section.id;lastAppSection=section.id;drawerPage=0;renderDrawer();controllerFocus(drawerSection?$('#drawer-grid .drawer-app')||document.querySelector(`[data-section="${section.id}"]`):document.querySelector(`[data-section="${section.id}"]`))};root.append(b);
  }
- dock.replaceChildren();const pins=drawerCatalog.filter(a=>appPreference(a.package).pinned).sort((a,b)=>(appPreference(a.package).order||0)-(appPreference(b.package).order||0)||drawerName(a).localeCompare(drawerName(b)));
+ dock.replaceChildren();const pins=(home?drawerCatalog.filter(a=>appPreference(a.package).pinned):[]).sort((a,b)=>(appPreference(a.package).order||0)-(appPreference(b.package).order||0)||drawerName(a).localeCompare(drawerName(b)));
  dock.hidden=!home||!pins.length;
  if(home)for(const a of pins.slice(0,8)){const tile=drawerTile(a);tile.querySelector('.drawer-edit').remove();dock.append(tile)}
  if(sectionFocus)root.querySelector(`[data-section="${sectionFocus}"]`)?.focus({preventScroll:true});

@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.148-beta.10)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.149-beta.11)
 
 Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. It turns installed games into a personal library of covers and categories, with controller navigation and a choice of ways to browse. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
 
@@ -27,7 +27,7 @@ That restraint is intentional. With hundreds or thousands of games, every extra 
 ## Built for a growing collection
 
 - **Organize in batches.** Rename or merge categories, move several games at once, and drag categories into your preferred order.
-- **Find and rediscover games.** Search titles across your library, browse by category, sort, mark favorites, and revisit recently played games.
+- **Find and rediscover games.** Search titles across your library, browse by category, sort alphabetically, by recency, or with favorites first, and revisit recently played games.
 - **Choose artwork easily.** Find images through Google Play, open Google Images or SteamGridDB searches, or use a file from your device. Preview and adjust how it fits.
 - **Set the mood.** Start with an appearance preset, or adjust colors, fonts, backgrounds, borders, shadows, selection effects, and sound. Preview a preset before keeping it, and save your own combinations.
 - **Keep everyday apps nearby.** The Apps screen groups apps into News, Media, Social, Tools, and System. A dock holds eight favorites; All apps and a Non-game apps filter provide broader access. Use installed icon packs or your own images to personalize app icons.
@@ -66,7 +66,7 @@ You can also enable interface sounds, play the included background music or your
 
 ![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/02-kyoto.png)
 
-*Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock. Shown in the current development build; not yet in the Beta 10 APK.*
+*Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock. Included in Beta 11.*
 
 ![Ulm: Tengami beside a spacious parchment title list with soft cover shadows.](docs/screenshots/03-ulm.png)
 
@@ -104,6 +104,10 @@ Your library and saved artwork stay on your device. You can browse them offline;
 Use **Settings → Library → Back up** to export your titles, categories, category order, custom covers, and app drawer preferences. **Restore** replaces the current library with the contents of a backup. A library backup does not include installed games or their save files.
 
 App drawer preferences include names, pins and their order, section assignments, hidden-from-section choices, custom images, and individually selected pack icons. Icon packs themselves are not included; reinstall them separately. Missing pack icons fall back to the app's original icon. Overall appearance settings—including the global icon pack, layout, and theme—and custom background, music, font, and startup media are not included. Restoring a library leaves those device settings in place.
+
+## Latest release
+
+**Beta 11** adds the refreshed Kyoto layout and Smitchish preset, Favorites first sorting, and a more spacious Apps overview. Browsing and app grouping are faster, selection updates do less work in large lists, and icon-pack discovery is quicker. It also fixes controller editing after using Kyoto’s position slider and saves toolbar sorting immediately.
 
 ## Project status
 

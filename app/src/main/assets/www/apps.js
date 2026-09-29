@@ -1,7 +1,8 @@
 let appIconPack="",lastIconPack="",availableIconPacks=[];
 let drawerCatalog=[],drawerPreferences=[],drawerView='home',drawerPage=0,drawerFiltered=[],appearanceDraft=null,drawerLoading=false;
 const drawerPageSize=48;
-function appPreference(pkg){return drawerPreferences.find(a=>a.package===pkg)||{package:pkg}}
+let drawerRenderPreferences=null,drawerRenderGames=null;
+function appPreference(pkg){return (drawerRenderPreferences?drawerRenderPreferences.get(pkg):drawerPreferences.find(a=>a.package===pkg))||{package:pkg}}
 function drawerName(a){return appPreference(a.package).title||a.title}
 function drawerImage(a){return appImagePreference(appPreference(a.package),a.package)}
 function appImagePreference(p,pkg){return p.image||(p.packIcon?.pack&&p.packIcon?.name?'app-icon/'+pkg+'?pack='+encodeURIComponent(p.packIcon.pack)+'&drawable='+encodeURIComponent(p.packIcon.name):(appIconPack?'app-icon/'+pkg+'?pack='+encodeURIComponent(appIconPack):'icon/'+pkg))}
@@ -13,19 +14,28 @@ function loadDrawerPreferences(){try{drawerPreferences=native?.appsPreferences?J
 function openApps(){drawerView='home';drawerSection='';drawerPage=0;$('#drawer-search').value='';$('#drawer-letter').value='';loadDrawerPreferences();showDialog('#apps-drawer');renderDrawer();if(native?.drawerApps){drawerLoading=true;native.drawerApps()}($('#app-sections button')||$('#drawer-search')).focus({preventScroll:true})}
 function openDrawerApp(a){effect('launch');native?.launchApp?.(a.package)}
 function drawerTile(a){const item=el('div','drawer-item'),b=el('button','drawer-app');b.dataset.package=a.package;b.setAttribute('aria-label','Open '+drawerName(a));const im=el('img');im.src=drawerImage(a);im.alt='';im.loading='lazy';b.append(im,el('span','',drawerName(a)));b.onclick=e=>{if(e.detail!==0&&b._held){b._held=false;return;}if(e.detail===0||performance.now()>pinIgnoreClickUntil)openDrawerApp(a)};b.onpointerdown=e=>{b._held=false;startPinDrag(e,a.package);startAppHold(e,b,a.package)};b.oncontextmenu=e=>{e.preventDefault();if(!pinDrag?.active&&performance.now()>pinIgnoreClickUntil){cancelAppHold();editDrawerApp(a.package)}};const edit=el('button','drawer-edit','•••');edit.setAttribute('aria-label','Edit '+drawerName(a));edit.onclick=()=>editDrawerApp(a.package);item.append(b,edit);return item}
+// Lookup tables live only for this synchronous render; edits never see stale entries.
 function renderDrawer(){
+ const previousPreferences=drawerRenderPreferences,previousGames=drawerRenderGames;
+ drawerRenderPreferences=new Map();drawerRenderGames=new Map();
+ for(const a of drawerPreferences)if(!drawerRenderPreferences.has(a.package))drawerRenderPreferences.set(a.package,a);
+ for(const g of games)if(g.kind!=='shortcut'&&!g.intentUri&&!drawerRenderGames.has(g.package))drawerRenderGames.set(g.package,g);
+ try{renderDrawerContents()}finally{drawerRenderPreferences=previousPreferences;drawerRenderGames=previousGames;}
+}
+function renderDrawerContents(){
  const home=drawerView==='home'&&!$('#drawer-search').value.trim()&&!$('#drawer-letter').value;renderAppSections(home);
  const focusedItem=document.activeElement?.closest('#drawer-grid .drawer-item'),focusedPackage=focusedItem?.querySelector('.drawer-app')?.dataset.package,focusedEdit=document.activeElement?.matches('.drawer-edit'),focusedIndex=focusedItem?[...$('#drawer-grid').children].indexOf(focusedItem):0,focusedTab=document.activeElement?.closest('#drawer-tabs button')?.dataset.drawerView;
  $('#drawer-search').placeholder=drawerView==='other'?'Search non-game apps…':'Search every installed app…';$('#drawer-search').setAttribute('aria-label',drawerView==='other'?'Search non-game apps':'Search installed apps');
  const q=normalize($('#drawer-search').value).trim(),letter=$('#drawer-letter').value;
  const available=drawerCatalog.filter(a=>!q?(drawerView==='home'&&drawerSection&&appSection(a)===drawerSection&&!appPreference(a.package).hideFromSections||drawerView==='all'||drawerView==='other'&&!drawerIsGame(a)||drawerView==='pinned'&&appPreference(a.package).pinned||drawerView==='recent'&&appPreference(a.package).lastUsed>0):(drawerView!=='other'||!drawerIsGame(a))&&normalize(drawerName(a)+' '+a.title+' '+a.package).includes(q));
  drawerFiltered=available.filter(a=>!letter||(letter==='#'?!/^[A-Z]/.test(normalize(drawerName(a)).toUpperCase()):normalize(drawerName(a)).toUpperCase().startsWith(letter)));
- drawerFiltered.sort((a,b)=>(!q&&drawerView==='pinned'?(appPreference(a.package).order||0)-(appPreference(b.package).order||0):!q&&drawerView==='recent'?(appPreference(b.package).lastUsed||0)-(appPreference(a.package).lastUsed||0):0)||drawerName(a).localeCompare(drawerName(b),undefined,{sensitivity:'base',numeric:true}));
+ drawerFiltered.sort((a,b)=>(!q&&drawerView==='pinned'?(appPreference(a.package).order||0)-(appPreference(b.package).order||0):!q&&drawerView==='recent'?(appPreference(b.package).lastUsed||0)-(appPreference(a.package).lastUsed||0):0)||compareTitles(drawerName(a),drawerName(b)));
  drawerPage=Math.max(0,Math.min(drawerPage,Math.max(0,Math.ceil(drawerFiltered.length/drawerPageSize)-1)));
  $('#drawer-tabs').replaceChildren(...[['home','Categories'],['pinned','Pinned'],['recent','Recent'],['other','Non-game apps'],['all','All apps']].map(([key,label])=>{const b=el('button','secondary',label);b.dataset.drawerView=key;b.setAttribute('aria-pressed',String(key===drawerView));b.onclick=()=>{drawerView=key;drawerPage=0;$('#drawer-search').value='';$('#drawer-letter').value='';renderDrawer()};return b}));
  $('#drawer-grid').replaceChildren(...(home?drawerFiltered:drawerFiltered.slice(drawerPage*drawerPageSize,(drawerPage+1)*drawerPageSize)).map(drawerTile));
  $('#drawer-status').textContent=drawerFiltered.length?`${drawerFiltered.length.toLocaleString()} apps${q?(drawerView==='other'?' · Searching non-game apps':' · Searching all installed apps'):canDragPins()?' · Drag apps to reorder':''}`:drawerLoading?'Loading apps…':drawerView==='pinned'&&!q&&!letter?'Pin your everyday apps: open Non-game apps, choose •••, then Pin this app.':drawerView==='recent'&&!q&&!letter?'Apps you open through Wayfinder will appear here.':'No matching apps.';
- if(home)$('#drawer-status').textContent=drawerSection?(appSections.find(s=>s.id===drawerSection).name+' · '+drawerFiltered.length+' apps'+(!drawerFiltered.length?' · Assign apps here using All apps → •••.':'')):'Your everyday apps, grouped. Choose a section to open it.';
+ if(home)$('#drawer-status').textContent=drawerSection?(appSections.find(s=>s.id===drawerSection).name+' · '+drawerFiltered.length+' apps'+(!drawerFiltered.length?' · Assign apps here using All apps → •••.':'')):'';
+ $('#drawer-status').hidden=home&&!drawerSection;
  $('#drawer-grid').hidden=home&&!drawerSection;$('#apps-drawer .drawer-pages').hidden=home||drawerFiltered.length<=drawerPageSize;$('#drawer-letter').parentElement.hidden=home;
  $('#drawer-page').textContent=drawerFiltered.length?`${drawerPage+1} / ${Math.ceil(drawerFiltered.length/drawerPageSize)}`:'';$('#drawer-prev').disabled=drawerPage===0;$('#drawer-next').disabled=(drawerPage+1)*drawerPageSize>=drawerFiltered.length;
  if(focusedPackage){const cards=[...$('#drawer-grid').querySelectorAll('.drawer-app')],b=cards.find(b=>b.dataset.package===focusedPackage)||cards[Math.min(focusedIndex,cards.length-1)];(focusedEdit?b?.parentElement.querySelector('.drawer-edit'):b)?.focus({preventScroll:true});if(!b)$('#drawer-search').focus({preventScroll:true});}
@@ -40,7 +50,7 @@ function closeAppAppearance(){
 }
 function editDrawerApp(pkg){const a=drawerCatalog.find(a=>a.package===pkg);if(!a)return;appearanceDraft={...appPreference(pkg)};$('#appearance-name').value=drawerName(a);$('#appearance-section').value=appearanceDraft.section||'auto';$('#appearance-section-hidden').checked=!!appearanceDraft.hideFromSections;$('#appearance-pinned').checked=!!appearanceDraft.pinned;const pins=drawerPreferences.filter(a=>a.pinned).sort((a,b)=>(a.order||0)-(b.order||0));$('#appearance-order').value=appearanceDraft.pinned?pins.findIndex(a=>a.package===pkg)+1:pins.length+1;$('#appearance-image').src=drawerImage(a);$('#appearance-error').textContent='';refreshAppGameAction();$('#appearance-uninstall').hidden=!native?.canUninstallApp?.(pkg);showDialog('#app-appearance')}
 // Shortcuts can share a host package without representing the app itself.
-function drawerGameEntry(pkg){return games.find(g=>g.package===pkg&&g.kind!=='shortcut'&&!g.intentUri)}
+function drawerGameEntry(pkg){return drawerRenderGames?drawerRenderGames.get(pkg):games.find(g=>g.package===pkg&&g.kind!=='shortcut'&&!g.intentUri)}
 function refreshAppGameAction(){
  $('#appearance-game').textContent=drawerGameEntry(appearanceDraft?.package)?'Edit game entry':'Add to game library';
 }
