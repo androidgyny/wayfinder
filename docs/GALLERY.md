@@ -4,7 +4,7 @@
 
 Nine library views and a home for everyday apps. From a quiet title list to a card table, carousel, or wall of artwork, these ten screenshots show how differently the same collection can feel.
 
-Captured directly on a Pimax Portal at **1920 × 1080** on September 27–28, 2026. These are unretouched screenshots of the app. Most show **v0.9.148 Beta 10**; Kyoto was refreshed on September 28 to show the refreshed layout and Smitchish preset now included in Beta 11. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
+Captured directly on a Pimax Portal at **1920 × 1080** on September 27–28, 2026. These are unretouched screenshots of the app. Most show **v0.9.148 Beta 10**; Kyoto was refreshed on September 28 to show the refreshed layout and Smitchish preset now included in Beta 11. The Apps screenshot was refreshed from Beta 11 to show the more spacious overview. Appearance combinations, favorites, and the Copenhagen table were arranged for the gallery. Games and personal cover artwork are not bundled with Wayfinder. Animated backdrops appear as still frames.
 
 [Copenhagen](#copenhagen) · [Cupertino](#cupertino) · [Ulm](#ulm) · [Venice](#venice) · [Cambridge](#cambridge) · [Kyoto](#kyoto) · [Berlin](#berlin) · [Oxford](#oxford) · [Vienna](#vienna)
 
@@ -86,7 +86,7 @@ An expanded shelf of puzzle platformers sits between compact previews of neighbo
 
 Wayfinder also keeps your everyday Android apps close at hand, with grouped sections and a favorites dock.
 
-**Everyday essentials** — Midnight · Outfit · Phosphor section icons
+**Everyday essentials** — Beta 11 · Phosphor section icons · Australis app icons
 
 News, Media, Social, Tools, and System sit above a dock of pinned apps. Colorful controller hints and customized app icons complete the screen.
 

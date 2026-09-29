@@ -74,7 +74,7 @@ You can also enable interface sounds, play the included background music or your
 
 ![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/08-apps.png)
 
-*Apps · your everyday essentials, with grouped apps and a favorites dock.*
+*Apps · Beta 11 · five app sections, a spacious favorites dock, and colorful controller hints.*
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
