@@ -48,7 +48,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  assert.equal(await page.evaluate(()=>window.appSaved.at(-1).section),'news');assert.equal(await page.evaluate(()=>window.appSaved.at(-1).hideFromSections),true);
  await page.locator('#drawer-search').fill('Utility 0');assert.equal(await page.locator('#drawer-grid .drawer-app').count(),1,'hidden section app remains searchable');
  await page.locator('#drawer-search').fill('');await page.locator('[data-drawer-view="all"]').click();assert.equal(await page.locator('#drawer-grid .drawer-app').count(),48);await page.locator('#drawer-next').click();assert.equal(await page.locator('#drawer-grid .drawer-app').count(),17);
- await page.locator('[data-drawer-view="home"]').click();await page.screenshot({path:'C:/Codex2/apps-first-version.png'});
+ await page.locator('[data-drawer-view="home"]').click();if(process.env.APPS_SCREENSHOT)await page.screenshot({path:process.env.APPS_SCREENSHOT});
  const before=await page.evaluate(()=>[...$('#app-dock').querySelectorAll('.drawer-app')].map(b=>b.dataset.package));
  await page.evaluate(()=>{native.reorderApps=ids=>{window.reordered=JSON.parse(ids);return '{"ok":true}'}});
  const first=await page.locator('#app-dock .drawer-app').nth(0).boundingBox(),second=await page.locator('#app-dock .drawer-app').nth(1).boundingBox();

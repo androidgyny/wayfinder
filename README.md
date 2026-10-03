@@ -56,6 +56,18 @@ To open Wayfinder whenever you press Home, go to **Settings → Home & startup �
 
 The **Help** page in Settings provides a brief guide to everyday use.
 
+## AI category organization
+
+In **Settings → Library**, save a Gemini API key. Visit [Google AI Studio](https://aistudio.google.com/apikey), sign in or create an account, and create a key; copy it into Wayfinder. The key is encrypted on the device and excluded from library backups.
+
+Open **Manage categories → AI Sort** to sort games into existing categories, or **AI Reorganize** to propose a new scheme with a maximum category count. Review the proposed covers by category, select a game to correct its assignment, then Apply. AI Sort assigns uncategorized games to a reasonably fitting existing category when possible, leaving unknown games uncategorized. For already categorized games, it checks for clear gameplay mismatches, preserves reasonable or unknown placements, then reviews proposed corrections against their previous categories before preview. Re-sorts default to showing only moved games. Progress highlights the current stage with an animated activity bar while Gemini responds. Reorganizing requires confirmation before replacing the game category scheme; app sections are separate.
+
+Every game is validated before saving. **Undo** in Manage categories reverses the entire AI operation, including category order, while Wayfinder remains open (up to 20 category changes). Make a library backup if you want to retain a recovery point after closing the app.
+
+**Suggest Category** in either item editor fills the category or app section; Save commits it. AI requests send the edited titles and package names to Gemini; AI Sort also sends current categories and proposed moves for comparison. Gemini account limits can interrupt large requests; a failed or canceled request leaves the library unchanged.
+
+The implementation uses `gemini-3.5-flash-lite` with [Gemini structured outputs](https://ai.google.dev/gemini-api/docs/structured-output). AI Sort checks category fit in groups of 250 games; AI Reorganize designs a scheme from the whole collection, then assigns the games. Assignments use short game IDs mapped back to the original records. Larger requests are bounded at 1,500 games, and incomplete assignment lists automatically recover in groups of 250. The complete proposal stays separate from saved records until every game validates and you press Apply. **Check connection** in the key setting tests access using tiny synthetic prompts, without sending the library.
+
 ## Choose your layout
 
 A **presentation theme** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style that layout separately.

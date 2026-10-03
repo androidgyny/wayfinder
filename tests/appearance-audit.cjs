@@ -25,10 +25,29 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  assert.deepEqual(presetNames,[...presetNames].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base',numeric:true})));
  for(const name of presetNames){
   const result=await page.evaluate(name=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name===name).values);return {shadow:coverShadow,hidden:$('#cover-shadow').closest('.settings-row').hidden}},name);
-  const shadow=name==='Full House'?'crisp':['Folio Nova','Smitchish','Launchbiz','Niagaramond','Playrite'].includes(name)?'soft':'off';
+  const shadow=name==='Full House'?'crisp':['Folio Nova','Smitchish','Smitchish Dark','Launchbiz','Niagaramond','Playrite'].includes(name)?'soft':'off';
   assert.equal(result.shadow,shadow,name);
  }
  passed.push('Every built-in preset applies its intended shadow; alphabetical ordering');
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Smitchish Dark').values);persist()});
+ await page.reload();await page.waitForTimeout(300);
+ assert.deepEqual(await page.evaluate(()=>({presentation,palette,typography,backdrop,coverGlow,selectionStyle,coverShadow,interfaceContrast,kyotoTitlePlacement,menuButtons})),{presentation:'kyoto',palette:'graphite',typography:'outfit',backdrop:'gradient',coverGlow:true,selectionStyle:'outline',coverShadow:'soft',interfaceContrast:'crisp',kyotoTitlePlacement:'below',menuButtons:'selected'});
+ passed.push('Smitchish Dark preserves the saved Kyoto appearance across reload');
+ assert.ok(!presetNames.includes('Spotlight'));
+ assert.equal(await page.locator('#presentation option[value=losangeles]').count(),0);
+ await page.evaluate(()=>{const v=JSON.parse(localStorage.getItem('auditView'));v.presentation='losangeles';v.backdrop='flat';v.coverBrightness='dimmed';localStorage.setItem('auditView',JSON.stringify(v));});
+ await page.reload();await page.waitForTimeout(300);
+ assert.deepEqual(await page.evaluate(()=>({presentation,backdrop,coverBrightness,selectionStyle})),{presentation:'kyoto',backdrop:'gradient',coverBrightness:'even',selectionStyle:'outline'});
+ assert.equal(await page.evaluate(()=>{applyAppearanceValues({presentation:'losangeles'});return presentation;}),'kyoto');
+ passed.push('Retired layout restores and imports as Smitchish Dark; retired options absent');
+
+ assert.ok(!presetNames.includes('Porcelain'));
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Smitchish').values);setPalette('porcelain');persist()});
+ await page.reload();await page.waitForTimeout(300);
+ assert.deepEqual(await page.evaluate(()=>({presentation,palette,coverShadow,bg:getComputedStyle(document.body).getPropertyValue('--bg').trim()})),{presentation:'kyoto',palette:'parchment',coverShadow:'soft',bg:'#f4efe5'});
+ assert.equal(await page.evaluate(()=>{setPalette('ricepaper');return palette;}),'parchment');
+ assert.equal(await page.locator('#palette option[value=ricepaper]').count(),0);
+ passed.push('Retired Porcelain and Rice Paper selections migrate to Parchment');
  await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Full House').values);persist()});
  await page.reload();await page.waitForTimeout(300);
  assert.deepEqual(await page.evaluate(()=>({presentation,palette,coverShadow,coverCorners,coverGlow})),{presentation:'copenhagen',palette:'felt',coverShadow:'crisp',coverCorners:'soft',coverGlow:false});

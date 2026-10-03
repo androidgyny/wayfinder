@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private static final String ORIGIN="https://appassets.androidplatform.net";
     private static final int COVER=10, EXPORT=11, IMPORT=12, SHORTCUT=13, UNINSTALL=19, FONT=20;
     private boolean startupTouch; private StartupVideo startup; private int startupSkipKey=-1; private WebView web; private Library db; private final ExecutorService worker=Executors.newSingleThreadExecutor();
+    private volatile boolean keyboardVisible;
     private ArtworkBrowser artworkBrowser; private final ExecutorService artworkWorker=Executors.newFixedThreadPool(2);
     private final ExecutorService artworkLookupWorker=Executors.newSingleThreadExecutor(); private Future<?> artworkLookupTask;
     private CustomFont customFont; private BackdropImage background; private AmbientAudio ambient; private Artwork artwork; private File covers; private String pickingId=""; private boolean ready=false; private long lastAxis=0;
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
     private void notice(String message){emit("notice",data("message",message));}
     private String result(boolean ok,String message){JSONObject o=data("ok",ok);try{o.put("message",message);}catch(Exception ignored){}return o.toString();}
     @Override public void onCreate(Bundle state){
-        super.onCreate(state);inputManager=getSystemService(InputManager.class);if(inputManager!=null)inputManager.registerInputDeviceListener(inputDevices,directionHandler);getWindow().setStatusBarColor(Color.rgb(17,22,21));getWindow().setNavigationBarColor(Color.rgb(17,22,21));
+        super.onCreate(state);gemini.removeRetiredCredentials();inputManager=getSystemService(InputManager.class);if(inputManager!=null)inputManager.registerInputDeviceListener(inputDevices,directionHandler);getWindow().setStatusBarColor(Color.rgb(17,22,21));getWindow().setNavigationBarColor(Color.rgb(17,22,21));
         covers=new File(getFilesDir(),"covers");covers.mkdirs();customFont=new CustomFont(this);artwork=new Artwork(this);background=new BackdropImage(this);db=new Library();db.getWritableDatabase();
         sounds=new SoundPool.Builder().setMaxStreams(3).setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()).build();
         sounds.setOnLoadCompleteListener((pool,id,status)->{if(status==0)loadedSounds.add(id);else Log.w("WayfinderSound","Could not load sound "+id);});
@@ -63,6 +64,17 @@ public class MainActivity extends Activity {
         web=new WebView(this);web.setSoundEffectsEnabled(false);web.setBackgroundColor(Color.rgb(17,22,21));android.widget.FrameLayout root=new android.widget.FrameLayout(this);root.addView(web,new android.widget.FrameLayout.LayoutParams(-1,-1));setContentView(root);startup=new StartupVideo(this,root);ambient=new AmbientAudio(this,()->startup.active(),this::notice);
         WebSettings s=web.getSettings();s.setJavaScriptEnabled(true);s.setDomStorageEnabled(true);s.setAllowFileAccess(false);s.setAllowContentAccess(false);s.setAllowFileAccessFromFileURLs(false);s.setAllowUniversalAccessFromFileURLs(false);s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);s.setSupportMultipleWindows(false);s.setMediaPlaybackRequiresUserGesture(true);
         WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);web.addJavascriptInterface(new Bridge(),"Portal");
+        root.getViewTreeObserver().addOnGlobalLayoutListener(()->{
+            boolean visible;
+            WindowInsets insets=root.getRootWindowInsets();
+            if(Build.VERSION.SDK_INT>=30&&insets!=null)visible=insets.isVisible(WindowInsets.Type.ime());
+            else{
+                Rect frame=new Rect();root.getWindowVisibleDisplayFrame(frame);
+                int fullHeight=root.getRootView().getHeight();
+                visible=fullHeight-frame.bottom>Math.max(100*getResources().getDisplayMetrics().density,fullHeight*.15f);
+            }
+            if(visible!=keyboardVisible){keyboardVisible=visible;if(web!=null)web.evaluateJavascript("window.wayfinderKeyboardChanged&&window.wayfinderKeyboardChanged("+visible+")",null);}
+        });
         web.setWebChromeClient(new WebChromeClient(){@Override public boolean onConsoleMessage(ConsoleMessage m){Log.d("WayfinderWeb",m.message()+" @"+m.lineNumber());return true;}});
         web.setWebViewClient(new WebViewClient(){
             @Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest r){return !local(r.getUrl());}
@@ -95,7 +107,7 @@ public class MainActivity extends Activity {
     private byte[] icon(String pkg,int size) throws Exception {String cacheKey=pkg+"/"+size;byte[] found=iconCache.get(cacheKey);if(found!=null)return found;Drawable d=getPackageManager().getApplicationIcon(pkg);Bitmap b=Bitmap.createBitmap(size,size,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);d.setBounds(0,0,size,size);d.draw(c);ByteArrayOutputStream out=new ByteArrayOutputStream();b.compress(Bitmap.CompressFormat.PNG,100,out);b.recycle();byte[] a=out.toByteArray();if(iconCache.size()<300)iconCache.put(cacheKey,a);return a;}
     @Override protected void onResume(){super.onResume();if(ambient!=null)ambient.resume();if(web!=null)web.onResume();if(ready){web.evaluateJavascript("window.onNativeResume&&window.onNativeResume()",null);emit("homeStatus",new JSONObject());}}
     @Override protected void onPause(){if(ambient!=null)ambient.leave();cancelControllerInput();if(startup!=null)startup.dismiss();if(web!=null){web.evaluateJavascript("window.onNativePause&&window.onNativePause();window.persist&&window.persist()",null);web.onPause();}leftTriggerKey=rightTriggerKey=leftTriggerAxis=rightTriggerAxis=false;super.onPause();}
-    @Override protected void onDestroy(){cancelControllerInput();if(inputManager!=null)inputManager.unregisterInputDeviceListener(inputDevices);if(ambient!=null)ambient.destroy();if(startup!=null)startup.dismiss();if(web!=null){web.removeJavascriptInterface("Portal");web.destroy();web=null;}if(sounds!=null){sounds.release();sounds=null;}if(artworkBrowser!=null)artworkBrowser.dismiss();artworkWorker.shutdownNow();artworkLookupWorker.shutdownNow();worker.shutdown();db.close();super.onDestroy();}
+    @Override protected void onDestroy(){cancelControllerInput();if(inputManager!=null)inputManager.unregisterInputDeviceListener(inputDevices);if(ambient!=null)ambient.destroy();if(startup!=null)startup.dismiss();if(web!=null){web.removeJavascriptInterface("Portal");web.destroy();web=null;}if(sounds!=null){sounds.release();sounds=null;}if(artworkBrowser!=null)artworkBrowser.dismiss();artworkWorker.shutdownNow();artworkLookupWorker.shutdownNow();worker.shutdown();aiWorker.shutdownNow();gemini.cancelAll();aiSnapshots.clear();db.close();super.onDestroy();}
     @Override public void onBackPressed(){if(startup.active()){startup.finishPlayback();return;}web.evaluateJavascript("window.nativeBack&&window.nativeBack()",value->{if(!"true".equals(value))moveTaskToBack(true);});}
     private void key(String key){web.evaluateJavascript("window.controller&&window.controller("+JSONObject.quote(key)+")",null);}
     @Override public boolean dispatchTouchEvent(MotionEvent e){if(startup!=null&&(startup.active()||startupTouch)){startupTouch=true;if(e.getActionMasked()==MotionEvent.ACTION_UP||e.getActionMasked()==MotionEvent.ACTION_CANCEL){startup.finishPlayback();startupTouch=false;}return true;}return super.dispatchTouchEvent(e);}
@@ -118,10 +130,20 @@ public class MainActivity extends Activity {
         if(ready&&pressed&&!was)key(left?"pageUp":"pageDown");
     }
     @Override public boolean onGenericMotionEvent(MotionEvent e){if(startup.active())return true;if((e.getSource()&InputDevice.SOURCE_JOYSTICK)==InputDevice.SOURCE_JOYSTICK&&e.getAction()==MotionEvent.ACTION_MOVE){float lt=Math.max(e.getAxisValue(MotionEvent.AXIS_LTRIGGER),e.getAxisValue(MotionEvent.AXIS_BRAKE)),rt=Math.max(e.getAxisValue(MotionEvent.AXIS_RTRIGGER),e.getAxisValue(MotionEvent.AXIS_GAS));trigger(true,lt>(leftTriggerAxis?.25f:.55f),true);trigger(false,rt>(rightTriggerAxis?.25f:.55f),true);if(heldKey!=-1)return true;float x=e.getAxisValue(MotionEvent.AXIS_HAT_X),y=e.getAxisValue(MotionEvent.AXIS_HAT_Y);if(Math.abs(x)<.4)x=e.getAxisValue(MotionEvent.AXIS_X);if(Math.abs(y)<.4)y=e.getAxisValue(MotionEvent.AXIS_Y);if(Math.max(Math.abs(x),Math.abs(y))<=.6)lastAxis=0;long now=SystemClock.uptimeMillis();if(Math.max(Math.abs(x),Math.abs(y))>.6&&now-lastAxis>90){lastAxis=now;key(Math.abs(x)>Math.abs(y)?(x>0?"right":"left"):(y>0?"down":"up"));}return true;}return super.onGenericMotionEvent(e);}
+    private final GeminiCategories gemini=new GeminiCategories(this);
+    private final ExecutorService aiWorker=Executors.newSingleThreadExecutor();
+    private final Map<String,JSONObject> aiSnapshots=new ConcurrentHashMap<>();
+    private final Map<String,Future<?>> aiTasks=new ConcurrentHashMap<>();
+    private final Map<String,Thread> aiThreads=new ConcurrentHashMap<>();
+    private String aiFingerprint(JSONArray records,String order) throws Exception {
+        JSONArray snapshot=new JSONArray();for(int i=0;i<records.length();i++){JSONObject g=records.getJSONObject(i);snapshot.put(new JSONArray().put(g.getString("id")).put(g.getString("title")).put(g.getString("package")).put(g.getString("genre")));}
+        return snapshot.toString()+order;
+    }
     private class Library extends SQLiteOpenHelper {
-        Library(){super(MainActivity.this,"library.db",null,2);}
-        @Override public void onCreate(SQLiteDatabase d){d.execSQL("CREATE TABLE games (id TEXT PRIMARY KEY NOT NULL, record TEXT NOT NULL)");try{JSONArray a=new JSONArray(read(getAssets().open("library.json"),12000000));for(int i=0;i<a.length();i++){JSONObject g=a.getJSONObject(i);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());d.insertOrThrow("games",null,v);}}catch(Exception e){throw new RuntimeException(e);}}
+        Library(){super(MainActivity.this,"library.db",null,3);}
+        @Override public void onCreate(SQLiteDatabase d){d.execSQL("CREATE TABLE games (id TEXT PRIMARY KEY NOT NULL, record TEXT NOT NULL)");d.execSQL("CREATE TABLE library_meta (name TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)");try{JSONArray a=new JSONArray(read(getAssets().open("library.json"),12000000));for(int i=0;i<a.length();i++){JSONObject g=a.getJSONObject(i);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());d.insertOrThrow("games",null,v);}}catch(Exception e){throw new RuntimeException(e);}}
         @Override public void onUpgrade(SQLiteDatabase d,int a,int b){
+            if(a<3){d.execSQL("CREATE TABLE library_meta (name TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)");ContentValues v=new ContentValues();v.put("name","categoryOrder");v.put("value",getPreferences(0).getString("categoryOrder","[]"));d.insertOrThrow("library_meta",null,v);}
             if(a<2){try{JSONArray records=new JSONArray();try(Cursor c=d.rawQuery("SELECT record FROM games",null)){while(c.moveToNext())records.put(new JSONObject(c.getString(0)));}for(int i=0;i<records.length();i++){JSONObject g=records.getJSONObject(i);normalizeRecord(g);ContentValues v=new ContentValues();v.put("record",g.toString());d.update("games",v,"id=?",new String[]{g.getString("id")});}}catch(Exception e){throw new RuntimeException("Could not upgrade library",e);}}
         }
         synchronized JSONArray all(){JSONArray a=new JSONArray();try(Cursor c=getReadableDatabase().rawQuery("SELECT record FROM games ORDER BY id",null)){while(c.moveToNext())try{a.put(new JSONObject(c.getString(0)));}catch(Exception e){throw new RuntimeException(e);}}return a;}
@@ -162,35 +184,51 @@ public class MainActivity extends Activity {
         synchronized JSONObject get(String id) throws Exception {try(Cursor c=getReadableDatabase().rawQuery("SELECT record FROM games WHERE id=?",new String[]{id})){if(c.moveToFirst())return new JSONObject(c.getString(0));}throw new IOException("This game is no longer in the library");}
         synchronized void put(JSONObject g) throws Exception {validate(g);ContentValues v=new ContentValues();v.put("id",g.getString("id"));v.put("record",g.toString());if(getWritableDatabase().insertWithOnConflict("games",null,v,SQLiteDatabase.CONFLICT_REPLACE)==-1)throw new IOException("Could not save game");}
         synchronized void remove(String id){getWritableDatabase().delete("games","id=?",new String[]{id});}
+        synchronized String order(){try(Cursor c=getReadableDatabase().rawQuery("SELECT value FROM library_meta WHERE name='categoryOrder'",null)){return c.moveToFirst()?c.getString(0):"[]";}}
+        private void order(JSONArray order) throws Exception {validateCategoryOrder(order);ContentValues v=new ContentValues();v.put("name","categoryOrder");v.put("value",order.toString());if(getWritableDatabase().insertWithOnConflict("library_meta",null,v,SQLiteDatabase.CONFLICT_REPLACE)==-1)throw new IOException("Could not save category order");}
         synchronized void categories(JSONObject change) throws Exception {
             JSONArray moves=change.getJSONArray("moves"),order=change.getJSONArray("order");validateCategoryOrder(order);
             if(moves.length()>20000)throw new IOException("Too many games");
-            SQLiteDatabase d=getWritableDatabase();String previous=getPreferences(0).getString("categoryOrder","[]");boolean touched=false,complete=false;
-            try{d.beginTransaction();try{Set<String> ids=new HashSet<>();
+            SQLiteDatabase d=getWritableDatabase();d.beginTransaction();try{
+                Set<String> ids=new HashSet<>();
                 for(int i=0;i<moves.length();i++){JSONObject move=moves.getJSONObject(i);String id=move.getString("id"),to=move.getString("to").trim();
                     if(!ids.add(id)||to.isEmpty()||to.length()>100)throw new IOException("Invalid category change");
                     JSONObject game=get(id);if(!game.getString("genre").equals(move.getString("from")))throw new IOException("A game's category changed. Reopen Manage categories and try again.");
                     game.put("genre",to);put(game);
                 }
-                touched=true;if(!getPreferences(0).edit().putString("categoryOrder",order.toString()).commit())throw new IOException("Could not save category order");
-                d.setTransactionSuccessful();
-            }finally{d.endTransaction();}complete=true;
-            }finally{if(touched&&!complete)getPreferences(0).edit().putString("categoryOrder",previous).commit();}
+                order(order);d.setTransactionSuccessful();
+            }finally{d.endTransaction();}
+        }
+        synchronized void applyAi(JSONObject proposal) throws Exception {
+            String request=proposal.getString("request");JSONObject snapshot=aiSnapshots.get(request);
+            if(snapshot==null||!snapshot.getString("fingerprint").equals(aiFingerprint(all(),order())))throw new IOException("Your library or categories changed. Generate a fresh proposal.");
+            JSONArray records=all(),categories=proposal.getJSONArray("categories"),assignments=proposal.getJSONArray("assignments");
+            JSONArray proposedOrder=proposal.getJSONArray("order");
+            if(snapshot.getBoolean("reorganize")){
+                GeminiCategories.validateNames(categories,snapshot.getInt("maximum"));
+                Set<String> used=new HashSet<>();for(int i=0;i<assignments.length();i++)used.add(assignments.getJSONObject(i).getString("category"));
+                validateCategoryOrder(proposedOrder);if(proposedOrder.length()!=used.size())throw new IOException("Invalid proposed category order.");
+                for(int i=0;i<proposedOrder.length();i++)if(!used.remove(proposedOrder.getString(i)))throw new IOException("Invalid proposed category order.");
+            }else{
+                Set<String> existing=new HashSet<>();JSONArray names=GeminiCategories.names(records);for(int i=0;i<names.length();i++)existing.add(names.getString(i));
+                if(categories.length()!=existing.size())throw new IOException("Existing categories changed.");
+                for(int i=0;i<categories.length();i++)if(!existing.remove(categories.getString(i)))throw new IOException("AI Sort must use existing categories.");
+                if(!proposedOrder.toString().equals(order()))throw new IOException("AI Sort must preserve category order.");
+            }
+            GeminiCategories.validateAssignments(records,categories,assignments);
+            JSONArray moves=new JSONArray();for(int i=0;i<assignments.length();i++){JSONObject a=assignments.getJSONObject(i),g=get(a.getString("id"));if(!g.getString("genre").equals(a.getString("category")))moves.put(new JSONObject().put("id",g.getString("id")).put("from",g.getString("genre")).put("to",a.getString("category")));}
+            categories(new JSONObject().put("moves",moves).put("order",proposedOrder));aiSnapshots.remove(request);
         }
         synchronized void replace(JSONArray a) throws Exception {replace(a,null);}
         synchronized void replace(JSONArray a,JSONArray apps) throws Exception {replace(a,apps,null);}
         synchronized void replace(JSONArray a,JSONArray apps,JSONArray order) throws Exception {
-            SQLiteDatabase d=getWritableDatabase();String previous=apps==null?null:getPreferences(0).getString("apps","[]");String previousOrder=getPreferences(0).getString("categoryOrder","[]");boolean orderTouched=false;boolean preferencesTouched=false,complete=false;
-            try{
-                d.beginTransaction();
-                try{
-                    d.delete("games",null,null);for(int i=0;i<a.length();i++)put(a.getJSONObject(i));
-                    if(apps!=null){preferencesTouched=true;if(!getPreferences(0).edit().putString("apps",apps.toString()).commit())throw new IOException("Could not save app preferences");}
-                    if(order!=null){orderTouched=true;if(!getPreferences(0).edit().putString("categoryOrder",order.toString()).commit())throw new IOException("Could not save category order");}
-                    d.setTransactionSuccessful();
-                }finally{d.endTransaction();}
-                complete=true;
-            }finally{if(!complete&&preferencesTouched)getPreferences(0).edit().putString("apps",previous).commit();if(!complete&&orderTouched)getPreferences(0).edit().putString("categoryOrder",previousOrder).commit();}
+            SQLiteDatabase d=getWritableDatabase();String previous=apps==null?null:getPreferences(0).getString("apps","[]");boolean preferencesTouched=false,complete=false;
+            try{d.beginTransaction();try{
+                d.delete("games",null,null);for(int i=0;i<a.length();i++)put(a.getJSONObject(i));
+                if(apps!=null){preferencesTouched=true;if(!getPreferences(0).edit().putString("apps",apps.toString()).commit())throw new IOException("Could not save app preferences");}
+                if(order!=null)order(order);d.setTransactionSuccessful();
+            }finally{d.endTransaction();}complete=true;
+            }finally{if(!complete&&preferencesTouched)getPreferences(0).edit().putString("apps",previous).commit();}
         }
     }
     private boolean uninstallableRecord(JSONObject g){return "app".equals(g.optString("kind"))&&!g.has("intentUri")&&!getPackageName().equals(g.optString("package"));}
@@ -233,7 +271,35 @@ public class MainActivity extends Activity {
         for(int i=0;i<order.length();i++){Object value=order.get(i);if(!(value instanceof String))throw new IOException("Invalid category order");String name=(String)value;if(name.trim().isEmpty()||name.length()>100||!names.add(name))throw new IOException("Invalid category order");}
     }
     public class Bridge {
-        @JavascriptInterface public String categoryOrder(){return getPreferences(0).getString("categoryOrder","[]");}
+        @JavascriptInterface public void geminiCheckKey(){aiWorker.execute(()->{
+            try{gemini.checkConnection(message->emit("aiKeyCheck",data("message",message)));emit("aiKeyCheckDone",data("message","Gemini connection and category requests work."));}
+            catch(Exception e){emit("aiKeyCheckDone",data("message",e instanceof IOException?e.getMessage():"Could not check Gemini connection."));}
+        });}
+        @JavascriptInterface public boolean geminiHasKey(){return gemini.hasKey();}
+        @JavascriptInterface public String geminiSaveKey(String key){try{gemini.saveKey(key);return result(true,key.trim().isEmpty()?"API key removed":"API key saved");}catch(Exception e){return result(false,e.getMessage());}}
+        @JavascriptInterface public void geminiOpenKeys(){runOnUiThread(()->{try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://aistudio.google.com/apikey")));}catch(Exception e){notice("Open aistudio.google.com/apikey in your browser.");}});}
+        @JavascriptInterface public void aiCancel(String request){Future<?> task=aiTasks.remove(request);if(task!=null)task.cancel(true);gemini.cancel(aiThreads.get(request));aiSnapshots.remove(request);if(aiTasks.isEmpty())runOnUiThread(()->getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));}
+        @JavascriptInterface public void aiOrganize(String request,boolean reorganize,int maximum){
+            if(!request.matches("[a-zA-Z0-9_-]{1,100}"))return;
+            runOnUiThread(()->getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));
+            FutureTask<Void> task=new FutureTask<>(()->{aiThreads.put(request,Thread.currentThread());try{
+                JSONArray records;String fingerprint;synchronized(db){records=db.all();fingerprint=aiFingerprint(records,db.order());}
+                JSONObject proposal=gemini.organize(records,reorganize,maximum,message->{Log.i("WayfinderAI",message);JSONObject event=data("request",request);try{event.put("message",message);}catch(Exception ignored){}emit("aiProgress",event);});
+                if(Thread.currentThread().isInterrupted())return null;
+                Log.i("WayfinderAI","Validated "+records.length()+" assignments; awaiting user review");aiSnapshots.put(request,new JSONObject().put("fingerprint",fingerprint).put("reorganize",reorganize).put("maximum",maximum));proposal.put("request",request);proposal.put("source",records);emit("aiProposal",proposal);
+            }catch(Exception e){if(!Thread.currentThread().isInterrupted()){JSONObject event=data("request",request);try{event.put("message",e instanceof IOException?e.getMessage():"Could not prepare a valid proposal. Try again.");}catch(Exception ignored){}emit("aiError",event);}}
+            finally{aiTasks.remove(request);aiThreads.remove(request);if(Thread.currentThread().isInterrupted())aiSnapshots.remove(request);if(aiTasks.isEmpty())runOnUiThread(()->getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));}return null;});aiTasks.put(request,task);aiWorker.execute(task);
+        }
+        @JavascriptInterface public String aiApply(String raw){try{db.applyAi(obj(raw));return result(true,"Organization saved");}catch(Exception e){return result(false,e.getMessage());}}
+        @JavascriptInterface public void aiSuggest(String request,String raw){
+            FutureTask<Void> task=new FutureTask<>(()->{aiThreads.put(request,Thread.currentThread());try{
+                JSONObject item=obj(raw);boolean app=item.optBoolean("app");JSONArray categories=app?new JSONArray(Arrays.asList("news","media","social","tools","system")):GeminiCategories.names(db.all());
+                String category=gemini.suggest(item.getString("title"),item.getString("package"),categories);
+                if(!Thread.currentThread().isInterrupted()){JSONObject event=data("request",request);event.put("category",category);emit("aiSuggestion",event);}
+            }catch(Exception e){if(!Thread.currentThread().isInterrupted()){JSONObject event=data("request",request);try{event.put("message",e instanceof IOException?e.getMessage():"Could not suggest a category. Try again.");}catch(Exception ignored){}emit("aiError",event);}}
+            finally{aiTasks.remove(request);aiThreads.remove(request);}return null;});aiTasks.put(request,task);aiWorker.execute(task);
+        }
+        @JavascriptInterface public String categoryOrder(){return db.order();}
         @JavascriptInterface public String changeCategories(String raw){try{db.categories(obj(raw));return result(true,"Categories updated");}catch(Exception e){return result(false,e.getMessage());}}
 
         @JavascriptInterface public void libraryInfo(String request){worker.execute(()->{
@@ -300,6 +366,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void androidSettings(){runOnUiThread(()->{try{startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));}catch(Exception e){notice("Android Settings is unavailable");}});}
         @JavascriptInterface public String library(){db.migrateBundledCovers();return db.all().toString();}
         @JavascriptInterface public String view(){return getPreferences(0).getString("view","{}");}
+        @JavascriptInterface public boolean keyboardVisible(){return keyboardVisible;}
         @JavascriptInterface public void hideKeyboard(){runOnUiThread(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(web.getWindowToken(),0);});}
         @JavascriptInterface public void showKeyboard(){runOnUiThread(()->{if(web==null)return;web.requestFocus();web.post(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);});});}
         @JavascriptInterface public void saveView(String value){if(value!=null&&value.length()<=512000)getPreferences(0).edit().putString("view",value).apply();else notice("Could not save settings: navigation history is too large");}
@@ -387,7 +454,7 @@ public class MainActivity extends Activity {
                 }else if(image.startsWith("user/"))custom.add(image);
             }
             for(int i=0;i<apps.length();i++){String image=apps.getJSONObject(i).optString("image");if(image.startsWith("user/"))custom.add(image);}
-            JSONObject backup=data("format","portal-library");backup.put("version",2);backup.put("games",records);backup.put("apps",apps);backup.put("categoryOrder",new JSONArray(getPreferences(0).getString("categoryOrder","[]")));
+            JSONObject backup=data("format","portal-library");backup.put("version",2);backup.put("games",records);backup.put("apps",apps);backup.put("categoryOrder",new JSONArray(db.order()));
             zip.putNextEntry(new ZipEntry("library.json"));zip.write(backup.toString().getBytes(StandardCharsets.UTF_8));zip.closeEntry();
             for(Map.Entry<String,String> image:bundled.entrySet()){
                 zip.putNextEntry(new ZipEntry(image.getValue()));try(InputStream in=getAssets().open("www/"+image.getKey())){byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)zip.write(buffer,0,n);}zip.closeEntry();
@@ -440,6 +507,7 @@ public class MainActivity extends Activity {
         for(int i=0;i<list.length();i++){JSONObject a=list.getJSONObject(i);String pkg=a.getString("package"),image=a.optString("image");
             if(a.has("packIcon")){JSONObject chosen=a.getJSONObject("packIcon");if(!chosen.optString("pack").matches("[a-zA-Z0-9_.]+")||!chosen.optString("name").matches("[a-zA-Z0-9_]+"))throw new IOException("Invalid pack icon");}
             if(!pkg.matches("[a-zA-Z0-9_.]+")||!seen.add(pkg)||a.optString("title").length()>250||(!image.isEmpty()&&!image.matches("user/[a-zA-Z0-9-]+\\.jpg")))throw new IOException("Invalid app appearance");
+            if(!Arrays.asList("auto","news","media","social","tools","system").contains(a.optString("section","auto")))throw new IOException("Invalid app section");
             if(!Arrays.asList("auto","app","game").contains(a.optString("classification","auto")))throw new IOException("Invalid app classification");
         }
     }

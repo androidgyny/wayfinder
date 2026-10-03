@@ -1,0 +1,32 @@
+/* Shared overflow rules: an empty result must never center above its own panel. */
+#grid .search-empty{justify-content:flex-start;overflow:auto;overscroll-behavior:contain}
+#grid .search-empty>*{flex-shrink:0}
+#grid .search-empty>:first-child{margin-top:auto}
+#grid .search-empty>:last-child{margin-bottom:auto}
+dialog{scroll-padding-block:16px}
+dialog :is(input,textarea,select,button){scroll-margin-block:16px}
+
+/* Give typing priority over artwork and duplicate controller shortcuts. */
+body.input-compact{--input-height:var(--visible-height,100dvh)}
+body.input-compact dialog[open]{max-height:calc(var(--input-height) - 16px);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:12px}
+body.input-compact dialog :is(.editor-actions,.app-edit-actions,.preset-actions,.settings-row){flex-wrap:wrap}
+body.input-compact :is(#kyoto-dock,#presentation-scrub,#presentation-navigation,.apps-controller-hints,#ulm-footer,#cambridge-footer){display:none!important}
+body.input-compact[data-presentation] .topbar{height:60px;min-height:60px;position:sticky;top:0}
+body.input-compact:is([data-presentation=kyoto],[data-presentation=cupertino],[data-presentation=venice],[data-presentation=oxford],[data-presentation=berlin]) main{height:calc(var(--input-height) - 60px)}
+body.input-compact:is([data-presentation=kyoto],[data-presentation=cupertino],[data-presentation=venice],[data-presentation=oxford],[data-presentation=berlin]) #presentation-info{display:none}
+body.input-compact:is([data-presentation=kyoto],[data-presentation=cupertino],[data-presentation=venice],[data-presentation=oxford],[data-presentation=berlin]) #grid{top:48px;bottom:8px;clip-path:inset(0);overflow:hidden}
+body.input-compact:is([data-presentation=oxford],[data-presentation=berlin]) #grid{overflow-y:auto}
+body.input-compact[data-presentation=oxford] :is(#catalogue-preview,#oxford-index){display:none}
+body.input-compact[data-presentation=oxford] #grid{left:12px;right:12px}
+body.input-compact #grid .search-empty{padding:12px;gap:8px}
+body.input-compact[data-presentation=cambridge]{height:var(--input-height)}
+body.input-compact[data-presentation=cambridge] #main{grid-template-rows:34px minmax(0,1fr);grid-template-columns:minmax(140px,25%) minmax(0,1fr)}
+body.input-compact[data-presentation=cambridge] #cambridge-preview{display:none}
+body.input-compact[data-presentation=ulm] :is(.shell,#main){height:var(--input-height)}
+body.input-compact[data-presentation=ulm] #main{grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
+body.input-compact[data-presentation=ulm] #ulm-preview{display:none}
+body.input-compact[data-presentation=prague] main{height:calc(var(--input-height) - 60px)}
+body.input-compact[data-presentation=library] aside{top:60px;height:calc(var(--input-height) - 60px)}
+body.input-compact #apps-drawer{height:calc(var(--input-height) - 16px)}
+body.input-compact #category-games{max-height:none}
+

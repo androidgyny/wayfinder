@@ -10,11 +10,11 @@ function categoryFollow(from,to){
  const old='genre:'+from,next='genre:'+to;
  if(viennaKey===old)viennaKey=next;if(pragueKey===old)pragueKey=next;if(ulmSection===old)ulmSection=next;if(ulmCategoryKey===old)ulmCategoryKey=next;if(cambridgeSection===old)cambridgeSection=next;
 }
-function categoryApply(moves,order,label,undo=false,restoreSource){
+function categoryApply(moves,order,label,undo=false,restoreSource,aiProposal){
  const beforeOrder=[...categoryOrder],beforeSource=categorySource;
  try{
   if(native&&!native.changeCategories)throw Error('Install the updated Android app to manage categories.');
-  if(native){const result=JSON.parse(native.changeCategories(JSON.stringify({moves,order})));if(!result.ok)throw Error(result.message||'Could not save categories.');}
+  if(native){const result=JSON.parse(aiProposal?native.aiApply(JSON.stringify(aiProposal)):native.changeCategories(JSON.stringify({moves,order})));if(!result.ok)throw Error(result.message||'Could not save categories.');}
   else{for(const m of moves)if(!games.some(g=>String(g.id)===m.id&&g.genre===m.from))throw Error('A game changed. Reopen Manage categories and try again.');for(const m of moves)games.find(g=>String(g.id)===m.id).genre=m.to;}
   if(!undo){categoryUndo.push({moves:moves.map(m=>({...m})),beforeOrder,afterOrder:[...order],beforeSource,label});if(categoryUndo.length>20)categoryUndo.shift();}else categoryUndo.pop();
   categoryOrder=[...order];if(native)games=JSON.parse(native.library());
