@@ -365,6 +365,11 @@ body:not([data-selection-style=glow]) .appearance-sample{box-shadow:var(--option
 body[data-presentation=vienna][data-vienna-separators=space] .vienna-section{border-bottom-color:transparent}
 
 #preset-options{padding:18px;border:1px solid var(--line);border-radius:8px;margin:20px 0;background:var(--panel)}
+/* Give preset names room without squeezing the description or overflowing the dialog. */
+#preset-options>.settings-row{flex-wrap:wrap}
+#preset-options>.settings-row>div{flex:1 1 220px}
+#settings-dialog #appearance-presets{width:240px;max-width:100%}
+@media(max-width:450px){#preset-options>.settings-row>div{flex-basis:auto}}
 #preset-options h3{margin-top:0}.preset-actions{display:flex;gap:10px;margin:12px 0}#preset-name{min-width:0;flex:1;background:var(--field);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:10px}#preset-status{color:var(--accent);font-size:13px}
 body[data-cover-corners=square]{--art-radius:0px}body[data-cover-corners=soft]{--art-radius:7px}body[data-cover-corners=rounded]{--art-radius:16px}
 body[data-cover-corners] #grid .game .cover,body[data-cover-corners] #catalogue-art,body[data-cover-corners] .appearance-sample,body[data-cover-corners] .cupertino-preview-tile{border-radius:var(--art-radius)}
@@ -396,7 +401,7 @@ body[data-presentation=kyoto] #grid .game:is(:focus,:focus-visible,.controller-s
 #settings-dialog .settings-group>h2{font-size:24px;line-height:1.25;margin:0 0 16px;color:var(--text)}
 #settings-dialog .settings-subheading{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin:26px 0 2px}
 #settings-dialog .settings-group>.settings-row:last-child{border-bottom:0}
-#settings-appearance #preset-options{margin:0 0 20px}
+#settings-appearance #preset-options{margin:20px 0}
 
 body[data-background-color=muted] #custom-backdrop{filter:saturate(.25)}
 body[data-background-color=palette] #custom-backdrop{filter:url(#background-palette-filter)}

@@ -18,9 +18,28 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const page=await browser.newPage({viewport:{width:1097,height:700}}),errors=[],passed=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
- await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>localStorage.getItem('auditView')||'{}',saveView:v=>{localStorage.setItem('auditView',v);window.savedView=JSON.parse(v)},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
+ await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>localStorage.getItem('auditView')||'{}',saveView:v=>{localStorage.setItem('auditView',v);window.savedView=JSON.parse(v)},library:()=>JSON.stringify(auditDb),installed:()=>{},sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
  await page.waitForTimeout(250);
+ const resetResult=await page.evaluate(()=>{
+  const game={...games[0],id:'426',image:'user/custom.jpg'};editGame(game);$('#reset-cover').click();
+  const result={image:draft.image,fallback:draft.fallback,original:game.image};cancelEditor();return result;
+ });
+ assert.deepEqual(resetResult,{image:'icon/test.audit',fallback:true,original:'user/custom.jpg'});
+ await page.waitForFunction(()=>$('#edit-image').complete&&$('#edit-image').naturalWidth>0);
+ passed.push('Default cover reset uses the package icon for legacy numeric IDs and Cancel preserves artwork');
+ const targetReset=await page.evaluate(()=>{
+  const results=[];
+  for(const image of ['icon/test.audit','user/custom.jpg']){
+   editGame({...games[0],image});appPicker(true);
+   installedApps=[{title:'Replacement',package:'test.replacement',component:'test.replacement/.MainActivity'}];renderApps();$('#app-list button').click();
+   results.push({image:draft.image,package:draft.package});cancelEditor();
+  }
+  return results;
+ });
+ assert.deepEqual(targetReset,[{image:'icon/test.replacement',package:'test.replacement'},{image:'user/custom.jpg',package:'test.replacement'}]);
+ passed.push('Replacing a launch target updates its default icon while preserving custom artwork');
+
  const presetNames=await page.evaluate(()=>availableAppearancePresets().map(p=>p.name));
  assert.deepEqual(presetNames,[...presetNames].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base',numeric:true})));
  for(const name of presetNames){

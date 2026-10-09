@@ -1,5 +1,9 @@
 # Regression checks
 
+The isolated Android runner supports `-e mode direction` to check held D-pad
+repeat without new axis events, acceleration, neutral release, direction reversal,
+focus loss, controller removal, startup overlays, and combined button/hat input.
+
 `layout-settings-regressions.cjs` audits all twelve offered layouts at two
 widths, including artwork on/off and Recent states in Cambridge and Ulm.
 It checks which settings are visible, exclusion of hidden controls from
@@ -106,3 +110,15 @@ The performance mode restores its original audit records in a `finally` block.
 Its timing and app-process PSS values are diagnostic; they exclude renderer
 process memory and do not establish a long-duration leak test. Wake the device
 before IME/input tests; the smoke audit waits for startup playback to finish.
+
+`global-state-regressions.cjs` runs 360 deterministic mixed interactions with
+1,200 synthetic games: layout/category/search/sort changes, controller movement,
+canceled edits, preset preview/Revert, dialogs, persistence and reload. It checks
+record preservation, valid rendered IDs, dialog cleanup and JavaScript errors.
+
+Additional isolated Android modes are `cover-reset` (legacy missing-art repair,
+custom/missing-app preservation, actual icon decoding and editor persistence),
+`startup` (16 startup/dismiss cycles, content visibility and Android 10 status-bar
+restoration), and `sustained` (eight four-second holds through 1,200 games in
+Kyoto, release behavior and matching visual/keyboard selection). Artwork and
+sustained modes restore their original synthetic records after testing.

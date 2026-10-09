@@ -19,9 +19,11 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const page=await browser.newPage({viewport:{width:1097,height:592},hasTouch:true}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
  await page.goto('http://127.0.0.1:'+server.address().port);
+ await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
  const layouts=['library','kyoto','cupertino','venice','oxford','berlin','seattle','vienna','prague','copenhagen','cambridge','ulm'];
  for(const layout of layouts)for(const width of [640,1097])for(const height of [320,260,220])for(const placement of (['kyoto','cupertino'].includes(layout)?['above','below']:['above'])){
   await page.setViewportSize({width,height:700});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   await page.evaluate(({layout,placement})=>{
    document.activeElement.blur();query='';setPresentation(layout);
    games=[{id:'a',title:'Ordinary',genre:'Alpha',image:'audit-image.svg'},{id:'b',title:'Retro title',genre:'Beta',image:'audit-image.svg'}];rebuildGenres();
@@ -43,7 +45,8 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
    assert.equal(await page.evaluate(()=>filtered.length),1);
   }
   // Dismissing the IME while the field remains focused restores the full layout.
-  await page.setViewportSize({width,height:700});await page.waitForTimeout(80);
+  await page.setViewportSize({width,height:700});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await page.waitForTimeout(80);
   assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('input-compact')),false,layout+' restored');
  }
  // Every text field in a dialog must remain reachable in the shrunken viewport,

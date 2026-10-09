@@ -139,6 +139,7 @@ public class ReleaseAudit extends Instrumentation {
         throw new AssertionError("Keyboard state did not settle to "+visible+": "+js("JSON.stringify({native:Portal.keyboardVisible(),compact:document.body.classList.contains('input-compact'),height:innerHeight})"));
     }
     private void keyboardAudit() throws Exception {
+        for(int i=0;i<100&&(Boolean)call(field("startup"),"active",new Class<?>[]{});i++)Thread.sleep(100);
         String library=records().toString();
         js("document.activeElement.blur();Portal.hideKeyboard();setPresentation('kyoto');");waitKeyboard(false);
         js("$('#search').focus();Portal.showKeyboard();");waitKeyboard(true);
@@ -172,7 +173,7 @@ public class ReleaseAudit extends Instrumentation {
         check("true".equals(js("query==='Audit'&&filtered.length===1")),"native touch and keyboard search find synthetic game");
         js("Portal.hideKeyboard();$('#search').value='';query='';update();");waitKeyboard(false);
         check("true".equals(js("JSON.parse(Portal.launchAudit())[0].ok")),"synthetic launch target resolves");
-        js("play('audit')");Thread.sleep(650);
+        js("play('audit')");Thread.sleep(2000);
         check(records().getJSONObject(0).optLong("lastPlayed")>0,"native launch records play history");
         runOnMainSync(()->activity.startActivity(new Intent().setClassName(getTargetContext().getPackageName(),MainActivity.class.getName()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
         Thread.sleep(500);
@@ -220,6 +221,110 @@ public class ReleaseAudit extends Instrumentation {
         }finally{replace(original,null,order);js("reloadLibrary()");}
         check(records().toString().equals(original.toString()),"native performance fixture restores original audit records");
     }
+    private void coverResetAudit() throws Exception {
+        JSONArray original=records();
+        try{
+            JSONObject g=new JSONObject().put("id","426").put("title","Reset fixture").put("genre","Puzzles").put("kind","app").put("package","com.android.settings").put("image","art/426.jpg").put("favorite",true).put("lastPlayed",123L);
+            JSONObject unavailable=new JSONObject(g.toString()).put("id","missing").put("package","audit.not.installed");
+            JSONObject custom=new JSONObject(g.toString()).put("id","custom").put("image","user/keep-cover.jpg");
+            replace(new JSONArray().put(unavailable).put(custom),null,null);
+            String untouched=records().toString();js("reloadLibrary()");
+            check(untouched.equals(records().toString()),"repair preserves custom covers and missing-app references");
+            replace(new JSONArray().put(g),null,null);
+            js("reloadLibrary()");
+            JSONObject repaired=records().getJSONObject(0);
+            check("icon/com.android.settings".equals(repaired.getString("image")),"missing legacy bundled cover repairs to installed icon");
+            check(repaired.getBoolean("favorite")&&repaired.getLong("lastPlayed")==123L,"cover repair preserves favorite and history");
+            js("editGame(games[0]);draft.image='user/canceled-test.jpg';$('#reset-cover').click();");
+            for(int n=0;n<40&&!"true".equals(js("$('#edit-image').complete&&$('#edit-image').naturalWidth>0"));n++)Thread.sleep(100);
+            check("true".equals(js("$('#edit-image').naturalWidth>0&&draft.image==='icon/com.android.settings'")),"reset preview decodes installed app icon");
+            js("$('#edit-form').requestSubmit()");
+            check("icon/com.android.settings".equals(records().getJSONObject(0).getString("image")),"reset image persists through normal editor save");
+            js("editGame(games[0]);");check("true".equals(js("draft.image==='icon/com.android.settings'")),"reopened editor retains reset icon");js("cancelEditor()");
+        }finally{replace(original,null,null);js("cancelEditor();reloadLibrary()");}
+    }
+    private void startupAudit() throws Exception {
+        Object opening=field("startup");
+        runOnMainSync(()->{try{call(opening,"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        for(boolean fullscreen:new boolean[]{false,true}){
+            runOnMainSync(()->{if(fullscreen)activity.getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);else activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);});
+            for(int cycle=0;cycle<8;cycle++){
+                runOnMainSync(()->{try{call(opening,"play",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+                Thread.sleep(100);
+                check((Boolean)call(opening,"active",new Class<?>[]{}),"startup overlay active "+fullscreen+"/"+cycle);
+                if(android.os.Build.VERSION.SDK_INT<30)check((activity.getWindow().getAttributes().flags&android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN)!=0,"startup hides status bar");
+                final boolean finish=cycle%2==0;
+                runOnMainSync(()->{try{call(opening,finish?"finishPlayback":"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+                for(int n=0;n<40&&(Boolean)call(opening,"active",new Class<?>[]{});n++)Thread.sleep(50);
+                check(!(Boolean)call(opening,"active",new Class<?>[]{}),"startup transition clears overlay");
+                check(((android.webkit.WebView)field("web")).getVisibility()==android.view.View.VISIBLE,"library visible after startup transition");
+                if(android.os.Build.VERSION.SDK_INT<30)check(((activity.getWindow().getAttributes().flags&android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN)!=0)==fullscreen,"startup restores prior status bar visibility");
+            }
+        }
+        runOnMainSync(()->activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN));
+    }
+    private void sustainedDirectionAudit() throws Exception {
+        JSONArray original=records(),order=new JSONArray((String)call(field("db"),"order",new Class<?>[]{})),many=new JSONArray();
+        for(int i=0;i<1200;i++)many.put(new JSONObject(original.getJSONObject(0).toString()).put("id","hold_"+i).put("title",String.format(java.util.Locale.US,"Game %04d",i)).put("genre","Games").put("favorite",false));
+        runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        try{
+            replace(many,null,new JSONArray());
+            js("reloadLibrary();query='';genre='';favoritesOnly=false;sort='az';applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Smitchish Dark').values);update();selectPresentation(filtered[300].id);window.holdErrors=[];addEventListener('error',e=>holdErrors.push(e.message));");
+            for(int round=0;round<8;round++){
+                int before=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));directionAxis(round%2==0?1:-1,0);Thread.sleep(4000);directionAxis(0,0);Thread.sleep(250);
+                int after=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
+                check((round%2==0?after-before:before-after)>30,"Kyoto sustained hold advances repeatedly through large library, round "+round);
+                Thread.sleep(250);check(Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"))==after,"Kyoto stops after release, round "+round);
+                check("true".equals(js("$('#grid .presentation-selected')?.dataset.id===presentationId&&document.activeElement?.closest('.game')?.dataset.id===presentationId")),"Kyoto visual selection and focus agree");
+            }
+            check("0".equals(js("holdErrors.length")),"sustained Kyoto navigation has no JavaScript errors");
+        }finally{directionAxis(0,0);replace(original,null,order);js("reloadLibrary()");}
+    }
+    private void directionAxis(float x,float y){
+        runOnMainSync(()->{
+            android.view.MotionEvent.PointerProperties prop=new android.view.MotionEvent.PointerProperties();prop.id=0;
+            android.view.MotionEvent.PointerCoords coords=new android.view.MotionEvent.PointerCoords();
+            coords.setAxisValue(android.view.MotionEvent.AXIS_HAT_X,x);coords.setAxisValue(android.view.MotionEvent.AXIS_HAT_Y,y);
+            long now=android.os.SystemClock.uptimeMillis();
+            android.view.MotionEvent event=android.view.MotionEvent.obtain(now,now,android.view.MotionEvent.ACTION_MOVE,1,new android.view.MotionEvent.PointerProperties[]{prop},new android.view.MotionEvent.PointerCoords[]{coords},0,0,1,1,-7,0,android.view.InputDevice.SOURCE_JOYSTICK,0);
+            activity.onGenericMotionEvent(event);event.recycle();
+        });
+    }
+    private void directionAudit() throws Exception {
+        runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        Thread.sleep(500);
+        js("window.originalController=window.controller;window.directionEvents=[];window.controller=a=>directionEvents.push({a,t:performance.now()})");
+        try{
+            directionAxis(1,0);Thread.sleep(1550);directionAxis(0,0);Thread.sleep(100);
+            JSONArray events=new JSONArray(new JSONTokener(js("JSON.stringify(directionEvents)")).nextValue().toString());
+            check(events.length()>=15,"one axis press repeats without additional motion events: "+events+" held="+field("heldDirection")+" ready="+field("ready")+" focus="+activity.hasWindowFocus());
+            double early=events.getJSONObject(3).getDouble("t")-events.getJSONObject(2).getDouble("t");
+            double late=events.getJSONObject(events.length()-2).getDouble("t")-events.getJSONObject(events.length()-3).getDouble("t");
+            check(early>80&&late<95&&late<early,"held axis accelerates from slow to fast repeat");
+            int count=events.length();Thread.sleep(250);check(Integer.parseInt(js("directionEvents.length"))==count,"neutral stops axis repeats");
+            js("directionEvents=[]");directionAxis(1,0);
+            for(int n=0;n<12;n++){Thread.sleep(50);directionAxis(1,0);}
+            check(Integer.parseInt(js("directionEvents.length"))>=4,"repeated axis reports do not restart initial delay");
+            directionAxis(-1,0);check("\"left\"".equals(js("directionEvents[directionEvents.length-1].a")),"direction reversal responds immediately");
+            runOnMainSync(()->activity.onWindowFocusChanged(false));int stopped=Integer.parseInt(js("directionEvents.length"));Thread.sleep(350);
+            check(Integer.parseInt(js("directionEvents.length"))==stopped,"focus loss cancels repeats");
+            runOnMainSync(()->activity.onWindowFocusChanged(true));
+            js("directionEvents=[]");
+            runOnMainSync(()->activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_DPAD_RIGHT)));
+            directionAxis(1,0);Thread.sleep(420);
+            runOnMainSync(()->activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,KeyEvent.KEYCODE_DPAD_RIGHT)));
+            int keys=Integer.parseInt(js("directionEvents.length"));check(keys>=2&&keys<=4,"button plus hat input shares one repeat stream");
+            Thread.sleep(200);check(Integer.parseInt(js("directionEvents.length"))==keys,"button release stops repeats");
+            js("directionEvents=[]");directionAxis(1,0);
+            runOnMainSync(()->{try{call(field("startup"),"play",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+            Thread.sleep(600);check(Integer.parseInt(js("directionEvents.length"))==1,"startup preview cancels held navigation behind overlay");
+            runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+            js("directionEvents=[]");directionAxis(1,0);
+            runOnMainSync(()->{try{((android.hardware.input.InputManager.InputDeviceListener)field("inputDevices")).onInputDeviceRemoved(-7);}catch(Exception e){throw new RuntimeException(e);}});
+            Thread.sleep(350);check(Integer.parseInt(js("directionEvents.length"))==1,"controller removal cancels held navigation");
+
+        }finally{directionAxis(0,0);runOnMainSync(()->activity.onWindowFocusChanged(false));js("window.controller=window.originalController");}
+    }
     @Override public void onStart() {
         Bundle result=new Bundle();int status=0;
         try {
@@ -229,6 +334,10 @@ public class ReleaseAudit extends Instrumentation {
             check(Boolean.TRUE.equals(field("ready")),"native first launch completes");
             for(int i=0;i<100&&!"true".equals(js("typeof restoring !== 'undefined' && !restoring"));i++)Thread.sleep(100);
             check("true".equals(js("!restoring")),"initial settings restoration completes");
+            if("startup".equals(args.getString("mode"))){startupAudit();result.putString("stream",log.toString());finish(0,result);return;}
+            if("sustained".equals(args.getString("mode"))){sustainedDirectionAudit();result.putString("stream",log.toString());finish(0,result);return;}
+            if("cover-reset".equals(args.getString("mode"))){coverResetAudit();result.putString("stream",log.toString());finish(0,result);return;}
+            if("direction".equals(args.getString("mode"))){directionAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("keyboard".equals(args.getString("mode"))){keyboardAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("artwork".equals(args.getString("mode"))){artworkAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("smoke".equals(args.getString("mode"))){smokeAudit();result.putString("stream",log.toString());finish(0,result);return;}

@@ -17,6 +17,7 @@ final class StartupVideo {
     private final Activity activity; private final FrameLayout root; private final SharedPreferences prefs;
     private final Handler handler=new Handler(Looper.getMainLooper());
     private FrameLayout overlay; private VideoView video; private WebView animation; private Runnable timeout;
+    private boolean statusBarOverride,wasFullscreen,wasStatusBarVisible;
     private int openingColor=0xff151719; private android.app.Dialog curtain; private int transition; private static boolean started;
     StartupVideo(Activity a,FrameLayout r){activity=a;root=r;prefs=a.getSharedPreferences("startup",0);}
     String settings(){try{return new JSONObject().put("enabled",prefs.getBoolean("enabled",true)).put("sound",prefs.getBoolean("sound",true)).put("custom",custom().isFile()).toString();}catch(Exception e){return "{}";}}
@@ -27,6 +28,7 @@ final class StartupVideo {
     boolean active(){return overlay!=null||curtain!=null;}
     void play(){
         dismiss();if(activity.isFinishing()||activity.isDestroyed())return;
+        hideStartupStatusBar();
         root.getChildAt(0).setVisibility(View.INVISIBLE);overlay=new FrameLayout(activity);overlay.setBackgroundColor(activity.getWindow().getStatusBarColor());overlay.setClickable(true);overlay.setOnTouchListener((v,e)->{if(e.getAction()==android.view.MotionEvent.ACTION_UP)finishPlayback();return true;});
         if(!custom().isFile()){playAnimation();return;}
         video=new VideoView(activity);video.setFocusable(false);video.setOnTouchListener((v,e)->{if(e.getAction()==android.view.MotionEvent.ACTION_UP)finishPlayback();return true;});
@@ -72,15 +74,41 @@ final class StartupVideo {
         final int token=++transition;
         curtain=new android.app.Dialog(activity);View black=new View(activity);black.setBackgroundColor(animation!=null?openingColor:0xff151719);black.setAlpha(0);curtain.setContentView(black);curtain.setCancelable(false);
         Window w=curtain.getWindow();w.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));w.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);w.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);w.setWindowAnimations(0);
-        curtain.show();w.setLayout(-1,-1);
+        hideStatusBar(w);curtain.show();w.setLayout(-1,-1);hideStatusBar(w);
         black.animate().alpha(1).setDuration(200).withEndAction(()->{
             if(token!=transition)return;
             removeVideo();
-            black.animate().alpha(0).setStartDelay(150).setDuration(350).withEndAction(()->{if(token==transition&&curtain!=null){curtain.dismiss();curtain=null;}}).start();
+            black.animate().alpha(0).setStartDelay(150).setDuration(350).withEndAction(()->{if(token==transition&&curtain!=null){curtain.dismiss();curtain=null;restoreStatusBar();}}).start();
         }).start();
     }
     private void removeVideo(){if(timeout!=null)handler.removeCallbacks(timeout);if(animation!=null){WebView old=animation;animation=null;old.removeJavascriptInterface("StartupHost");old.stopLoading();old.onPause();if(overlay!=null)overlay.removeView(old);old.destroy();}if(video!=null){video.setOnCompletionListener(null);video.setOnErrorListener(null);video.setOnPreparedListener(null);video.stopPlayback();video=null;}if(overlay!=null){root.removeView(overlay);overlay=null;root.getChildAt(0).setVisibility(View.VISIBLE);((MainActivity)activity).focusStartupGame();}}
-    void dismiss(){transition++;if(curtain!=null){curtain.dismiss();curtain=null;}removeVideo();}
+    void dismiss(){transition++;if(curtain!=null){curtain.dismiss();curtain=null;}removeVideo();restoreStatusBar();}
+    private void hideStartupStatusBar(){
+        Window window=activity.getWindow();
+        wasFullscreen=(window.getAttributes().flags&WindowManager.LayoutParams.FLAG_FULLSCREEN)!=0;
+        wasStatusBarVisible=!wasFullscreen;
+        if(Build.VERSION.SDK_INT>=30){
+            WindowInsets insets=window.getDecorView().getRootWindowInsets();
+            if(insets!=null)wasStatusBarVisible=insets.isVisible(WindowInsets.Type.statusBars());
+        }
+        statusBarOverride=true;
+        hideStatusBar(window);
+    }
+    private void hideStatusBar(Window window){
+        if(Build.VERSION.SDK_INT>=30){
+            WindowInsetsController controller=window.getInsetsController();
+            if(controller!=null)controller.hide(WindowInsets.Type.statusBars());
+        }else window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+    private void restoreStatusBar(){
+        if(!statusBarOverride)return;
+        statusBarOverride=false;
+        Window window=activity.getWindow();
+        if(Build.VERSION.SDK_INT>=30){
+            WindowInsetsController controller=window.getInsetsController();
+            if(controller!=null&&wasStatusBarVisible)controller.show(WindowInsets.Type.statusBars());
+        }else if(!wasFullscreen)window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
     void importVideo(Uri uri) throws Exception {
         File temp=File.createTempFile("startup-",".video",activity.getFilesDir());
         try{

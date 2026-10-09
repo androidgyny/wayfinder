@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.182-beta.12)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.185-beta.13)
 
 Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. It turns installed games into a personal library of covers and categories, with controller navigation and a choice of ways to browse. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
 
@@ -113,7 +113,7 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Latest release
 
-**Beta 12** adds optional AI category organization with proposal review and Undo, category suggestions in the game and app editors, the Smitchish Dark preset, and improved layouts while the keyboard is open. It also expands regression coverage for appearance, controller navigation, backups, and AI request handling. Tested on the Pimax Portal running Android 10.
+**Beta 13** improves held D-pad navigation with steady, accelerating movement, fixes resetting game artwork to the app icon, and keeps default icons in sync when changing a game's launch target. It also refines startup and preset selection, with expanded regression coverage for large libraries, controllers, artwork, backups, and AI suggestions. Tested on the Pimax Portal running Android 10.
 
 ## Project status
 

@@ -32,13 +32,19 @@ public class MainActivity extends Activity {
     private volatile boolean keyboardVisible;
     private ArtworkBrowser artworkBrowser; private final ExecutorService artworkWorker=Executors.newFixedThreadPool(2);
     private final ExecutorService artworkLookupWorker=Executors.newSingleThreadExecutor(); private Future<?> artworkLookupTask;
-    private CustomFont customFont; private BackdropImage background; private AmbientAudio ambient; private Artwork artwork; private File covers; private String pickingId=""; private boolean ready=false; private long lastAxis=0;
-    private final Handler directionHandler=new Handler(Looper.getMainLooper()); private String heldDirection; private int heldKey=-1; private long directionStarted;
-    private final Runnable repeatDirection=new Runnable(){public void run(){if(heldDirection==null||!ready)return;key(heldDirection);directionHandler.postDelayed(this,SystemClock.uptimeMillis()-directionStarted>900?65:110);}};
-    private void stopDirection(){directionHandler.removeCallbacks(repeatDirection);heldDirection=null;heldKey=-1;}
+    private CustomFont customFont; private BackdropImage background; private AmbientAudio ambient; private Artwork artwork; private File covers; private String pickingId=""; private boolean ready=false;
+    private final Handler directionHandler=new Handler(Looper.getMainLooper()); private String heldDirection; private int heldKey=-1,heldDevice=-1; private long directionStarted;
+    private final Runnable repeatDirection=new Runnable(){public void run(){if(heldDirection==null)return;if(!ready||!hasWindowFocus()||startup.active()){stopDirection();return;}key(heldDirection);directionHandler.postDelayed(this,SystemClock.uptimeMillis()-directionStarted>900?65:110);}};
+    private void startDirection(String direction,int keyCode,int deviceId){
+        // Axis noise and duplicate key/hat reports must not restart the hold delay.
+        if(direction.equals(heldDirection)&&heldDevice==deviceId){heldKey=keyCode;return;}
+        stopDirection();heldKey=keyCode;heldDevice=deviceId;heldDirection=direction;directionStarted=SystemClock.uptimeMillis();
+        key(direction);directionHandler.postDelayed(repeatDirection,280);
+    }
+    private void stopDirection(){directionHandler.removeCallbacks(repeatDirection);heldDirection=null;heldKey=-1;heldDevice=-1;}
     private boolean leftTriggerKey,rightTriggerKey,leftTriggerAxis,rightTriggerAxis;
     private InputManager inputManager;
-    private void cancelControllerInput(){stopDirection();lastAxis=0;leftTriggerKey=rightTriggerKey=leftTriggerAxis=rightTriggerAxis=false;startupSkipKey=-1;}
+    private void cancelControllerInput(){stopDirection();leftTriggerKey=rightTriggerKey=leftTriggerAxis=rightTriggerAxis=false;startupSkipKey=-1;}
     private final InputManager.InputDeviceListener inputDevices=new InputManager.InputDeviceListener(){
         public void onInputDeviceAdded(int id){}
         public void onInputDeviceChanged(int id){}
@@ -118,7 +124,7 @@ public class MainActivity extends Activity {
         if(k==KeyEvent.KEYCODE_BUTTON_THUMBR)return true;
         if(k==KeyEvent.KEYCODE_BUTTON_THUMBL)action="apps";else if(k==KeyEvent.KEYCODE_BUTTON_SELECT)action="favorite";else if(k==KeyEvent.KEYCODE_BUTTON_A||k==KeyEvent.KEYCODE_DPAD_CENTER)action="activate";else if(k==KeyEvent.KEYCODE_BUTTON_B)action="back";else if(k==KeyEvent.KEYCODE_BUTTON_X)action="edit";else if(k==KeyEvent.KEYCODE_BUTTON_Y)action="search";else if(k==KeyEvent.KEYCODE_BUTTON_L1)action="genrePrev";else if(k==KeyEvent.KEYCODE_BUTTON_R1)action="genreNext";else if(k==KeyEvent.KEYCODE_BUTTON_START)action="menu";
         else if(k==KeyEvent.KEYCODE_DPAD_UP)action="up";else if(k==KeyEvent.KEYCODE_DPAD_DOWN)action="down";else if(k==KeyEvent.KEYCODE_DPAD_LEFT)action="left";else if(k==KeyEvent.KEYCODE_DPAD_RIGHT)action="right";
-        if(action!=null&&ready&&(k==KeyEvent.KEYCODE_DPAD_UP||k==KeyEvent.KEYCODE_DPAD_DOWN||k==KeyEvent.KEYCODE_DPAD_LEFT||k==KeyEvent.KEYCODE_DPAD_RIGHT)){if(e.getAction()==KeyEvent.ACTION_UP){if(k==heldKey)stopDirection();}else if(e.getRepeatCount()==0){stopDirection();heldKey=k;heldDirection=action;directionStarted=SystemClock.uptimeMillis();key(action);directionHandler.postDelayed(repeatDirection,280);}return true;}
+        if(action!=null&&ready&&(k==KeyEvent.KEYCODE_DPAD_UP||k==KeyEvent.KEYCODE_DPAD_DOWN||k==KeyEvent.KEYCODE_DPAD_LEFT||k==KeyEvent.KEYCODE_DPAD_RIGHT)){if(e.getAction()==KeyEvent.ACTION_UP){if(k==heldKey&&e.getDeviceId()==heldDevice)stopDirection();}else if(e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()==0){startDirection(action,k,e.getDeviceId());}return true;}
         if(action!=null&&ready){if(e.getAction()==KeyEvent.ACTION_DOWN&&(action.equals("genrePrev")||action.equals("genreNext")||e.getRepeatCount()==0))key(action);return true;}return super.dispatchKeyEvent(e);
     }
     @Override public void onWindowFocusChanged(boolean focused){super.onWindowFocusChanged(focused);if(!focused)cancelControllerInput();}
@@ -129,7 +135,21 @@ public class MainActivity extends Activity {
         boolean pressed=left?(leftTriggerKey||leftTriggerAxis):(rightTriggerKey||rightTriggerAxis);
         if(ready&&pressed&&!was)key(left?"pageUp":"pageDown");
     }
-    @Override public boolean onGenericMotionEvent(MotionEvent e){if(startup.active())return true;if((e.getSource()&InputDevice.SOURCE_JOYSTICK)==InputDevice.SOURCE_JOYSTICK&&e.getAction()==MotionEvent.ACTION_MOVE){float lt=Math.max(e.getAxisValue(MotionEvent.AXIS_LTRIGGER),e.getAxisValue(MotionEvent.AXIS_BRAKE)),rt=Math.max(e.getAxisValue(MotionEvent.AXIS_RTRIGGER),e.getAxisValue(MotionEvent.AXIS_GAS));trigger(true,lt>(leftTriggerAxis?.25f:.55f),true);trigger(false,rt>(rightTriggerAxis?.25f:.55f),true);if(heldKey!=-1)return true;float x=e.getAxisValue(MotionEvent.AXIS_HAT_X),y=e.getAxisValue(MotionEvent.AXIS_HAT_Y);if(Math.abs(x)<.4)x=e.getAxisValue(MotionEvent.AXIS_X);if(Math.abs(y)<.4)y=e.getAxisValue(MotionEvent.AXIS_Y);if(Math.max(Math.abs(x),Math.abs(y))<=.6)lastAxis=0;long now=SystemClock.uptimeMillis();if(Math.max(Math.abs(x),Math.abs(y))>.6&&now-lastAxis>90){lastAxis=now;key(Math.abs(x)>Math.abs(y)?(x>0?"right":"left"):(y>0?"down":"up"));}return true;}return super.onGenericMotionEvent(e);}
+    @Override public boolean onGenericMotionEvent(MotionEvent e){
+        if(startup.active())return true;
+        if((e.getSource()&InputDevice.SOURCE_JOYSTICK)!=InputDevice.SOURCE_JOYSTICK||e.getAction()!=MotionEvent.ACTION_MOVE)return super.onGenericMotionEvent(e);
+        if(!ready||!hasWindowFocus())return true;
+        float lt=Math.max(e.getAxisValue(MotionEvent.AXIS_LTRIGGER),e.getAxisValue(MotionEvent.AXIS_BRAKE)),rt=Math.max(e.getAxisValue(MotionEvent.AXIS_RTRIGGER),e.getAxisValue(MotionEvent.AXIS_GAS));
+        trigger(true,lt>(leftTriggerAxis?.25f:.55f),true);trigger(false,rt>(rightTriggerAxis?.25f:.55f),true);
+        if(heldKey!=-1)return true;
+        float x=e.getAxisValue(MotionEvent.AXIS_HAT_X),y=e.getAxisValue(MotionEvent.AXIS_HAT_Y);
+        // A held D-pad takes priority over stick drift on either axis.
+        if(Math.max(Math.abs(x),Math.abs(y))<.4f){x=e.getAxisValue(MotionEvent.AXIS_X);y=e.getAxisValue(MotionEvent.AXIS_Y);}
+        if(Math.max(Math.abs(x),Math.abs(y))<=.6f){if(e.getDeviceId()==heldDevice)stopDirection();}
+        else startDirection(Math.abs(x)>Math.abs(y)?(x>0?"right":"left"):(y>0?"down":"up"),-1,e.getDeviceId());
+        return true;
+    }
+
     private final GeminiCategories gemini=new GeminiCategories(this);
     private final ExecutorService aiWorker=Executors.newSingleThreadExecutor();
     private final Map<String,JSONObject> aiSnapshots=new ConcurrentHashMap<>();
@@ -159,10 +179,18 @@ public class MainActivity extends Activity {
                     String stored=migrated.get(image);
                     if(stored==null){
                         String name=UUID.randomUUID()+".jpg";File target=new File(covers,name);
-                        temporary=File.createTempFile("cover-migration-",".tmp",covers);
-                        try(InputStream in=getAssets().open("www/"+image);FileOutputStream out=new FileOutputStream(temporary)){
-                            byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)out.write(buffer,0,n);out.getFD().sync();
+                        InputStream bundled;
+                        try{bundled=getAssets().open("www/"+image);}
+                        catch(java.io.FileNotFoundException missing){
+                            // Only a missing bundled source warrants replacing the cover reference.
+                            getPackageManager().getApplicationIcon(game.getString("package"));
+                            game.put("image","icon/"+game.getString("package"));game.put("fallback",true);updates.add(game);continue;
                         }
+                        try(InputStream in=bundled){
+                        temporary=File.createTempFile("cover-migration-",".tmp",covers);
+                        try(FileOutputStream out=new FileOutputStream(temporary)){
+                            byte[] buffer=new byte[32768];int n;while((n=in.read(buffer))!=-1)out.write(buffer,0,n);out.getFD().sync();
+                        }}
                         BitmapFactory.Options options=new BitmapFactory.Options();options.inJustDecodeBounds=true;
                         BitmapFactory.decodeFile(temporary.getPath(),options);
                         if(options.outWidth<=0||options.outHeight<=0)throw new IOException("Invalid bundled cover");
