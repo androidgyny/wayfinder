@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.185-beta.13)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.190-beta.14)
 
 Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. It turns installed games into a personal library of covers and categories, with controller navigation and a choice of ways to browse. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
 
@@ -22,7 +22,7 @@ It is designed for Android handhelds with a touchscreen and a game controller. Y
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and images work across twelve layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and images work across thirteen layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -49,10 +49,10 @@ The controller is intended for everyday browsing and launching. The touchscreen 
 1. **Install the Wayfinder APK** on your Android device. If Android asks, allow installation from the app you used to open the file.
 2. **Open Wayfinder and choose Add game.** Add a game that is already installed on the device.
 3. **Choose a category and cover.** Keep the app's name or edit it. You can change any of these later.
-4. **Open Settings to choose a look.** Start with an appearance preset, or select a presentation theme and adjust it yourself.
+4. **Open Settings → Appearance to choose a look.** Start with a preset, or select a layout and adjust it yourself.
 5. **Select a game and launch it.** Browse using touch or your controller.
 
-To open Wayfinder whenever you press Home, go to **Settings → Home & startup → Set as default launcher**. Using it as your home screen is optional.
+To open Wayfinder whenever you press Home, go to **Settings → System & help → Set as default launcher**. Using it as your home screen is optional.
 
 The **Help** page in Settings provides a brief guide to everyday use.
 
@@ -60,31 +60,33 @@ The **Help** page in Settings provides a brief guide to everyday use.
 
 Optional AI tools help organize a large library: **AI Sort** suggests placements in your existing categories, **AI Reorganize** proposes a new category scheme, and **Suggest Category** helps when adding or editing a game or app. Review and adjust proposals before applying them; Undo is available while Wayfinder remains open.
 
-Add your own [Gemini API key](https://aistudio.google.com/apikey) in **Settings → Library**. Requests send titles, package names, and relevant category information to Gemini. Your key is encrypted on the device and excluded from backups.
+Add your own [Gemini API key](https://aistudio.google.com/apikey) in **Settings → System & help → AI assistance**. Requests send titles, package names, and relevant category information to Gemini. Your key is encrypted on the device and excluded from backups.
 
 ## Choose your layout
 
-A **presentation theme** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style that layout separately.
+A **layout** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style it separately; a **preset** combines these choices into a complete look.
 
-Wayfinder includes twelve layouts: Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Ulm, Venice, and Vienna. You do not need to learn their names before starting—try an appearance preset and see which approach suits your collection and screen.
+Wayfinder includes thirteen layouts: aBBotSford, Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Ulm, Venice, and Vienna. You do not need to learn their names before starting—try an appearance preset and see which approach suits your collection and screen. aBBotSford recalls old-school bulletin boards with ANSI lettering, character-drawn windows, and a text directory; open a game’s details to see its cover art.
 
-You can also enable interface sounds, play the included background music or your own audio, and choose a startup video. These options are available in Settings.
+Try **MyNameIsMUD** for aBBotSford’s BBS-style directory with IBM VGA lettering. Its six terminal palettes range from colorful ANSI Classic to Green Screen, Amber Terminal, Ice Blue, Paper Terminal, and Grayscale.
+
+You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
 ![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/02-kyoto.png)
 
-*Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock. Included in Beta 11.*
+*Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock.*
 
-![Ulm: Tengami beside a spacious parchment title list with soft cover shadows.](docs/screenshots/03-ulm.png)
+![aBBotSford: Ultimate Doom selected in a colorful BBS directory with pixel lettering and character-drawn frames.](docs/screenshots/05-abbotsford.png)
 
-*Ulm · Parchment palette · a quiet title list with one selected cover and soft shadows.*
+*aBBotSford · MyNameIsMUD preset · an old-school directory for a modern collection.*
 
 ![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/08-apps.png)
 
-*Apps · Beta 11 · five app sections, a spacious favorites dock, and colorful controller hints.*
+*Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
-These screenshots come directly from the app running on a Pimax Portal. Games and personal cover artwork are not bundled. [See all ten screenshots of library views and the Apps screen in the gallery.](docs/GALLERY.md)
+These ten screenshots were captured on a Pimax Portal with the Beta 14 build. Games and personal cover artwork are not bundled. [See all ten screenshots of library views and the Apps screen in the gallery.](docs/GALLERY.md)
 
 ## Controller reference
 
@@ -113,7 +115,7 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Latest release
 
-**Beta 13** improves held D-pad navigation with steady, accelerating movement, fixes resetting game artwork to the app icon, and keeps default icons in sync when changing a game's launch target. It also refines startup and preset selection, with expanded regression coverage for large libraries, controllers, artwork, backups, and AI suggestions. Tested on the Pimax Portal running Android 10.
+**Beta 14** introduces aBBotSford, a BBS-inspired layout with six terminal palettes, the IBM VGA font, and the MyNameIsMUD preset. Settings are now grouped into Appearance, Library, Apps, Sound & startup, and System & help, with clearer controller navigation. The release also includes fixes for directory focus, dialog spacing, font controls, and palette-tinted backdrops. All ten gallery screenshots have been refreshed on the Pimax Portal running Android 10.
 
 ## Project status
 
@@ -127,7 +129,7 @@ Game artwork belongs to its respective creators. Interface audio includes [Inter
 
 Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
 
-Bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
+Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
 
 App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
 

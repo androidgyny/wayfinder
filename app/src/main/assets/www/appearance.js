@@ -2,6 +2,7 @@ const builtinAppearancePresets=[{"name":"Default","values":{"presentation":"libr
 builtinAppearancePresets.push({name:'Smitchish',values:{...builtinAppearancePresets[0].values,presentation:'kyoto',palette:'daylight',typography:'outfit',kyotoTitlePlacement:'below',coverShadow:'soft',menuButtons:'selected',backdrop:'flat'}});
 builtinAppearancePresets.push({"name":"Smitchish Dark","values":{"cambridgeArtwork":true,"ulmArtwork":false,"coverShadow":"soft","coverBorder":"none","interfaceContrast":"crisp","titleWeight":"medium","presentation":"kyoto","palette":"graphite","typography":"outfit","coverGlow":true,"backdrop":"gradient","backgroundDim":60,"backgroundColor":"original","selectionStyle":"outline","artFit":"cover","size":"comfortable","cupertinoReflections":"subtle","cupertinoSpacing":"airy","berlinCoverSize":120,"kyotoTitlePlacement":"below","cupertinoTitlePlacement":"above","viennaSeparators":"lines","coverCorners":"soft","coverBrightness":"even","menuButtons":"selected"}});
 let coverShadow='off';
+builtinAppearancePresets.push({name:'MyNameIsMUD',values:{...builtinAppearancePresets[0].values,presentation:'abbotsford',typography:'ibmvga',terminalPalette:'ansi',backdrop:'flat',titleWeight:'regular'}});
 let coverBorder='none',interfaceContrast='soft',titleWeight='medium';
 let coverCorners='soft',coverBrightness='dimmed',menuButtons='all',menuTouchId=null,appearancePresets=[];
 // Appearance stays independent of palette and layout. Only the selected image is sampled.
@@ -22,13 +23,13 @@ async function loadCustomFont(info,candidate=false){
   document.fonts.add(face);if(customFontFace)document.fonts.delete(customFontFace);customFontFace=face;customFontInfo=info;
   document.body.style.setProperty('--custom-font-family','"'+face.family+'",sans-serif');
   typography='custom';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=presentation==='cambridge';$('#custom-font-name').textContent=info.name||'Custom font';
-  sizePresentation();persist();if(candidate)toast('Custom font applied');
+  refreshApplicableAppearanceControls();sizePresentation();persist();if(candidate)toast('Custom font applied');
  }catch(e){if(candidate)native?.discardCustomFont?.(info.file);if(request===customFontRequest){$('#typography').value=typography;toast(e.message==='Choose a custom font first'?e.message:'Could not load this font. Try another TTF or OTF file.');}}
 }
 function setTypography(value){
  if(value==='exo2')value='clean';
  if(value==='custom'){refreshCustomFont();if(customFontInfo.url){loadCustomFont(customFontInfo);return;}value='clean';toast('Choose a custom font to use this preset');}
- customFontRequest++;typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans','nunito'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=true;persist();
+ customFontRequest++;typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans','ibmvga','nunito'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=true;refreshApplicableAppearanceControls();persist();
 }
 
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').value=coverGlow?'subtle':'off';queueCoverGlow();persist();}
@@ -71,6 +72,7 @@ function setAtmosphere(background,selection){
 function setViennaSeparators(value){viennaSeparators=value==='space'?'space':'lines';document.body.dataset.viennaSeparators=viennaSeparators;$('#vienna-separators').value=viennaSeparators;persist();}
 function migrateRetiredAppearance(value){return value.presentation==='losangeles'?{...value,...builtinAppearancePresets.find(p=>p.name==='Smitchish Dark').values}:value;}
 function initAppearance(value){
+ setTerminalPalette(value.terminalPalette,false);
  setCambridgeArtwork(value.cambridgeArtwork,false);setUlmArtwork(value.ulmArtwork,false);
  setCoverShadow(value.coverShadow);
  $('#cover-shadow').onchange=e=>{setCoverShadow(e.target.value);effect('select')};
@@ -145,7 +147,7 @@ function setCoverOptions(corners,brightness,menus){
  document.body.dataset.coverCorners=coverCorners;document.body.dataset.coverBrightness=coverBrightness;document.body.dataset.menuButtons=menuButtons;
  $('#cover-corners').value=coverCorners;$('#cover-brightness').value=coverBrightness;$('#menu-buttons').value=menuButtons;persist();
 }
-function appearanceSnapshot(){return {cambridgeArtwork,ulmArtwork,coverShadow,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
+function appearanceSnapshot(){return {terminalPalette,cambridgeArtwork,ulmArtwork,coverShadow,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
 function availableAppearancePresets(){return [...builtinAppearancePresets.filter(b=>!appearancePresets.some(p=>p.name.toLowerCase()===b.name.toLowerCase())),...appearancePresets].sort((a,b)=>compareTitles(a.name,b.name))}
 function refreshPresetButtons(){const name=$('#appearance-presets').value;$('#preset-apply').disabled=!availableAppearancePresets().some(p=>p.name===name);$('#preset-preview').disabled=$('#preset-apply').disabled;$('#preset-delete').disabled=!appearancePresets.some(p=>p.name===name);const preset=availableAppearancePresets().find(p=>p.name===name);$('#preset-origin').textContent=preset?(builtinAppearancePresets.includes(preset)?'Built-in preset':'Your saved preset'):'';}
 function refreshPresets(selected=''){
@@ -161,14 +163,14 @@ function applyAppearancePreset(){
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;applyAppearanceValues(preset.values);$('#preset-status').textContent='Applied “'+preset.name+'”.';
 }
 function applyAppearanceValues(v){v=migrateRetiredAppearance(v);if(v.preserveOtherSettings)v={...appearanceSnapshot(),...v};const wasRestoring=restoring;restoring=true;
- try{setCoverShadow(v.coverShadow);setCambridgeArtwork(v.cambridgeArtwork,false);setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
+ try{if(v.terminalPalette!==undefined)setTerminalPalette(v.terminalPalette,false);setCoverShadow(v.coverShadow);setCambridgeArtwork(v.cambridgeArtwork,false);setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
  finally{restoring=wasRestoring;persist()}
 }
 
 
 function updateInterfaceContrast(){
  const body=document.body;body.style.removeProperty('--line');body.style.removeProperty('--muted');
- if(interfaceContrast!=='crisp')return;
+ if(interfaceContrast!=='crisp'||presentation==='abbotsford')return;
  const style=getComputedStyle(body),rgb=name=>{const hex=style.getPropertyValue(name).trim().replace('#','');return [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16));},bg=rgb('--bg'),text=rgb('--text');
  const mix=ratio=>'rgb('+text.map((v,i)=>Math.round(v*ratio+bg[i]*(1-ratio))).join(',')+')';
  body.style.setProperty('--line',mix(.60));body.style.setProperty('--muted',mix(.90));
@@ -219,24 +221,25 @@ function syncUlmSettingsSample(sample){
 
 // Visibility describes actual layout behavior; hidden values remain saved.
 function refreshApplicableAppearanceControls(){
- const ulm=['ulm','cambridge'].includes(presentation),artwork=presentation==='cambridge'?cambridgeArtwork:!ulm||ulmArtwork;
+ const bbs=presentation==='abbotsford',ulm=['ulm','cambridge','abbotsford'].includes(presentation),artwork=!bbs&&(presentation==='cambridge'?cambridgeArtwork:!ulm||ulmArtwork);
  $('#custom-font-controls').hidden=presentation==='cambridge'||typography!=='custom';
  const shadow=artwork&&['library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge'].includes(presentation);
  document.body.dataset.coverShadowActive=String(shadow);
  const rows={
-  'cover-shadow':shadow,
+  'terminal-palette':bbs,'cover-shadow':shadow,
   'presentation-sort':!['oxford','copenhagen'].includes(presentation)&&!(presentation==='cambridge'&&cambridgeSection==='recent')&&!(presentation==='ulm'&&ulmLevel==='games'&&ulmSection==='recent'),
   'art-fit':artwork,'cover-border':artwork,'cover-corners':artwork,'cover-glow':artwork,
-  'typography':presentation!=='cambridge','cover-brightness':!ulm,'menu-buttons':!['ulm','cambridge','venice'].includes(presentation),
+  'palette':!bbs,'backdrop':true,'interface-contrast':!bbs,'title-weight':typography!=='ibmvga',
+  'typography':presentation!=='cambridge','cover-brightness':!ulm||bbs,'menu-buttons':!['ulm','cambridge','venice','abbotsford'].includes(presentation),
   'selection-style':!ulm
  };
  for(const [id,visible] of Object.entries(rows))$('#'+id).closest('.settings-row').hidden=!visible;
  $('#appearance-preview').hidden=!artwork;
  // Oxford dims neighboring text rows rather than separate cover tiles.
  const brightness=$('#cover-brightness').closest('.settings-row');
- brightness.querySelector('h3').textContent=presentation==='oxford'?'Unselected titles':'Unselected covers';
- brightness.querySelector('p').textContent=presentation==='oxford'?'Keep neighboring titles equally bright or dim them to emphasize your selection.':'Keep neighboring artwork equally bright or dim it to emphasize your selection.';
- for(const heading of document.querySelectorAll('#settings-appearance>.settings-subheading')){
+ brightness.querySelector('h3').textContent=(presentation==='oxford'||bbs)?'Unselected titles':'Unselected covers';
+ brightness.querySelector('p').textContent=(presentation==='oxford'||bbs)?'Keep neighboring titles equally bright or dim them to emphasize your selection.':'Keep neighboring artwork equally bright or dim it to emphasize your selection.';
+ for(const heading of document.querySelectorAll('#settings-appearance .settings-subheading')){
   let node=heading.nextElementSibling,visible=false;
   while(node&&!node.classList.contains('settings-subheading')){if(!node.hidden)visible=true;node=node.nextElementSibling;}
   heading.hidden=!visible;
@@ -248,7 +251,7 @@ function auditionAppearancePreset(){
  if(window.appearanceAudition)return;
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;
  rememberCategoryPlace();
- const navigation=JSON.parse(JSON.stringify({ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
+ const navigation=JSON.parse(JSON.stringify({abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
  window.appearanceAudition={name:preset.name,values:appearanceSnapshot(),navigation,scrollX:scrollX,scrollY:scrollY,settingsScroll:$('#settings-dialog').scrollTop,scrolls:[...document.querySelectorAll('[id]')].filter(n=>n.scrollTop||n.scrollLeft).map(n=>({id:n.id,top:n.scrollTop,left:n.scrollLeft}))};
  hideDialog('#settings-dialog');
  try{applyAppearanceValues(preset.values);$('#audition-name').textContent=preset.name;showDialog('#preset-audition');$('#audition-keep').focus({preventScroll:true});}
@@ -259,7 +262,7 @@ function finishAppearanceAudition(keep){
  hideDialog('#preset-audition');
  if(!keep){
   applyAppearanceValues(audition.values);
-  ({ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
+  ({abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
   renderedCategoryKey=null;$('#search').value=query;$('#sort').value=sort;update();
   for(const saved of audition.scrolls){const node=document.getElementById(saved.id);if(node){node.scrollTop=saved.top;node.scrollLeft=saved.left;}}
   window.scrollTo(audition.scrollX,audition.scrollY);

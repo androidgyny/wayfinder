@@ -122,3 +122,19 @@ custom/missing-app preservation, actual icon decoding and editor persistence),
 restoration), and `sustained` (eight four-second holds through 1,200 games in
 Kyoto, release behavior and matching visual/keyboard selection). Artwork and
 sustained modes restore their original synthetic records after testing.
+
+`settings-navigation-regressions.cjs` checks the five settings sections, hidden
+controls, controller enter/back and focus memory, preset management, preview and
+Revert, AI/startup submenus, unique control IDs and responsive geometry. The
+isolated Android runner accepts `-e mode settings` for native key dispatch and
+submenu focus checks; wake and unlock the device before running. The keyboard
+mode also checks the preset-name field in its new submenu.
+
+The settings suite also covers independent section scroll positions, navigation
+focus synchronization, empty-heading suppression with artwork disabled, return
+from Categories/Library Info/Help, canceling controller dropdowns, and modal
+cleanup without changing game records. Native settings mode additionally checks
+returning from a startup preview to the nested Startup submenu.
+# aBBotSford layout
+
+`node tests/abbotsford-regressions.cjs` checks the ANSI directory with 1,200 synthetic games: search across categories, reading positions, favorites, cover details and launch, persistence, settings isolation, empty collections, keyboard space, frame stacking, and responsive sizes. It writes screenshots to `output/abbotsford/`.

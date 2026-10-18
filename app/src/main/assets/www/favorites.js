@@ -56,7 +56,7 @@ function revealActiveCategory(){
 // Each layout owns its reading position; search results never replace the unfiltered one.
 let categoryPlaces={},renderedCategoryKey=null;
 function categoryPlaceKey(){
- if(!['library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen'].includes(presentation))return null;
+ if(!['library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen','abbotsford'].includes(presentation))return null;
  return JSON.stringify([presentation,presentation==='copenhagen'?'table':presentation==='seattle'&&!seattleBrowse&&!genre&&!favoritesOnly&&!query?'dashboard':favoritesOnly?'favorites':genre||'all',query]);
 }
 function rememberCategoryPlace(){
@@ -83,7 +83,7 @@ function restoreCategoryPlace(state){
  if(!state)return;
  const {place,id}=state,grid=$('#grid');
  if(presentation==='berlin'&&place){grid.scrollTop=place.gridTop;renderBerlin();}
- else if(presentation==='oxford'&&place){grid.scrollTop=place.gridTop;revealCategoryItem(grid,grid.querySelector('.presentation-selected'));}
+ else if(['oxford','abbotsford'].includes(presentation)&&place){grid.scrollTop=place.gridTop;revealCategoryItem(grid,grid.querySelector('.presentation-selected'));}
  for(const row of document.querySelectorAll('.seattle-shelf')){const saved=place?.rows?.find(s=>s.name===row.getAttribute('aria-label'));if(saved)row.scrollLeft=saved.left;}
  const matches=[...grid.querySelectorAll('.game')].filter(n=>n.dataset.id===id);
  const card=matches.find(n=>n.closest('.seattle-shelf')?.getAttribute('aria-label')===place?.row)||matches[0];
@@ -93,7 +93,7 @@ function restoreCategoryPlace(state){
  }
  window.scrollTo({top:place?.top||0,behavior:'instant'});
  // Restore selection visually for touch too, without pulling focus out of search/settings.
- if(card&&!topDialog()&&!editingField())controllerFocus(card,true);
+ if(card&&!topDialog()&&!editingField()&&!(presentation==='abbotsford'&&abbotsfordPane==='categories'))controllerFocus(card,true);
 }
 
 function rememberedCategoryGame(items,id,key){

@@ -1,0 +1,8 @@
+PxPlus IBM VGA 8x16, from The Ultimate Oldschool PC Font Pack v2.2
+Font reconstruction by VileR / int10h.org, 2020.
+https://int10h.org/oldschool-pc-fonts/
+https://int10h.org/oldschool-pc-fonts/readme/
+
+Distributed unmodified under Creative Commons Attribution-ShareAlike 4.0 International.
+https://creativecommons.org/licenses/by-sa/4.0/
+Full license: oldschool-pc-CC-BY-SA-4.0.txt (in this directory).

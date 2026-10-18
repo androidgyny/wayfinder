@@ -23,7 +23,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
 
  for(const viewport of [{width:1097,height:592},{width:480,height:600}]){
  await page.setViewportSize(viewport);
- await page.evaluate(()=>{$('#settings-button').click();$('#open-help').focus();$('#open-help').click();});
+ await page.evaluate(()=>{$('#settings-button').click();selectSettingsSection('system');$('#open-help').focus();$('#open-help').click();});
  assert.equal(await page.evaluate(()=>topDialog().id),'help-dialog');
  await page.evaluate(()=>controller('down'));assert.ok(await page.evaluate(()=>$('#help-dialog').scrollTop)>0);
  await page.evaluate(()=>controller('pageDown'));assert.ok(await page.evaluate(()=>$('#help-dialog').scrollWidth<=$('#help-dialog').clientWidth+1));
@@ -34,11 +34,11 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const before=await page.evaluate(()=>appearanceSnapshot());
  await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='After Hours').values);});
  assert.deepEqual(await page.evaluate(()=>[presentation,backdrop,backgroundDim,palette,selectionStyle,coverShadow]),['oxford','fireflies',75,'midnight','underline','off']);
- await page.evaluate(()=>{showDialog('#settings-dialog');$('#appearance-presets').value='After Hours';refreshPresetButtons();$('#preset-preview').click();});
+ await page.evaluate(()=>{showDialog('#settings-dialog');selectSettingsSection('appearance');$('#appearance-presets').value='After Hours';refreshPresetButtons();$('#preset-preview').click();});
  assert.equal(await page.evaluate(()=>topDialog().id),'preset-audition');
  await page.evaluate(()=>finishAppearanceAudition(false));
  assert.equal(await page.evaluate(()=>topDialog().id),'settings-dialog');
- await page.setViewportSize({width:1097,height:592});await page.evaluate(()=>$('#open-help').click());await page.screenshot({path:'output/after-hours-help-check.png'});
+ await page.setViewportSize({width:1097,height:592});await page.evaluate(()=>{selectSettingsSection('system');$('#open-help').click()});await page.screenshot({path:'output/after-hours-help-check.png'});
  assert.deepEqual(errors,[]);console.log('PASS: Help navigation, After Hours audition, and Oxford appearance');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});

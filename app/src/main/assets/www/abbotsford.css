@@ -1,0 +1,79 @@
+/* aBBotSford is a fixed ANSI terminal treatment; other layouts retain saved appearance choices. */
+body[data-presentation=abbotsford]{--bbs-banner:#171338;--bbs-category-active:#53336d;--bbs-list:#101f3c;--bbs-selection-ink:#1c1230;--bbs-inactive:#263354;--bbs-status:#3c2459;--bbs-coral:#ff9a80}
+#abbotsford-banner,#abbotsford-directory,#abbotsford-list-frame,#abbotsford-status,#abbotsford-footer,#abbotsford-detail-frame{display:none}
+body[data-presentation=abbotsford]{--bg:#0c0b28;--panel:#18133c;--field:#18133c;--text:#eeebff;--muted:#a09ec7;--accent:#69e8ee;--accent-ink:#101222;--accent-soft:#30254c;--line:#46517c;--hover:#30254c;--bbs-gold:#ffe073;--bbs-pink:#f582d0;display:flex;flex-direction:column;height:100dvh;overflow:hidden;background:var(--bg);color-scheme:dark}
+
+body[data-presentation=abbotsford] .topbar{flex:none;min-height:64px;height:64px;padding:0 26px;gap:20px;font-family:WayfinderComputer,monospace;border:0;backdrop-filter:none}
+body[data-presentation=abbotsford] .topbar .brand,body[data-presentation=abbotsford] #menu,body[data-presentation=abbotsford] .search svg{display:none}
+body[data-presentation=abbotsford] .search{max-width:none;border:0;border-bottom:1px dashed var(--line);border-radius:0;background:transparent;padding:0;gap:12px}
+body[data-presentation=abbotsford] .search::before{content:'Find title:';white-space:nowrap;color:var(--accent)}
+body[data-presentation=abbotsford] .search input{font:16px WayfinderComputer,monospace}
+body[data-presentation=abbotsford] .topbar button{border-radius:0;background:transparent;color:var(--accent);font:16px WayfinderComputer,monospace;white-space:nowrap}
+body[data-presentation=abbotsford] .topbar :is(#open-apps,#add-game)::before{content:'[ '}
+body[data-presentation=abbotsford] .topbar :is(#open-apps,#add-game)::after{content:' ]'}
+body[data-presentation=abbotsford] .shell{display:block;flex:1;min-height:0;height:auto}
+body[data-presentation=abbotsford] .shell>aside{display:none!important}
+body[data-presentation=abbotsford] #main{height:100%;padding:0 26px 12px;display:grid;grid-template-columns:minmax(170px,25%) minmax(0,1fr);grid-template-rows:96px minmax(0,1fr) 32px 44px;gap:8px 18px;overflow:hidden;font-family:WayfinderComputer,monospace}
+body[data-presentation=abbotsford] #main>:not(#abbotsford-banner):not(#abbotsford-directory):not(#abbotsford-list-frame):not(#abbotsford-status):not(#abbotsford-footer):not(#grid){display:none!important}
+body[data-presentation=abbotsford] #abbotsford-banner{display:flex;grid-column:1/-1;grid-row:1;flex-direction:column;align-items:center;justify-content:center;background:var(--bbs-banner);min-width:0;overflow:hidden}
+#abbotsford-banner pre{font:14px/1.12 WayfinderComputer,monospace;white-space:pre;margin:0;text-align:center}
+#abbotsford-banner .bbs-cell{display:inline-block;width:1ch;text-align:center}
+#abbotsford-banner .bbs-gold{color:var(--bbs-gold)}#abbotsford-banner .bbs-coral{color:var(--bbs-coral)}#abbotsford-banner .bbs-pink{color:var(--bbs-pink)}
+#abbotsford-banner p{color:var(--accent);font:13px/1.2 WayfinderComputer,monospace;letter-spacing:1px;margin:10px 0 0}
+.bbs-small-logo{display:none}
+body[data-presentation=abbotsford] #abbotsford-directory{display:block;grid-column:1;grid-row:2;position:relative;min-height:0;min-width:0;background:var(--panel);padding:26px 16px 24px}
+body[data-presentation=abbotsford] #abbotsford-categories{overflow:auto;height:100%;touch-action:pan-y;scrollbar-width:thin;overscroll-behavior:contain}
+.bbs-category{font:16px/1.25 WayfinderComputer,monospace;display:flex;gap:8px;align-items:center;min-height:38px;width:100%;padding:7px;background:transparent;border:0;border-radius:0;text-align:left}
+.bbs-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bbs-category small{font:12px WayfinderComputer,monospace}.bbs-cursor{visibility:hidden;flex:none}
+.bbs-category.current{background:var(--hover);color:var(--bbs-gold)}.bbs-category.current .bbs-cursor{visibility:visible}
+body[data-abbotsford-pane=categories] .bbs-category.current{background:var(--bbs-category-active)}
+body[data-presentation=abbotsford] #grid{display:block;grid-column:2;grid-row:2;position:relative;inset:auto;margin:26px 18px 25px 16px;padding:0;width:auto;height:auto;min-height:0;overflow:auto;overscroll-behavior:contain;perspective:none;transform:none;touch-action:pan-y;scrollbar-width:thin;contain:layout paint;z-index:1;background:var(--bbs-list)}
+body[data-presentation=abbotsford] #grid .bbs-row{display:flex!important;position:relative!important;inset:auto!important;align-items:center;width:100%;gap:10px;min-height:38px;margin:0;padding:7px 10px;background:transparent!important;color:var(--text)!important;border:0!important;border-radius:0!important;box-shadow:none!important;outline:none!important;transform:none!important;opacity:1!important;text-align:left;transition:none!important;touch-action:pan-y}
+body[data-presentation=abbotsford] #grid .bbs-row::before,body[data-presentation=abbotsford] #grid .bbs-row::after{display:none!important}
+body[data-presentation=abbotsford] #grid .game-title{display:block;position:static;min-width:0;flex:1;margin:0;font:16px/1.4 WayfinderComputer,monospace;font-weight:var(--game-title-weight,400)!important;color:inherit!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:none}
+body[data-presentation=abbotsford] #grid .presentation-selected{background:var(--bbs-gold)!important;color:var(--bbs-selection-ink)!important}
+body[data-presentation=abbotsford][data-abbotsford-pane=categories] #grid .presentation-selected{background:var(--bbs-inactive)!important;color:var(--text)!important}
+body[data-presentation=abbotsford] .presentation-selected .bbs-cursor{visibility:visible}
+body[data-presentation=abbotsford] .favorite-badge{position:static;background:none;box-shadow:none;color:inherit;font-size:13px;padding:0}
+body[data-presentation=abbotsford] #abbotsford-list-frame{display:block;grid-column:2;grid-row:2;background:var(--bbs-list);position:relative;z-index:0}
+.bbs-frame{position:absolute;inset:0;pointer-events:none;font:16px/20px WayfinderComputer,monospace;overflow:hidden;z-index:2;color:var(--accent)}
+.bbs-edge{position:absolute;white-space:pre;font:inherit}.bbs-top{top:var(--bbs-edge-y,0px);left:var(--bbs-edge-x,0px)}.bbs-bottom{top:var(--bbs-edge-bottom);left:var(--bbs-edge-x,0px)}.bbs-left{top:calc(var(--bbs-edge-y,0px) + 20px);left:var(--bbs-edge-x,0px)}.bbs-right{top:calc(var(--bbs-edge-y,0px) + 20px);left:var(--bbs-edge-right)}.bbs-probe{position:absolute;white-space:pre;font:inherit}
+body[data-presentation=abbotsford] #abbotsford-status{display:block;grid-column:1/-1;grid-row:3;padding:5px 12px;background:var(--bbs-status);color:var(--bbs-gold);font:14px/22px WayfinderComputer,monospace;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+body[data-presentation=abbotsford] #abbotsford-footer{display:flex;align-items:center;grid-row:4;grid-column:1/-1;gap:12px;background:var(--bbs-banner);font:14px WayfinderComputer,monospace;padding:0 6px;min-width:0}
+#abbotsford-footer button{font:inherit;white-space:nowrap;padding:10px 4px;background:transparent;border-radius:0;min-height:40px}#abbotsford-footer button:disabled{opacity:.4}.bbs-key-details{color:#9bd38e}.bbs-key-back{color:#f19291}.bbs-key-edit{color:#8bbcef}.bbs-key-search,.bbs-key-favorite{color:var(--bbs-gold)}.bbs-page-hints{margin-left:auto;color:var(--muted);font-size:12px}.bbs-empty{padding:12px;color:var(--muted)}
+body[data-presentation=abbotsford] #detail{border:0;border-radius:0;background:var(--panel);padding:32px 24px;font-family:WayfinderComputer,monospace;overflow:hidden}
+body[data-presentation=abbotsford] #detail .detail-layout{max-height:calc(90dvh - 64px);overflow:auto;overscroll-behavior:contain;scroll-padding-block:12px}
+body[data-presentation=abbotsford] #abbotsford-detail-frame{display:block;position:absolute}
+body[data-presentation=abbotsford] #detail .detail-art{min-height:0;background:transparent;padding:16px}
+body[data-presentation=abbotsford] #detail .detail-art img{border-radius:0;aspect-ratio:2/3;max-height:60dvh;object-fit:contain}
+body[data-presentation=abbotsford] #detail .detail-info{padding:30px 20px 20px}
+body[data-presentation=abbotsford] #detail .detail-nav{flex-shrink:0;padding-bottom:8px}
+body[data-presentation=abbotsford] #detail h2{font:28px/1.2 WayfinderComputer,monospace;color:var(--bbs-gold);letter-spacing:0}
+body[data-presentation=abbotsford] #detail button{border-radius:0;font-family:WayfinderComputer,monospace}
+body[data-presentation=abbotsford] #detail .close{top:28px;right:28px}
+body[data-presentation=abbotsford] #detail::backdrop{background:var(--bg);backdrop-filter:none}
+@media(max-height:560px){body[data-presentation=abbotsford] #main{grid-template-rows:62px minmax(0,1fr) 28px 38px;gap:4px 14px}#abbotsford-banner pre{font-size:10px}#abbotsford-banner p{margin-top:5px}body[data-presentation=abbotsford] .topbar{height:54px;min-height:54px}.bbs-category,body[data-presentation=abbotsford] #grid .bbs-row{min-height:32px;padding-block:4px}.bbs-page-hints{display:none}}
+@media(max-width:750px){body[data-presentation=abbotsford] #main{padding-inline:12px;column-gap:8px;grid-template-columns:170px minmax(0,1fr)}body[data-presentation=abbotsford] .topbar{padding-inline:12px;gap:8px}#abbotsford-banner pre{font-size:11px}.bbs-page-hints{display:none}#abbotsford-footer{gap:5px!important}}
+@media(max-width:520px){body[data-presentation=abbotsford] #main{grid-template-columns:1fr;grid-template-rows:40px 92px minmax(0,1fr) 30px 44px}#abbotsford-banner pre{display:none}.bbs-small-logo{display:block;color:var(--bbs-gold);font:20px WayfinderComputer,monospace}#abbotsford-banner p{font-size:11px;letter-spacing:0}body[data-presentation=abbotsford] #abbotsford-directory{grid-column:1;grid-row:2;padding:22px 12px}body[data-presentation=abbotsford] #abbotsford-categories{display:flex;align-items:center;gap:6px;overflow-x:auto}.bbs-category{width:auto;flex-shrink:0;max-width:220px}body[data-presentation=abbotsford] :is(#grid,#abbotsford-list-frame){grid-column:1;grid-row:3}body[data-presentation=abbotsford] #abbotsford-status{grid-row:4}body[data-presentation=abbotsford] #abbotsford-footer{grid-row:5;font-size:12px}body[data-presentation=abbotsford] .topbar .app-actions{gap:4px}body[data-presentation=abbotsford] .topbar button{font-size:12px;padding-inline:4px}body[data-presentation=abbotsford] .search::before{display:none}}
+body.input-compact[data-presentation=abbotsford]{height:var(--input-height)}
+body.input-compact[data-presentation=abbotsford] #main{grid-template-rows:minmax(0,1fr);padding-top:8px}
+body.input-compact[data-presentation=abbotsford] :is(#abbotsford-banner,#abbotsford-status,#abbotsford-footer){display:none!important}
+body.input-compact[data-presentation=abbotsford] :is(#abbotsford-directory,#grid,#abbotsford-list-frame){grid-row:1}
+@media(max-width:520px){body.input-compact[data-presentation=abbotsford] #main{grid-template-rows:68px minmax(0,1fr)}body.input-compact[data-presentation=abbotsford] :is(#grid,#abbotsford-list-frame){grid-row:2}}
+@media(max-width:520px){body[data-presentation=abbotsford]:not(.input-compact) #main{grid-template-rows:40px 92px minmax(0,1fr) 30px auto}body[data-presentation=abbotsford] #abbotsford-footer{flex-wrap:wrap;gap:0 8px!important}}
+
+body[data-presentation=abbotsford] #grid .game-title,body[data-presentation=abbotsford] .bbs-name,body[data-presentation=abbotsford] #detail h2{font-family:var(--display-font)}
+body[data-presentation=abbotsford][data-cover-brightness=dimmed] #grid .bbs-row:not(.presentation-selected) .game-title{opacity:.65}
+/* Terminal palettes are scoped to this layout; the general library palette is untouched. */
+body[data-presentation=abbotsford][data-terminal-palette=green]{--bg:#060d09;--panel:#0c1911;--field:#0c1911;--text:#c5f6d0;--muted:#8ab69a;--accent:#79e59a;--accent-ink:#06110a;--accent-soft:#203e2b;--line:#39634a;--hover:#203e2b;--bbs-gold:#9bf7ad;--bbs-pink:#6fca8b;--bbs-coral:#bdf7cb;--bbs-banner:#0a160f;--bbs-category-active:#244a32;--bbs-list:#0a1710;--bbs-selection-ink:#06110a;--bbs-inactive:#244331;--bbs-status:#183223}
+body[data-presentation=abbotsford][data-terminal-palette=amber]{--bg:#120d06;--panel:#21180c;--field:#21180c;--text:#ffe8b6;--muted:#c1a475;--accent:#edb853;--accent-ink:#211405;--accent-soft:#40301a;--line:#725731;--hover:#40301a;--bbs-gold:#ffd278;--bbs-pink:#dca34d;--bbs-coral:#ffe4a2;--bbs-banner:#1b140b;--bbs-category-active:#513b1c;--bbs-list:#1c150b;--bbs-selection-ink:#211405;--bbs-inactive:#44341d;--bbs-status:#382913}
+body[data-presentation=abbotsford][data-terminal-palette=ice]{--bg:#09121f;--panel:#142338;--field:#142338;--text:#e6f1fc;--muted:#9db3ce;--accent:#91c9f5;--accent-ink:#0b2034;--accent-soft:#253e59;--line:#486580;--hover:#253e59;--bbs-gold:#bceaff;--bbs-pink:#b4bfe9;--bbs-coral:#83c9f0;--bbs-banner:#102033;--bbs-category-active:#304e6c;--bbs-list:#102033;--bbs-selection-ink:#0b2034;--bbs-inactive:#29425b;--bbs-status:#20354e}
+body[data-presentation=abbotsford][data-terminal-palette=paper]{color-scheme:light;--bg:#f2efe7;--panel:#e8e6df;--field:#e8e6df;--text:#252b34;--muted:#59616d;--accent:#254f7a;--accent-ink:#ffffff;--accent-soft:#d2dce5;--line:#929ba5;--hover:#d2dce5;--bbs-gold:#234e79;--bbs-pink:#6a426d;--bbs-coral:#875127;--bbs-banner:#e8e5dc;--bbs-category-active:#cad7e2;--bbs-list:#faf8f2;--bbs-selection-ink:#ffffff;--bbs-inactive:#d6dfe8;--bbs-status:#dce3e8}
+body[data-presentation=abbotsford]:is([data-terminal-palette=green],[data-terminal-palette=amber]) #abbotsford-footer .bbs-key{color:var(--accent)}
+body[data-presentation=abbotsford][data-terminal-palette=paper] .bbs-key-details{color:#28613b}
+body[data-presentation=abbotsford][data-terminal-palette=paper] .bbs-key-back{color:#a5363c}
+body[data-presentation=abbotsford][data-terminal-palette=paper] .bbs-key-edit{color:#245e99}
+body[data-presentation=abbotsford][data-terminal-palette=paper] :is(.bbs-key-search,.bbs-key-favorite){color:#795300}
+body[data-presentation=abbotsford][data-terminal-palette=grayscale]{--bg:#101010;--panel:#202020;--field:#202020;--text:#eeeeee;--muted:#b0b0b0;--accent:#d0d0d0;--accent-ink:#141414;--accent-soft:#363636;--line:#6c6c6c;--hover:#363636;--bbs-gold:#eeeeee;--bbs-pink:#a8a8a8;--bbs-coral:#cdcdcd;--bbs-banner:#1b1b1b;--bbs-category-active:#454545;--bbs-list:#181818;--bbs-selection-ink:#141414;--bbs-inactive:#3a3a3a;--bbs-status:#303030}
+body[data-presentation=abbotsford][data-terminal-palette=grayscale] #abbotsford-footer .bbs-key{color:var(--accent)}
+body[data-presentation=abbotsford][data-typography=ibmvga] #grid .game-title,body[data-presentation=abbotsford][data-typography=ibmvga] .bbs-name{font-size:18px}

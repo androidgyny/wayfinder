@@ -148,10 +148,10 @@ public class ReleaseAudit extends Instrumentation {
         check("true".equals(js("document.body.classList.contains('input-compact')===Portal.keyboardVisible()")),"focus transfer follows actual IME visibility");
         js("Portal.hideKeyboard();");waitKeyboard(false);
         check("true".equals(js("getComputedStyle($('#kyoto-dock')).display!=='none'")),"keyboard dismissal restores controller dock");
-        js("showDialog('#settings-dialog');$('#preset-name').focus();Portal.showKeyboard();");waitKeyboard(true);Thread.sleep(200);
-        check("true".equals(js("(()=>{const r=$('#preset-name').getBoundingClientRect(),d=$('#settings-dialog').getBoundingClientRect();return r.top>=d.top&&r.bottom<=d.bottom&&d.top>=0&&d.bottom<=innerHeight})()")),"real keyboard leaves settings field inside visible dialog");
+        js("showDialog('#settings-dialog');selectSettingsSection('appearance');$('#settings-save-look').click();$('#preset-name').focus();Portal.showKeyboard();");waitKeyboard(true);Thread.sleep(200);
+        check("true".equals(js("(()=>{const r=$('#preset-name').getBoundingClientRect(),d=$('#settings-presets-dialog').getBoundingClientRect();return r.top>=d.top&&r.bottom<=d.bottom&&d.top>=0&&d.bottom<=innerHeight})()")),"real keyboard leaves settings field inside visible dialog");
         js("Portal.hideKeyboard();");waitKeyboard(false);
-        js("hideDialog('#settings-dialog');");
+        js("hideDialog('#settings-presets-dialog');hideDialog('#settings-dialog');");
         check(library.equals(records().toString()),"keyboard transitions do not mutate library");
     }
     private void smokeAudit() throws Exception {
@@ -242,6 +242,36 @@ public class ReleaseAudit extends Instrumentation {
             check("icon/com.android.settings".equals(records().getJSONObject(0).getString("image")),"reset image persists through normal editor save");
             js("editGame(games[0]);");check("true".equals(js("draft.image==='icon/com.android.settings'")),"reopened editor retains reset icon");js("cancelEditor()");
         }finally{replace(original,null,null);js("cancelEditor();reloadLibrary()");}
+    }
+    private void settingsKey(int code){runOnMainSync(()->{activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,code));activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,code));});}
+    private void settingsAudit() throws Exception {
+        runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        Thread.sleep(500);
+        check(activity.hasWindowFocus(),"settings audit has native window focus");
+        js("showDialog('#settings-dialog');selectSettingsSection('appearance',true)");
+        settingsKey(KeyEvent.KEYCODE_DPAD_DOWN);settingsKey(KeyEvent.KEYCODE_DPAD_DOWN);
+        check("\"settings-nav-apps\"".equals(js("document.activeElement.id")),"native D-pad selects Apps settings section: "+js("document.activeElement.id"));
+        settingsKey(KeyEvent.KEYCODE_DPAD_RIGHT);
+        check("\"app-icon-pack\"".equals(js("document.activeElement.id")),"native Right enters section controls");
+        settingsKey(KeyEvent.KEYCODE_BUTTON_B);
+        check("\"settings-nav-apps\"".equals(js("document.activeElement.id")),"native B returns to section navigation");
+        js("selectSettingsSection('appearance',true);$('#settings-save-look').focus();$('#settings-save-look').click()");
+        check("\"settings-presets-dialog\"".equals(js("topDialog().id")),"preset management opens in its own dialog");
+        settingsKey(KeyEvent.KEYCODE_BUTTON_B);
+        check("\"settings-save-look\"".equals(js("document.activeElement.id")),"closing submenu restores the launching control");
+        js("selectSettingsSection('system',true);$('#settings-open-ai').focus();$('#settings-open-ai').click()");
+        check("true".equals(js("focusableControl($('#gemini-key'))")),"AI key field is reachable in its submenu");
+        settingsKey(KeyEvent.KEYCODE_BUTTON_B);
+        check("\"settings-open-ai\"".equals(js("document.activeElement.id")),"AI submenu returns focus to System and help");
+        js("selectSettingsSection('sound',true);$('#settings-open-startup').focus();$('#settings-open-startup').click();$('#startup-preview').focus();$('#startup-preview').click()");
+        Thread.sleep(300);
+        check((Boolean)call(field("startup"),"active",new Class<?>[]{}),"startup preview opens from nested settings submenu");
+        runOnMainSync(()->{try{call(field("startup"),"finishPlayback",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        for(int n=0;n<40&&(Boolean)call(field("startup"),"active",new Class<?>[]{});n++)Thread.sleep(50);
+        check("true".equals(js("topDialog()?.id==='settings-startup-dialog'&&document.activeElement.id==='startup-preview'")),"startup preview restores submenu and focus");
+        settingsKey(KeyEvent.KEYCODE_BUTTON_B);
+        check("\"settings-open-startup\"".equals(js("document.activeElement.id")),"startup submenu returns to its parent control");
+        js("hideDialog('#settings-dialog')");
     }
     private void startupAudit() throws Exception {
         Object opening=field("startup");
@@ -334,6 +364,7 @@ public class ReleaseAudit extends Instrumentation {
             check(Boolean.TRUE.equals(field("ready")),"native first launch completes");
             for(int i=0;i<100&&!"true".equals(js("typeof restoring !== 'undefined' && !restoring"));i++)Thread.sleep(100);
             check("true".equals(js("!restoring")),"initial settings restoration completes");
+            if("settings".equals(args.getString("mode"))){settingsAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("startup".equals(args.getString("mode"))){startupAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("sustained".equals(args.getString("mode"))){sustainedDirectionAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("cover-reset".equals(args.getString("mode"))){coverResetAudit();result.putString("stream",log.toString());finish(0,result);return;}

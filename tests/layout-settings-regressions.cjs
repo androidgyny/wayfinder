@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../app/src/main/assets/www');
-const modes=['library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna'];
+const modes=['abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna'];
 const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,genre:'Puzzles',kind:'app',package:'test.audit',image:'audit.svg',favorite:i<2,lastPlayed:i+1}));
 (async()=>{
  const server=http.createServer((req,res)=>{
@@ -27,25 +27,26 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
        while(topDialog())nativeBack();setPresentation(mode);setUlmArtwork(artwork,false);setCambridgeArtwork(artwork,false);
        if(mode==='ulm'){ulmLevel='games';ulmSection=recent?'recent':'all';}
        if(mode==='cambridge')cambridgeSection=recent?'recent':'all';
-       showDialog('#settings-dialog');refreshCupertinoControls();refreshApplicableAppearanceControls();
+       showDialog('#settings-dialog');selectSettingsSection('appearance');refreshCupertinoControls();refreshApplicableAppearanceControls();
        const ids=['cambridge-options','ulm-options','vienna-options','title-placement-options','berlin-options','cupertino-options','presentation-sort','art-fit','cover-border','cover-corners','cover-glow','cover-shadow','typography','cover-brightness','menu-buttons','selection-style','appearance-preview'];
        const controls=dialogControls($('#settings-dialog')).map(e=>e.id);
        const rows=Object.fromEntries(ids.map(id=>{const node=$('#'+id),row=node.closest('.settings-row')||node;return [id,!row.closest('[hidden]')&&getComputedStyle(row).display!=='none'];}));
+       selectSettingsSection('library');rows['presentation-sort']=focusableControl($('#presentation-sort'));controls.push(...dialogControls($('#settings-library')).map(e=>e.id));selectSettingsSection('appearance');
        return {rows,controls,overflow:$('#settings-dialog').scrollWidth-$('#settings-dialog').clientWidth,brightness:$('#cover-brightness').closest('.settings-row').querySelector('h3').textContent};
       },{mode,artwork,recent});
-      const text=['ulm','cambridge'].includes(mode),art=!text||artwork;
+      const text=['ulm','cambridge','abbotsford'].includes(mode),art=mode!=='abbotsford'&&(!text||artwork);
       const expected={
        'cambridge-options':mode==='cambridge','ulm-options':mode==='ulm','vienna-options':mode==='vienna',
        'title-placement-options':['kyoto','cupertino'].includes(mode),'berlin-options':mode==='berlin','cupertino-options':mode==='cupertino',
        'presentation-sort':!['oxford','copenhagen'].includes(mode)&&!(text&&recent),
        'art-fit':art,'cover-border':art,'cover-corners':art,'cover-glow':art,'appearance-preview':art,
        'cover-shadow':art&&!['kyoto','cupertino','venice'].includes(mode),'typography':mode!=='cambridge',
-       'cover-brightness':!text,'menu-buttons':!['ulm','cambridge','venice'].includes(mode),'selection-style':!text
+       'cover-brightness':!text||mode==='abbotsford','menu-buttons':!['ulm','cambridge','venice','abbotsford'].includes(mode),'selection-style':!text
       };
       assert.deepEqual(result.rows,expected,JSON.stringify({mode,artwork,recent,width}));
       for(const [id,visible] of Object.entries(expected))if(!visible)assert.ok(!result.controls.includes(id),'hidden control reachable: '+mode+' '+id);
       assert.ok(result.overflow<=1,mode+' settings overflow');
-      assert.equal(result.brightness,mode==='oxford'?'Unselected titles':'Unselected covers');
+      assert.equal(result.brightness,['oxford','abbotsford'].includes(mode)?'Unselected titles':'Unselected covers');
       records.push({mode,artwork,recent,width,visible:Object.keys(expected).filter(id=>expected[id])});
      }
     }
@@ -53,6 +54,6 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
   }
   assert.deepEqual(errors,[]);
   if(process.env.SETTINGS_AUDIT_REPORT)fs.writeFileSync(process.env.SETTINGS_AUDIT_REPORT,JSON.stringify(records,null,2));
-  console.log('PASS '+records.length+' settings states across all 12 layouts: visible controls, artwork off, Recent sorting, controller reachability, and dialog width');
+  console.log('PASS '+records.length+' settings states across all 13 layouts: visible controls, artwork off, Recent sorting, controller reachability, and dialog width');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1});

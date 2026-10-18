@@ -1,0 +1,136 @@
+/* Exercise the ANSI directory with a large synthetic collection, never the device library. */
+const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
+const {chromium}=require('playwright');
+const root=path.resolve(__dirname,'../app/src/main/assets/www'),out=path.resolve(__dirname,'../output/abbotsford');fs.mkdirSync(out,{recursive:true});
+const fixture=Array.from({length:1200},(_,i)=>({id:'bbs'+i,title:(i%7?'Game ':'Retro ')+String(i).padStart(4,'0')+(i%11?'':' — 漢字 & "quoted"'),genre:['Action','Puzzles','Role-playing','Kids games','Racing','Adventure'][i%6],image:'audit.svg',package:'test.fixture',kind:'app',favorite:i%13===0,lastPlayed:i%5?0:i+1}));
+(async()=>{
+ const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://localhost').pathname;
+  if(u==='/games.js'){res.setHeader('Content-Type','text/javascript');return res.end('window.GAMES='+JSON.stringify(fixture));}
+  if(u==='/audit.svg'){res.setHeader('Content-Type','image/svg+xml');return res.end('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="720"><rect width="480" height="720" fill="#224b60"/><circle cx="240" cy="280" r="120" fill="#dcad63"/><text x="240" y="540" text-anchor="middle" fill="white" font-size="40">TEST COVER</text></svg>');}
+  try{const f=path.join(root,u==='/'?'index.html':u);res.setHeader('Content-Type',u.endsWith('.js')?'text/javascript':u.endsWith('.css')?'text/css':u.endsWith('.ttf')?'font/ttf':'text/html');res.end(fs.readFileSync(f));}catch{res.statusCode=404;res.end();}});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'msedge',headless:true});
+ try{
+  const page=await browser.newPage({viewport:{width:1097,height:592}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.addInitScript(data=>{window.fixtureDb=data;window.Portal={library:()=>JSON.stringify(fixtureDb),view:()=>localStorage.view||'{}',saveView:v=>localStorage.view=v,sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',favorite:(id,value)=>{fixtureDb.find(g=>g.id===id).favorite=value;return '{"ok":true}'},launch:id=>window.launched=id};},fixture);
+  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
+  await page.evaluate(()=>setPresentation('abbotsford'));await page.waitForTimeout(150);
+  assert.equal(await page.locator('#presentation').inputValue(),'abbotsford');
+  assert.equal(await page.locator('#grid .bbs-row').count(),1200);
+  assert.equal(await page.locator('#grid img').count(),0,'no hidden art decoding in text browser');
+  for(const palette of ['ansi','green','amber','ice','grayscale','paper']){
+   await page.evaluate(p=>setTerminalPalette(p),palette);
+   assert.equal(await page.evaluate(()=>appearanceSnapshot().terminalPalette),palette);
+   const contrast=await page.evaluate(()=>{const s=getComputedStyle(document.body),rgb=v=>v.trim().slice(1).match(/../g).map(c=>parseInt(c,16)/255),lum=v=>rgb(v).map(c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4).reduce((s,c,i)=>s+c*[.2126,.7152,.0722][i],0),ratio=(a,b)=>{const x=lum(s.getPropertyValue(a)),y=lum(s.getPropertyValue(b));return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};return Math.min(ratio('--text','--bbs-list'),ratio('--bbs-selection-ink','--bbs-gold'),ratio('--text','--bbs-inactive'));});
+   assert.ok(contrast>=4.5,palette+' text contrast');
+   await page.screenshot({path:path.join(out,'palette-'+palette+'.png')});
+  }
+  await page.reload();await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
+  assert.equal(await page.evaluate(()=>terminalPalette),'paper','terminal palette survives restart');
+  await page.evaluate(()=>{const v=appearanceSnapshot();setTerminalPalette('green');applyAppearanceValues(v)});
+  assert.equal(await page.evaluate(()=>terminalPalette),'paper','preset restores terminal palette');
+  await page.evaluate(()=>setTerminalPalette('ansi'));
+  await page.evaluate(()=>{setTypography('outfit');setPresentation('kyoto');setPresentation('abbotsford')});
+  assert.equal(await page.evaluate(()=>typography),'outfit','layout switches preserve the chosen font');
+  await page.evaluate(()=>{setTerminalPalette('green');setBackgroundColor('palette')});
+  const terminalTint=await page.locator('#background-palette-matrix').getAttribute('values');
+  await page.evaluate(()=>setPresentation('kyoto'));
+  assert.notEqual(await page.locator('#background-palette-matrix').getAttribute('values'),terminalTint,'leaving terminal restores general background tint');
+  await page.evaluate(()=>setPresentation('abbotsford'));
+  assert.equal(await page.locator('#background-palette-matrix').getAttribute('values'),terminalTint,'returning restores terminal background tint');
+  await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='MyNameIsMUD').values));
+  assert.deepEqual(await page.evaluate(()=>[presentation,typography,terminalPalette,backdrop,titleWeight]),['abbotsford','ibmvga','ansi','flat','regular']);
+  await page.evaluate(()=>document.fonts.load('16px IBMVGA'));
+  assert.equal(await page.evaluate(()=>document.fonts.check('16px IBMVGA')),true,'bundled VGA font loads');
+  assert.equal(await page.locator('#grid .game-title').first().evaluate(n=>getComputedStyle(n).fontFamily.includes('IBMVGA')),true);
+  await page.screenshot({path:path.join(out,'dial-up.png')});
+  await page.evaluate(()=>setLightAppearance(coverBorder,interfaceContrast,'bold'));
+  assert.deepEqual(await page.locator('#grid .game-title').first().evaluate(n=>{const s=getComputedStyle(n);return [s.fontSize,s.fontWeight,s.fontSynthesis]}),['18px','400','none'],'VGA is larger and never synthetically bolded');
+  await page.evaluate(()=>setLightAppearance(coverBorder,interfaceContrast,'regular'));
+  assert.equal(await page.locator('#abbotsford-banner').innerText().then(t=>t.includes('PERSONAL GAMES BOARD')),false,'compact banner has no subtitle');
+  assert.equal(await page.locator('#grid .bbs-row').first().evaluate(n=>{const r=n.getBoundingClientRect();return n.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));}),true,'the frame never covers or intercepts game rows');
+  await page.screenshot({path:path.join(out,'directory.png')});
+  const before=await page.evaluate(()=>presentationId);
+  await page.evaluate(()=>{abbotsfordPane='games';abbotsfordFocus();controller('left')});
+  for(const action of ['down','down','up']){
+   const index=await page.evaluate(()=>sectionIndex());
+   await page.evaluate(action=>controller(action),action);
+   assert.equal(await page.evaluate(()=>sectionIndex()),index+(action==='down'?1:-1),'directory direction changes category');
+   assert.equal(await page.evaluate(()=>abbotsfordPane==='categories'&&!!document.activeElement.closest('#abbotsford-categories')),true,'category restoration must not move focus into games');
+  }
+  await page.evaluate(()=>{abbotsfordOpenSection(0);controller('right')});
+  assert.equal(await page.evaluate(()=>abbotsfordPane==='games'&&!!document.activeElement.closest('#grid')),true,'Right returns to games');
+  await page.evaluate(()=>{abbotsfordPane='games';abbotsfordFocus();controller('down')});
+  assert.notEqual(await page.evaluate(()=>presentationId),before);
+  await page.evaluate(()=>controller('activate'));
+  assert.equal(await page.locator('#detail').isVisible(),true);assert.equal(await page.locator('#detail-image').isVisible(),true);
+  await page.evaluate(()=>{filtered[selected].lastPlayed=1;showGame();$('#next').scrollIntoView({block:'nearest'})});
+  assert.equal(await page.evaluate(()=>{const button=$('#next').getBoundingClientRect(),frame=$('#detail').getBoundingClientRect();return button.bottom<frame.bottom-24&&button.right<frame.right-16;}),true,'detail navigation clears the character frame, including Recently Played controls');
+  assert.equal(await page.evaluate(()=>{const f=$('#abbotsford-detail-frame'),s=getComputedStyle(f),x=parseFloat(s.getPropertyValue('--bbs-edge-x')),y=parseFloat(s.getPropertyValue('--bbs-edge-y'));return x>=0&&y>=0&&x<10&&y<10}),true,'character-grid remainder is centered');
+  await page.waitForFunction(()=>$('#detail-image').naturalWidth>0);await page.screenshot({path:path.join(out,'details.png')});
+  await page.evaluate(()=>{document.body.dataset.input='controller';$('#close').focus()});
+  assert.equal(await page.locator('#close').evaluate(n=>{const r=n.getBoundingClientRect(),f=document.querySelector('#detail').getBoundingClientRect(),s=getComputedStyle(n),ring=parseFloat(s.outlineWidth)+parseFloat(s.outlineOffset);return r.top-ring>=f.top+20&&r.right+ring<=f.right-16;}),true,'close-button controller outline stays inside the character frame');
+  await page.screenshot({path:path.join(out,'details-close-focus.png')});
+  await page.locator('#play-detail').click();assert.ok(await page.evaluate(()=>window.launched),'details launches the selected game');
+  await page.evaluate(()=>{if(topDialog())nativeBack();});
+  await page.evaluate(()=>{abbotsfordPane='games';abbotsfordFocus();controller('pageDown')});
+  assert.ok(await page.evaluate(()=>$('#grid').scrollTop>0));
+  const remembered=await page.evaluate(()=>presentationId);
+  await page.evaluate(()=>{controller('genreNext');controller('genrePrev')});
+  assert.equal(await page.evaluate(()=>presentationId),remembered,'category restores reading position');
+  await page.locator('#search').fill('Retro 0000');
+  assert.equal(await page.locator('#grid .bbs-row').count(),1);
+  await page.evaluate(()=>{abbotsfordPane='categories';abbotsfordOpenSection(3)});
+  assert.equal(await page.locator('#grid .bbs-row').count(),0);
+  assert.equal(await page.locator('#grid .show-all-matches').isVisible(),true);
+  await page.evaluate(()=>{controller('right');controller('activate')});
+  assert.equal(await page.locator('#grid .bbs-row').count(),1,'controller reaches matches in other categories');
+  await page.evaluate(()=>{nativeBack();abbotsfordPane='games';abbotsfordFocus();});
+  await page.evaluate(()=>{abbotsfordOpenSection(1);abbotsfordPane='games';abbotsfordFocus();});
+  const count=await page.locator('#grid .bbs-row').count();await page.evaluate(()=>controller('favorite'));
+  assert.equal(await page.locator('#grid .bbs-row').count(),count-1);
+  assert.equal(await page.evaluate(()=>focusableControl(document.activeElement)),true,'favorite removal restores visible focus');
+  await page.evaluate(()=>{abbotsfordOpenSection(0);sort='favorites';update();persist()});
+  assert.equal(await page.evaluate(()=>filtered[0].favorite),true);
+  const saved=await page.evaluate(()=>({id:presentationId,n:games.length}));await page.reload();await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
+  assert.equal(await page.evaluate(()=>presentation),'abbotsford');assert.equal(await page.evaluate(()=>presentationId),saved.id);
+  await page.evaluate(()=>{showDialog('#settings-dialog');selectSettingsSection('appearance');refreshApplicableAppearanceControls()});
+  for(const id of ['palette','cover-shadow','cover-glow','selection-style','appearance-preview'])assert.equal(await page.locator('#'+id).isVisible(),false,id+' does not apply');
+  for(const id of ['typography','cover-brightness','backdrop'])assert.equal(await page.locator('#'+id).isVisible(),true,id+' applies');
+  assert.equal(await page.locator('#title-weight').isVisible(),false,'VGA only has regular weight');
+  await page.evaluate(()=>setAtmosphere('mountain',selectionStyle));
+  assert.equal(await page.locator('#custom-background-controls').isVisible(),true,'backdrop adjustments available');
+  assert.equal(await page.locator('#custom-backdrop').evaluate(n=>!!n.getAttribute('src')&&getComputedStyle(n).display!=='none'),true,'backdrop is loaded and displayed');
+  await page.evaluate(()=>{setTypography('outfit');setLightAppearance(coverBorder,interfaceContrast,'bold');setCoverOptions(coverCorners,'dimmed',menuButtons)});
+  assert.equal(await page.locator('#title-weight').isVisible(),true,'other fonts retain weight choices');
+  await page.evaluate(()=>{typography='custom';refreshApplicableAppearanceControls()});
+  assert.equal(await page.locator('#custom-font-controls').isVisible(),true,'custom-font file controls remain available');
+  await page.evaluate(()=>{setTypography('outfit');setTerminalPalette('grayscale')});
+  const priorLook=await page.evaluate(()=>appearanceSnapshot());
+  await page.evaluate(()=>{$('#appearance-presets').value='MyNameIsMUD';auditionAppearancePreset()});
+  assert.equal(await page.evaluate(()=>typography),'ibmvga','preset audition uses VGA');
+  await page.evaluate(()=>finishAppearanceAudition(false));
+  assert.deepEqual(await page.evaluate(()=>appearanceSnapshot()),priorLook,'cancel restores font, palette and other appearance values');
+  assert.equal(await page.locator('#grid .game-title').first().evaluate(n=>getComputedStyle(n).fontFamily.includes('Outfit')&&getComputedStyle(n).fontWeight==='700'),true,'text appearance changes apply');
+  assert.equal(await page.locator('.bbs-frame').first().evaluate(n=>getComputedStyle(n).fontFamily.includes('WayfinderComputer')),true,'ASCII frame stays monospaced');
+  assert.equal(await page.locator('#grid .bbs-row:not(.presentation-selected) .game-title').first().evaluate(n=>getComputedStyle(n).opacity),'0.65');
+  await page.evaluate(()=>{hideDialog('#settings-dialog');setPresentation('kyoto');showDialog('#settings-dialog');selectSettingsSection('appearance')});
+  assert.equal(await page.locator('#palette').isVisible(),true);
+  assert.equal(await page.locator('#terminal-palette').isVisible(),false,'terminal palette only appears in its own layout');
+  await page.evaluate(()=>{hideDialog('#settings-dialog');setPresentation('abbotsford')});
+  for(const [width,height] of [[1920,1080],[1097,592],[640,360],[390,740]]){
+   await page.setViewportSize({width,height});await page.waitForTimeout(150);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no horizontal overflow '+width);
+   assert.ok(await page.locator('#grid').evaluate(n=>n.clientHeight)>30,'usable list '+width);
+   const bounds=await page.locator('#abbotsford-footer').boundingBox();assert.ok(bounds.y+bounds.height<=height+1,'footer on screen '+width);
+   assert.equal(await page.locator('#abbotsford-footer').evaluate(n=>n.scrollWidth>n.clientWidth),false,'footer controls fit '+width);
+   await page.screenshot({path:path.join(out,'size-'+width+'.png')});
+  }
+  await page.setViewportSize({width:1097,height:592});
+  await page.evaluate(()=>{document.body.classList.add('input-compact');document.body.style.setProperty('--visible-height','300px')});
+  assert.equal(await page.locator('#abbotsford-banner').isVisible(),false);assert.ok(await page.locator('#grid').evaluate(n=>n.clientHeight)>80);
+  await page.evaluate(()=>{document.body.classList.remove('input-compact');document.body.style.removeProperty('--visible-height');games=[];rebuildGenres();update();abbotsfordFocus()});
+  assert.equal(await page.evaluate(()=>focusableControl(document.activeElement)),true,'empty library has category focus');
+  assert.equal(await page.locator('#abbotsford-footer [data-game-action]:enabled').count(),0);
+  assert.deepEqual(errors,[]);console.log('PASS aBBotSford: 1200 games, search, category memory, details artwork, launch, favorite removal, persistence, settings isolation, keyboard and responsive sizes');
+ }finally{await browser.close();await new Promise(r=>server.close(r));}
+})().catch(e=>{console.error(e);process.exitCode=1});

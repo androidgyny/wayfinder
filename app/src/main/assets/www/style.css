@@ -795,3 +795,8 @@ body.search-no-results[data-presentation=prague] .prague-empty{visibility:hidden
 #ai-activity{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--hover);margin:18px 0 12px}#ai-activity[hidden]{display:none}#ai-stages{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}.ai-stage{padding:8px 12px;border-radius:20px;color:var(--muted);font-size:14px}.ai-stage.active{background:var(--accent);color:var(--accent-ink);font-weight:650}.ai-stage.complete{color:var(--text)}#ai-activity-track{height:6px;border-radius:6px;background:var(--line);overflow:hidden;position:relative}#ai-activity-track:after{content:"";position:absolute;width:35%;height:100%;border-radius:6px;background:var(--accent);animation:ai-activity-sweep 1.8s ease-in-out infinite}@keyframes ai-activity-sweep{from{transform:translateX(-110%)}to{transform:translateX(400%)}}@media(prefers-reduced-motion:reduce){#ai-activity-track:after{animation:none;left:32.5%}}
 
 #edit-error,#appearance-error{color:var(--text);background:var(--field);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;font-size:15px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}#edit-error:empty,#appearance-error:empty{display:none}
+@font-face{font-family:IBMVGA;src:url('fonts/PxPlus_IBM_VGA_8x16.ttf') format('truetype');font-weight:400;font-display:swap}
+body[data-typography=ibmvga]{--display-font:IBMVGA,monospace}
+/* VGA has only its original regular weight; synthetic bold distorts the pixel outlines. */
+body[data-typography=ibmvga]{--game-title-weight:400!important;font-synthesis:none}
+body[data-typography=ibmvga] :is(h1,h2,.bbs-name){font-weight:400!important}
