@@ -68,8 +68,6 @@ A **layout** changes how your library is arranged. Colors, backgrounds, fonts, a
 
 Wayfinder includes thirteen layouts: aBBotSford, Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Ulm, Venice, and Vienna. You do not need to learn their names before starting—try an appearance preset and see which approach suits your collection and screen. aBBotSford recalls old-school bulletin boards with ANSI lettering, character-drawn windows, and a text directory; open a game’s details to see its cover art.
 
-Try **MyNameIsMUD** for aBBotSford’s BBS-style directory with IBM VGA lettering. Its six terminal palettes range from colorful ANSI Classic to Green Screen, Amber Terminal, Ice Blue, Paper Terminal, and Grayscale.
-
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
 ![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/02-kyoto.png)
