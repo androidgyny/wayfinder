@@ -9,6 +9,7 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
   const url=new URL(req.url,'http://localhost').pathname;
   if(url==='/audit.svg'){res.setHeader('Content-Type','image/svg+xml');return res.end('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rect width="600" height="900" fill="green"/></svg>');}
   if(url==='/games.js'){res.setHeader('Content-Type','application/javascript');return res.end('window.GAMES='+JSON.stringify(fixture));}
+  if(url==='/font/00000000-0000-0000-0000-000000000000.ttf'){res.setHeader('Content-Type','font/ttf');return res.end(fs.readFileSync(path.join(root,'fonts/Outfit.ttf')));}
   try{const file=path.join(root,url==='/'?'index.html':url);res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':'text/html');res.end(fs.readFileSync(file));}catch{res.statusCode=404;res.end();}
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
@@ -40,7 +41,7 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
        'title-placement-options':['kyoto','cupertino'].includes(mode),'berlin-options':mode==='berlin','cupertino-options':mode==='cupertino',
        'presentation-sort':!['oxford','copenhagen'].includes(mode)&&!(text&&recent),
        'art-fit':art,'cover-border':art,'cover-corners':art,'cover-glow':art,'appearance-preview':art,
-       'cover-shadow':art&&!['kyoto','cupertino','venice'].includes(mode),'typography':mode!=='cambridge',
+       'cover-shadow':art&&!['kyoto','cupertino','venice'].includes(mode),'typography':true,
        'cover-brightness':!text||mode==='abbotsford','menu-buttons':!['ulm','cambridge','venice','abbotsford'].includes(mode),'selection-style':!text
       };
       assert.deepEqual(result.rows,expected,JSON.stringify({mode,artwork,recent,width}));
@@ -53,6 +54,41 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
    }
   }
   assert.deepEqual(errors,[]);
+  for(const [font,family] of [['ibmvga','IBMVGA'],['outfit','Outfit'],['editorial','WayfinderEditorial'],['custom','Outfit']]){
+   const result=await page.evaluate(font=>{
+    while(topDialog())nativeBack();
+    typography=font;document.body.dataset.typography=font;document.body.style.setProperty('--custom-font-family','Outfit');
+    setPresentation('kyoto');setPresentation('cambridge');
+    showDialog('#settings-dialog');refreshApplicableAppearanceControls();
+    const families=['#grid .game-title','.cambridge-category','#cambridge-title','#editor-heading'].map(s=>getComputedStyle($(s)).fontFamily);
+    const customVisible=!$('#custom-font-controls').hidden;
+    while(topDialog())nativeBack();setPresentation('oxford');
+    return {families,customVisible,restored:document.body.dataset.typography,saved:appearanceSnapshot().typography};
+   },font);
+   assert.ok(result.families.every(f=>f.includes(family)),'Cambridge lists and dialog heading use '+font);
+   assert.equal(result.saved,font);assert.equal(result.restored,font);
+   assert.equal(result.customVisible,font==='custom');
+  }
+  await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Title Commander').values));
+  assert.equal(await page.evaluate(()=>typography),'computer','Title Commander chooses its own font');
+  await page.evaluate(async()=>{
+   while(topDialog())nativeBack();setPresentation('cambridge');
+   await loadCustomFont({url:'font/00000000-0000-0000-0000-000000000000.ttf',name:'Audit imported font'});
+  });
+  assert.equal(await page.evaluate(()=>typography),'custom','real imported font loads in Cambridge');
+  assert.ok((await page.locator('#grid .game-title').first().evaluate(n=>getComputedStyle(n).fontFamily)).includes('WayfinderCustom'));
+  for(const width of [640,1097]){
+   await page.setViewportSize({width,height:592});
+   for(const font of ['custom','computer','ibmvga','editorial','clean','outfit','spacegrotesk','oxanium','spacemono','ibmplexsans','nunito']){
+    for(const artwork of [true,false]){
+     const overflow=await page.evaluate(async({font,artwork})=>{
+      if(font==='custom')await loadCustomFont({url:'font/00000000-0000-0000-0000-000000000000.ttf',name:'Audit imported font'});else setTypography(font);setCambridgeArtwork(artwork,false);sizePresentation();
+      return ['#main','#grid','#cambridge-categories'].map(s=>{const n=$(s);return n.scrollWidth-n.clientWidth});
+     },{font,artwork});
+     assert.ok(overflow.every(n=>n<=1),'Cambridge horizontal overflow: '+JSON.stringify({width,font,artwork,overflow}));
+    }
+   }
+  }
   if(process.env.SETTINGS_AUDIT_REPORT)fs.writeFileSync(process.env.SETTINGS_AUDIT_REPORT,JSON.stringify(records,null,2));
   console.log('PASS '+records.length+' settings states across all 13 layouts: visible controls, artwork off, Recent sorting, controller reachability, and dialog width');
  }finally{await browser.close();await new Promise(r=>server.close(r));}

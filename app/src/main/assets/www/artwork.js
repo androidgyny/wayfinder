@@ -5,6 +5,7 @@
  function message(text){$('#artwork-status').textContent=text}
  function pending(value){if(!state)return;state.busy=value;$('#artwork-use').disabled=value||!state.loaded;$('#artwork-download').disabled=value;$('#artwork-play').disabled=value||!!state.searching;$('#artwork-file').disabled=value}
  function open({title,pkg,image,square,apply}){
+  dialog.classList.toggle('apps-ui',!!square);
   state={session:String(Date.now())+'_'+(++serial),title,pkg,square,apply,mode:'fit',x:.5,y:.5,loaded:false,busy:false,load:0};
   $('#artwork-subtitle').textContent=title;$('#artwork-query').value=title+' Android game cover';$('#artwork-url').value='';$('#artwork-search-options').open=false;$('#artwork-title-toggle').checked=true;
   canvas.width=600;canvas.height=square?600:900;preview.style.aspectRatio=square?'1':'2 / 3';

@@ -43,6 +43,15 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await page.setViewportSize({width,height:700});const report=await page.evaluate(()=>{const root=$('#artwork-dialog');$('#artwork-search-options').open=true;const all=dialogControls(root),queue=[$('#artwork-search-options summary')],seen=new Set(queue);while(queue.length){const from=queue.shift();for(const direction of ['up','down','left','right']){controllerFocus(from,true);controller(direction);const next=document.activeElement;if(root.contains(next)&&!seen.has(next)){seen.add(next);queue.push(next)}}}const missing=all.filter(n=>!seen.has(n)).map(n=>n.id);$('#artwork-search-options').open=false;const hidden=dialogControls(root).filter(n=>n.closest('.artwork-options-grid')).map(n=>n.id);return {missing,hidden,overflow:root.scrollWidth>root.clientWidth+1}});assert.deepEqual(report,{missing:[],hidden:[],overflow:false},'Layout/controller width '+width);
  }passed.push('Seven screen widths: every control reachable, collapsed controls excluded, no overflow');
  await page.setViewportSize({width:1097,height:700});await page.evaluate(()=>{$('#artwork-close').click();cancelEditor()});await page.waitForTimeout(30);await page.evaluate(()=>{drawerCatalog=[{package:'test.audit',title:'Audit app'}];openApps();editDrawerApp('test.audit');$('#appearance-choose').click()});await page.waitForFunction(()=>!$('#artwork-use').disabled);assert.deepEqual(await page.evaluate(()=>[$('#artwork-canvas').width,$('#artwork-canvas').height]),[600,600]);await page.click('[data-artwork-mode=compose]');await page.click('#artwork-use');await event('artworkSaved',{session:await session(),image:'user/app-staged.jpg'});assert.equal(await page.evaluate(()=>appearanceDraft.image),'user/app-staged.jpg');assert.equal(await page.evaluate(()=>Portal.appsPreferences()),'[]');passed.push('App artwork remains square and is staged until its editor is saved');
+ for(const font of ['ibmvga','editorial','outfit']){
+  await page.evaluate(font=>{setTypography(font);chooseAppImage()},font);
+  assert.ok((await page.locator('#artwork-dialog h2').evaluate(n=>getComputedStyle(n).fontFamily)).includes('WayfinderClean'),'app artwork font isolated');
+  await page.evaluate(()=>{hideDialog('#artwork-dialog');hideDialog('#app-appearance');hideDialog('#apps-drawer');editGame(games[0]);$('#choose-cover').click()});
+  const styles=await page.evaluate(()=>({app:$('#artwork-dialog').classList.contains('apps-ui'),art:getComputedStyle($('#artwork-dialog h2')).fontFamily,game:getComputedStyle($('#editor-heading')).fontFamily}));
+  assert.equal(styles.app,false);assert.equal(styles.art,styles.game,'shared artwork dialog restores game typography');
+  await page.evaluate(()=>{hideDialog('#artwork-dialog');cancelEditor();openApps();editDrawerApp('test.audit')});
+ }
+ passed.push('Shared artwork editor switches typography correctly between Apps and Games');
  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed,errors},null,2));
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});

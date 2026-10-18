@@ -594,13 +594,13 @@ body[data-presentation=copenhagen] #grid.copenhagen-drag-active .card-edit{point
 body[data-presentation=cambridge]{height:100dvh;overflow:hidden}
 body[data-presentation=cambridge] .shell>aside{display:none!important}
 body[data-presentation=cambridge] .shell{display:block;height:calc(100dvh - 76px)}
-body[data-presentation=cambridge] #main{height:100%;display:grid;grid-template-columns:minmax(170px,24%) minmax(0,1fr) minmax(180px,27%);grid-template-rows:46px minmax(0,1fr) 40px;gap:0;padding:0 24px;overflow:hidden;font-family:WayfinderComputer,monospace;--display-font:WayfinderComputer,monospace}
+body[data-presentation=cambridge] #main{height:100%;display:grid;grid-template-columns:minmax(170px,24%) minmax(0,1fr) minmax(180px,27%);grid-template-rows:46px minmax(0,1fr) 40px;gap:0;padding:0 24px;overflow:hidden;font-family:var(--display-font)}
 body[data-presentation=cambridge][data-cambridge-artwork=false] #main{grid-template-columns:minmax(170px,25%) minmax(0,1fr)}
 body[data-presentation=cambridge] #main>:not(#cambridge-heading):not(#cambridge-categories):not(#grid):not(#cambridge-preview):not(#cambridge-footer){display:none!important}
 body[data-presentation=cambridge] #cambridge-heading{display:flex;grid-row:1;grid-column:1/-1;align-items:center;gap:12px;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line);min-width:0}
 #cambridge-heading strong{color:var(--accent);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 body[data-presentation=cambridge] #cambridge-categories{display:block;grid-column:1;grid-row:2;overflow-y:auto;overflow-x:hidden;border-right:1px solid var(--line);padding:14px 12px 14px 0;min-height:0;touch-action:pan-y;scrollbar-width:thin}
-.cambridge-category{display:flex;align-items:center;gap:9px;width:100%;min-height:38px;padding:9px 10px;border:0;border-left:2px solid transparent;border-radius:0;background:transparent;color:var(--text);font:14px WayfinderComputer,monospace;text-align:left}
+.cambridge-category{display:flex;align-items:center;gap:9px;width:100%;min-height:38px;padding:9px 10px;border:0;border-left:2px solid transparent;border-radius:0;background:transparent;color:var(--text);font:14px var(--display-font);text-align:left}
 .cambridge-category span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.cambridge-category small{color:var(--muted);font-size:11px}
 .cambridge-category.current{background:var(--accent-soft);border-left-color:var(--accent)}
 body[data-cambridge-pane=categories] .cambridge-category.current{background:var(--accent);color:var(--accent-ink)}
@@ -609,8 +609,8 @@ body[data-cambridge-pane=categories] .cambridge-category.current small{color:inh
 body[data-presentation=cambridge] #grid{display:block;grid-row:2;grid-column:2;position:relative;inset:auto;width:auto;height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;padding:14px 16px;perspective:none;transform:none;touch-action:pan-y;scrollbar-width:thin;contain:layout paint}
 body[data-presentation=cambridge] #grid .cambridge-row{display:flex!important;position:relative!important;inset:auto!important;align-items:center;width:100%;gap:10px;min-height:38px;margin:0;padding:8px 10px;background:transparent!important;color:var(--text)!important;border:0!important;border-radius:0!important;box-shadow:none!important;outline:none!important;transform:none!important;opacity:1!important;text-align:left;transition:none!important;touch-action:pan-y}
 body[data-presentation=cambridge] #grid .cambridge-row::before,body[data-presentation=cambridge] #grid .cambridge-row::after{display:none!important}
-body[data-presentation=cambridge] #grid .game-title{display:block;position:static;min-width:0;flex:1;margin:0;font:var(--game-title-weight,500) 16px/1.4 WayfinderComputer,monospace;color:inherit!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:none}
-.cambridge-cursor{visibility:hidden;font:16px WayfinderComputer,monospace}
+body[data-presentation=cambridge] #grid .game-title{display:block;position:static;min-width:0;flex:1;margin:0;font:var(--game-title-weight,500) 16px/1.4 var(--display-font);color:inherit!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:none}
+.cambridge-cursor{visibility:hidden;font:16px var(--display-font)}
 body[data-presentation=cambridge] #grid .presentation-selected{background:var(--accent)!important;color:var(--accent-ink)!important}
 body[data-presentation=cambridge][data-cambridge-pane=categories] #grid .presentation-selected{background:var(--hover)!important;color:var(--text)!important}
 body[data-presentation=cambridge] .presentation-selected .cambridge-cursor{visibility:visible}
@@ -730,7 +730,11 @@ body.search-no-results[data-presentation=prague] .prague-empty{visibility:hidden
 #help-title{margin-right:35px}#help-dialog section{margin-top:22px}#help-dialog h3{font-size:18px;margin:0 0 8px}#help-dialog p,#help-dialog dd{font-size:15px;line-height:1.6;color:var(--muted)}#help-dialog strong{color:var(--text)}#help-dialog p{margin:0}#help-dialog .help-controls{display:grid;grid-template-columns:minmax(100px,1fr) 2fr;gap:7px 18px;margin:0 0 12px}#help-dialog dt{font-size:15px}#help-dialog dd{margin:0}
 
 /* Apps: quiet category cards and a direct-launch dock. */
-#apps-drawer{max-width:1400px;width:calc(100% - 32px);height:94dvh;box-sizing:border-box;overflow-y:auto}
+#apps-drawer{max-width:1400px;width:calc(100% - 32px);height:94dvh;box-sizing:border-box;overflow-y:auto;font-family:WayfinderClean,sans-serif;--display-font:WayfinderClean,sans-serif}
+/* Apps has its own typography, independent of the games' heading styles. */
+:is(#apps-drawer,#app-appearance,#pack-icon-picker,#artwork-dialog.apps-ui,#controller-choice.apps-ui){font-family:WayfinderClean,sans-serif;--display-font:WayfinderClean,sans-serif;font-synthesis:none}
+:is(#app-appearance,#pack-icon-picker,#artwork-dialog.apps-ui,#controller-choice.apps-ui) h2{font-family:WayfinderClean,sans-serif;font-weight:600!important;letter-spacing:0!important}
+#apps-drawer .apps-heading h2{font-family:WayfinderClean,sans-serif;font-weight:400!important;letter-spacing:0!important}
 .apps-heading h2{display:flex;align-items:center;gap:18px;font-weight:400;font-size:24px}.apps-heading h2 small{font-size:20px;letter-spacing:.12em;font-weight:650;border-right:1px solid var(--line);padding-right:18px}
 #app-sections{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin:12px 0}
 #app-sections[hidden],#app-dock[hidden],#drawer-grid[hidden],.drawer-pages[hidden]{display:none}

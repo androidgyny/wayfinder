@@ -303,6 +303,7 @@ function openControllerChoice(select){
  let dialog=$('#controller-choice');
  if(!dialog){dialog=el('dialog');dialog.id='controller-choice';dialog.setAttribute('aria-labelledby','controller-choice-title');dialog.innerHTML='<h2 id="controller-choice-title"></h2><div id="controller-choice-options" role="listbox"></div><p class="muted">↑ ↓ Choose · A Confirm · B Cancel</p>';document.body.append(dialog);dialog.addEventListener('cancel',e=>{e.preventDefault();closeControllerChoice()});}
  const options=[...select.options].filter(o=>!o.disabled&&!o.hidden&&!o.parentElement.disabled);if(!options.length)return;
+ dialog.classList.toggle('apps-ui',!!select.closest('#apps-drawer,#app-appearance,#pack-icon-picker,#artwork-dialog.apps-ui'));
  window.controllerChoice={select,options,index:Math.max(0,options.indexOf(select.selectedOptions[0]))};
  $('#controller-choice-title').textContent=select.getAttribute('aria-label')||select.labels?.[0]?.textContent||select.closest('.settings-row')?.querySelector('h3')?.textContent||'Choose an option';
  const list=$('#controller-choice-options');list.replaceChildren();options.forEach((option,index)=>{const button=el('button','choice-option',option.textContent);button.setAttribute('role','option');button.setAttribute('aria-selected',String(option.selected));button.onclick=()=>{window.controllerChoice.index=index;closeControllerChoice(true)};list.append(button)});

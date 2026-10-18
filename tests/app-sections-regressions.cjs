@@ -24,6 +24,30 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
 
  await page.evaluate(()=>{window.appSaved=[];native.saveApp=raw=>{window.appSaved.push(JSON.parse(raw));return '{"ok":true}'};native.launchApp=p=>window.launched=p;drawerCatalog=Array.from({length:65},(_,i)=>({package:'test.app'+i,title:'Utility '+i}));drawerPreferences=drawerCatalog.slice(0,8).map((a,i)=>({package:a.package,pinned:true,order:i}));native.appsPreferences=()=>JSON.stringify(drawerPreferences);openApps()});
  assert.equal(await page.locator('.app-section').count(),5);
+ for(const font of ['computer','ibmvga','editorial','outfit','clean','spacegrotesk','oxanium','spacemono','ibmplexsans','nunito']){
+  const styles=await page.evaluate(font=>{setTypography(font);const h=getComputedStyle($('.apps-heading h2')),category=getComputedStyle($('.app-section strong'));return {font:h.fontFamily,category:category.fontFamily,weight:h.fontWeight,spacing:h.letterSpacing};},font);
+  assert.equal(styles.font,styles.category,'Apps heading matches category font regardless of '+font);
+  assert.ok(styles.font.includes('WayfinderClean'));assert.equal(styles.weight,'400');assert.equal(styles.spacing,'normal');
+  const editorStyles=await page.evaluate(()=>{
+   editDrawerApp(drawerCatalog[0].package);openControllerChoice($('#appearance-section'));
+   const values=['#app-appearance h2','#appearance-name','#pack-picker-title','#controller-choice-title'].map(selector=>{const s=getComputedStyle($(selector));return {font:s.fontFamily,weight:s.fontWeight,spacing:s.letterSpacing};});
+   closeControllerChoice();hideDialog('#app-appearance');return values;
+  });
+  assert.ok(editorStyles.every(s=>s.font.includes('WayfinderClean')),'App editor and pickers remain independent of '+font);
+  for(const i of [0,2,3]){assert.equal(editorStyles[i].weight,'600');assert.equal(editorStyles[i].spacing,'normal');}
+  const gameChooser=await page.evaluate(()=>{
+   openControllerChoice($('#typography'));
+   const result={appStyle:$('#controller-choice').classList.contains('apps-ui'),font:getComputedStyle($('#controller-choice-title')).fontFamily,gameFont:getComputedStyle($('#editor-heading')).fontFamily};
+   closeControllerChoice();return result;
+  });
+  assert.equal(gameChooser.appStyle,false,'shared chooser clears Apps styling on return to Games');
+  assert.equal(gameChooser.font,gameChooser.gameFont,'Games chooser retains selected font');
+ }
+ for(const mode of ['library','abbotsford','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna']){
+  await page.evaluate(mode=>{setPresentation(mode);setTypography('ibmvga')},mode);
+  assert.ok((await page.locator('.apps-heading h2').evaluate(n=>getComputedStyle(n).fontFamily)).includes('WayfinderClean'),'Apps header isolated in '+mode);
+ }
+ await page.evaluate(()=>{setPresentation('library');setTypography('clean')});
  assert.equal(await page.locator('#drawer-status').isVisible(),false,'overview has no explanatory line');
  for(const viewport of [{width:1097,height:592},{width:640,height:360}]){
   await page.setViewportSize(viewport);
