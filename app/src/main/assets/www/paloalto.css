@@ -1,0 +1,64 @@
+/* The stack geometry belongs to the layout; palette and font remain user choices. */
+.paloalto-part{display:none}
+body[data-palette=platinum]:not([data-presentation=abbotsford]){--bg:#eeeeee;--panel:#fafafa;--field:#ffffff;--hover:#dddddd;--line:#666666;--muted:#555555;--accent:#181818;--text:#181818;--accent-soft:#dedede;--accent-ink:#ffffff;--glow:#0002;color-scheme:light}
+body[data-presentation=paloalto]{overflow:hidden}
+body[data-presentation=paloalto] .topbar{height:64px;border-bottom:1px solid var(--text);gap:20px;background:var(--panel);backdrop-filter:none}
+body[data-presentation=paloalto] .brand{min-width:180px;font-size:20px;letter-spacing:1px}
+body[data-presentation=paloalto] .mark{background:none;color:var(--text);transform:none;height:32px;width:30px}
+body[data-presentation=paloalto] .brand-sub{display:none}
+body[data-presentation=paloalto] .search{height:36px;border:0;border-bottom:1px solid var(--line);border-radius:0}
+body[data-presentation=paloalto] .topbar button{border-radius:0;background:none;color:var(--text)}
+body[data-presentation=paloalto] aside,body[data-presentation=paloalto] #scrim{display:none!important}
+body[data-presentation=paloalto] .shell{display:block;height:calc(100dvh - 64px);padding:14px 26px 50px}
+body[data-presentation=paloalto] #main{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,37%) minmax(0,1fr);grid-template-rows:24px 36px minmax(48px,auto) 22px minmax(80px,1fr) 42px 36px;gap:8px 24px;height:100%;padding:0 18px;background:var(--panel);border:1px solid var(--text);border-radius:0;overflow:visible;font-family:var(--display-font);box-shadow:5px 5px 0 var(--panel),6px 6px 0 var(--text),10px 10px 0 var(--panel),11px 11px 0 var(--text)}
+body[data-presentation=paloalto] #main>:not(.paloalto-part):not(#grid){display:none!important}
+body[data-presentation=paloalto] .paloalto-part{display:block;min-width:0;min-height:0}
+body[data-presentation=paloalto] #paloalto-bar{grid-column:1/-1;margin:4px -14px 0;text-align:center;background:repeating-linear-gradient(to bottom,transparent 0 2px,var(--line) 2px 3px);line-height:19px;font-size:14px}
+#paloalto-stack-name{background:var(--panel);padding:0 14px;display:inline-block;max-width:80%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+body[data-presentation=paloalto] #paloalto-tabs{grid-column:1/-1;display:flex;align-items:stretch;gap:4px;border-bottom:1px solid var(--text);overflow-x:auto;scrollbar-width:none}
+#paloalto-tabs::-webkit-scrollbar{display:none}
+.paloalto-tab{flex:0 0 auto;max-width:220px;padding:5px 16px;background:var(--field);border:1px solid var(--line);border-bottom:0;border-radius:5px 5px 0 0;font:14px var(--display-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.paloalto-tab.current{background:var(--panel);border-color:var(--text);font-weight:600;box-shadow:inset 0 3px var(--text)}
+body[data-presentation=paloalto] .paloalto-tab:focus-visible,body[data-presentation=paloalto][data-input=controller] .paloalto-tab:focus{outline:none;outline-offset:0;background:var(--accent);color:var(--accent-ink);border-color:var(--accent);box-shadow:none}
+.paloalto-tab small{padding-left:8px;opacity:.75}
+body[data-presentation=paloalto] #paloalto-art{grid-column:1;grid-row:3/7;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:2px}
+#paloalto-cover{width:100%;height:100%;max-height:100%;object-fit:contain;min-width:0;min-height:0}
+body[data-presentation=paloalto][data-art-fit=cover] #paloalto-cover{object-fit:cover;aspect-ratio:2/3;width:auto;max-width:100%}
+body[data-presentation=paloalto] #paloalto-cover{border-radius:var(--art-radius,0px);background:var(--panel)}
+body[data-presentation=paloalto][data-cover-border=hairline] #paloalto-cover{border:1px solid var(--line)}
+body[data-presentation=paloalto][data-cover-border=matte] #paloalto-cover{border:6px solid var(--panel)}
+/* Preview the opaque stack beneath the artwork, with the backdrop outside it. */
+body[data-presentation=paloalto] #settings-appearance #appearance-preview{padding:24px 5px 12px}
+body[data-presentation=paloalto] #appearance-preview .appearance-sample-space::before{content:'';position:absolute;inset:-8px -6px;background:var(--panel);border:1px solid var(--text);box-shadow:3px 3px 0 var(--panel),4px 4px 0 var(--text);z-index:-1}
+body[data-presentation=paloalto] #appearance-preview .appearance-sample{border:0;border-radius:0;background:transparent;outline:none;box-shadow:none;overflow:visible}
+body[data-presentation=paloalto] #appearance-preview .appearance-sample::after{display:none}
+body[data-presentation=paloalto] #appearance-preview>p{margin-top:28px}
+body[data-presentation=paloalto] #paloalto-heading{grid-column:2;grid-row:3;align-self:center}
+#paloalto-title{font:var(--game-title-weight,500) clamp(24px,3.8vw,48px)/1.12 var(--display-font);letter-spacing:0;margin:0;padding:0 0 8px;border-bottom:1px solid var(--text);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#paloalto-genre{margin:7px 0 0;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=paloalto] #paloalto-index-label{grid-column:2;grid-row:4;font-size:14px;align-self:end}
+body[data-presentation=paloalto] #grid{grid-column:2;grid-row:5;position:static;display:grid;grid-auto-flow:column;grid-template-rows:repeat(4,minmax(0,1fr));grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 12px;width:auto;height:auto;min-height:0;min-width:0;padding:2px;overflow:hidden;transform:none;perspective:none;inset:auto;align-items:stretch}
+body[data-presentation=paloalto] #grid .paloalto-row{display:flex;align-items:center;gap:6px;position:static;transform:none!important;box-shadow:none!important;border:0;border-radius:0;background:transparent;color:var(--text);padding:4px 6px;min-height:0;min-width:0;text-align:left;outline-offset:-2px}
+body[data-presentation=paloalto] #grid .paloalto-row::before,body[data-presentation=paloalto] #grid .paloalto-row::after{display:none}
+body[data-presentation=paloalto] #grid .game-title{position:static;margin:0;display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;font:var(--game-title-weight,500) 16px/1.25 var(--display-font);text-shadow:none;color:inherit!important}
+body[data-presentation=paloalto] #grid .presentation-selected{background:var(--accent);color:var(--accent-ink)}
+body[data-presentation=paloalto] .favorite-badge{position:static;background:none;color:inherit;padding:0;font-size:12px}
+body[data-presentation=paloalto] #grid.search-empty-grid{display:flex;flex-direction:column;overflow:auto}
+.paloalto-empty{grid-area:1/1/-1/-1;align-self:center;color:var(--muted);font-size:15px}
+body[data-presentation=paloalto] #paloalto-actions{grid-column:2;grid-row:6;display:flex;gap:10px;align-items:center;justify-content:flex-end}
+#paloalto-actions button,#paloalto-footer button{font-family:var(--display-font);border:1px solid var(--text);border-radius:0;padding:5px 16px;background:var(--panel);box-shadow:2px 2px 0 var(--text);min-height:30px}
+#paloalto-actions #paloalto-play{min-width:120px;font-size:21px;font-weight:600}
+body[data-presentation=paloalto] #paloalto-footer{grid-column:1/-1;grid-row:7;border-top:1px solid var(--text);display:flex;align-items:center;gap:10px;font-size:14px}
+#paloalto-count{flex:1}#paloalto-count::before{content:'▱ ';font-size:22px}#paloalto-position{margin-right:auto}#paloalto-footer button{min-height:26px;padding:2px 12px;box-shadow:none}
+body[data-presentation=paloalto] #paloalto-hints{position:absolute;left:0;right:0;top:calc(100% + 17px);height:30px;display:flex;align-items:center;justify-content:center;gap:24px;font:13px WayfinderClean,sans-serif}
+#paloalto-hints button{display:flex;align-items:center;gap:8px;background:none;padding:0;font:inherit}
+.paloalto-key{display:grid;place-items:center;width:23px;height:23px;border:2px solid;border-radius:50%;font:bold 13px WayfinderClean,sans-serif;background:var(--panel)}
+.paloalto-key.a{border-color:#35ac42}.paloalto-key.b{border-color:#e84747}.paloalto-key.x{border-color:#3986eb}.paloalto-key.y{border-color:#dba900}#paloalto-hints small{color:var(--muted);font-size:10px}
+@media(max-width:750px){body[data-presentation=paloalto] .shell{padding:10px 14px 46px}body[data-presentation=paloalto] #main{gap:6px 12px;padding:0 12px;grid-template-columns:minmax(0,34%) minmax(0,1fr)}.paloalto-tab{padding-inline:10px;font-size:12px}#paloalto-title{font-size:25px}body[data-presentation=paloalto] #grid .game-title{font-size:13px}#paloalto-hints small{display:none}body[data-presentation=paloalto] .brand{min-width:0}body[data-presentation=paloalto] .brand>span:last-child{display:none}}
+@media(max-height:450px){body[data-presentation=paloalto] .topbar{height:48px}body[data-presentation=paloalto] .shell{height:calc(100dvh - 48px);padding-top:6px;padding-bottom:40px}body[data-presentation=paloalto] #main{grid-template-rows:18px 28px 38px 16px minmax(50px,1fr) 30px 26px;gap:3px 12px}#paloalto-title{font-size:23px;padding-bottom:3px}#paloalto-genre{font-size:10px;margin-top:3px}#paloalto-actions button{min-height:24px;padding:2px 10px}#paloalto-actions #paloalto-play{font-size:16px}body[data-presentation=paloalto] #paloalto-footer{font-size:11px}body[data-presentation=paloalto] #grid .game-title{font-size:12px}}
+body.input-compact[data-presentation=paloalto] .shell{height:calc(var(--input-height) - 60px);padding:4px 12px 12px}
+body.input-compact[data-presentation=paloalto] #main{grid-template-columns:1fr;grid-template-rows:28px 18px minmax(40px,1fr);gap:3px;padding:4px 8px}
+body.input-compact[data-presentation=paloalto] :is(#paloalto-bar,#paloalto-art,#paloalto-heading,#paloalto-actions,#paloalto-footer,#paloalto-hints){display:none}
+body.input-compact[data-presentation=paloalto] #paloalto-tabs{grid-row:1}
+body.input-compact[data-presentation=paloalto] #paloalto-index-label{grid-column:1;grid-row:2}
+body.input-compact[data-presentation=paloalto] #grid{grid-column:1;grid-row:3}

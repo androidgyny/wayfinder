@@ -49,12 +49,12 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  }
  await page.evaluate(()=>{setPresentation('ulm');query='retro';update();ulmOpen('genre:Beta');});assert.deepEqual(await page.evaluate(()=>[query,filtered.length]),['retro',1]);
 
- for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice']){
+ for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice','paloalto']){
  await page.evaluate(mode=>{query='';setPresentation('library');genre='Beta';favoritesOnly=false;update();setPresentation(mode);query='retro';update();controllerFocus($('#grid .presentation-selected')||$('#grid .game'));controller('back');},mode);
  assert.deepEqual(await page.evaluate(()=>[genre,query]),['Beta',''],mode+' Back clears search without exiting category');
  }
  // Searching must not silently select another category or clear the query on layout changes.
- for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice']){
+ for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice','paloalto']){
  await page.evaluate(()=>{query='';setPresentation('library');genre='Beta';favoritesOnly=false;update();$('#search').value='retro';$('#search').dispatchEvent(new Event('input'));});
  await page.evaluate(mode=>setPresentation(mode),mode);
  assert.deepEqual(await page.evaluate(()=>[query,genre,filtered.length]),['retro','Beta',1],mode+' preserves scope');
@@ -69,7 +69,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  }
  await page.evaluate(()=>{setPresentation('berlin');genre='Alpha';query='retro';update();controllerFocus($('#category-current'));controller('down');controller('up');});
  assert.equal(await page.evaluate(()=>document.activeElement.id),'category-current','Berlin can leave empty action');
- for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice','vienna','prague','copenhagen']){
+ for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice','vienna','prague','copenhagen','paloalto']){
  await page.evaluate(mode=>{query='';setPresentation(mode);if(mode==='ulm')ulmOpen('all');query='zz nonexistent';update();},mode);
  assert.equal(await page.locator('.show-all-matches').count(),0,mode+' global empty has no false escape');
  const count=await page.locator('.search-empty').count();assert.equal(count,1,mode+' single feedback');

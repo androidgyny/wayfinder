@@ -19,6 +19,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const page=await browser.newPage({viewport:{width:1097,height:592},hasTouch:true}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
  await page.goto('http://127.0.0.1:'+server.address().port);
+ await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
  const findings=[];
  async function check(name,condition){if(!condition)findings.push(name);}
  await page.setViewportSize({width:1097,height:700});
@@ -51,7 +52,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await nativePage.close();
  // Keep a selection deep in a populated list while the keyboard changes its
  // visible rows. This exercises virtualized Berlin and the text/artwork panes.
- for(const layout of ['kyoto','cupertino','venice','berlin','oxford','cambridge','ulm']){
+ for(const layout of ['kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto']){
   await page.setViewportSize({width:1097,height:700});
   await page.evaluate(layout=>{
    window.wayfinderKeyboardChanged(false);document.activeElement.blur();

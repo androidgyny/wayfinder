@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../app/src/main/assets/www');
-const modes=['abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna'];
+const modes=['abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna','paloalto'];
 const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,genre:'Puzzles',kind:'app',package:'test.audit',image:'audit.svg',favorite:i<2,lastPlayed:i+1}));
 (async()=>{
  const server=http.createServer((req,res)=>{
@@ -40,9 +40,9 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
        'cambridge-options':mode==='cambridge','ulm-options':mode==='ulm','vienna-options':mode==='vienna',
        'title-placement-options':['kyoto','cupertino'].includes(mode),'berlin-options':mode==='berlin','cupertino-options':mode==='cupertino',
        'presentation-sort':!['oxford','copenhagen'].includes(mode)&&!(text&&recent),
-       'art-fit':art,'cover-border':art,'cover-corners':art,'cover-glow':art,'appearance-preview':art,
-       'cover-shadow':art&&!['kyoto','cupertino','venice'].includes(mode),'typography':true,
-       'cover-brightness':!text||mode==='abbotsford','menu-buttons':!['ulm','cambridge','venice','abbotsford'].includes(mode),'selection-style':!text
+       'art-fit':art,'cover-border':art,'cover-corners':art,'cover-glow':art&&mode!=='paloalto','appearance-preview':art,
+       'cover-shadow':art&&!['kyoto','cupertino','venice','paloalto'].includes(mode),'typography':true,
+       'cover-brightness':mode!=='paloalto'&&(!text||mode==='abbotsford'),'menu-buttons':!['ulm','cambridge','venice','abbotsford','paloalto'].includes(mode),'selection-style':!text&&mode!=='paloalto'
       };
       assert.deepEqual(result.rows,expected,JSON.stringify({mode,artwork,recent,width}));
       for(const [id,visible] of Object.entries(expected))if(!visible)assert.ok(!result.controls.includes(id),'hidden control reachable: '+mode+' '+id);
@@ -90,6 +90,6 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
    }
   }
   if(process.env.SETTINGS_AUDIT_REPORT)fs.writeFileSync(process.env.SETTINGS_AUDIT_REPORT,JSON.stringify(records,null,2));
-  console.log('PASS '+records.length+' settings states across all 13 layouts: visible controls, artwork off, Recent sorting, controller reachability, and dialog width');
+  console.log('PASS '+records.length+' settings states across all 14 layouts: visible controls, artwork off, Recent sorting, controller reachability, and dialog width');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1});

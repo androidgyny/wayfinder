@@ -4,15 +4,15 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.190-beta.14)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.191-beta.15)
 
 Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. It turns installed games into a personal library of covers and categories, with controller navigation and a choice of ways to browse. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
 
 It is designed for Android handhelds with a touchscreen and a game controller. You can open Wayfinder like any other app or make it your Android home screen. Games are installed separately; Wayfinder organizes and opens them.
 
-![Copenhagen: twelve covers arranged on a green felt table with KAMI selected.](docs/screenshots/10-copenhagen.png)
+![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta15/03-paloalto.png)
 
-*Copenhagen · Full House preset · a table of games to discover.*
+*Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
 
 [Explore the screenshot gallery →](docs/GALLERY.md)
 
@@ -22,7 +22,7 @@ It is designed for Android handhelds with a touchscreen and a game controller. Y
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and images work across thirteen layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and images work across fourteen layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -64,27 +64,29 @@ Add your own [Gemini API key](https://aistudio.google.com/apikey) in **Settings 
 
 ## Choose your layout
 
+New installations start with **Hyperstack**, a classic-computer-inspired card catalogue with category tabs, portrait artwork, and a paged title index. Prefer a cover grid? Try **Playbyte** with its **Evergreen** color scheme.
+
 A **layout** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style it separately; a **preset** combines these choices into a complete look.
 
-Wayfinder includes thirteen layouts: aBBotSford, Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Prague, Seattle, Ulm, Venice, and Vienna. You do not need to learn their names before starting—try an appearance preset and see which approach suits your collection and screen. aBBotSford recalls old-school bulletin boards with ANSI lettering, character-drawn windows, and a text directory; open a game’s details to see its cover art.
+Wayfinder includes fourteen layouts: aBBotSford, Alexandria, Berlin, Cambridge, Copenhagen, Cupertino, Kyoto, Oxford, Palo Alto, Prague, Seattle, Ulm, Venice, and Vienna. You do not need to learn their names before starting—try an appearance preset and see which approach suits your collection and screen. aBBotSford recalls old-school bulletin boards with ANSI lettering, character-drawn windows, and a text directory; open a game’s details to see its cover art.
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/02-kyoto.png)
+![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/beta15/02-kyoto.png)
 
 *Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock.*
 
-![aBBotSford: Ultimate Doom selected in a colorful BBS directory with pixel lettering and character-drawn frames.](docs/screenshots/05-abbotsford.png)
+![aBBotSford: Ultimate Doom selected in a colorful BBS directory with pixel lettering and character-drawn frames.](docs/screenshots/beta15/05-abbotsford.png)
 
 *aBBotSford · MyNameIsMUD preset · an old-school directory for a modern collection.*
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/08-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta15/08-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
-These ten screenshots were captured on a Pimax Portal with the Beta 14 build. Games and personal cover artwork are not bundled. [See all ten screenshots of library views and the Apps screen in the gallery.](docs/GALLERY.md)
+These ten screenshots were captured on a Pimax Portal with the Beta 15 build. Games and personal cover artwork are not bundled. [See all ten screenshots of library views and the Apps screen in the gallery.](docs/GALLERY.md)
 
 ## Controller reference
 
@@ -113,7 +115,7 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Latest release
 
-**Beta 14** introduces aBBotSford, a BBS-inspired layout with six terminal palettes, the IBM VGA font, and the MyNameIsMUD preset. Settings are now grouped into Appearance, Library, Apps, Sound & startup, and System & help, with clearer controller navigation. The release also includes fixes for directory focus, dialog spacing, font controls, and palette-tinted backdrops. All ten gallery screenshots have been refreshed on the Pimax Portal running Android 10.
+**Beta 15** introduces Palo Alto and the Hyperstack preset, now the starting appearance for new installations. The former Default preset is now Playbyte, and the Wayfinder color scheme is now Evergreen. All built-in presets start with Fill artwork. This release also makes Cambridge’s font adjustable, keeps Apps typography consistent, and fixes category focus, page navigation, cover previews, and palette interactions. All ten gallery screenshots have been refreshed.
 
 ## Project status
 
