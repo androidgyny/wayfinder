@@ -20,7 +20,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  try{
  await page.goto('http://127.0.0.1:'+server.address().port);
  await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
- const layouts=['abbotsford','library','kyoto','cupertino','venice','oxford','berlin','seattle','vienna','prague','copenhagen','cambridge','ulm'];
+ const layouts=['milan','bellevue','bath','dashboard','paloalto','abbotsford','library','kyoto','cupertino','venice','oxford','berlin','seattle','vienna','prague','copenhagen','cambridge','ulm','redmond','sanfrancisco','atlantis'];
  for(const layout of layouts)for(const width of [640,1097])for(const height of [320,260,220])for(const placement of (['kyoto','cupertino'].includes(layout)?['above','below']:['above'])){
   await page.setViewportSize({width,height:700});
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -31,8 +31,8 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
    document.body.dataset.titlePlacement=placement;query='retro';$('#search').value=query;update();
    const field=layout==='ulm'?$('#ulm-search'):$('#search');field.hidden=false;field.focus({preventScroll:true});
   },{layout,placement});
-  await page.setViewportSize({width,height});await page.waitForTimeout(80);
-  assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('input-compact')),true,layout);
+  await page.setViewportSize({width,height});await page.waitForFunction(()=>document.body.classList.contains('input-compact'));
+  assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('input-compact')),true,layout+' '+width+'x'+height+' '+await page.evaluate(()=>document.activeElement.outerHTML));
   if(layout==='kyoto'&&height===260&&width===1097){fs.mkdirSync(path.join(__dirname,'../output/keyboard-audit'),{recursive:true});await page.screenshot({path:path.join(__dirname,'../output/keyboard-audit/kyoto-search.png')});}
   if(await page.locator('.search-empty').count()){
    const result=await page.evaluate(()=>{
@@ -64,6 +64,6 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   if(id==='edit-title')await page.screenshot({path:path.join(__dirname,'../output/keyboard-audit/edit-title.png')});
  }
  assert.ok(tested>=10,'Dialog field coverage');assert.deepEqual(errors,[]);
- console.log('PASS 12 layouts at 3 keyboard heights and 2 widths, both title placements, keyboard dismissal, and '+tested+' dialog fields');
+ console.log('PASS '+layouts.length+' layouts at 3 keyboard heights and 2 widths, both title placements, keyboard dismissal, and '+tested+' dialog fields');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});

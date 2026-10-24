@@ -53,7 +53,7 @@ function settingsController(action){
 }
 function refreshSettingsSummaries(){
  if(!$('#settings-current-look'))return;
- const snapshot=appearanceSnapshot(),matches=availableAppearancePresets().filter(p=>Object.entries(p.values).every(([k,v])=>k==='preserveOtherSettings'||snapshot[k]===v));
+ const snapshot=appearanceSnapshot(),matches=availableAppearancePresets().filter(p=>Object.entries(p.values).every(([k,v])=>k==='preserveOtherSettings'||(k==='sort'?sort:snapshot[k])===v));
  const chosen=matches.find(p=>p.name===$('#appearance-presets').value)||matches[matches.length-1];
  $('#settings-current-look').textContent=chosen?'Current look · '+chosen.name:'Current look · Custom';
  $('#settings-ai-summary').textContent=!$('#gemini-remove').disabled?'API key saved on this device':'Optional · No API key saved';

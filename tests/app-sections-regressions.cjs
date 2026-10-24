@@ -24,7 +24,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
 
  await page.evaluate(()=>{window.appSaved=[];native.saveApp=raw=>{window.appSaved.push(JSON.parse(raw));return '{"ok":true}'};native.launchApp=p=>window.launched=p;drawerCatalog=Array.from({length:65},(_,i)=>({package:'test.app'+i,title:'Utility '+i}));drawerPreferences=drawerCatalog.slice(0,8).map((a,i)=>({package:a.package,pinned:true,order:i}));native.appsPreferences=()=>JSON.stringify(drawerPreferences);openApps()});
  assert.equal(await page.locator('.app-section').count(),5);
- for(const font of ['computer','ibmvga','editorial','outfit','clean','spacegrotesk','oxanium','spacemono','ibmplexsans','nunito']){
+ for(const font of ['computer','ibmvga','editorial','outfit','clean','spacegrotesk','oxanium','spacemono','ibmplexsans','nunito','winetahoma','oswald','go']){
   const styles=await page.evaluate(font=>{setTypography(font);const h=getComputedStyle($('.apps-heading h2')),category=getComputedStyle($('.app-section strong'));return {font:h.fontFamily,category:category.fontFamily,weight:h.fontWeight,spacing:h.letterSpacing};},font);
   assert.equal(styles.font,styles.category,'Apps heading matches category font regardless of '+font);
   assert.ok(styles.font.includes('WayfinderClean'));assert.equal(styles.weight,'400');assert.equal(styles.spacing,'normal');
@@ -43,7 +43,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   assert.equal(gameChooser.appStyle,false,'shared chooser clears Apps styling on return to Games');
   assert.equal(gameChooser.font,gameChooser.gameFont,'Games chooser retains selected font');
  }
- for(const mode of ['library','abbotsford','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna']){
+ for(const mode of await page.evaluate(()=>[...$('#presentation').options].map(o=>o.value))){
   await page.evaluate(mode=>{setPresentation(mode);setTypography('ibmvga')},mode);
   assert.ok((await page.locator('.apps-heading h2').evaluate(n=>getComputedStyle(n).fontFamily)).includes('WayfinderClean'),'Apps header isolated in '+mode);
  }
@@ -55,7 +55,11 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   assert.deepEqual(fit,{cards:true,hints:true,overflow:false},JSON.stringify(viewport));
  }
  await page.setViewportSize({width:1097,height:592});
- const bars=await page.evaluate(async()=>{const results=[];native.setThemeColor=color=>window.barColor=color;const hex=node=>'#'+getComputedStyle(node,node.id==='apps-drawer'?'::backdrop':null).backgroundColor.match(/\d+/g).slice(0,3).map(v=>Number(v).toString(16).padStart(2,'0')).join('');for(const p of ['parchment','midnight']){setPalette(p);results.push(barColor===hex($('#apps-drawer')));showDialog('#app-appearance');hideDialog('#app-appearance');results.push(barColor===hex($('#apps-drawer')));hideDialog('#apps-drawer');results.push(barColor===hex(document.body));openApps();results.push(barColor===hex($('#apps-drawer')));$('#apps-drawer').close();await new Promise(r=>setTimeout(r,30));results.push(barColor===hex(document.body));openApps();}hideDialog('#apps-drawer');openApps();await new Promise(r=>setTimeout(r,30));results.push(barColor===hex($('#apps-drawer')));setPalette('portal');return results});
+ const bars=await page.evaluate(async()=>{const results=[];native.setThemeColor=color=>window.barColor=color;const hex=node=>'#'+getComputedStyle(node,node.id==='apps-drawer'?'::backdrop':null).backgroundColor.match(/\d+/g).slice(0,3).map(v=>Number(v).toString(16).padStart(2,'0')).join('');for(const p of ['parchment','midnight','pearl']){setPalette(p);results.push(barColor===hex($('#apps-drawer')));showDialog('#app-appearance');hideDialog('#app-appearance');results.push(barColor===hex($('#apps-drawer')));hideDialog('#apps-drawer');results.push(barColor===hex(document.body));openApps();results.push(barColor===hex($('#apps-drawer')));$('#apps-drawer').close();await new Promise(r=>setTimeout(r,30));results.push(barColor===hex(document.body));openApps();}hideDialog('#apps-drawer');openApps();await new Promise(r=>setTimeout(r,30));results.push(barColor===hex($('#apps-drawer')));setPalette('portal');return results});
+ await page.evaluate(()=>{setPalette('pearl');openApps()});
+ assert.equal(await page.locator('#apps-drawer').evaluate(n=>getComputedStyle(n).backgroundColor),'rgb(237, 243, 250)');
+ for(const selector of ['#app-appearance','#pack-icon-picker'])assert.equal(await page.locator(selector).evaluate(n=>getComputedStyle(n).getPropertyValue('--bg').trim()),'#edf3fa');
+ await page.evaluate(()=>setPalette('portal'));
  assert.ok(bars.every(Boolean),'system bars follow Apps surface, palette changes, nested dialogs, close and immediate reopen');
  assert.deepEqual(await page.evaluate(()=>['Beeper','Reddit','Telegram','WhatsApp','Signal','Discord'].map(title=>appSection({title,package:'test.social'}))),Array(6).fill('social'));
  assert.equal(await page.evaluate(()=>{drawerPreferences.push({package:'test.manual',section:'news'});return appSection({title:'Reddit',package:'test.manual'})}),'news');

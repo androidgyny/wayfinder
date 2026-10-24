@@ -178,10 +178,10 @@ public class ReleaseAudit extends Instrumentation {
         runOnMainSync(()->activity.startActivity(new Intent().setClassName(getTargetContext().getPackageName(),MainActivity.class.getName()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
         Thread.sleep(500);
         check("true".equals(js("backgroundActive&&!topDialog()")),"return from launched app resumes browsing cleanly");
-        String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna"};
+        String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna","abbotsford","paloalto","redmond","sanfrancisco","atlantis"};
         js("window.auditErrors=[];addEventListener('error',e=>auditErrors.push(e.message))");
         for(int round=0;round<3;round++)for(String layout:layouts)js("setPresentation('"+layout+"');showDialog('#settings-dialog');refreshApplicableAppearanceControls();nativeBack()");
-        check("0".equals(js("auditErrors.length")),"36 native layout/settings transitions complete without JavaScript errors");
+        check("0".equals(js("auditErrors.length")),"51 native layout/settings transitions complete without JavaScript errors");
         check(records().length()==1&&records().getJSONObject(0).getBoolean("favorite"),"native smoke preserves synthetic record and favorite");
     }
     private void artworkAudit() throws Exception {
@@ -208,13 +208,13 @@ public class ReleaseAudit extends Instrumentation {
         for(int i=0;i<1200;i++)many.put(new JSONObject(original.getJSONObject(0).toString()).put("id","stress_"+i).put("title","Synthetic game "+i).put("genre","Category "+(i/40)).put("favorite",i%10==0).put("lastPlayed",i));
         try{
             replace(many,null,new JSONArray());js("reloadLibrary();window.auditErrors=[];addEventListener('error',e=>auditErrors.push(e.message))");
-            String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna"};
+            String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna","abbotsford","paloalto","redmond","sanfrancisco","atlantis"};
             long before=android.os.Debug.getPss();JSONArray timings=new JSONArray();
             for(int round=0;round<3;round++)for(String layout:layouts){
                 String elapsed=js("(()=>{const start=performance.now();setPresentation('"+layout+"');for(const a of ['right','down','left','up'])controller(a);return performance.now()-start})()");
                 timings.put(new JSONObject().put("round",round).put("layout",layout).put("updateMs",Double.parseDouble(elapsed)));
             }
-            check("0".equals(js("auditErrors.length")),"1,200-game native library survives 36 layout changes and 144 navigation actions");
+            check("0".equals(js("auditErrors.length")),"1,200-game native library survives 51 layout changes and 204 navigation actions");
             check(records().length()==1200,"native performance navigation does not remove records");
             log.append("METRIC native app PSS KB before=").append(before).append(" after=").append(android.os.Debug.getPss()).append('\n');
             log.append("METRIC native synchronous layout/navigation timings ").append(timings).append('\n');
@@ -300,14 +300,17 @@ public class ReleaseAudit extends Instrumentation {
         try{
             replace(many,null,new JSONArray());
             js("reloadLibrary();query='';genre='';favoritesOnly=false;sort='az';applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Smitchish Dark').values);update();selectPresentation(filtered[300].id);window.holdErrors=[];addEventListener('error',e=>holdErrors.push(e.message));");
-            for(int round=0;round<8;round++){
-                int before=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));directionAxis(round%2==0?1:-1,0);Thread.sleep(4000);directionAxis(0,0);Thread.sleep(250);
+            for(String layout:new String[]{"kyoto","redmond","sanfrancisco","atlantis"}){
+            js("setPresentation('"+layout+"');selectPresentation(filtered[300].id)");
+            for(int round=0;round<4;round++){
+                int before=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));directionAxis(layout.equals("kyoto")?(round%2==0?1:-1):0,layout.equals("kyoto")?0:(round%2==0?1:-1));Thread.sleep(4000);directionAxis(0,0);Thread.sleep(250);
                 int after=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
-                check((round%2==0?after-before:before-after)>30,"Kyoto sustained hold advances repeatedly through large library, round "+round);
-                Thread.sleep(250);check(Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"))==after,"Kyoto stops after release, round "+round);
-                check("true".equals(js("$('#grid .presentation-selected')?.dataset.id===presentationId&&document.activeElement?.closest('.game')?.dataset.id===presentationId")),"Kyoto visual selection and focus agree");
+                check((round%2==0?after-before:before-after)>30,layout+" sustained hold advances repeatedly through large library, round "+round);
+                Thread.sleep(250);check(Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"))==after,layout+" stops after release, round "+round);
+                check("true".equals(js("$('#grid .presentation-selected')?.dataset.id===presentationId&&document.activeElement?.closest('.game')?.dataset.id===presentationId")),layout+" visual selection and focus agree");
             }
-            check("0".equals(js("holdErrors.length")),"sustained Kyoto navigation has no JavaScript errors");
+            }
+            check("0".equals(js("holdErrors.length")),"sustained navigation has no JavaScript errors");
         }finally{directionAxis(0,0);replace(original,null,order);js("reloadLibrary()");}
     }
     private void directionAxis(float x,float y){
@@ -360,6 +363,9 @@ public class ReleaseAudit extends Instrumentation {
         try {
             check(getTargetContext().getPackageName().equals("com.androidgyny.wayfinder.audit"),"isolated package guard");
             activity=(MainActivity)startActivitySync(new Intent().setClassName(getTargetContext().getPackageName(),MainActivity.class.getName()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));waitForIdleSync();
+            // Direct axis injection does not count as system user activity. Keep only
+            // the isolated audit window awake during sustained-input checks.
+            runOnMainSync(()->activity.getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));
             for(int i=0;i<100&&!Boolean.TRUE.equals(field("ready"));i++)Thread.sleep(200);
             check(Boolean.TRUE.equals(field("ready")),"native first launch completes");
             for(int i=0;i<100&&!"true".equals(js("typeof restoring !== 'undefined' && !restoring"));i++)Thread.sleep(100);

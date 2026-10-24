@@ -1,0 +1,132 @@
+.atlantis-part{display:none}
+body[data-presentation=atlantis]{overflow:hidden;font-family:var(--display-font)}
+body[data-presentation=atlantis] .atlantis-part{display:block;min-width:0;min-height:0}
+body[data-presentation=atlantis] #atlantis-titlebar{height:28px;display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--accent-ink);background:linear-gradient(transparent 55%,#00000012),var(--accent);font:600 14px var(--display-font);border-radius:0;overflow:hidden}
+#atlantis-window-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=atlantis] .topbar{height:58px;position:static;gap:12px;padding:5px 14px;background:linear-gradient(#ffffff30,#00000004),var(--bg);border-bottom:1px solid var(--line);backdrop-filter:none}
+body[data-presentation=atlantis] .brand,body[data-presentation=atlantis] aside,body[data-presentation=atlantis] #scrim,body[data-presentation=atlantis] #menu{display:none!important}
+body[data-presentation=atlantis] #atlantis-toolbar{display:flex;gap:12px;align-items:center;flex:none}
+#atlantis-toolbar button{display:flex;align-items:center;gap:6px;background:none;padding:5px;font:14px var(--display-font);white-space:nowrap}
+body[data-presentation=atlantis] .topbar button{border-radius:4px;color:var(--text)}
+body[data-presentation=atlantis] .search{margin-left:0;min-width:70px;max-width:330px;height:34px;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+body[data-presentation=atlantis] .search input{font-family:var(--display-font)}
+body[data-presentation=atlantis] .search kbd{display:none}
+body[data-presentation=atlantis] #open-apps{margin-left:auto}
+body[data-presentation=atlantis] .shell{display:block;padding:0;height:calc(100dvh - 86px)}
+body[data-presentation=atlantis] #main{padding:0;height:100%;display:grid;grid-template-columns:minmax(160px,23%) minmax(220px,39%) minmax(240px,38%);grid-template-rows:30px minmax(0,1fr) 32px;gap:0;background:var(--panel);font-family:var(--display-font)}
+body[data-presentation=atlantis] #main>:not(.atlantis-part):not(#grid){display:none!important}
+body[data-presentation=atlantis] #atlantis-sidebar{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;padding:16px 12px;background:linear-gradient(135deg,var(--accent-soft),var(--hover));border-right:1px solid var(--line)}
+#atlantis-sidebar h2{margin:0;padding:9px 12px;border-radius:6px 6px 0 0;background:linear-gradient(#ffffff25,transparent),var(--accent);color:var(--accent-ink);font:600 15px var(--display-font)}
+#atlantis-categories{min-height:0;overflow:auto;padding:8px 5px;background:var(--field);border-radius:0 0 5px 5px;scrollbar-width:thin}
+.atlantis-category{display:flex;align-items:center;gap:9px;width:100%;padding:9px 7px;min-height:38px;background:transparent;color:var(--text);border-radius:4px;text-align:left;font:14px var(--display-font)}
+.atlantis-category>span:not(.atlantis-icon){min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atlantis-category small{font-size:11px;opacity:.8}
+.atlantis-category.current{background:var(--accent-soft);font-weight:600}
+body[data-presentation=atlantis] .atlantis-category:focus-visible,body[data-presentation=atlantis][data-input=controller] .atlantis-category:focus{outline:2px solid var(--accent);outline-offset:-2px}
+.atlantis-icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;font:24px/1 sans-serif;color:#e8ac24;text-shadow:0 1px 0 #ffffff,0 0 1px #7a5915}
+.atlantis-icon.folder{position:relative;width:24px;height:17px;margin-top:4px;border-radius:2px;background:linear-gradient(#ffffff70,transparent 45%,#00000018),var(--folder-color,#e7ad24);border:1px solid #00000045;box-shadow:inset 0 1px 0 #ffffffb0}
+.atlantis-icon.folder::before{content:'';position:absolute;left:1px;top:-5px;width:10px;height:4px;background:var(--folder-color,#e7ad24);border:1px solid #00000045;border-bottom:0;border-radius:2px 3px 0 0}
+.atlantis-icon.all,.atlantis-icon.details{color:#578bbe;text-shadow:0 1px white}
+.atlantis-icon.back{border-radius:50%;background:linear-gradient(#94d56c,#409627);color:white;text-shadow:none;font-size:19px;transform:rotate(180deg)}
+.atlantis-icon.play{color:inherit;font-size:19px;text-shadow:none}
+body[data-presentation=atlantis] #atlantis-columns{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) 100px;background:var(--bg);border-bottom:1px solid var(--line)}
+#atlantis-columns button{border-radius:0;background:transparent;padding:4px 12px;text-align:left;font:12px var(--display-font);border-right:1px solid var(--line)}
+body[data-presentation=atlantis] #grid{grid-column:2;grid-row:2;display:block;position:static;overflow:auto;min-height:0;min-width:0;padding:0;margin:0;scrollbar-width:thin;scrollbar-color:var(--accent-soft) var(--field);border-right:1px solid var(--line)}
+body[data-presentation=atlantis] #grid .atlantis-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 100px;width:100%;height:38px;min-height:38px;padding:0;background:transparent;color:var(--text);border:0;border-bottom:1px solid var(--hover);border-radius:0;box-shadow:none;transform:none;text-align:left}
+body[data-presentation=atlantis] #grid .atlantis-row::before,body[data-presentation=atlantis] #grid .atlantis-row::after{display:none}
+.atlantis-name{display:flex;align-items:center;min-width:0;gap:7px;padding:0 12px}
+body[data-presentation=atlantis] #grid .game-title{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit!important;font:14px var(--display-font);margin:0;position:static;text-shadow:none}
+.atlantis-star{font:18px sans-serif;color:#efb52f;text-shadow:0 0 1px #765312;flex:none}
+.atlantis-date{padding:0 10px;align-self:center;white-space:nowrap;font:12px var(--display-font)}
+body[data-presentation=atlantis] #grid .presentation-selected{background:linear-gradient(#ffffff10,transparent),var(--accent);color:var(--accent-ink)}
+body[data-presentation=atlantis] #grid .game:focus{outline:1px dotted var(--accent-ink);outline-offset:-3px}
+body[data-presentation=atlantis] #atlantis-preview{grid-column:3;grid-row:1/3;display:flex;flex-direction:column;gap:8px;padding:10px 18px 14px;min-height:0;overflow:auto;background:var(--panel)}
+#atlantis-art{flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#atlantis-cover{flex:none;object-fit:contain;border-radius:var(--art-radius,0px);background:var(--panel)}
+body[data-presentation=atlantis][data-art-fit=cover] #atlantis-cover{object-fit:cover}
+body[data-presentation=atlantis][data-cover-border=hairline] #atlantis-cover{border:1px solid var(--line)}
+body[data-presentation=atlantis][data-cover-border=matte] #atlantis-cover{border:6px solid var(--panel)}
+#atlantis-game-title{font:var(--game-title-weight,500) 25px/1.15 var(--display-font);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0}
+#atlantis-preview dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 16px;margin:0;font:13px var(--display-font)}
+#atlantis-preview dt{font-weight:600}#atlantis-preview dd{margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#atlantis-actions{display:flex;gap:6px;flex:none}
+#atlantis-actions button{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 5px;background:linear-gradient(#ffffff40,#00000008),var(--bg);border:1px solid var(--line);border-radius:4px;font:12px var(--display-font);white-space:nowrap}
+#atlantis-actions #atlantis-play{background:linear-gradient(#74c847,#308b17);color:white;border-color:#357e20;font-weight:600;font-size:16px}
+#atlantis-actions button:disabled{opacity:.4;cursor:default}
+body[data-presentation=atlantis] #atlantis-footer{grid-column:1/-1;grid-row:3;display:flex;align-items:center;gap:18px;padding:0 14px;background:var(--bg);border-top:1px solid var(--line);font:12px var(--display-font)}
+#atlantis-position{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#atlantis-footer button{display:flex;align-items:center;gap:5px;background:none;font:12px var(--display-font);padding:0}
+.atlantis-key{width:19px;height:19px;display:grid;place-items:center;border:1px solid #ffffff80;border-radius:50%;color:white;font:bold 12px sans-serif;box-shadow:0 0 0 1px #0004}
+.atlantis-key.a{background:#42a23d}.atlantis-key.b{background:#cf3934}.atlantis-key.x{background:#247acf}.atlantis-key.y{background:#d9960e}
+.atlantis-empty{padding:20px;font-size:14px;color:var(--muted)}
+body[data-presentation=atlantis] #appearance-preview .appearance-sample{background:transparent;border:0;outline:none;box-shadow:none;border-radius:0;overflow:visible}
+body[data-presentation=atlantis] #appearance-preview .appearance-sample::after{display:none}
+body[data-presentation=atlantis] #settings-appearance #appearance-preview{background:var(--panel)}
+@media(max-width:850px){body[data-presentation=atlantis] #main{grid-template-columns:23% 40% 37%}body[data-presentation=atlantis] #atlantis-preview{padding:8px;gap:6px}#atlantis-toolbar button{font-size:12px;gap:4px}body[data-presentation=atlantis] #atlantis-toolbar{gap:2px}.atlantis-category{font-size:12px;gap:5px;padding-inline:3px}.atlantis-icon{width:20px;height:20px}#atlantis-game-title{font-size:19px}body[data-presentation=atlantis] #grid .game-title{font-size:12px}body[data-presentation=atlantis] #atlantis-columns,body[data-presentation=atlantis] #grid .atlantis-row{grid-template-columns:minmax(0,1fr) 76px}.atlantis-date{font-size:10px;padding:0 5px}#atlantis-actions button{font-size:11px}#atlantis-actions .atlantis-icon{display:none}#atlantis-preview dl{font-size:11px;gap:3px 8px}body[data-presentation=atlantis] .search{padding:0 6px}body[data-presentation=atlantis] .topbar{gap:6px;padding-inline:8px}body[data-presentation=atlantis] #atlantis-footer{gap:9px;font-size:10px}#atlantis-footer button{font-size:10px}}
+body.input-compact[data-presentation=atlantis] #atlantis-titlebar{display:none}
+body.input-compact[data-presentation=atlantis] .shell{height:calc(var(--input-height) - 60px)}
+body.input-compact[data-presentation=atlantis] #main{grid-template-columns:30% 70%;grid-template-rows:26px minmax(0,1fr)}
+body.input-compact[data-presentation=atlantis] :is(#atlantis-preview,#atlantis-footer){display:none}
+body.input-compact[data-presentation=atlantis] #atlantis-sidebar{padding:4px}
+
+/* Raised toolbar control and jewel-like favorites, echoing the desktop era. */
+body[data-presentation=atlantis] #settings-button{border:1px solid var(--muted);background:linear-gradient(#ffffff80,#ffffff10 48%,#0000000c),var(--bg);box-shadow:inset 0 1px 0 #ffffffaa,0 1px 1px #0002;min-width:40px;min-height:40px}
+body[data-presentation=atlantis] :is(.atlantis-icon.star,.atlantis-star){color:#ffc424;background:linear-gradient(155deg,#fff8bb 12%,#ffdf46 32%,#ffb900 56%,#ef8c00 77%,#ffe675 92%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:.6px #a76609;text-shadow:none;filter:drop-shadow(0 1px 0 #fff9) drop-shadow(0 1px 1px #70430070);font-family:Arial,sans-serif;font-weight:400}
+body[data-presentation=atlantis] .atlantis-icon.star{font-size:29px;width:30px;height:30px;line-height:30px}
+body[data-presentation=atlantis] .atlantis-star{font-size:22px;line-height:26px}
+#atlantis-favorite-value{display:flex;align-items:center;gap:5px}
+body[data-presentation=atlantis] #atlantis-favorite-value .star{font-size:20px;width:20px;height:18px;line-height:18px}
+body[data-presentation=atlantis] #atlantis-actions .star{font-size:24px;width:24px;height:25px;line-height:25px}
+body[data-presentation=atlantis] .atlantis-icon.star.unfilled{-webkit-text-fill-color:#fff1b5;-webkit-text-stroke:.8px #ae770b;filter:drop-shadow(0 1px 0 #fff9)}
+#atlantis-columns button{white-space:nowrap}
+@media(max-width:850px){#atlantis-columns button{font-size:10px;padding-inline:6px}}
+
+/* Keep native touch highlights from lingering behind modal dialogs. */
+body[data-presentation=atlantis] :is(.topbar,#main) button{-webkit-tap-highlight-color:transparent}
+
+#atlantis-preview #atlantis-type-value{white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;line-height:1.3}
+/* Droplet uses readable content surfaces; only Atlantis has a blue desktop surround. */
+body[data-palette=pearl]:not([data-presentation=abbotsford]){--bg:#edf3fa;--panel:#f5f8fc;--field:#ffffff;--hover:#e6eff8;--line:#b8ccdf;--text:#183754;--muted:#526c85;--accent:#0875df;--accent-ink:#ffffff;--accent-soft:#c5dff9;--glow:#0876df33;color-scheme:light}
+body[data-presentation=atlantis][data-palette=pearl]{background-color:#3989c7}
+body[data-presentation=atlantis]{--aqua-chrome:repeating-linear-gradient(0deg,#ffffff18 0px,#ffffff18 1px,#00000003 1px,#00000003 3px);padding:18px 24px 0}
+body[data-presentation=atlantis] :is(#atlantis-titlebar,#atlantis-toolbar,#atlantis-sidebar h2,#atlantis-preview dl){display:none}
+body[data-presentation=atlantis] .topbar{height:68px;border:1px solid var(--line);border-radius:14px 14px 0 0;background:var(--aqua-chrome),linear-gradient(#ffffff90,#00000008),var(--panel);padding:10px 20px;box-shadow:0 -1px 0 #fff9,0 3px 12px #0002;gap:18px}
+body[data-presentation=atlantis] #atlantis-brand{display:block;font:600 23px var(--display-font);letter-spacing:3px;white-space:nowrap;margin-right:auto}
+body[data-presentation=atlantis] .topbar button{border:1px solid var(--line);border-radius:24px;background:linear-gradient(#ffffff90,#ffffff20 49%,#00000008 51%,#ffffff30),var(--panel);color:var(--text);box-shadow:inset 0 1px #fff9,0 1px 2px #0002}
+body[data-presentation=atlantis] .search{max-width:280px;border-radius:24px;height:36px;box-shadow:inset 0 1px 3px #0002}
+body[data-presentation=atlantis] .shell{height:calc(100dvh - 86px);padding:0;display:block}
+body[data-presentation=atlantis] #main{grid-template-columns:minmax(140px,24%) minmax(190px,38%) minmax(160px,1fr);grid-template-rows:52px minmax(0,1fr) 62px 40px;background:none;position:relative}
+body[data-presentation=atlantis] #atlantis-sidebar{grid-row:1/3;padding:14px 5px;background:var(--panel);border-left:1px solid var(--line)}
+#atlantis-categories{background:transparent;padding:0 4px}
+.atlantis-category{padding:10px 8px;min-height:46px;font-size:15px;border-radius:5px}
+.atlantis-category>span:not(.atlantis-icon){white-space:normal;overflow-wrap:anywhere}
+.atlantis-category.current{background:linear-gradient(#ffffff30,transparent),var(--accent-soft);font-weight:400}
+body[data-presentation=atlantis] #atlantis-columns{display:flex;align-items:center;grid-row:1;background:var(--panel);border-right:1px solid var(--line);padding:0 12px}
+#atlantis-columns button{font-size:13px;border:0;padding:4px 0;background:none;color:var(--muted)}
+#atlantis-columns button:first-child{flex:1;font-size:21px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis}
+#atlantis-columns button:last-child{font-size:11px}
+body[data-presentation=atlantis] #grid{background:var(--panel)}
+body[data-presentation=atlantis] #grid .atlantis-row{display:flex;height:39px;min-height:39px;border:0}
+body[data-presentation=atlantis] #grid .atlantis-row:nth-child(even):not(.presentation-selected){background:var(--hover)}
+.atlantis-name{width:100%;padding:0 14px}.atlantis-name::after{content:'›';margin-left:auto;font:22px sans-serif;opacity:.65}
+body[data-presentation=atlantis] #grid .game-title{font-size:16px}
+body[data-presentation=atlantis] #grid .presentation-selected{background:linear-gradient(#ffffff40,transparent 48%,#0000000c 51%),var(--accent);color:var(--accent-ink);border-radius:5px;box-shadow:inset 0 1px #ffffff80}
+body[data-presentation=atlantis][data-palette=pearl] #grid .presentation-selected{background:linear-gradient(#ffffff18,transparent 48%,#0000000c 51%),#0860bd;color:#fff}
+.atlantis-date{display:none}
+body[data-presentation=atlantis] #atlantis-preview{padding:12px 18px;grid-row:1/3;background:var(--panel);border-right:1px solid var(--line)}
+body[data-presentation=atlantis] #atlantis-shelf{grid-column:1/-1;grid-row:3;display:flex;align-items:center;gap:20px;padding:10px 20px;border:1px solid var(--line);border-radius:0 0 14px 14px;background:var(--aqua-chrome),linear-gradient(#ffffff60,#00000008),var(--panel);box-shadow:0 8px 12px #0003}
+#atlantis-game-title{flex:1;font:var(--game-title-weight,400) 22px var(--display-font)}
+#atlantis-actions{flex:none;gap:10px}#atlantis-actions button{border-radius:24px;padding:9px 20px;font-size:15px;box-shadow:inset 0 1px #fff9,0 1px 2px #0002;background:linear-gradient(#ffffff90,#ffffff10 50%,#0000000a 51%),var(--panel)}
+#atlantis-actions #atlantis-play{background:linear-gradient(#ffffff80,transparent 45%,#00000012 51%),var(--accent);border-color:var(--accent);font-size:16px;color:var(--accent-ink)}
+body[data-presentation=atlantis] #atlantis-footer{grid-row:4;justify-content:center;background:transparent;border:0;color:white;text-shadow:0 1px 3px #000,0 0 4px #000;padding:5px;gap:24px}
+#atlantis-position{display:none}
+body[data-presentation=atlantis] #settings-appearance #appearance-preview{background:var(--panel)}
+@media(max-width:850px){body[data-presentation=atlantis]{padding:10px 10px 0}body[data-presentation=atlantis] .topbar{gap:8px;padding:8px;height:60px}body[data-presentation=atlantis] #atlantis-brand{font-size:16px;letter-spacing:1px}body[data-presentation=atlantis] .shell{height:calc(100dvh - 70px)}body[data-presentation=atlantis] #main{grid-template-columns:25% 38% 37%}body[data-presentation=atlantis] #grid .game-title{font-size:13px}.atlantis-category{font-size:12px;padding:8px 3px}#atlantis-actions button{font-size:12px;padding:8px 12px}#atlantis-game-title{font-size:17px}body[data-presentation=atlantis] #atlantis-shelf{padding:8px 12px;gap:10px}}
+body.input-compact[data-presentation=atlantis]{padding:0 8px}
+body.input-compact[data-presentation=atlantis] .shell{height:calc(var(--input-height) - 60px)}
+body.input-compact[data-presentation=atlantis] #main{grid-template-columns:30% 70%;grid-template-rows:30px minmax(0,1fr)}
+body.input-compact[data-presentation=atlantis] :is(#atlantis-preview,#atlantis-footer,#atlantis-shelf,#atlantis-brand){display:none}
+body.input-compact[data-presentation=atlantis] .topbar{height:60px}
+/* The desktop blue is a surround, not a readable Apps content surface. */
+body[data-palette=pearl] :is(#apps-drawer,#app-appearance,#pack-icon-picker,#artwork-dialog.apps-ui,#controller-choice.apps-ui){--bg:#edf3fa;--panel:#f5f8fc;--field:#ffffff;--hover:#e6eff8;--line:#b8ccdf;--text:#183754;--muted:#526c85;background:var(--bg);color:var(--text);color-scheme:light}
+body[data-palette=pearl] #apps-drawer::backdrop{background:#edf3fa}

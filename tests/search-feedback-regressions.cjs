@@ -19,6 +19,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const page=await browser.newPage({viewport:{width:1097,height:592},hasTouch:true}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
  await page.goto('http://127.0.0.1:'+server.address().port);
+ await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
  await page.evaluate(()=>{games=[{id:'a',title:'Ordinary',genre:'Alpha',image:'audit-image.svg'},{id:'b',title:'Retro One',genre:'Beta',favorite:true,image:'audit-image.svg'},{id:'c',title:'Retro Two',genre:'Gamma',lastPlayed:42,image:'audit-image.svg'}];rebuildGenres();setPresentation('cambridge');cambridgeOpen('genre:Alpha');query='retro';$('#search').value=query;update();});
  assert.equal(await page.evaluate(()=>cambridgeSection),'genre:Alpha');
  assert.match(await page.locator('.search-empty').innerText(),/2 matches elsewhere/);

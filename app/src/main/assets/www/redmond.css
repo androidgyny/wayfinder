@@ -1,0 +1,91 @@
+.redmond-part{display:none}
+body[data-palette=luna]:not([data-presentation=abbotsford]){--bg:#ece9d8;--panel:#ffffff;--field:#f7f9ff;--hover:#d9e9ff;--line:#a5b7d5;--muted:#546b8a;--text:#163565;--accent:#0963df;--accent-ink:#ffffff;--accent-soft:#c5dcff;--glow:#0963df33;color-scheme:light}
+body[data-presentation=redmond]{overflow:hidden;font-family:var(--display-font)}
+body[data-presentation=redmond] .redmond-part{display:block;min-width:0;min-height:0}
+body[data-presentation=redmond] #redmond-titlebar{height:28px;display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--accent-ink);background:linear-gradient(transparent 55%,#00000012),var(--accent);font:600 14px var(--display-font);border-radius:0;overflow:hidden}
+#redmond-window-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=redmond] .topbar{height:58px;position:static;gap:12px;padding:5px 14px;background:linear-gradient(#ffffff30,#00000004),var(--bg);border-bottom:1px solid var(--line);backdrop-filter:none}
+body[data-presentation=redmond] .brand,body[data-presentation=redmond] aside,body[data-presentation=redmond] #scrim,body[data-presentation=redmond] #menu{display:none!important}
+body[data-presentation=redmond] #redmond-toolbar{display:flex;gap:12px;align-items:center;flex:none}
+#redmond-toolbar button{display:flex;align-items:center;gap:6px;background:none;padding:5px;font:14px var(--display-font);white-space:nowrap}
+body[data-presentation=redmond] .topbar button{border-radius:4px;color:var(--text)}
+body[data-presentation=redmond] .topbar .primary{color:var(--accent-ink)}
+body[data-presentation=redmond] .search{margin-left:0;min-width:70px;max-width:330px;height:34px;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+body[data-presentation=redmond] .search input{font-family:var(--display-font)}
+body[data-presentation=redmond] .search kbd{display:none}
+body[data-presentation=redmond] #open-apps{margin-left:auto}
+body[data-presentation=redmond] .shell{display:block;padding:0;height:calc(100dvh - 86px)}
+body[data-presentation=redmond] #main{padding:0;height:100%;display:grid;grid-template-columns:minmax(160px,23%) minmax(220px,39%) minmax(240px,38%);grid-template-rows:30px minmax(0,1fr) 32px;gap:0;background:var(--panel);font-family:var(--display-font)}
+body[data-presentation=redmond] #main>:not(.redmond-part):not(#grid){display:none!important}
+body[data-presentation=redmond] #redmond-sidebar{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;padding:16px 12px;background:linear-gradient(135deg,var(--accent-soft),var(--hover));border-right:1px solid var(--line)}
+#redmond-sidebar h2{margin:0;padding:9px 12px;border-radius:6px 6px 0 0;background:linear-gradient(#ffffff25,transparent),var(--accent);color:var(--accent-ink);font:600 15px var(--display-font)}
+#redmond-categories{min-height:0;overflow:auto;padding:8px 5px;background:var(--field);border-radius:0 0 5px 5px;scrollbar-width:thin}
+.redmond-category{display:flex;align-items:center;gap:9px;width:100%;padding:9px 7px;min-height:38px;background:transparent;color:var(--text);border-radius:4px;text-align:left;font:14px var(--display-font)}
+.redmond-category>span:not(.redmond-icon){min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.redmond-category small{font-size:11px;opacity:.8}
+.redmond-category.current{background:var(--accent-soft);font-weight:600}
+body[data-presentation=redmond] .redmond-category:focus-visible,body[data-presentation=redmond][data-input=controller] .redmond-category:focus{outline:2px solid var(--accent);outline-offset:-2px}
+.redmond-icon{flex:none;display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;font:24px/1 sans-serif;color:#e8ac24;text-shadow:0 1px 0 #ffffff,0 0 1px #7a5915}
+.redmond-icon.folder{position:relative;width:24px;height:17px;margin-top:4px;border-radius:2px;background:linear-gradient(#ffffff70,transparent 45%,#00000018),var(--folder-color,#e7ad24);border:1px solid #00000045;box-shadow:inset 0 1px 0 #ffffffb0}
+.redmond-icon.folder::before{content:'';position:absolute;left:1px;top:-5px;width:10px;height:4px;background:var(--folder-color,#e7ad24);border:1px solid #00000045;border-bottom:0;border-radius:2px 3px 0 0}
+.redmond-icon.all,.redmond-icon.details{color:#578bbe;text-shadow:0 1px white}
+.redmond-icon.back{border-radius:50%;background:linear-gradient(#94d56c,#409627);color:white;text-shadow:none;font-size:19px;transform:rotate(180deg)}
+.redmond-icon.play{color:inherit;font-size:19px;text-shadow:none}
+body[data-presentation=redmond] #redmond-columns{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) 100px;background:var(--bg);border-bottom:1px solid var(--line)}
+#redmond-columns button{border-radius:0;background:transparent;padding:4px 12px;text-align:left;font:12px var(--display-font);border-right:1px solid var(--line)}
+body[data-presentation=redmond] #grid{grid-column:2;grid-row:2;display:block;position:static;overflow:auto;min-height:0;min-width:0;padding:0;margin:0;scrollbar-width:thin;scrollbar-color:var(--accent-soft) var(--field);border-right:1px solid var(--line)}
+body[data-presentation=redmond] #grid .redmond-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 100px;width:100%;height:38px;min-height:38px;padding:0;background:transparent;color:var(--text);border:0;border-bottom:1px solid var(--hover);border-radius:0;box-shadow:none;transform:none;text-align:left}
+body[data-presentation=redmond] #grid .redmond-row::before,body[data-presentation=redmond] #grid .redmond-row::after{display:none}
+.redmond-name{display:flex;align-items:center;min-width:0;gap:7px;padding:0 12px}
+body[data-presentation=redmond] #grid .game-title{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit!important;font:14px var(--display-font);margin:0;position:static;text-shadow:none}
+.redmond-star{font:18px sans-serif;color:#efb52f;text-shadow:0 0 1px #765312;flex:none}
+.redmond-date{padding:0 10px;align-self:center;white-space:nowrap;font:12px var(--display-font)}
+body[data-presentation=redmond] #grid .presentation-selected{background:linear-gradient(#ffffff10,transparent),var(--accent);color:var(--accent-ink)}
+body[data-presentation=redmond] #grid .game:focus{outline:1px dotted var(--accent-ink);outline-offset:-3px}
+body[data-presentation=redmond] #redmond-preview{grid-column:3;grid-row:1/3;display:flex;flex-direction:column;gap:8px;padding:10px 18px 14px;min-height:0;overflow:auto;background:var(--panel)}
+#redmond-art{flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#redmond-cover{flex:none;object-fit:contain;border-radius:var(--art-radius,0px);background:var(--panel)}
+body[data-presentation=redmond][data-art-fit=cover] #redmond-cover{object-fit:cover}
+body[data-presentation=redmond][data-cover-border=hairline] #redmond-cover{border:1px solid var(--line)}
+body[data-presentation=redmond][data-cover-border=matte] #redmond-cover{border:6px solid var(--panel)}
+#redmond-game-title{font:var(--game-title-weight,500) 25px/1.15 var(--display-font);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0}
+#redmond-preview dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 16px;margin:0;font:13px var(--display-font)}
+#redmond-preview dt{font-weight:600}#redmond-preview dd{margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#redmond-actions{display:flex;gap:6px;flex:none}
+#redmond-actions button{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 5px;background:linear-gradient(#ffffff40,#00000008),var(--bg);border:1px solid var(--line);border-radius:4px;font:12px var(--display-font);white-space:nowrap}
+#redmond-actions #redmond-play{background:linear-gradient(#74c847,#308b17);color:white;border-color:#357e20;font-weight:600;font-size:16px}
+#redmond-actions button:disabled{opacity:.4;cursor:default}
+body[data-presentation=redmond] #redmond-footer{grid-column:1/-1;grid-row:3;display:flex;align-items:center;gap:18px;padding:0 14px;background:var(--bg);border-top:1px solid var(--line);font:12px var(--display-font)}
+#redmond-position{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#redmond-footer button{display:flex;align-items:center;gap:5px;background:none;font:12px var(--display-font);padding:0}
+.redmond-key{width:19px;height:19px;display:grid;place-items:center;border:1px solid #ffffff80;border-radius:50%;color:white;font:bold 12px sans-serif;box-shadow:0 0 0 1px #0004}
+.redmond-key.a{background:#42a23d}.redmond-key.b{background:#cf3934}.redmond-key.x{background:#247acf}.redmond-key.y{background:#d9960e}
+.redmond-empty{padding:20px;font-size:14px;color:var(--muted)}
+body[data-presentation=redmond] #appearance-preview .appearance-sample{background:transparent;border:0;outline:none;box-shadow:none;border-radius:0;overflow:visible}
+body[data-presentation=redmond] #appearance-preview .appearance-sample::after{display:none}
+body[data-presentation=redmond] #settings-appearance #appearance-preview{background:var(--panel)}
+@media(max-width:850px){body[data-presentation=redmond] #main{grid-template-columns:23% 40% 37%}body[data-presentation=redmond] #redmond-preview{padding:8px;gap:6px}#redmond-toolbar button{font-size:12px;gap:4px}body[data-presentation=redmond] #redmond-toolbar{gap:2px}.redmond-category{font-size:12px;gap:5px;padding-inline:3px}.redmond-icon{width:20px;height:20px}#redmond-game-title{font-size:19px}body[data-presentation=redmond] #grid .game-title{font-size:12px}body[data-presentation=redmond] #redmond-columns,body[data-presentation=redmond] #grid .redmond-row{grid-template-columns:minmax(0,1fr) 76px}.redmond-date{font-size:10px;padding:0 5px}#redmond-actions button{font-size:11px}#redmond-actions .redmond-icon{display:none}#redmond-preview dl{font-size:11px;gap:3px 8px}body[data-presentation=redmond] .search{padding:0 6px}body[data-presentation=redmond] .topbar{gap:6px;padding-inline:8px}body[data-presentation=redmond] #redmond-footer{gap:9px;font-size:10px}#redmond-footer button{font-size:10px}}
+body.input-compact[data-presentation=redmond] #redmond-titlebar{display:none}
+body.input-compact[data-presentation=redmond] .shell{height:calc(var(--input-height) - 60px)}
+body.input-compact[data-presentation=redmond] #main{grid-template-columns:30% 70%;grid-template-rows:26px minmax(0,1fr)}
+body.input-compact[data-presentation=redmond] :is(#redmond-preview,#redmond-footer){display:none}
+body.input-compact[data-presentation=redmond] #redmond-sidebar{padding:4px}
+
+/* Raised toolbar control and jewel-like favorites, echoing the desktop era. */
+body[data-presentation=redmond] #settings-button{border:1px solid var(--muted);background:linear-gradient(#ffffff80,#ffffff10 48%,#0000000c),var(--bg);box-shadow:inset 0 1px 0 #ffffffaa,0 1px 1px #0002;min-width:40px;min-height:40px}
+body[data-presentation=redmond] :is(.redmond-icon.star,.redmond-star){color:#ffc424;background:linear-gradient(155deg,#fff8bb 12%,#ffdf46 32%,#ffb900 56%,#ef8c00 77%,#ffe675 92%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:.6px #a76609;text-shadow:none;filter:drop-shadow(0 1px 0 #fff9) drop-shadow(0 1px 1px #70430070);font-family:Arial,sans-serif;font-weight:400}
+body[data-presentation=redmond] .redmond-icon.star{font-size:29px;width:30px;height:30px;line-height:30px}
+body[data-presentation=redmond] .redmond-star{font-size:22px;line-height:26px}
+#redmond-favorite-value{display:flex;align-items:center;gap:5px}
+body[data-presentation=redmond] #redmond-favorite-value .star{font-size:20px;width:20px;height:18px;line-height:18px}
+body[data-presentation=redmond] #redmond-actions .star{font-size:24px;width:24px;height:25px;line-height:25px}
+body[data-presentation=redmond] .redmond-icon.star.unfilled{-webkit-text-fill-color:#fff1b5;-webkit-text-stroke:.8px #ae770b;filter:drop-shadow(0 1px 0 #fff9)}
+#redmond-columns button{white-space:nowrap}
+@media(max-width:850px){#redmond-columns button{font-size:10px;padding-inline:6px}}
+
+/* Keep native touch highlights from lingering behind modal dialogs. */
+body[data-presentation=redmond] :is(.topbar,#main) button{-webkit-tap-highlight-color:transparent}
+
+#redmond-preview #redmond-type-value{white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;line-height:1.3}
+
+body[data-presentation=redmond] #soft-gradient{display:none}

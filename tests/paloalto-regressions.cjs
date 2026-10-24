@@ -14,9 +14,9 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Tengami':'
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
  assert.deepEqual(await page.evaluate(()=>({presentation,palette,typography,artFit})),{presentation:'paloalto',palette:'platinum',typography:'ibmvga',artFit:'cover'},'fresh installation starts with Hyperstack');
  assert.equal(await page.evaluate(()=>builtinAppearancePresets.some(p=>p.name==='Default')),false);
- await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Playbyte').values);persist()});
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Boxer').values);persist()});
  await page.reload();await page.waitForFunction(()=>!restoring);
- assert.equal(await page.evaluate(()=>presentation),'library','saved Playbyte selection survives restart');
+ assert.equal(await page.evaluate(()=>presentation),'dashboard','saved Boxer selection survives restart');
  const presets=await page.evaluate(()=>builtinAppearancePresets.map(p=>p.name));
  for(const name of presets){
   const result=await page.evaluate(name=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Hyperstack').values);const p=builtinAppearancePresets.find(p=>p.name===name);applyAppearanceValues(p.values);const actual=appearanceSnapshot();return Object.fromEntries(['presentation','palette','typography','coverBorder','coverCorners','backdrop','artFit'].filter(k=>p.values[k]!==undefined).map(k=>[k,[actual[k],p.values[k]]]))},name);

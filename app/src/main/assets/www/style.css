@@ -804,3 +804,26 @@ body[data-typography=ibmvga]{--display-font:IBMVGA,monospace}
 /* VGA has only its original regular weight; synthetic bold distorts the pixel outlines. */
 body[data-typography=ibmvga]{--game-title-weight:400!important;font-synthesis:none}
 body[data-typography=ibmvga] :is(h1,h2,.bbs-name){font-weight:400!important}
+
+@font-face{font-family:WineTahoma;src:url('fonts/tahoma.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:WineTahoma;src:url('fonts/tahomabd.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+/* Wine Tahoma bold has underweight fi/fl ligatures; keep the separate glyphs. */
+body[data-typography=winetahoma]{--display-font:WineTahoma,sans-serif;font-feature-settings:"liga" 0,"clig" 0}
+body[data-typography=winetahoma] *{font-feature-settings:inherit!important}
+body[data-typography=winetahoma] :is(#apps-drawer,#app-appearance,#pack-icon-picker,#artwork-dialog.apps-ui,#controller-choice.apps-ui){font-feature-settings:normal!important}
+
+@font-face{font-family:Oswald;src:url('fonts/Oswald.ttf') format('truetype');font-weight:200 700;font-display:swap}
+body[data-typography=oswald]{--display-font:Oswald,sans-serif}
+
+/* Geometric controls stay centered independently of the selected typeface. */
+#settings-button,#close-settings{display:inline-flex;align-items:center;justify-content:center;padding:0;line-height:1;flex-shrink:0}
+#settings-button svg,#close-settings svg{display:block;width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+
+/* Go's real Regular, Medium and Bold weights; Bold covers semibold/bold UI labels. */
+@font-face{font-family:WayfinderGo;src:url('fonts/Go-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:WayfinderGo;src:url('fonts/Go-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:WayfinderGo;src:url('fonts/Go-Bold.ttf') format('truetype');font-weight:600 900;font-style:normal;font-display:swap}
+body[data-typography=go]{--display-font:WayfinderGo,sans-serif}
+
+/* Cool neutral panels with an icy selection accent. */
+body[data-palette="slateblue"]{--bg:#141e2b;--panel:#1d2a3b;--field:#243347;--hover:#30445c;--line:#435870;--muted:#acbdd0;--accent:#9bdcff;--text:#eff5fc;--accent-soft:#2c455d;--accent-ink:#142738;--glow:#9bdcff55;}

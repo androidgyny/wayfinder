@@ -1,0 +1,45 @@
+.dashboard-part{display:none}
+body[data-presentation=dashboard]{overflow:hidden}
+body[data-presentation=dashboard] .topbar{height:64px;padding:0 24px;gap:24px;background:var(--bg)}
+body[data-presentation=dashboard] .brand{min-width:190px;font-size:18px}
+body[data-presentation=dashboard] .mark,body[data-presentation=dashboard] #menu{display:none}
+body[data-presentation=dashboard] .shell{display:grid;grid-template-columns:clamp(180px,22vw,290px) minmax(0,1fr);height:calc(var(--visible-height,100dvh) - 64px);gap:20px;padding:12px 24px 0}
+body[data-presentation=dashboard] #sidebar,body[data-presentation=dashboard] :is(#category-strip,#presentation-info,.load-area,#main>footer,#active-filter,.heading .eyebrow,.heading .total,.heading #subline){display:none}
+body[data-presentation=dashboard] #main{display:grid;grid-template-rows:48px 48px minmax(0,1fr) 48px;grid-template-columns:minmax(0,1fr);height:100%;padding:0;min-width:0;min-height:0;position:relative;overflow:hidden}
+body[data-presentation=dashboard] #dashboard-sidebar{display:flex;flex-direction:column;min-height:0;margin-bottom:48px;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:18px 10px 10px}
+#dashboard-sidebar h2{font-size:16px;margin:0 8px 16px;font-weight:600}
+#dashboard-recents{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:5px}
+.dashboard-recent{display:flex;align-items:center;gap:12px;width:100%;background:transparent;border-radius:8px;padding:8px;margin-bottom:5px;text-align:left;min-width:0}
+.dashboard-recent img{width:42px;height:63px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.dashboard-recent>span{min-width:0}.dashboard-recent strong{font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:600}.dashboard-recent small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-top:5px}
+.dashboard-recent:hover,.dashboard-recent:focus{background:var(--hover)}.dashboard-recent-empty{font-size:14px;color:var(--muted);padding:0 8px;line-height:1.6}
+body[data-presentation=dashboard] #dashboard-categories{display:flex;gap:7px;overflow-x:auto;min-width:0;align-items:center;padding:5px 8px;scrollbar-width:none;grid-row:1}
+.dashboard-category{background:transparent;border-radius:6px;padding:9px 14px;white-space:nowrap;font-size:14px;flex-shrink:0}.dashboard-category small{margin-left:9px}.dashboard-category.current{background:var(--hover);color:var(--accent);box-shadow:inset 0 -2px var(--accent)}
+body[data-presentation=dashboard] .heading{display:flex;align-items:center;grid-row:2;grid-column:1;margin:0;padding:0 12px;pointer-events:none}
+body[data-presentation=dashboard] .heading h1{font-size:23px;line-height:1.2;margin:0;max-width:45vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}body[data-presentation=dashboard] .heading-dot{display:none}
+body[data-presentation=dashboard] .toolbar{grid-row:2;grid-column:1;justify-self:end;margin:0;padding:0 12px;gap:12px;align-self:center;max-width:60%}
+body[data-presentation=dashboard] #result{display:none}
+body[data-presentation=dashboard] .size-picker{display:none}
+body[data-presentation=dashboard] #grid{display:grid;grid-row:3;position:relative;inset:auto;grid-template-columns:repeat(var(--dashboard-columns,4),minmax(0,1fr));gap:16px;align-content:start;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;overflow-anchor:none;scrollbar-width:thin;padding:12px;min-height:0;touch-action:pan-y}
+body[data-presentation=dashboard] #grid .game{position:relative;width:100%;height:calc(var(--dashboard-cover) + 58px);min-width:0;transform:none;opacity:1;scroll-margin:12px}
+body[data-presentation=dashboard] #grid .cover{height:var(--dashboard-cover);aspect-ratio:2/3;width:100%}
+body[data-presentation=dashboard] #grid .game-title{display:block;font-size:14px;margin-top:9px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;line-height:20px}
+body[data-presentation=dashboard] #grid .game-genre{display:block;font-size:11px;margin-top:2px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;line-height:17px}
+.dashboard-spacer{grid-column:1/-1;pointer-events:none}.dashboard-empty{grid-column:1/-1;color:var(--muted);text-align:center;padding:30px 12px;line-height:1.6}
+body[data-presentation=dashboard] #dashboard-hints{display:flex;grid-row:4;align-items:center;justify-content:center;gap:20px;min-width:0}
+.dashboard-hint{display:flex;align-items:center;gap:7px;background:transparent;padding:5px 0;font-size:12px;color:var(--muted);white-space:nowrap}
+.dashboard-key{display:inline-grid;place-items:center;font-size:11px;min-width:22px;height:22px;border:1px solid var(--muted);border-radius:5px;padding:0 4px;color:var(--text)}
+.dashboard-key:is(.key-a,.key-b,.key-x,.key-y){border-radius:50%;padding:0;font-size:13px;font-weight:700;border:0;color:#101510}.key-a{background:#7be56e}.key-b{background:#ff747e}.key-x{background:#70baff}.key-y{background:#ffe16a}
+body[data-presentation=dashboard][data-dashboard-pane=recents] #grid .game.controller-selected,body[data-presentation=dashboard][data-dashboard-pane=categories] #grid .game.controller-selected{outline:none}
+@media(max-width:760px){body[data-presentation=dashboard] .topbar{gap:10px;padding:0 12px}body[data-presentation=dashboard] .brand{display:none}body[data-presentation=dashboard] .shell{grid-template-columns:148px minmax(0,1fr);gap:8px;padding:8px 8px 0}.dashboard-recent{padding:6px;gap:8px}.dashboard-recent img{width:32px;height:48px}.dashboard-recent strong{font-size:12px}.dashboard-recent small{font-size:10px}body[data-presentation=dashboard] #dashboard-sidebar{padding:12px 4px}#dashboard-sidebar h2{font-size:13px}body[data-presentation=dashboard] #dashboard-hints{gap:12px}.dashboard-hint:nth-last-child(-n+2){display:none}body[data-presentation=dashboard] .heading h1{font-size:18px;max-width:22vw}body[data-presentation=dashboard] .sort-label{font-size:12px}}
+@media(max-height:430px){body[data-presentation=dashboard] #main{grid-template-rows:40px 38px minmax(0,1fr) 36px}body[data-presentation=dashboard] #dashboard-sidebar{margin-bottom:36px}body[data-presentation=dashboard] #dashboard-hints{gap:12px}}
+body[data-presentation=dashboard] #grid .game:is(:focus,.controller-selected,.presentation-selected){outline:none}
+body[data-presentation=dashboard][data-selection-style=outline] #grid .presentation-selected .cover{outline:2px solid var(--accent);outline-offset:3px}
+body[data-presentation=dashboard] #grid .cover::after{display:none}
+@media(min-width:1100px){body[data-presentation=dashboard] .size-picker{display:flex}}
+@media(max-width:500px){body[data-presentation=dashboard] .shell{grid-template-columns:112px minmax(0,1fr)}.dashboard-recent img{width:26px;height:39px}.dashboard-recent{gap:5px}.dashboard-recent small{display:none}body[data-presentation=dashboard] .heading h1{max-width:100%;font-size:16px}body[data-presentation=dashboard] .toolbar{display:none}.dashboard-hint>span{display:none}}
+body.input-compact[data-presentation=dashboard] .shell{height:calc(var(--input-height) - 60px)}
+body.input-compact[data-presentation=dashboard] #main{grid-template-rows:40px minmax(0,1fr)}
+body.input-compact[data-presentation=dashboard] :is(.heading,.toolbar,#dashboard-hints){display:none}
+body.input-compact[data-presentation=dashboard] #grid{grid-row:2}
+body.input-compact[data-presentation=dashboard] #dashboard-sidebar{margin-bottom:8px}

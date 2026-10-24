@@ -1,0 +1,189 @@
+/* Original geometric treatments: one unmodified portrait cover, no theme artwork. */
+.showcase-part{display:none}
+body[data-palette=print]:not([data-presentation=abbotsford]){--bg:#f4efdf;--panel:#f4efdf;--field:#fffbee;--hover:#e5ddca;--line:#b0a791;--text:#171710;--muted:#635e50;--accent:#9d320a;--accent-soft:#f07a32;--accent-ink:#fffbee;--glow:#b4461522;color-scheme:light}
+body[data-palette=enamel]:not([data-presentation=abbotsford]){--bg:#17211f;--panel:#25332d;--field:#1a2721;--hover:#344c3c;--line:#738576;--text:#eef3e9;--muted:#b4c4b5;--accent:#b3dfa9;--accent-soft:#365d42;--accent-ink:#142719;--glow:#a8dfa533;color-scheme:dark}
+body:is([data-presentation=milan],[data-presentation=bellevue]){overflow:hidden}
+body:is([data-presentation=milan],[data-presentation=bellevue]) :is(#sidebar,#scrim,.brand-sub,.mark,#menu){display:none!important}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar{position:relative;height:58px;padding:0 28px;gap:20px;background:transparent;border:0;backdrop-filter:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .brand{font:700 18px/1 WayfinderClean,sans-serif;letter-spacing:5px;min-width:0;flex:1}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .brand>span:last-child{display:block}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .app-actions{flex:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .app-actions button{height:36px;min-height:36px;background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none;border-radius:4px}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #settings-button{display:flex;align-items:center;justify-content:center;padding:6px;width:36px}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .search{position:absolute;top:100%;left:24px;right:24px;z-index:30;height:44px;background:var(--field);border:1px solid var(--line);opacity:0;pointer-events:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .search:focus-within{opacity:1;pointer-events:auto}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .shell{display:block;height:calc(100dvh - 58px);padding:0 28px 12px}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #main{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,60fr) minmax(0,40fr);grid-template-rows:94px minmax(0,1fr) 32px 46px;column-gap:24px;height:100%;padding:0;overflow:visible;color:var(--text);font-family:var(--display-font)}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #main>:not(.showcase-part):not(#grid){display:none!important}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-part{display:block;min-width:0;min-height:0}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-heading{grid-column:1;grid-row:1;align-self:center;overflow:hidden}
+#showcase-category{margin:0;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit}
+#showcase-count{margin:5px 0 0;color:var(--muted);font:13px WayfinderClean,sans-serif}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid{position:static;grid-column:1;grid-row:2/4;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(8,minmax(0,1fr));gap:0;height:auto;min-height:0;min-width:0;padding:0 0 10px;margin:0;overflow:hidden;transform:none;perspective:none;inset:auto;align-items:stretch}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .showcase-row{position:relative;display:flex;align-items:center;gap:20px;min-width:0;min-height:0;height:auto;padding:4px 12px;text-align:left;border:0;border-radius:0;background:transparent;color:var(--text);transform:none!important;box-shadow:none!important;outline:none;overflow:hidden}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .showcase-row::before,body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .showcase-row::after{display:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{position:static;display:block;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;padding:0;font:var(--game-title-weight,500) clamp(16px,1.85vw,29px)/1.2 var(--display-font);color:inherit!important;text-shadow:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .favorite-badge{position:static;flex:none;background:none;color:inherit;padding:0;font:26px/1 WayfinderClean,sans-serif;box-shadow:none}
+.showcase-number{font:400 22px/1 Oswald,WayfinderClean,sans-serif;min-width:30px;color:inherit}
+.showcase-unstar{display:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-art{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;padding:8px;overflow:hidden}
+#showcase-print{line-height:0;flex:none;max-width:100%;max-height:100%}
+#showcase-cover{display:block;box-sizing:border-box;object-fit:contain;background:var(--field);border:0 solid var(--text);border-radius:var(--art-radius,0);max-width:100%;max-height:100%}
+body[data-art-fit=cover] #showcase-cover{object-fit:cover}
+body[data-cover-border=hairline] #showcase-cover{border-width:1px}
+body[data-cover-border=matte] #showcase-cover{border-width:8px;border-color:var(--field)}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-caption{grid-column:2;grid-row:3;text-align:center;align-self:center;overflow:hidden}
+#showcase-title{font:var(--game-title-weight,500) 16px/1.2 var(--display-font);color:inherit;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-footer{grid-column:1/-1;grid-row:4;display:flex;align-items:center;gap:18px;border-top:1px solid var(--line);z-index:3}
+.showcase-hint{display:flex;align-items:center;gap:7px;background:none;color:inherit;border:0;padding:6px 0;font:14px WayfinderClean,sans-serif}
+.showcase-key{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;border:1px solid #fff8;box-shadow:inset 0 2px 4px #fff6,0 1px 2px #0006;font:600 16px WayfinderClean,sans-serif;color:white}
+.showcase-key.a{background:#348a27}.showcase-key.b{background:#c5371e}.showcase-key.x{background:#1684b7}.showcase-key.y{background:#e7b42d;color:#251c00}
+.showcase-page-help{margin-left:auto;color:var(--muted);font:10px WayfinderClean,sans-serif}
+.showcase-page{background:none;color:inherit;font:24px WayfinderClean,sans-serif;min-width:28px;padding:0}
+#showcase-position{font:12px WayfinderClean,sans-serif;white-space:nowrap;min-width:42px;text-align:right}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid.search-empty-grid{display:flex;flex-direction:column;overflow:auto}
+.showcase-empty{grid-area:1/1/-1/-1;align-self:center;color:inherit;font-size:16px}
+.showcase-tab small{font:11px WayfinderClean,sans-serif;margin-left:8px}
+.showcase-tab-count{display:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar .brand{display:flex}
+body[data-presentation=milan] #main #showcase-heading #showcase-category{font-family:Oswald,WayfinderClean,sans-serif}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #appearance-preview .appearance-sample-space::before{content:'';position:absolute;inset:-12px;background:var(--panel);z-index:-1}
+/* Milan: graphic packaging, not a simulation of additional game artwork. */
+body[data-presentation=milan]{--print-stripe:clamp(30px,8vw,110px);background-color:var(--bg)}
+body[data-presentation=milan]::before{content:'';position:fixed;top:0;bottom:0;left:12px;width:var(--print-stripe);background:linear-gradient(90deg,#be3c16 0 31%,transparent 31% 33%,#e67c14 33% 65%,transparent 65% 67%,#d8aa26 67%);pointer-events:none}
+body[data-presentation=milan] .topbar{margin-left:var(--print-stripe);padding-left:32px}
+body[data-presentation=milan] .shell{margin-left:var(--print-stripe);padding-left:32px}
+body[data-presentation=milan] #showcase-category{font:700 clamp(32px,5.8vw,82px)/1.05 Oswald,WayfinderClean,sans-serif;text-transform:uppercase;letter-spacing:-1px}
+body[data-presentation=milan] #showcase-count{text-transform:uppercase;letter-spacing:3px}
+body[data-presentation=milan] #showcase-heading{padding-bottom:10px}
+body[data-presentation=milan] #showcase-tabs{grid-column:2;grid-row:1;display:flex;align-items:flex-end;gap:4px;overflow:auto;scrollbar-width:none;padding-bottom:12px}
+body[data-presentation=milan] .showcase-tab{flex:0 0 auto;max-width:180px;padding:9px 12px;border:0;border-radius:0;background:none;color:var(--text);font:15px var(--display-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=milan] .showcase-tab.current{background:var(--text);color:var(--bg)}
+body[data-presentation=milan] #grid{border-top:2px solid var(--text);padding-top:5px}
+body[data-presentation=milan] #grid .presentation-selected{background:var(--accent-soft)}
+body[data-presentation=milan] #showcase-footer{border-top:2px solid var(--text)}
+body[data-presentation=milan][data-showcase-pane=tabs] .showcase-tab.current{outline:2px solid var(--accent);outline-offset:-3px}
+/* Bellevue: a bounded window of category blades for arbitrarily large libraries. */
+body[data-presentation=bellevue]{--blade-width:clamp(32px,4.5vw,64px);--blade-left:2;--blade-right:2}
+body[data-presentation=bellevue] .shell{padding:0 12px 10px}
+body[data-presentation=bellevue] #main{padding-left:calc(var(--blade-left)*var(--blade-width) + 26px);padding-right:calc(var(--blade-right)*var(--blade-width) + 26px);grid-template-columns:minmax(0,58fr) minmax(0,42fr);grid-template-rows:85px minmax(0,1fr) 34px 50px;column-gap:22px}
+body[data-presentation=bellevue] #main::before{content:'';position:absolute;z-index:-1;top:0;bottom:50px;left:calc(var(--blade-left)*var(--blade-width));right:calc(var(--blade-right)*var(--blade-width));border:1px solid var(--line);border-radius:54px 48px 40px 40px;background:linear-gradient(115deg,#ffffff22,transparent 40%,#00000016),var(--panel);box-shadow:inset 2px 0 3px #ffffff80,inset -3px 0 4px #0008,0 6px 12px #0006}
+body[data-presentation=bellevue] #main::after{content:'';position:absolute;z-index:-2;inset:0 0 50px;border-radius:0 48px 40px 0;background:var(--blade-backing);pointer-events:none}
+body[data-presentation=bellevue][data-palette=enamel] #main{--panel:#d4d8c7;--field:#e6eada;--text:#1e3027;--muted:#4b6050;--accent-soft:#245038;--line:#93a38c;color:var(--text)}
+body[data-presentation=bellevue] #showcase-tabs{position:absolute;inset:0 0 50px;pointer-events:none;z-index:2;display:block}
+body[data-presentation=bellevue] .showcase-tab{pointer-events:auto;position:absolute;top:0;bottom:0;width:var(--blade-width);padding:25px 7px;border:1px solid #fff7;border-radius:0 48px 40px 0;background:linear-gradient(90deg,#0003,transparent 50%,#ffffff35 88%,#0006),var(--blade-color);color:#fff;box-shadow:2px 0 3px #000a,inset -2px 0 1px #fff5;font:400 19px var(--display-font);overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
+body[data-presentation=bellevue] .showcase-tab[data-side=before]{left:calc(var(--blade-slot)*var(--blade-width))}
+body[data-presentation=bellevue] .showcase-tab[data-side=after]{right:calc((var(--blade-right) - 1 - var(--blade-slot))*var(--blade-width))}
+body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{writing-mode:vertical-rl;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:100%;letter-spacing:1px}
+body[data-presentation=bellevue] .showcase-tab:not(.current) small{position:absolute;bottom:18px;left:0;right:0;text-align:center;margin:0}
+body[data-presentation=bellevue] .showcase-tab.current{left:calc(var(--blade-left)*var(--blade-width));right:calc(var(--blade-right)*var(--blade-width));width:auto;bottom:auto;height:78px;padding:12px 35px;border-radius:54px 48px 50% 0;justify-content:flex-start;align-items:center;gap:12px;background:linear-gradient(120deg,#fff1,transparent 50%,#0004),var(--blade-color);font-size:28px;box-shadow:inset 0 2px 1px #fff8,0 2px 0 #fff5}
+body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=bellevue] .showcase-tab.current{padding-bottom:24px}
+body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{display:block;position:absolute;bottom:9px;left:35px;font:12px WayfinderClean,sans-serif;color:#ffffffcc}
+body[data-presentation=bellevue] #showcase-heading{display:none}
+body[data-presentation=bellevue] #grid .showcase-row{border-bottom:1px solid #73857633;border-radius:8px;padding-inline:14px;gap:10px}
+body[data-presentation=bellevue] #grid .showcase-number{display:none}
+body[data-presentation=bellevue] #grid .presentation-selected{background:linear-gradient(#fff1,transparent 60%,#0002),var(--accent-soft);color:var(--text);box-shadow:inset 0 1px 1px #fff9,inset 0 0 0 1px var(--line)!important}
+body[data-presentation=bellevue][data-palette=enamel] #grid .presentation-selected{color:#fff;box-shadow:inset 0 0 0 1px #efffdf,0 0 0 2px #719e6c!important}
+body[data-presentation=bellevue] #grid .favorite-badge{color:#ffe16e;text-shadow:0 1px 2px #000,0 0 1px #000}
+body[data-presentation=bellevue] #showcase-art{grid-row:2;padding:4px}
+body[data-presentation=bellevue] #showcase-footer{margin-left:calc(-1*var(--blade-left)*var(--blade-width));margin-right:calc(-1*var(--blade-right)*var(--blade-width));color:var(--text);background:var(--bg);padding:0 15px}
+body[data-presentation=bellevue][data-palette=enamel] #showcase-footer{color:#eef3e9;--muted:#b4c4b5}
+body[data-presentation=bellevue][data-showcase-pane=tabs] .showcase-tab.current{outline:none}
+body[data-presentation=bellevue][data-showcase-pane=tabs] .showcase-tab.current .showcase-tab-label{text-decoration:underline;text-decoration-color:#e8e7b5;text-decoration-thickness:2px;text-underline-offset:7px;text-shadow:0 1px 2px #07110e,0 0 10px #f3efb833}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-tab[hidden]{display:none}
+@media(max-width:900px){.showcase-page-help{display:none}#showcase-position{margin-left:auto}body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-footer{gap:12px}body[data-presentation=milan] #main{column-gap:14px}body[data-presentation=bellevue] #main{padding-left:calc(var(--blade-left)*var(--blade-width) + 14px);padding-right:calc(var(--blade-right)*var(--blade-width) + 14px);column-gap:12px}.showcase-number{font-size:18px;min-width:24px}}
+@media(max-width:600px){body:is([data-presentation=milan],[data-presentation=bellevue]) .brand{font-size:12px;letter-spacing:2px}body:is([data-presentation=milan],[data-presentation=bellevue]) #add-game{display:none}body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar{padding-inline:12px;gap:6px}body[data-presentation=milan] .shell{padding-inline:12px}body[data-presentation=milan]{--print-stripe:16px}body[data-presentation=milan]::before{left:0}body:is([data-presentation=milan],[data-presentation=bellevue]) #main{grid-template-columns:minmax(0,1fr);grid-template-rows:72px 38px minmax(0,1fr) 46px}body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-art,body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-caption{display:none}body[data-presentation=milan] #showcase-tabs{grid-column:1;grid-row:2;padding-bottom:4px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid{grid-row:3}body[data-presentation=bellevue] #main{grid-template-rows:78px 0 minmax(0,1fr) 46px}body[data-presentation=bellevue]{--blade-width:25px}body[data-presentation=bellevue] .showcase-tab{font-size:14px;padding-inline:3px}body[data-presentation=bellevue] .showcase-tab.current{font-size:22px;padding-inline:18px}body[data-presentation=bellevue] #showcase-tabs{bottom:46px}body[data-presentation=bellevue] #main::before{bottom:46px}body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-hint span{display:none}body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-footer{gap:10px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{font-size:15px}}
+@media(max-height:450px){body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar{height:44px}body:is([data-presentation=milan],[data-presentation=bellevue]) .shell{height:calc(100dvh - 44px)}body:is([data-presentation=milan],[data-presentation=bellevue]) #main{grid-template-rows:60px minmax(0,1fr) 22px 36px}body[data-presentation=milan] #showcase-category{font-size:32px}body[data-presentation=bellevue] .showcase-tab.current{height:54px;font-size:22px}body[data-presentation=bellevue] #showcase-tabs,body[data-presentation=bellevue] #main::before{bottom:36px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{font-size:14px}.showcase-page-help{display:none}.showcase-number{font-size:16px}}
+body.input-compact:is([data-presentation=milan],[data-presentation=bellevue]) .shell{height:calc(var(--input-height) - 58px)}
+body.input-compact:is([data-presentation=milan],[data-presentation=bellevue]) #grid{overflow:auto;grid-template-rows:repeat(8,minmax(30px,1fr))}
+body[data-presentation=bellevue][data-palette=enamel] #appearance-preview .appearance-sample-space::before{background:#d4d8c7}
+@media(max-width:600px){body[data-presentation=bellevue] #main::after{bottom:46px}}
+@media(max-height:450px){body[data-presentation=bellevue] #main::after{bottom:36px}}
+@media(max-height:450px){body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{bottom:5px;font-size:10px}body[data-presentation=bellevue] .showcase-tab.current{padding-bottom:20px}}
+/* Shared curved surfaces replace the old independently rounded strips. */
+body[data-presentation=bellevue] #main::before,body[data-presentation=bellevue] #main::after{display:none}
+body[data-presentation=milan] #blade-surfaces{display:none}
+#blade-unit{position:absolute;visibility:hidden;pointer-events:none;width:var(--blade-width);height:0}
+body[data-presentation=bellevue] #blade-surfaces{position:absolute;inset:0 0 50px;width:100%;height:calc(100% - 50px);z-index:-1;pointer-events:none;overflow:visible;filter:drop-shadow(0 5px 5px #0006)}
+body[data-presentation=bellevue] .showcase-tab,body[data-presentation=bellevue] .showcase-tab.current{background:none;border:0;border-radius:0;box-shadow:none}
+body[data-presentation=bellevue] .showcase-tab:not(.current){padding-top:80px;padding-left:18px;padding-right:0}
+body[data-presentation=bellevue] .showcase-tab.current{height:100px;padding:12px 0 30px 84px;align-items:center;font-size:30px;max-width:65%}
+body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{left:84px;bottom:20px}
+body[data-presentation=bellevue] .showcase-tab.current{right:auto;max-width:none;width:calc((100% - (var(--blade-left) + var(--blade-right))*var(--blade-width))*.48)}
+body[data-presentation=bellevue] #main{padding-left:calc(var(--blade-left)*var(--blade-width) + 42px);grid-template-rows:112px minmax(0,1fr) 34px 50px}
+body[data-presentation=bellevue] #grid .showcase-row{border-radius:0}
+body[data-presentation=bellevue] #grid .presentation-selected{border-radius:14px;background:radial-gradient(ellipse at 65% 0%,#8adf7540,transparent 65%),linear-gradient(110deg,#0007,#ffffff0a 55%,#0005),var(--accent-soft)}
+body[data-presentation=bellevue][data-palette=enamel] #grid .presentation-selected{box-shadow:inset 0 2px 2px #fffc,inset 0 -2px 3px #0006,inset 0 0 0 1px #eaffdb,0 0 0 2px #68996a,0 2px 8px #33492b66!important}
+body[data-presentation=bellevue] #showcase-art{grid-row:1/3;padding-top:72px}
+@media(max-width:600px){body[data-presentation=bellevue] #blade-surfaces{height:calc(100% - 46px);bottom:46px}body[data-presentation=bellevue] #main{padding-left:calc(var(--blade-left)*var(--blade-width) + 14px);grid-template-rows:100px 0 minmax(0,1fr) 46px}body[data-presentation=bellevue] .showcase-tab.current{padding-left:44px;font-size:20px}body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{left:44px}body[data-presentation=bellevue] .showcase-tab:not(.current){padding-left:7px}}
+@media(max-height:450px){body[data-presentation=bellevue] #blade-surfaces{height:calc(100% - 36px);bottom:36px}body[data-presentation=bellevue] #main{grid-template-rows:80px minmax(0,1fr) 22px 36px}body[data-presentation=bellevue] .showcase-tab.current{height:75px;padding-left:70px;font-size:22px}body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{left:70px;bottom:14px}body[data-presentation=bellevue] #showcase-art{padding-top:48px}}
+
+/* Typography follows the packaging and dashboard references. */
+@font-face{font-family:Anton;src:url('fonts/Anton-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+body[data-presentation=milan] #main #showcase-heading #showcase-category{font-family:Anton,Oswald,sans-serif;font-weight:400;font-size:clamp(40px,7vw,100px);line-height:1.08;letter-spacing:-.025em;font-synthesis:none}
+body[data-presentation=milan] #showcase-heading{display:flex;align-items:baseline;gap:18px;padding-bottom:6px}
+body[data-presentation=milan] #showcase-category{min-width:0;flex:0 1 auto}
+body[data-presentation=milan] #showcase-count{flex:none;font:400 16px/1.1 Oswald,sans-serif;letter-spacing:3px;color:var(--text)}
+body[data-presentation=milan] #grid .game-title{font-size:clamp(18px,2.65vw,40px);letter-spacing:-.035em;line-height:1.1}
+body[data-presentation=milan] .showcase-tab{font-family:Oswald,sans-serif;font-size:17px}
+body[data-presentation=milan] .showcase-hint{font-family:Oswald,sans-serif}
+body[data-presentation=bellevue] #grid .game-title{font-size:clamp(17px,2vw,31px);letter-spacing:-.02em}
+body[data-presentation=bellevue] .showcase-tab.current{font-weight:400;letter-spacing:-.025em}
+body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{letter-spacing:.35px}
+body[data-presentation=bellevue] :is(#showcase-title,.showcase-hint,.showcase-tab-count){font-family:var(--display-font)}
+@media(max-width:600px){body[data-presentation=milan] #showcase-heading{gap:8px}body[data-presentation=milan] #showcase-count{font-size:11px;letter-spacing:1px}body[data-presentation=milan] #main #showcase-heading #showcase-category{font-size:38px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{font-size:16px}}
+@media(max-height:450px){body[data-presentation=milan] #main #showcase-heading #showcase-category{font-size:44px}body[data-presentation=milan] #showcase-count{font-size:12px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{font-size:16px}}
+
+body[data-presentation=milan] #showcase-caption{display:none}
+body[data-presentation=milan] #showcase-art{grid-row:2/4}
+
+body[data-presentation=bellevue] #showcase-caption{display:none}
+body[data-presentation=bellevue] #showcase-art{grid-row:1/4}
+
+body[data-presentation=bellevue] #showcase-print{transform:translateY(-6px)}
+
+/* Final packaging and enamel polish. */
+body[data-presentation=milan][data-palette=print] #grid .presentation-selected{background:#eb5b21}
+body[data-presentation=milan] #showcase-tabs{margin-inline:28px;overflow:hidden}
+body[data-presentation=milan] .showcase-tab{max-width:100%}
+body[data-presentation=milan] .showcase-category-arrow{grid-column:2;grid-row:1;align-self:end;z-index:4;width:26px;height:44px;margin-bottom:6px;padding:0;border:0;background:none;color:var(--text);font:28px/1 WayfinderClean,sans-serif}
+body[data-presentation=milan] #showcase-category-prev{justify-self:start}
+body[data-presentation=milan] #showcase-category-next{justify-self:end}
+body[data-presentation=milan] .showcase-category-arrow:disabled{opacity:.22}
+body[data-presentation=bellevue] .showcase-category-arrow{display:none}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-page-help{display:flex;align-items:center;gap:14px;font-size:11px}
+.showcase-control-group{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.showcase-shoulder{border:1px solid var(--line);border-radius:5px;padding:3px 5px;font:500 10px/1 WayfinderClean,sans-serif;color:inherit}
+body[data-presentation=bellevue][data-palette=enamel] #grid .presentation-selected{box-shadow:inset 0 1px 0 #d7e8d999,inset 0 -1px 2px #0006,0 2px 4px #14291e55!important}
+body[data-presentation=bellevue] .showcase-tab.current{font-size:32px;padding-top:8px;padding-bottom:33px}
+body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{bottom:16px;letter-spacing:0}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar .app-actions button{border-color:transparent;border-radius:8px;min-width:44px;height:40px;min-height:40px}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar #settings-button{border:1px solid var(--line);border-radius:50%;width:40px;min-width:40px}
+body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar .app-actions button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:1000px){body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-page-help{display:none}}
+@media(max-width:600px){body[data-presentation=milan] .showcase-category-arrow{grid-column:1;grid-row:2;height:34px;margin-bottom:0}body[data-presentation=bellevue] .showcase-tab.current{font-size:22px}}
+@media(max-height:450px){body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-page-help{display:none}body[data-presentation=bellevue] .showcase-tab.current{font-size:24px;padding-bottom:24px}body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{bottom:10px}}
+
+/* Keep blade lettering inside the straight face, clear of both curved ends. */
+body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{position:absolute;top:86px;bottom:76px;left:18px;right:4px;min-width:0;min-height:0;max-height:none;width:auto;line-height:1.15;font-size:18px;font-weight:500;overflow:hidden;text-overflow:ellipsis;color:#fff;text-shadow:0 1px 2px #07110ecc}
+body[data-presentation=bellevue] .showcase-tab:not(.current) small{bottom:54px;left:18px;right:4px;font-size:12px;font-weight:600;color:#fff;text-shadow:0 1px 2px #07110e}
+body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-label{min-width:0;flex:1;line-height:1.2;color:#fff;text-shadow:0 1px 2px #10221799}
+body[data-presentation=bellevue] .showcase-tab.current>small{display:none}
+body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#f0f4ef;text-shadow:0 1px 2px #102217}
+@media(max-width:600px){body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{left:9px;right:1px;font-size:13px;top:80px;bottom:70px}body[data-presentation=bellevue] .showcase-tab:not(.current) small{left:7px;right:0;font-size:10px}}
+@media(max-height:450px){body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{top:65px;bottom:65px;font-size:15px}body[data-presentation=bellevue] .showcase-tab:not(.current) small{bottom:44px}}
+
+body[data-presentation=bellevue] .showcase-tab-label,body[data-presentation=bellevue] .showcase-tab-count{text-align:start}
+
+body[data-presentation=bellevue] #showcase-footer{border-top-color:transparent}
+
+/* Labels and touch areas follow the actual straight faces of the blades. */
+body[data-presentation=bellevue] .showcase-tab:not(.current){left:var(--blade-face-left);right:auto;width:var(--blade-face-width);padding-inline:0}
+body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{left:50%;right:auto;width:1.2em;transform:translateX(-50%)}
+body[data-presentation=bellevue] .showcase-tab:not(.current) small{left:4px;right:4px}
+
+body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label{font-size:clamp(10px,calc((var(--blade-face-width) - 8px)/1.2),18px)}
+
+/* Keep the static metalwork on its own layer while titles and covers change. */
+body[data-presentation=bellevue] #blade-surfaces{will-change:transform}

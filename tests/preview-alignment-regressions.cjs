@@ -20,7 +20,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  try{
  await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>'{}',saveView:()=>{},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
- const modes=['library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice','paloalto'];
+ const modes=['dashboard','library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice','paloalto','redmond','sanfrancisco','atlantis'];
 
  for(const viewport of [{width:1097,height:700},{width:640,height:600}]){
  await page.setViewportSize(viewport);
@@ -30,10 +30,10 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  for(const size of ['normal','small','large']){
  const report=await page.evaluate(size=>{
  const selected=$('#grid .presentation-selected')||$('#grid .controller-selected')||$('#grid .game');
- const actual=['ulm','cambridge','paloalto'].includes(presentation)?$('#'+presentation+'-cover'):['oxford'].includes(presentation)?$('#catalogue-art'):selected?.querySelector('.cover');
+ const actual=['ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)?$('#'+presentation+'-cover'):['oxford'].includes(presentation)?$('#catalogue-art'):selected?.querySelector('.cover');
  if(actual&&size!=='normal'){actual.style.width=(size==='small'?38:300)+'px';actual.style.height=(size==='small'?57:450)+'px';}
  updateAppearancePreview();const frame=$('.appearance-sample'),image=$('.appearance-sample img'),caption=$('#appearance-preview>p'),space=$('.appearance-sample-space');
- const r=(['ulm','cambridge','paloalto'].includes(presentation)?image:frame).getBoundingClientRect(),c=caption.getBoundingClientRect(),w=space.getBoundingClientRect();
+ const r=(['ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)?image:frame).getBoundingClientRect(),c=caption.getBoundingClientRect(),w=space.getBoundingClientRect();
  return {delta:Math.abs(r.x+r.width/2-c.x-c.width/2),inside:r.left>=w.left-1&&r.right<=w.right+1,width:r.width};
  },size);
  assert.ok(report.delta<1,mode+' '+size+' at '+viewport.width+': '+JSON.stringify(report));assert.equal(report.inside,true,mode+' fits reserved preview space');
@@ -41,7 +41,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await page.evaluate(()=>$('#settings-dialog').close());
  }
  }
- assert.deepEqual(errors,[]);console.log('PASS: centered appearance previews across 12 layouts, two viewport sizes, and small/normal/large source covers');
+ assert.deepEqual(errors,[]);console.log('PASS: centered appearance previews across 17 artwork layouts, two viewport sizes, and small/normal/large source covers');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});
 

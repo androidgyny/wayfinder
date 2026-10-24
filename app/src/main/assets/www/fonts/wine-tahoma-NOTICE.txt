@@ -1,0 +1,13 @@
+Wine Tahoma Regular and Bold
+Copyright (c) 2004 Larry Snyder. Based on Bitstream Vera Sans, copyright (c) 2003 Bitstream, Inc.
+Font renamed in accordance with the original license. Please do not contact Bitstream Inc. regarding this font.
+
+Distributed unmodified from Wine, commit 7298a818b79446bae153b8d5aa27235ab3703bf9:
+https://github.com/wine-mirror/wine/tree/7298a818b79446bae153b8d5aa27235ab3703bf9/fonts
+
+Licensed under GNU LGPL version 2.1 or later; see wine-tahoma-LGPL-2.1.txt.
+The underlying Bitstream Vera notice is in wine-tahoma-Bitstream.txt.
+Corresponding editable FontForge sources are included in the Wayfinder repository:
+https://github.com/androidgyny/wayfinder/tree/main/docs/font-sources/wine-tahoma
+
+This is Wine's replacement font, not Microsoft's Tahoma.
