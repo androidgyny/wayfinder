@@ -4,13 +4,13 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.191-beta.15)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.212-beta.16)
 
 Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. It turns installed games into a personal library of covers and categories, with controller navigation and a choice of ways to browse. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
 
 It is designed for Android handhelds with a touchscreen and a game controller. You can open Wayfinder like any other app or make it your Android home screen. Games are installed separately; Wayfinder organizes and opens them.
 
-![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta15/03-paloalto.png)
+![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta16/01-paloalto.png)
 
 *Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
 
@@ -22,7 +22,7 @@ It is designed for Android handhelds with a touchscreen and a game controller. Y
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and images work across fourteen layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and images work across twenty-one layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -72,21 +72,21 @@ Wayfinder includes twenty-one layouts: aBBotSford, Alexandria, Atlantis, Bath, B
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Kyoto: Dream Machine selected on a pale cover shelf, with cyan focus and a floating dock of colorful controller buttons.](docs/screenshots/beta15/02-kyoto.png)
+![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta16/02-bath.png)
 
-*Kyoto · Smitchish preset · a spacious cover shelf and colorful controller dock.*
+*Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
-![aBBotSford: Ultimate Doom selected in a colorful BBS directory with pixel lettering and character-drawn frames.](docs/screenshots/beta15/05-abbotsford.png)
+![Bellevue: Across Age 2 beside a title list framed by curved metallic category panels.](docs/screenshots/beta16/03-bellevue.png)
 
-*aBBotSford · MyNameIsMUD preset · an old-school directory for a modern collection.*
+*Bellevue · Blades preset · sculpted metallic panels and one large portrait cover.*
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta15/08-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta16/15-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
-These ten screenshots were captured on a Pimax Portal with the Beta 15 build. Games and personal cover artwork are not bundled. [See all ten screenshots of library views and the Apps screen in the gallery.](docs/GALLERY.md)
+The gallery’s fifteen screenshots were captured on a Pimax Portal with the Beta 16 build. Games and personal cover artwork are not bundled. [Explore all fifteen screenshots of library views and the Apps screen.](docs/GALLERY.md)
 
 ## Controller reference
 
@@ -115,7 +115,7 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Latest release
 
-**Beta 15** introduces Palo Alto and the Hyperstack preset, now the starting appearance for new installations. The former Default preset is now Playbyte, and the Wayfinder color scheme is now Evergreen. All built-in presets start with Fill artwork. This release also makes Cambridge’s font adjustable, keeps Apps typography consistent, and fixes category focus, page navigation, cover previews, and palette interactions. All ten gallery screenshots have been refreshed.
+**Beta 16** adds notebook, classic desktop, sci-fi, and console-inspired ways to browse, including Field Notes, Droplet, Experience, Final Frontier, Boxer, Homage, and Blades. It also improves controller navigation, artwork previews, settings compatibility, and responsiveness. The gallery now includes fifteen fresh screenshots.
 
 ## Project status
 
@@ -129,9 +129,21 @@ Game artwork belongs to its respective creators. Interface audio includes [Inter
 
 Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
 
-Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
+Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). New display choices include [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) for notebook lettering, [Anton](https://github.com/google/fonts/tree/main/ofl/anton) for bold packaging-inspired headlines, and [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) for condensed headings, all under the SIL Open Font License 1.1. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
 
 App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
+
+The notebook’s [paper](app/src/main/assets/www/notebook-paper.svg), [wood](app/src/main/assets/www/notebook-wood.svg), [binding rings](app/src/main/assets/www/notebook-rings.svg), and [tape](app/src/main/assets/www/notebook-tape.svg), along with the [Tidal Waves backdrop](app/src/main/assets/www/backgrounds/tidal-waves.svg) and procedural Blades metalwork, were created for Wayfinder.
+
+Design inspirations are credited separately from bundled assets:
+
+- **Bath / Field Notes:** [Notepad Pocket for ES-DE](https://github.com/anthonycaccese/notepad-pocket-es-de), based on Zoidburg’s original design and adapted for ES-DE by ant (Anthony Caccese).
+- **Milan / Homage:** [Homage for ES-DE by Weestuarty](https://github.com/Weestuarty-es-de/homage-es-de).
+- **Bellevue / Blades:** Microsoft’s original Xbox 360 Blades dashboard; **Durango / Boxer:** the Xbox app’s library and recent-games sidebar.
+- **Redmond / Experience:** Windows XP’s Explorer and Luna styling. **Atlantis / Droplet:** Mac OS X’s Aqua and Finder. **Palo Alto / Hyperstack:** HyperCard’s card-and-stack interface.
+- **San Francisco / Final Frontier:** Star Trek’s LCARS interface, associated with designer Michael Okuda.
+
+These are independent interpretations for Wayfinder, not official themes or endorsements by the original creators.
 
 ## Build from source
 

@@ -2,74 +2,106 @@
 
 [← Back to the README](../README.md)
 
-Nine library views and a home for everyday apps. Start with Hyperstack’s classic card catalogue, then explore a different way to browse. The same collection can become a card table, a cover carousel, a quiet reading list, or a colorful BBS directory.
+Fourteen ways to browse a game collection, followed by a home for everyday apps. From paper notebooks and metallic consoles to classic desktops and colorful terminals, these views use the same library of portrait covers and categories.
 
-All ten images were captured directly on a **Pimax Portal at 1920 × 1080**, running **Wayfinder v0.9.191 Beta 15**, on **October 18, 2026**. These are unretouched screenshots. Appearance combinations, temporary favorites, and the Copenhagen table were arranged for the gallery; the device’s saved library and appearance were preserved. Games and personal cover artwork are not bundled. Animated backdrops appear as still frames.
+All fifteen images were captured directly on a **Pimax Portal (Snapdragon 865), running Android 10 at 1920 × 1080**, with **Wayfinder v0.9.212 Beta 16**, on **October 24, 2026**. These are unretouched screenshots. Appearance combinations, temporary favorites, and the Copenhagen table were arranged for the gallery; the device’s saved library and appearance were preserved. Games and personal cover artwork are not bundled. Animated backdrops appear as still frames.
 
-[Palo Alto](#palo-alto) · [Copenhagen](#copenhagen) · [Kyoto](#kyoto) · [aBBotSford](#abbotsford) · [Cupertino](#cupertino) · [Berlin](#berlin) · [Venice](#venice) · [Oxford](#oxford) · [Vienna](#vienna)
+[Palo Alto](#palo-alto) · [Bath](#bath) · [Bellevue](#bellevue) · [Milan](#milan) · [Atlantis](#atlantis) · [Redmond](#redmond) · [San Francisco](#san-francisco) · [Durango](#durango) · [Kyoto](#kyoto) · [Copenhagen](#copenhagen) · [aBBotSford](#abbotsford) · [Cupertino](#cupertino) · [Prague](#prague) · [Venice](#venice)
 
 [Beyond the game library: Apps](#beyond-the-game-library)
 
 ## Palo Alto
 
-**Hyperstack** — the default for new installations. Category tabs, a paged title index, and portrait artwork form a classic card catalogue, with crisp Platinum colors and IBM VGA lettering.
+**Hyperstack** — the default for new installations: a crisp card catalogue with category tabs, a paged title index, and Tengami’s portrait artwork.
 
-![Palo Alto: Tengami beside a tabbed card index in the Hyperstack preset.](screenshots/beta15/03-paloalto.png)
+![Palo Alto — Hyperstack.](screenshots/beta16/01-paloalto.png)
 
-## Copenhagen
+## Bath
 
-**Full House** — a green felt table of twelve colorful covers. Keep a pick, replace it, or shuffle the table to rediscover something.
+**Field Notes** — warm paper, colored tabs, handwritten headings, and KAMI held in place with a strip of tape.
 
-![Copenhagen: twelve covers on green felt, with KAMI selected.](screenshots/beta15/10-copenhagen.png)
+![Bath — Field Notes.](screenshots/beta16/02-bath.png)
+
+## Bellevue
+
+**Blades** — curved metallic category panels frame a compact title list and Across Age 2’s cover.
+
+![Bellevue — Blades.](screenshots/beta16/03-bellevue.png)
+
+## Milan
+
+**Homage** — bold orange graphics, oversized lettering, and a numbered title index give Sonic Mania Plus a packaging-inspired presentation.
+
+![Milan — Homage.](screenshots/beta16/04-milan.png)
+
+## Atlantis
+
+**Droplet** — cool blue desktop styling, colorful folders, and a large preview of Night in the Woods.
+
+![Atlantis — Droplet.](screenshots/beta16/05-atlantis.png)
+
+## Redmond
+
+**Experience** — a familiar blue desktop, a file-browser title list, and Braid’s artwork and launch details.
+
+![Redmond — Experience.](screenshots/beta16/06-redmond.png)
+
+## San Francisco
+
+**Final Frontier** — peach, lavender, and gold control panels surround a sci-fi library and Space Expedition.
+
+![San Francisco — Final Frontier.](screenshots/beta16/07-sanfrancisco.png)
+
+## Durango
+
+**Boxer** — a recent-games sidebar beside a generous cover grid, in deep Evergreen colors.
+
+![Durango — Boxer.](screenshots/beta16/08-durango.png)
 
 ## Kyoto
 
-**Smitchish** — a pale cover shelf with Dream Machine selected, soft shadows, and a floating dock of colorful controller hints.
+**Smitchish** — a bright cover shelf, cyan selection glow, soft shadows, and a floating dock of colorful controller hints.
 
-![Kyoto: Dream Machine among seven favorites on a bright cover shelf.](screenshots/beta15/02-kyoto.png)
+![Kyoto — Smitchish.](screenshots/beta16/09-kyoto.png)
+
+## Copenhagen
+
+**Full House** — twelve covers on a green card table. Keep a pick, replace it, or shuffle to rediscover something.
+
+![Copenhagen — Full House.](screenshots/beta16/10-copenhagen.png)
 
 ## aBBotSford
 
-**MyNameIsMUD** — ANSI Classic colors, IBM VGA lettering, and character-drawn windows. Ultimate Doom sits in a directory of shooters; opening a title’s details reveals its cover and launch controls.
+**MyNameIsMUD** — ANSI colors, IBM VGA lettering, and character-drawn windows. Open a title’s details to see its cover.
 
-![aBBotSford: Ultimate Doom selected in a colorful, two-pane BBS directory.](screenshots/beta15/05-abbotsford.png)
+![aBBotSford — MyNameIsMUD.](screenshots/beta16/11-abbotsford.png)
 
 ## Cupertino
 
-**Midnight favorites** — angled covers, subtle reflections, and artwork glow give Night in the Woods center stage.
+**Midnight favorites** — a custom combination of Cupertino, Midnight colors, and artwork glow, with angled covers and reflections.
 
-![Cupertino: Night in the Woods at the center of a dark cover carousel.](screenshots/beta15/01-cupertino.png)
+![Cupertino — Midnight favorites.](screenshots/beta16/12-cupertino.png)
 
-## Berlin
+## Prague
 
-**Room for a collection** — sixteen covers in two complete rows, with cyan accents and a subdued underwater backdrop.
+**Cross Reference** — calm Sea Glass colors and parallel category columns for browsing several parts of a collection at once.
 
-![Berlin: two rows of puzzle-platformer covers with Braid selected.](screenshots/beta15/06-berlin.png)
+![Prague — Cross Reference.](screenshots/beta16/13-prague.png)
 
 ## Venice
 
 **Fan Favorite** — warm Terracotta colors and a fan of adventure covers surrounding The Silent Age.
 
-![Venice: The Silent Age centered in a fan of story-adventure covers.](screenshots/beta15/04-venice.png)
-
-## Oxford
-
-**After Hours** — a clear title list, large selected artwork, an alphabetical index, and a faint scattering of fireflies.
-
-![Oxford: Night in the Woods beside a list of story adventures and an alphabetical index.](screenshots/beta15/07-oxford.png)
-
-## Vienna
-
-**Woodland shelves** — an expanded shelf of puzzle platformers between compact previews of neighboring categories, over a forest backdrop.
-
-![Vienna: Braid selected on an expanded puzzle-platformer shelf over a forest background.](screenshots/beta15/09-vienna.png)
+![Venice — Fan Favorite.](screenshots/beta16/14-venice.png)
 
 ## Beyond the game library
 
 Wayfinder also keeps everyday Android apps close at hand. News, Media, Social, Tools, and System sit above a favorites dock, with colorful controller hints along the bottom.
 
-![Apps: five illustrated sections and seven pinned apps above colorful controller hints.](screenshots/beta15/08-apps.png)
+![Apps: five illustrated sections and seven pinned apps above colorful controller hints.](screenshots/beta16/15-apps.png)
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
+
+See the [README credits](../README.md#credits) for design inspirations, fonts, and bundled artwork.
 
 [← Back to the README](../README.md)
