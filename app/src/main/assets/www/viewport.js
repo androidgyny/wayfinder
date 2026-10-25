@@ -21,6 +21,7 @@
   }
   root.style.setProperty('--visible-height',height+'px');
   document.body.classList.toggle('input-compact',compact);
+  document.body.classList.toggle('search-focused',!!document.activeElement?.closest('.topbar .search'));
   // Scroll only an occluded field, never the carousel or the whole document.
   const field=document.activeElement,dialog=editable(field)?field.closest('dialog[open]'):null;
   if(compact&&dialog){

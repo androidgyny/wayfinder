@@ -3,7 +3,7 @@ let paloaltoPane='index',paloaltoPageKey='';
 function sizePaloaltoCover(){if(presentation!=='paloalto')return;const panel=$('#paloalto-art'),width=Math.max(0,Math.min(panel.clientWidth-4,(panel.clientHeight-4)/1.5));Object.assign($('#paloalto-cover').style,{width:width+'px',height:width*1.5+'px'});}
 function paloaltoFocus(){
  const target=paloaltoPane==='tabs'?$('#paloalto-tabs .current'):$('#grid .presentation-selected')||$('#grid .show-all-matches')||$('#paloalto-tabs .current');
- target?.focus({preventScroll:true});
+ controllerFocus(target,true);
  if(paloaltoPane==='tabs')target?.scrollIntoView({block:'nearest',inline:'nearest'});
 }
 function paloaltoOpen(index){const s=sections()[index];if(!s)return;favoritesOnly=s.favorite;setGenre(s.genre,true);persist();}
@@ -61,6 +61,8 @@ function paloaltoController(action){
   if(['down','activate','back'].includes(action)){document.activeElement.blur();paloaltoPane='index';paloaltoFocus();return true;}return false;
  }
  document.body.dataset.input='controller';
+ const active=document.activeElement;
+ if(action==='activate'&&active?.matches('button')&&!active.closest('#grid,#paloalto-tabs')){active.click();return true;}
  if(action==='back'){paloaltoBack();return true;}
  if(action==='genrePrev'||action==='genreNext'){paloaltoOpen((sectionIndex()+(action==='genreNext'?1:-1)+sections().length)%sections().length);paloaltoFocus();return true;}
  if(paloaltoPane==='tabs'){

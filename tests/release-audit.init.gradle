@@ -2,6 +2,7 @@
 gradle.beforeProject { p ->
     if (p.name == 'app') p.afterEvaluate {
         p.android.defaultConfig.applicationId = 'com.androidgyny.wayfinder.audit'
+        p.android.defaultConfig.manifestPlaceholders.appLabel = 'Wayfinder Audit'
         p.android.defaultConfig.testInstrumentationRunner = 'com.androidgyny.wayfinder.ReleaseAudit'
         p.layout.buildDirectory.set(new File(p.rootDir, 'output/native-audit'))
     }

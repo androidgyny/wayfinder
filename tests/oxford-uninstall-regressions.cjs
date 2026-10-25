@@ -15,11 +15,11 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const file=path.join(root,pathname==='/'?'index.html':pathname);try{res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.ttf')?'font/ttf':'text/html');res.end(fs.readFileSync(file));}catch{res.statusCode=404;res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'msedge',headless:true});
- const page=await browser.newPage({viewport:{width:1097,height:700}}),errors=[],passed=[];
+ const page=await browser.newPage({viewport:{width:1097,height:700},hasTouch:true}),errors=[],passed=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
  await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>'{}',saveView:()=>{},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
- await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
+ await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function'&&!restoring);
 
  await page.evaluate(()=>{games=Array.from({length:60},(_,i)=>({id:'g'+i,title:'Game '+String(i).padStart(2,'0'),genre:'Puzzles',kind:'app',package:'test.game',image:'audit-image.svg'}));rebuildGenres();setPresentation('oxford');presentationId='g20';renderPresentation();});
 

@@ -7,6 +7,7 @@ function syncFavoriteCard(b,g){let badge=b.querySelector('.favorite-badge');if(g
 function syncFavoritesUI(){const b=$('#favorites-section');b.classList.toggle('active',favoritesOnly);b.setAttribute('aria-pressed',String(favoritesOnly));$('#favorites-count').textContent=games.filter(g=>g.favorite===true).length;$('#presentation-sort').value=presentation==='oxford'?'az':sort;$('#empty h2').textContent=favoritesOnly&&!query?'No favorites yet':'No games found';$('#empty p').textContent=favoritesOnly&&!query?'Open a game’s details and press the star, or select a game and press Select.':'Try another title or browse all genres.'}
 function toggleFavorite(id){
  const g=games.find(g=>g.id===id);if(!g)return;
+ const inputMode=document.body.dataset.input;
  const value=g.favorite!==true;
  try{if(native){const response=JSON.parse(native.favorite?native.favorite(id,value):native.save(JSON.stringify({...g,favorite:value})));if(!response.ok){toast(response.message||'Could not save favorite');return}}}catch{toast('Could not save favorite');return}
  const detailOpen=$('#detail').open,detailId=detailOpen?filtered[selected]?.id:null,oldIndex=filtered.findIndex(g=>g.id===id),focusId=document.activeElement?.id;
@@ -15,6 +16,8 @@ function toggleFavorite(id){
  if(!$('#detail').open){const next=filtered.find(g=>g.id===id)||filtered[Math.min(Math.max(0,oldIndex),filtered.length-1)];if(presentation!=='library'&&next){presentationId=next.id;renderPresentation()}
   const target=(focusId&&document.getElementById(focusId)&&!document.getElementById(focusId).disabled&&document.getElementById(focusId).getClientRects().length)?document.getElementById(focusId):next?[...document.querySelectorAll('#grid .game')].find(b=>b.dataset.id===next.id):presentation==='library'?$('#favorites-section'):presentation==='seattle'?$('#seattle-home'):$('#category-current');controllerFocus(focusableControl(target)?target:libraryFocusTarget());
  }
+ // Restoring focus after rebuilding rows must not turn a touch into controller input.
+ if(inputMode==='touch'||inputMode==='pointer')document.body.dataset.input=inputMode;
  persist();toast(value?'Added to Favorites':'Removed from Favorites');
 }
 function initFavorites(){

@@ -63,13 +63,16 @@ function viennaController(action){
 
 function refreshViennaPreviews(){
  if(presentation!=='vienna')return;
+ const changes=[];
  for(const preview of document.querySelectorAll('.vienna-preview')){
   const shelf=viennaShelves.find(s=>s.key===preview.closest('.vienna-section').dataset.shelf);if(!shelf?.items.length)continue;
   const style=getComputedStyle(preview),gap=parseFloat(style.columnGap)||0;
   const width=preview.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
   const count=Math.min(shelf.items.length,Math.max(0,Math.ceil((width+gap)/(28+gap))));
   if(preview.children.length===count)continue;
-  preview.replaceChildren(...shelf.items.slice(0,count).map(g=>{const im=el('img');im.src=g.image;im.alt='';im.loading='lazy';return im}));
+  changes.push({preview,items:shelf.items.slice(0,count)});
  }
+ // Measure every shelf before inserting images, avoiding one layout pass per category.
+ for(const {preview,items} of changes)preview.replaceChildren(...items.map(g=>{const im=el('img');im.src=g.image;im.alt='';im.loading='lazy';return im}));
 }
 window.addEventListener('resize',refreshViennaPreviews);

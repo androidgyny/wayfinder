@@ -89,3 +89,6 @@ body[data-presentation=redmond] :is(.topbar,#main) button{-webkit-tap-highlight-
 #redmond-preview #redmond-type-value{white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;line-height:1.3}
 
 body[data-presentation=redmond] #soft-gradient{display:none}
+
+/* Keep the settings control reachable on compact handheld displays. */
+@media(max-width:600px){body[data-presentation=redmond] #redmond-toolbar button{font-size:0;gap:0;padding:5px}body[data-presentation=redmond] #redmond-toolbar .redmond-icon{font-size:22px}body[data-presentation=redmond] .search{flex:1;min-width:70px}}

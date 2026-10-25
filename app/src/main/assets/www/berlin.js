@@ -28,7 +28,9 @@ function paintBerlin(){
 function renderBerlin(){
  const grid=$('#grid'),style=getComputedStyle(grid),gap=parseFloat(style.columnGap)||8,padding=parseFloat(style.paddingLeft)+parseFloat(style.paddingRight),width=grid.clientWidth-padding;
  if(width<=0||grid.clientHeight<=0)return;
- const columns=Math.max(2,Math.floor((width+gap)/(berlinCoverSize+gap))),height=(width-(columns-1)*gap)/columns*1.5;
+ // A complete portrait must fit vertically even on shallow phone displays.
+ const availableHeight=Math.max(40,grid.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom)-6);
+ const columns=Math.max(2,Math.floor((width+gap)/(berlinCoverSize+gap)),Math.ceil((width+gap)/(availableHeight/1.5+gap))),height=(width-(columns-1)*gap)/columns*1.5;
  const changed=berlinItems!==filtered||berlinColumns!==columns||Math.abs(berlinPitch-height-gap)>.5||!grid.querySelector('[data-berlin]');
  berlinColumns=columns;berlinPitch=height+gap;grid.style.setProperty('--berlin-columns',columns);grid.style.setProperty('--berlin-height',height+'px');
  if(berlinItems!==filtered){berlinItems=filtered;grid.replaceChildren();}

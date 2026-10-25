@@ -1,0 +1,101 @@
+/* Original player-style chrome drawn with CSS; no Winamp skin assets. */
+.sedona-part{display:none}
+body[data-palette=ampere]{--bg:#141823;--panel:#222a3b;--field:#080e14;--hover:#303d58;--line:#657085;--text:#d9dfdb;--muted:#a1adb5;--accent:#a3e888;--accent-soft:#263b60;--accent-ink:#101b13;--glow:#9ce47b22;color-scheme:dark}
+body[data-presentation=sedona]{overflow:hidden;background:var(--bg);--sd-metal:linear-gradient(175deg,#ffffff16,transparent 45%,#0005);--sd-rim:inset 1px 1px #c0c9d477,inset -1px -1px #000c,0 0 0 1px #06090e}
+body[data-presentation=sedona] .topbar{height:40px;padding:3px 10px;gap:10px;background:var(--sd-metal),var(--panel);border:2px solid var(--line);box-shadow:var(--sd-rim);border-radius:0;backdrop-filter:none}
+body[data-presentation=sedona] .brand{font:24px var(--display-font);letter-spacing:3px;color:#f3ce76;min-width:0;overflow:hidden}
+body[data-presentation=sedona] :is(.brand-sub,.mark,#menu,#sidebar,#scrim){display:none!important}
+body[data-presentation=sedona] .topbar button{height:30px;min-height:0;border:1px solid var(--line);border-radius:0;background:var(--sd-metal),var(--panel);box-shadow:var(--sd-rim);color:var(--text);padding:3px 12px;font-size:14px}
+body[data-presentation=sedona] #settings-button{width:32px;padding:4px;display:grid;place-items:center}
+body[data-presentation=sedona] .search{min-width:80px;max-width:420px;height:28px;background:var(--field);border:1px solid var(--line);border-radius:0}
+body[data-presentation=sedona] .search input{font-size:14px}
+body[data-presentation=sedona] .shell{display:block;height:calc(100dvh - 40px);padding:6px}
+body[data-presentation=sedona] #main{display:grid;grid-template-columns:minmax(0,61fr) minmax(0,39fr);grid-template-rows:85px 66px 22px 34px minmax(0,1fr) 34px;gap:5px 10px;height:100%;padding:0;min-width:0;min-height:0;background:none;overflow:hidden}
+body[data-presentation=sedona] #main>:not(.sedona-part):not(#grid){display:none!important}
+body[data-presentation=sedona] .sedona-part{display:block;min-width:0;min-height:0}
+body[data-presentation=sedona] #sedona-heading{grid-column:1;grid-row:1;background:var(--field);border:5px ridge var(--line);padding:10px 14px;overflow:hidden;box-shadow:inset 0 0 8px #0009}
+#sedona-title{font:30px/1.15 var(--display-font);font-weight:400;margin:0 0 6px;color:var(--accent);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-shadow:0 0 4px var(--glow)}
+#sedona-category,#sedona-count{display:inline;font:16px/1 var(--display-font);font-weight:400;margin:0;color:var(--accent)}
+#sedona-count::before{content:' · '}
+body[data-presentation=sedona] #sedona-transport{grid-column:1;grid-row:2;display:flex;gap:5px;padding:5px;background:var(--sd-metal),var(--panel);border:2px solid var(--line);box-shadow:var(--sd-rim)}
+#sedona-transport button{flex:1;min-width:0;padding:2px;border:2px solid var(--line);border-radius:0;background:var(--sd-metal),var(--panel);box-shadow:var(--sd-rim);color:var(--text);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;font:12px var(--display-font)}
+#sedona-transport b{font:22px/1 WayfinderClean,sans-serif;color:#e8e2c9}
+#sedona-transport #sedona-favorite b{color:#ffd36b;font-size:29px}
+#sedona-favorite[aria-pressed=false] b{opacity:.5}
+body[data-presentation=sedona] #sedona-library-label{grid-column:1;grid-row:3;padding:2px 9px;color:#f3ce76;background:var(--sd-metal),var(--panel);border:1px solid var(--line);font:16px/1 var(--display-font);letter-spacing:1px}
+body[data-presentation=sedona] #sedona-tabs{grid-column:1;grid-row:4;display:flex;gap:3px;overflow:auto;scrollbar-width:none}
+#sedona-tabs::-webkit-scrollbar{display:none}
+.sedona-tab{flex:0 0 auto;min-width:80px;max-width:190px;padding:4px 12px;background:var(--sd-metal),var(--panel);border:2px solid var(--line);box-shadow:var(--sd-rim);border-radius:0;color:var(--text);font:15px var(--display-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sedona-tab.current{border-bottom-color:#f3ce76;color:#fff2c0}
+.sedona-tab small{margin-left:8px}
+body[data-presentation=sedona] #grid{grid-column:1;grid-row:5;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(8,minmax(0,1fr));gap:0;padding:5px 7px;background:var(--field);border:4px ridge var(--line);margin:0;min-width:0;min-height:0;height:auto;overflow:hidden;position:static;transform:none;perspective:none;align-items:stretch}
+body[data-presentation=sedona] #grid .sedona-row{display:flex;gap:16px;align-items:center;position:relative;min-width:0;min-height:0;padding:2px 10px;border:1px solid transparent;border-radius:0;background:none;color:var(--accent);box-shadow:none!important;transform:none!important;outline:none;text-align:left}
+body[data-presentation=sedona] #grid .sedona-row::before,body[data-presentation=sedona] #grid .sedona-row::after{display:none}
+body[data-presentation=sedona] #grid .sedona-row.presentation-selected{background:var(--accent-soft);border-color:var(--line)}
+body[data-presentation=sedona] #grid .game-title{position:static;flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;color:inherit!important;font:var(--game-title-weight,400) clamp(17px,1.9vw,26px)/1 var(--display-font);text-shadow:none}
+.sedona-number{flex:0 0 2.5em;color:inherit;font:20px/1 var(--display-font)}
+body[data-presentation=sedona] #grid .favorite-badge{position:static;flex:none;background:none;box-shadow:none;color:#ffd36b;padding:0;font:22px/1 WayfinderClean,sans-serif}
+body[data-presentation=sedona] #sedona-art{grid-column:2;grid-row:1/6;display:flex;align-items:center;justify-content:center;position:relative;padding:25px 8px 8px;border:4px ridge var(--line);background:var(--sd-metal),var(--panel)}
+#sedona-art::before{content:'COVER ART';position:absolute;top:4px;left:10px;font:15px/1 var(--display-font);color:#f3ce76;letter-spacing:1px}
+#sedona-print{line-height:0;max-width:100%;max-height:100%}
+#sedona-cover{display:block;object-fit:contain;box-sizing:border-box;background:var(--field);border:1px solid var(--line);border-radius:var(--art-radius,0);max-width:100%;max-height:100%}
+body[data-presentation=sedona][data-art-fit=cover] #sedona-cover{object-fit:cover}
+body[data-presentation=sedona][data-cover-border=none] #sedona-cover{border-width:0}
+body[data-presentation=sedona][data-cover-border=matte] #sedona-cover{border-width:6px}
+body[data-presentation=sedona] #sedona-caption{display:none}
+body[data-presentation=sedona] #sedona-footer{grid-column:1/-1;grid-row:6;display:flex;gap:14px;align-items:center;padding:2px 12px;background:var(--sd-metal),var(--panel);border:2px solid var(--line);box-shadow:var(--sd-rim)}
+.sedona-hint{display:flex;gap:6px;align-items:center;border:0;background:none;color:var(--text);padding:0;font:14px WayfinderClean,sans-serif}
+.sedona-key{display:grid;place-items:center;width:23px;height:23px;border:2px solid currentColor;border-radius:50%;font:500 16px WayfinderClean,sans-serif;background:#090e16}
+.sedona-key.a{color:#70db76}.sedona-key.b{color:#ff606e}.sedona-key.x{color:#64adff}.sedona-key.y{color:#ffce61}
+.sedona-page-help{margin-left:auto;font:11px WayfinderClean,sans-serif;color:var(--muted)}
+.sedona-page{background:none;color:var(--text);border:0;padding:0 4px;font-size:22px}
+#sedona-position{font:16px var(--display-font);color:#f3ce76;white-space:nowrap}
+body[data-presentation=sedona] button:disabled{opacity:.4}
+body[data-presentation=sedona] :is(.sedona-tab,#sedona-transport button):focus-visible,body[data-presentation=sedona][data-input=controller] :is(.sedona-tab,#sedona-transport button):focus{outline:2px solid var(--accent);outline-offset:-4px}
+body[data-presentation=sedona] #grid.search-empty-grid{display:flex;flex-direction:column;overflow:auto}
+.sedona-empty{grid-area:1/1/-1/-1;align-self:center;color:var(--muted);font-size:18px}
+body[data-presentation=sedona] #appearance-preview .appearance-sample-space::before{content:'';position:absolute;inset:-12px;background:var(--panel);z-index:-1}
+@media(max-width:850px){.sedona-page-help{display:none}#sedona-position{margin-left:auto}body[data-presentation=sedona] .brand{font-size:20px;letter-spacing:1px}body[data-presentation=sedona] #main{grid-template-columns:minmax(0,60fr) minmax(0,40fr)}#sedona-title{font-size:24px}.sedona-number{font-size:17px}.sedona-tab{font-size:13px;min-width:60px;padding-inline:8px}}
+@media(max-height:480px){body[data-presentation=sedona] #main{grid-template-rows:60px 48px 18px 28px minmax(0,1fr) 30px;gap:3px 7px}#sedona-title{font-size:23px;margin-bottom:3px}#sedona-category,#sedona-count{font-size:13px}#sedona-transport b{font-size:16px}body[data-presentation=sedona] #grid .game-title{font-size:16px}.sedona-number{font-size:16px}}
+body.input-compact[data-presentation=sedona] .shell{height:calc(var(--input-height) - 40px)}
+body.input-compact[data-presentation=sedona] #main{grid-template-columns:1fr;grid-template-rows:50px 28px minmax(50px,1fr)}
+body.input-compact[data-presentation=sedona] :is(#sedona-art,#sedona-transport,#sedona-caption,#sedona-library-label,#sedona-footer){display:none}
+body.input-compact[data-presentation=sedona] #sedona-tabs{grid-row:2}
+body.input-compact[data-presentation=sedona] #grid{grid-row:3}
+
+/* A real dot-matrix face keeps the display crisp without masking ordinary text. */
+@font-face{font-family:WayfinderDoto;src:url('fonts/Doto.ttf') format('truetype');font-weight:100 900;font-display:swap}
+body[data-presentation=sedona] #main #sedona-title{font-family:WayfinderDoto,WayfinderClean,sans-serif;font-size:34px;font-weight:800!important;font-variation-settings:'ROND' 0;line-height:1.1;letter-spacing:1px;text-transform:uppercase;text-shadow:none;font-synthesis:none}
+body[data-presentation=sedona] #sedona-heading{background-image:radial-gradient(#78b5610a .65px,transparent .8px);background-size:3px 3px}
+body[data-presentation=sedona] #sedona-transport{padding:5px;gap:6px}
+body[data-presentation=sedona] #sedona-transport button{padding:0;gap:0;overflow:hidden;border:2px solid #718095;box-shadow:inset 1px 1px #d9e4ed,1px 1px #03060b;display:grid;grid-template-columns:minmax(0,1fr);justify-content:stretch;justify-items:stretch;grid-template-rows:minmax(0,1fr) 16px;background:#0c111a}
+body[data-presentation=sedona] #sedona-transport b{display:grid;place-items:center;align-self:stretch;width:100%;font:24px/1 WayfinderClean,sans-serif;color:#f5eed9;background:linear-gradient(165deg,#a4adba 0%,#798797 9%,#566477 48%,#3b485c 51%,#657285 100%);border-bottom:1px solid #a1adbe;box-shadow:inset 1px 1px #eff6ff88,inset -1px -1px #101827;filter:none;text-shadow:1px 2px #080c12}
+body[data-presentation=sedona] #sedona-transport span{display:block;align-self:stretch;padding:1px 3px 0;background:linear-gradient(#080c12,#151d2a);box-shadow:inset 0 1px #000;color:#f4ead2;font:12px/14px WayfinderClean,sans-serif;font-weight:500;letter-spacing:1px;text-transform:uppercase}
+body[data-presentation=sedona] #sedona-transport #sedona-favorite b{color:#ffd16a;opacity:1}
+body[data-presentation=sedona] #sedona-transport #sedona-favorite[aria-pressed=false] b{color:#acb5c0}
+body[data-presentation=sedona] #sedona-transport button:active b{background:linear-gradient(#303d50,#68788a);box-shadow:inset 2px 2px 3px #0009}
+body[data-presentation=sedona] #sedona-transport button:disabled{opacity:.5}
+@media(max-width:850px){body[data-presentation=sedona] #main #sedona-title{font-size:28px}body[data-presentation=sedona] #sedona-transport span{font-size:10px;letter-spacing:.4px}}
+@media(max-height:480px){body[data-presentation=sedona] #main #sedona-title{font-size:25px}body[data-presentation=sedona] #sedona-transport button{grid-template-rows:minmax(0,1fr) 13px}body[data-presentation=sedona] #sedona-transport span{font-size:9px;line-height:12px}body[data-presentation=sedona] #sedona-transport b{font-size:17px}}
+
+/* Thin machined lips and recessed wells, rather than broad painted outlines. */
+body[data-presentation=sedona]{--sd-metal:linear-gradient(180deg,#ffffff12,transparent 28%,#00000022 75%,#ffffff08);--sd-rim:inset 1px 1px #b4bdcf66,inset -1px -1px #02040a,0 0 0 1px #03050a}
+body[data-presentation=sedona] :is(.topbar,#sedona-transport,#sedona-footer,#sedona-library-label){background-color:#202535;border-color:#454c5c;box-shadow:inset 0 1px #9299a866,inset 0 2px #303747,inset 0 -1px #05070c,0 1px #000}
+body[data-presentation=sedona] :is(#sedona-heading,#grid,#sedona-art){border:3px solid;border-color:#11151e #596172 #596172 #11151e;box-shadow:inset 1px 1px #020308,inset -1px -1px #303848,0 0 0 1px #080b12,0 1px 0 2px #737d8a44}
+body[data-presentation=sedona] #sedona-art{background:linear-gradient(90deg,#070a10,#10151f 8%,#0b1019 92%,#030508);padding-top:25px}
+#sedona-art::before{right:8px;padding:2px 4px;top:3px;background:linear-gradient(#373f50,#1b202d);border-top:1px solid #6c7483;border-bottom:1px solid #02050b;font-size:13px}
+body[data-presentation=sedona] #sedona-transport button{border:1px solid;border-color:#c1c7ce #1c2330 #080b12 #8993a1;box-shadow:0 0 0 1px #04060b}
+body[data-presentation=sedona] #sedona-transport b{background:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 3px),linear-gradient(180deg,#a6aeb9,#737f90 12%,#667284 50%,#586476 90%,#8a95a5);box-shadow:inset 1px 1px #edf2f555,inset -1px -1px #283343;border-bottom-color:#202837}
+body[data-presentation=sedona] .sedona-tab{border-width:1px;border-color:#798292 #0a0e17 #0a0e17 #798292;background:linear-gradient(#353e50,#202737);box-shadow:inset 0 1px #ffffff12}
+body[data-presentation=sedona] .sedona-tab.current{border-bottom:2px solid #e3bf70}
+body[data-presentation=sedona] #grid{padding-right:29px}
+body[data-presentation=sedona] #sedona-scroll{grid-column:1;grid-row:5;justify-self:end;align-self:stretch;width:19px;margin:5px 5px 5px 0;position:relative;z-index:2;background:repeating-linear-gradient(0deg,#151b26 0 2px,#090d16 2px 4px);border:1px solid;border-color:#02040a #667080 #667080 #02040a;box-shadow:inset 1px 0 3px #000;touch-action:none;cursor:pointer}
+body[data-presentation=sedona] #sedona-scroll[hidden]{display:none}
+.sedona-scroll-thumb{position:absolute;left:1px;right:1px;height:var(--thumb-size);top:var(--thumb-position);background:linear-gradient(90deg,#8994a5,#5d6b80 25%,#46546c 80%,#303d52);border:1px solid;border-color:#bac4d0 #111825 #111825 #bac4d0;box-shadow:0 1px 2px #000}
+.sedona-scroll-thumb::after{content:'';position:absolute;left:3px;right:3px;top:50%;height:7px;transform:translateY(-50%);background:repeating-linear-gradient(#151e2e 0 1px,#a4afbd 1px 2px,transparent 2px 3px)}
+#sedona-scroll:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+body.input-compact[data-presentation=sedona] #sedona-scroll{grid-row:3}
+
+body[data-presentation=sedona] #main #grid{overflow-y:auto;grid-template-rows:repeat(8,minmax(32px,1fr));scrollbar-width:none}
+body[data-presentation=sedona] #main #grid::-webkit-scrollbar{display:none}
+@media(max-height:480px){body[data-presentation=sedona] #sedona-heading{padding:5px 12px}body[data-presentation=sedona] #sedona-title{margin-bottom:2px}body[data-presentation=sedona] :is(#sedona-category,#sedona-count){font-size:13px}}

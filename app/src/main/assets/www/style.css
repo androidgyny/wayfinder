@@ -315,6 +315,7 @@ body[data-presentation=berlin] #presentation-info #presentation-title{font-size:
 body[data-presentation=berlin] #presentation-info .presentation-actions{top:15px;right:24px}
 body[data-presentation=berlin] :is(#presentation-scrub,#presentation-navigation){display:none}
 @media(max-width:760px){body[data-presentation=berlin] #grid{gap:6px;padding:12px}body[data-presentation=berlin] #presentation-info #presentation-title{font-size:18px;padding-right:285px}}
+@media(max-width:600px){body[data-presentation=berlin] #presentation-info{height:112px;padding:10px 24px}body[data-presentation=berlin] #presentation-info #presentation-title{padding-right:0}body[data-presentation=berlin] #grid{bottom:112px}}
 
 /* Honest portrait preview and a palette-aware category chevron. */
 #edit-image{width:min(100%,206.6667px);height:auto;aspect-ratio:2/3;margin-inline:auto}
@@ -638,7 +639,9 @@ body[data-presentation=cambridge] .shell{height:auto;flex:1;min-height:0}
 body[data-presentation=cambridge] #cambridge-categories .cambridge-category:focus{outline:none;outline-offset:0}
 
 /* Cards already provide themed selection feedback; avoid WebView tap flashes. */
-#grid .game,#grid .game .card-edit,.drawer-edit{-webkit-tap-highlight-color:transparent}
+/* Custom buttons provide their own feedback; Android's tap rectangle can linger
+   above a newly opened dialog. Keyboard/controller focus remains unchanged. */
+button,[role=button]{-webkit-tap-highlight-color:transparent}
 
 /* Recovery dialog needs its own inset: the base dialog is an unpadded shell. */
 #missing-target{max-width:620px;padding:clamp(22px,4vw,36px)}

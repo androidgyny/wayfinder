@@ -61,4 +61,5 @@ body.input-compact[data-presentation=paloalto] #main{grid-template-columns:1fr;g
 body.input-compact[data-presentation=paloalto] :is(#paloalto-bar,#paloalto-art,#paloalto-heading,#paloalto-actions,#paloalto-footer,#paloalto-hints){display:none}
 body.input-compact[data-presentation=paloalto] #paloalto-tabs{grid-row:1}
 body.input-compact[data-presentation=paloalto] #paloalto-index-label{grid-column:1;grid-row:2}
-body.input-compact[data-presentation=paloalto] #grid{grid-column:1;grid-row:3}
+body.input-compact[data-presentation=paloalto] #grid{grid-column:1;grid-row:3;grid-template-rows:repeat(4,minmax(28px,1fr));overflow-y:auto}
+@media(max-height:200px){body.input-compact[data-presentation=paloalto] #main{grid-template-rows:28px 0 minmax(0,1fr)}body.input-compact[data-presentation=paloalto] #paloalto-index-label{display:none}}

@@ -4,13 +4,13 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.212-beta.16)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.226-beta.17)
 
-Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. Add the games already installed on your device, give them categories and cover art, and browse your collection with a controller or touchscreen. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
+Wayfinder organizes the Android games already on your device into a personal, console-like library. Give each game a category and a cover, then browse and launch it with a controller or touchscreen. Whether you have a few favorites or hundreds of titles, the goal is the same: make finding something to play a pleasure.
 
 Wayfinder is designed for Android handhelds. You can open it like any other app or make it your Android home screen. It starts with an empty library; games and cover artwork are not included.
 
-![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta16/01-paloalto.png)
+![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta17/01-paloalto.png)
 
 *Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
 
@@ -22,7 +22,7 @@ Wayfinder is designed for Android handhelds. You can open it like any other app 
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and images work across twenty-one layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. You can give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 22 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -30,7 +30,7 @@ That restraint is intentional. With hundreds or thousands of games, every extra 
 - **Find and rediscover games.** Search titles across your library, browse by category, sort alphabetically, by recency, or with favorites first, and revisit recently played games.
 - **Choose artwork easily.** Find images through Google Play, open Google Images or SteamGridDB searches, or use a file from your device. Preview and adjust how it fits.
 - **Set the mood.** Start with an appearance preset, or adjust colors, fonts, backgrounds, borders, shadows, selection effects, and sound. Preview a preset before keeping it, and save your own combinations.
-- **Keep everyday apps nearby.** The Apps screen groups apps into News, Media, Social, Tools, and System. A dock holds eight favorites; All apps and a Non-game apps filter provide broader access. Use installed icon packs or your own images to personalize app icons.
+- **Keep everyday apps nearby.** A separate Apps screen offers sections, a dock for up to eight favorites, and an All apps view. Use installed icon packs or your own images to personalize app icons.
 - **Maintain your library.** Library information shows counts, storage use, and entries needing attention. Export a backup of your organization and artwork before making larger changes.
 
 Wayfinder does not supply or install games, run emulators, or manage ROM collections. It is a home for the Android games you already have.
@@ -73,15 +73,15 @@ Choose a way to browse that suits you:
 - **Scan a large library quickly** with compact lists, category columns, or a dashboard with recently played games.
 - **Rediscover something to play** with a shuffled table of covers.
 
-The same portrait artwork works throughout. Styles range from restrained and modern to paper notebooks, desktop interfaces, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. You can switch to another style at any time without reorganizing your games.
+Styles range from restrained and modern to paper notebooks, desktop interfaces, music-player panels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta16/02-bath.png)
+![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta17/02-bath.png)
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
-![Kyoto: Dream Machine selected on a bright shelf of portrait covers with colorful controller hints.](docs/screenshots/beta16/09-kyoto.png)
+![Kyoto: Dream Machine selected on a bright shelf of portrait covers with colorful controller hints.](docs/screenshots/beta17/09-kyoto.png)
 
 *Kyoto · Smitchish preset · a bright cover shelf with colorful controller hints.*
 
@@ -89,7 +89,7 @@ You can also enable interface sounds, play the included background music or your
 
 The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta16/15-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta17/15-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
@@ -124,7 +124,7 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Project status
 
-Wayfinder is an actively evolving personal project, developed and tested with a large game collection on a **Pimax Portal (Snapdragon 865), running Android 10 at 1920 × 1080 resolution**. Support for other Android devices and controllers is still being established.
+Wayfinder is an actively evolving personal project, developed and tested with a large game collection on a **Pimax Portal (Snapdragon 865), running Android 10 at 1920 × 1080 resolution**. Layout and on-screen keyboard checks also cover simulated 4:3, 3:2, 16:10, and 21:9 displays. These checks help catch clipping and misplaced controls; support for other devices and controllers is still being established.
 
 See the [release notes](https://github.com/androidgyny/wayfinder/releases) for version-by-version changes.
 
@@ -136,7 +136,7 @@ Game artwork belongs to its respective creators. Interface audio includes [Inter
 
 Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
 
-Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). Other bundled fonts include [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) for notebook lettering, [Anton](https://github.com/google/fonts/tree/main/ofl/anton) for bold packaging-inspired headlines, and [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) for condensed headings, all under the SIL Open Font License 1.1. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
+Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). [Doto](https://github.com/google/fonts/tree/main/ofl/doto) supplies the dot-matrix title display in Sedona under the SIL Open Font License 1.1. Other bundled fonts include [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) for notebook lettering, [Anton](https://github.com/google/fonts/tree/main/ofl/anton) for bold packaging-inspired headlines, and [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) for condensed headings, all under the SIL Open Font License 1.1. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
 
 App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
 

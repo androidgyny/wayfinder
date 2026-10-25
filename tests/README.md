@@ -1,17 +1,26 @@
 # Regression checks
 
+`button-press-regressions.cjs` checks tactile feedback on raised controls in
+Sedona, Atlantis, Redmond and Palo Alto: touch/controller activation, immediate
+actions, single pulses, cleanup, canceled gestures, disabled controls, reduced
+motion, and isolation from game rows in all 22 layouts and dialog controls.
+It also checks the real Sedona Favorite action, touch-to-controller handoff,
+and distinct on/off star colors. The isolated Android runner's `-e mode buttons`
+uses finger taps and controller keys to verify favorites, dialog focus return,
+and animation cleanup in all four raised-button layouts, restoring its records.
+
 The isolated Android runner supports `-e mode direction` to check held D-pad
 repeat without new axis events, acceleration, neutral release, direction reversal,
 focus loss, controller removal, startup overlays, and combined button/hat input.
 
-`layout-settings-regressions.cjs` audits all seventeen offered layouts at two
+`layout-settings-regressions.cjs` audits all 22 offered layouts at two
 widths, including artwork on/off and Recent states in Cambridge and Ulm.
 It checks which settings are visible, exclusion of hidden controls from
 controller navigation, Oxford's title-brightness wording, and dialog overflow.
 Set `SETTINGS_AUDIT_REPORT` to save the visibility matrix as JSON.
 
 
-`keyboard-layout-regressions.cjs` checks 16 layouts at 320, 260, and 220
+`keyboard-layout-regressions.cjs` checks all 22 layouts at 320, 260, and 220
 pixels of available height at 640 and 1097 pixels wide with a text field focused,
 both carousel title positions, search recovery actions,
 restoration after keyboard dismissal, and visibility of text fields in dialogs.
@@ -105,7 +114,7 @@ After the initial audit seeds its synthetic library, the runner also supports
 `-e mode artwork` (fresh cover URL, rendered pixels, reload and SQLite
 persistence), `-e mode smoke` (native controller editing/cancel, touch search,
 launch/return and layout/settings transitions), and `-e mode performance`
-(1,200 synthetic games, 51 layout changes and 204 navigation actions).
+(1,200 synthetic games, 66 layout changes and 264 navigation actions across all 22 layouts).
 The performance mode restores its original audit records in a `finally` block.
 Its timing and app-process PSS values are diagnostic; they exclude renderer
 process memory and do not establish a long-duration leak test. Wake the device
@@ -129,6 +138,14 @@ Revert, AI/startup submenus, unique control IDs and responsive geometry. The
 isolated Android runner accepts `-e mode settings` for native key dispatch and
 submenu focus checks; wake and unlock the device before running. The keyboard
 mode also checks the preset-name field in its new submenu.
+
+`all-layout-responsiveness.cjs` measures all 22 layouts with 1,200 synthetic
+games and 24 categories. It separates full updates, game navigation, category
+switching and search; navigation must actually visit multiple games. It also
+checks date-label equivalence for the shared desktop browser. `AUDIT_TAG` names
+the JSON report under `output/`. Timings include synchronous work and forced
+layout, not image decoding, GPU presentation or end-to-end input latency; they
+are diagnostics rather than machine-independent performance thresholds.
 
 The settings suite also covers independent section scroll positions, navigation
 focus synchronization, empty-heading suppression with artwork disabled, return
@@ -165,3 +182,31 @@ The notebook suite also compares shared UI styling before and after visits to Ba
 - `showcase-regressions.cjs`: Milan/Homage and Bellevue/Blades navigation, page boundaries, search across categories, launch/edit/favorites, saved focus, preview cancellation, five screen sizes, Fit/Fill and border/corner preview parity, Apps isolation, layout switching, and empty libraries. Uses synthetic data only.
 
 The showcase suite also checks whole-category paging arrows, vertical label bounds, non-overlapping search counts, singular search wording, and bounded bevel-cache reuse with unchanged SVG output.
+
+## UI placement audit
+
+`placement-audit.cjs` exercises all 22 layouts with their built-in preset styling,
+normal and keyboard-open empty searches, hardware-keyboard searches in the floating-search
+layouts, and Edit, Settings, and populated Apps dialogs while the keyboard is open.
+It writes screenshots and a geometry report to `output/placement-audit/`.
+
+`populated-placement-audit.cjs` checks all 22 layouts with populated searches at
+320px and 220px available height. It rejects rows shorter than their text and
+verifies that controller selection remains visible in the paged text layouts.
+
+The isolated Android runner accepts `-e mode placement` to repeat search-field,
+empty-message and selected-row placement checks with the real Android IME in all
+22 layouts. Synthetic records stay in the test WebView; the stored library must
+remain unchanged. Use the isolated build and installation instructions above.
+
+## Handheld aspect-ratio audit
+
+- `aspect-ratio-regressions.cjs`: all 22 layouts at Pocket DMG (551 x 456 CSS pixels), 4:3, 3:2, 16:10, and 21:9 landscape profiles, including smaller displays. Profile heights allow 24 pixels for the system bar. Screenshots and geometry reports go to `output/aspect-audit/`.
+- `opening-aspect-regressions.cjs`: the complete startup console must fit and remain centered at every target ratio.
+- `placement-audit.cjs`: accepts `AUDIT_WIDTH`, `AUDIT_HEIGHT`, `AUDIT_IME_HEIGHT`, and `AUDIT_PROFILE` for empty search, keyboard and dialog checks.
+- `populated-placement-audit.cjs`: accepts the same width/normal-height/profile variables and `AUDIT_HEIGHTS` (comma-separated remaining app heights). Stress coverage includes 160, 180, 220, 260 and 320 pixels. These are test boundaries, not assumed keyboard dimensions.
+- The isolated Android runner's `aspect-seed` mode persistently creates 1,200 synthetic games in 16 categories, with generated portrait covers, favorites, long names and recent-play history. Its package guard prevents seeding the regular app. The isolated app is labeled **Wayfinder Audit**; synthetic entries do not launch real games.
+- `device-aspect-audit.cjs SERIAL` captures every layout in that isolated app; `ADB` may override the adb executable. It does not alter the regular app.
+- Native `opening-fit` checks actual animation bounds and saves `opening-fit.png` in the audit app's external files folder. Native `placement` and `settings` exercise the actual Android IME and controller/dialog paths.
+
+Android recommends reading the actual IME insets rather than assuming a keyboard height: [software keyboard guidance](https://developer.android.com/develop/ui/views/layout/sw-keyboard). Keyboard apps can also be resized independently of screen ratio: [Microsoft SwiftKey resizing](https://support.microsoft.com/en-us/swiftkey-keyboard/how-to-resize-microsoft-swiftkey-keyboard). Consequently the simulated matrix covers a range of remaining viewport heights; it does not claim to reproduce every keyboard, floating-keyboard placement, cutout or manufacturer configuration.

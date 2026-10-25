@@ -13,3 +13,5 @@ Go Regular, Medium and Bold are unmodified proportional sans-serif fonts by Bige
 Caveat is used for Bath’s notebook headings and tabs. Source: https://github.com/google/fonts/tree/main/ofl/caveat . Distributed under the SIL Open Font License 1.1; see caveat-OFL.txt.
 
 Anton is used for Milan packaging headlines. Unmodified source: https://github.com/google/fonts/tree/main/ofl/anton . SIL Open Font License 1.1; see anton-OFL.txt.
+
+Doto is used for Sedona’s dot-matrix title display. Unmodified source: https://github.com/google/fonts/tree/main/ofl/doto . Copyright The Doto Project Authors; SIL Open Font License 1.1, included in doto-OFL.txt.

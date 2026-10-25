@@ -154,6 +154,27 @@ public class ReleaseAudit extends Instrumentation {
         js("hideDialog('#settings-presets-dialog');hideDialog('#settings-dialog');");
         check(library.equals(records().toString()),"keyboard transitions do not mutate library");
     }
+    private void placementAudit() throws Exception {
+        for(int i=0;i<100&&(Boolean)call(field("startup"),"active",new Class<?>[]{});i++)Thread.sleep(100);
+        for(int i=0;i<100&&!"true".equals(js("innerHeight>100&&innerWidth>100"));i++)Thread.sleep(100);
+        check("true".equals(js("innerHeight>100&&innerWidth>100")),"placement test window is visible");
+        String library=records().toString();
+        String[] layouts={"abbotsford","library","bath","bellevue","milan","berlin","cambridge","copenhagen","cupertino","dashboard","kyoto","oxford","paloalto","redmond","atlantis","prague","sanfrancisco","sedona","seattle","ulm","venice","vienna"};
+        for(String layout:layouts){
+            js("while(topDialog())nativeBack();document.activeElement.blur();Portal.hideKeyboard()");waitKeyboard(false);
+            js("query='';games=Array.from({length:40},(_,i)=>({id:'placement'+i,title:'Audit '+i,genre:'Alpha',image:'icon/com.android.settings'}));rebuildGenres();setPresentation('"+layout+"');genre='';favoritesOnly=false;if(presentation==='ulm')ulmOpen('all');if(presentation==='cambridge')cambridgeOpen('all');query='absent-title';$('#search').value=query;update();var placementField=presentation==='ulm'?$('#ulm-search'):$('#search');placementField.hidden=false;placementField.focus();Portal.showKeyboard()");
+            waitKeyboard(true);Thread.sleep(250);
+            log.append("IME viewport ").append(layout).append(' ').append(js("JSON.stringify({width:innerWidth,height:innerHeight})")).append('\n');
+            check("true".equals(js("(()=>{const f=(presentation==='ulm'?$('#ulm-search'):$('#search')).getBoundingClientRect();return f.top>=0&&f.bottom<=innerHeight&&f.width>40})()")),layout+" real IME search field stays visible");
+            check("true".equals(js("(()=>{const p=$('.search-empty');if(!p)return false;const r=p.getBoundingClientRect(),g=p.parentElement.getBoundingClientRect(),first=p.firstElementChild.getBoundingClientRect();return r.height>0&&r.left>=g.left-1&&r.right<=g.right+1&&first.top>=r.top-1})()")),layout+" real IME empty message remains in its panel");
+            if(layout.equals("bath")||layout.equals("sedona")||layout.equals("milan")||layout.equals("bellevue")){
+                js("query='Audit';$('#search').value=query;update();controller('down');for(let i=0;i<7;i++)controller('down')");Thread.sleep(100);
+                check("true".equals(js("(()=>{const a=$('#grid .presentation-selected').getBoundingClientRect(),b=$('#grid').getBoundingClientRect();return a.height>=20&&a.top>=b.top-1&&a.bottom<=Math.min(b.bottom,innerHeight)+1})()")),layout+" real IME selected row stays visible");
+            }
+        }
+        js("document.activeElement.blur();Portal.hideKeyboard()");waitKeyboard(false);
+        check(library.equals(records().toString()),"placement audit leaves stored library unchanged");
+    }
     private void smokeAudit() throws Exception {
         for(int i=0;i<100&&(Boolean)call(field("startup"),"active",new Class<?>[]{});i++)Thread.sleep(100);
         String before=records().toString();
@@ -178,7 +199,7 @@ public class ReleaseAudit extends Instrumentation {
         runOnMainSync(()->activity.startActivity(new Intent().setClassName(getTargetContext().getPackageName(),MainActivity.class.getName()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
         Thread.sleep(500);
         check("true".equals(js("backgroundActive&&!topDialog()")),"return from launched app resumes browsing cleanly");
-        String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna","abbotsford","paloalto","redmond","sanfrancisco","atlantis"};
+        String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna","abbotsford","paloalto","redmond","sanfrancisco","atlantis","dashboard","bath","bellevue","milan","sedona"};
         js("window.auditErrors=[];addEventListener('error',e=>auditErrors.push(e.message))");
         for(int round=0;round<3;round++)for(String layout:layouts)js("setPresentation('"+layout+"');showDialog('#settings-dialog');refreshApplicableAppearanceControls();nativeBack()");
         check("0".equals(js("auditErrors.length")),"51 native layout/settings transitions complete without JavaScript errors");
@@ -202,19 +223,76 @@ public class ReleaseAudit extends Instrumentation {
         }
         check(records().getJSONObject(0).getString("image").equals(image),"new artwork reference persists in SQLite");
     }
+    private void tapControl(String selector) throws Exception {
+        android.webkit.WebView web=(android.webkit.WebView)field("web");
+        JSONObject point=new JSONObject(js("(()=>{const r=document.querySelector("+JSONObject.quote(selector)+").getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,width:innerWidth}})()"));
+        int[] location=new int[2];runOnMainSync(()->web.getLocationOnScreen(location));
+        float scale=(float)web.getWidth()/(float)point.getDouble("width"),x=location[0]+(float)point.getDouble("x")*scale,y=location[1]+(float)point.getDouble("y")*scale;
+        long time=android.os.SystemClock.uptimeMillis();
+        android.view.MotionEvent down=android.view.MotionEvent.obtain(time,time,android.view.MotionEvent.ACTION_DOWN,x,y,0),up=android.view.MotionEvent.obtain(time,time+50,android.view.MotionEvent.ACTION_UP,x,y,0);
+        down.recycle();up.recycle();
+        android.view.MotionEvent.PointerProperties finger=new android.view.MotionEvent.PointerProperties();finger.id=0;finger.toolType=android.view.MotionEvent.TOOL_TYPE_FINGER;
+        android.view.MotionEvent.PointerCoords pointCoords=new android.view.MotionEvent.PointerCoords();pointCoords.x=x;pointCoords.y=y;pointCoords.pressure=1;pointCoords.size=1;
+        down=android.view.MotionEvent.obtain(time,time,android.view.MotionEvent.ACTION_DOWN,1,new android.view.MotionEvent.PointerProperties[]{finger},new android.view.MotionEvent.PointerCoords[]{pointCoords},0,0,1,1,0,0,android.view.InputDevice.SOURCE_TOUCHSCREEN,0);
+        up=android.view.MotionEvent.obtain(time,time+50,android.view.MotionEvent.ACTION_UP,1,new android.view.MotionEvent.PointerProperties[]{finger},new android.view.MotionEvent.PointerCoords[]{pointCoords},0,0,1,1,0,0,android.view.InputDevice.SOURCE_TOUCHSCREEN,0);
+        try{sendPointerSync(down);sendPointerSync(up);}finally{down.recycle();up.recycle();}
+        Thread.sleep(200);
+    }
+    private void buttonAudit() throws Exception {
+        JSONArray original=records();
+        runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        waitForIdleSync();
+        try{
+            for(String layout:new String[]{"sedona","atlantis","redmond","paloalto"}){
+                js("while(topDialog())nativeBack();query='';genre='';favoritesOnly=false;applyAppearanceValues(builtinAppearancePresets.find(p=>p.values.presentation==='"+layout+"').values);update()");
+                Thread.sleep(250);
+                if(!layout.equals("paloalto")){
+                    String star="#"+layout+"-favorite";
+                    js("window.auditFavorite=games.find(g=>g.id===presentationId).favorite===true;window.auditSelected=presentationId");
+                    tapControl(star);
+                    check("true".equals(js("games.find(g=>g.id===auditSelected).favorite===!auditFavorite")),layout+" native touch toggles Favorite once");
+                    check("true".equals(js("document.body.dataset.input==='touch'")),layout+" favorite retains touch input mode");
+                    if(layout.equals("sedona")){
+                        check("true".equals(js("getComputedStyle($('#sedona-favorite')).outlineStyle==='none'")),"Sedona touch has no lingering focus rectangle");
+                        js("window.auditStarColor=getComputedStyle($('#sedona-favorite b')).color");
+                    }
+                    tapControl(star);
+                    check("true".equals(js("games.find(g=>g.id===auditSelected).favorite===auditFavorite")),layout+" second tap restores Favorite");
+                    if(layout.equals("sedona")){
+                        check("true".equals(js("getComputedStyle($('#sedona-favorite b')).color!==auditStarColor")),"Sedona favorite color distinguishes both states");
+                        sendKeyDownUpSync(KeyEvent.KEYCODE_BUTTON_A);Thread.sleep(200);
+                        check("true".equals(js("document.body.dataset.input==='controller'&&games.find(g=>g.id===auditSelected).favorite===!auditFavorite")),"Sedona native A takes over from touch and toggles once");
+                        sendKeyDownUpSync(KeyEvent.KEYCODE_BUTTON_A);Thread.sleep(200);
+                    }
+                }
+                tapControl("#settings-button");
+                check("true".equals(js("$('#settings-dialog').open&&$('#settings-button').getAnimations().length===0")),layout+" settings opens without lingering button animation");
+                sendKeyDownUpSync(KeyEvent.KEYCODE_BUTTON_B);Thread.sleep(200);
+                check("true".equals(js("!topDialog()&&document.activeElement===$('#settings-button')")),layout+" B closes settings and returns focus");
+                js("controllerFocus($('#grid .presentation-selected')||$('#grid .game'),true);openGame(presentationId,document.activeElement)");
+                check("true".equals(js("$('#detail').open")),layout+" Details opens");
+                sendKeyDownUpSync(KeyEvent.KEYCODE_BUTTON_B);Thread.sleep(200);
+                js("editGame(games.find(g=>g.id===presentationId))");
+                check("true".equals(js("$('#editor').open")),layout+" Edit opens");
+                js("cancelEditor()");
+                check("true".equals(js("!topDialog()&&focusableControl(document.activeElement)")),layout+" cancelling Edit restores usable focus");
+            }
+            check(records().toString().equals(original.toString()),"button audit leaves library unchanged");
+        }finally{replace(original,null,null);js("while(topDialog())nativeBack();reloadLibrary()");}
+    }
     private void performanceAudit() throws Exception {
         JSONArray original=records(),order=new JSONArray((String)call(field("db"),"order",new Class<?>[]{}));
         JSONArray many=new JSONArray();
         for(int i=0;i<1200;i++)many.put(new JSONObject(original.getJSONObject(0).toString()).put("id","stress_"+i).put("title","Synthetic game "+i).put("genre","Category "+(i/40)).put("favorite",i%10==0).put("lastPlayed",i));
         try{
             replace(many,null,new JSONArray());js("reloadLibrary();window.auditErrors=[];addEventListener('error',e=>auditErrors.push(e.message))");
-            String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna","abbotsford","paloalto","redmond","sanfrancisco","atlantis"};
+            String[] layouts={"library","berlin","cambridge","copenhagen","cupertino","kyoto","oxford","prague","seattle","ulm","venice","vienna","abbotsford","paloalto","redmond","sanfrancisco","atlantis","dashboard","bath","bellevue","milan","sedona"};
             long before=android.os.Debug.getPss();JSONArray timings=new JSONArray();
             for(int round=0;round<3;round++)for(String layout:layouts){
                 String elapsed=js("(()=>{const start=performance.now();setPresentation('"+layout+"');for(const a of ['right','down','left','up'])controller(a);return performance.now()-start})()");
                 timings.put(new JSONObject().put("round",round).put("layout",layout).put("updateMs",Double.parseDouble(elapsed)));
             }
-            check("0".equals(js("auditErrors.length")),"1,200-game native library survives 51 layout changes and 204 navigation actions");
+            check("0".equals(js("auditErrors.length")),"1,200-game native library survives 66 layout changes and 264 navigation actions");
             check(records().length()==1200,"native performance navigation does not remove records");
             log.append("METRIC native app PSS KB before=").append(before).append(" after=").append(android.os.Debug.getPss()).append('\n');
             log.append("METRIC native synchronous layout/navigation timings ").append(timings).append('\n');
@@ -358,6 +436,45 @@ public class ReleaseAudit extends Instrumentation {
 
         }finally{directionAxis(0,0);runOnMainSync(()->activity.onWindowFocusChanged(false));js("window.controller=window.originalController");}
     }
+    private void openingFitAudit() throws Exception {
+        Object opening=field("startup");
+        runOnMainSync(()->{try{call(opening,"play",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        try{
+            Thread.sleep(2500);
+            Field f=opening.getClass().getDeclaredField("animation");f.setAccessible(true);
+            android.webkit.WebView animation=(android.webkit.WebView)f.get(opening);
+            check(animation!=null,"built-in opening animation is active");
+            java.util.concurrent.CountDownLatch done=new java.util.concurrent.CountDownLatch(1);String[] value={null};
+            runOnMainSync(()->animation.evaluateJavascript("(()=>{const r=document.querySelector('.console').getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:innerWidth,height:innerHeight}})()",v->{value[0]=v;done.countDown();}));
+            check(done.await(5,java.util.concurrent.TimeUnit.SECONDS),"opening geometry responds");
+            JSONObject r=new JSONObject(value[0]);
+            check(r.getDouble("left")>=0&&r.getDouble("top")>=0&&r.getDouble("right")<=r.getDouble("width")&&r.getDouble("bottom")<=r.getDouble("height"),"entire opening console fits actual device viewport "+r);
+            check(Math.abs(r.getDouble("left")+r.getDouble("right")-r.getDouble("width"))<2,"opening console is horizontally centered");
+            Bitmap screenshot=getUiAutomation().takeScreenshot();
+            if(screenshot!=null){try(FileOutputStream out=new FileOutputStream(new File(activity.getExternalFilesDir(null),"opening-fit.png"))){screenshot.compress(Bitmap.CompressFormat.PNG,100,out);}screenshot.recycle();}
+        }finally{runOnMainSync(()->{try{call(opening,"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});}
+    }
+    private void aspectSeed() throws Exception {
+        String[] categories={"Adventure","Arcade","Action","Puzzles","Racing","Role-playing","Strategy","Platformers","Sports","Rhythm","Simulation","Card games","Board games","Shooters","Exploration","A deliberately long category name for testing"};
+        JSONArray order=new JSONArray(),collection=new JSONArray();
+        String[] images=new String[categories.length];
+        for(int c=0;c<categories.length;c++){
+            order.put(categories[c]);
+            Bitmap bitmap=Bitmap.createBitmap(400,600,Bitmap.Config.ARGB_8888);
+            android.graphics.Canvas canvas=new android.graphics.Canvas(bitmap);
+            android.graphics.Paint paint=new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+            canvas.drawColor(android.graphics.Color.HSVToColor(new float[]{c*22.5f,.65f,.38f}));
+            paint.setColor(android.graphics.Color.HSVToColor(new float[]{(c*22.5f+65)%360,.45f,.9f}));
+            canvas.drawCircle(200,240,125,paint);paint.setColor(android.graphics.Color.WHITE);paint.setTextSize(27);
+            canvas.drawText("WAYFINDER",35,455,paint);paint.setTextSize(22);canvas.drawText("TEST COLLECTION",35,490,paint);canvas.drawText("SECTION "+(c+1),35,535,paint);
+            ByteArrayOutputStream bytes=new ByteArrayOutputStream();bitmap.compress(Bitmap.CompressFormat.PNG,100,bytes);bitmap.recycle();
+            images[c]=(String)call(field("artwork"),"save",new Class<?>[]{byte[].class,File.class},bytes.toByteArray(),field("covers"));
+        }
+        for(int i=0;i<1200;i++)collection.put(new JSONObject().put("id","aspect_"+i).put("title",String.format(Locale.US,"Game %04d",i+1)+(i%17==0?" — An unusually long adventure title for testing":""))
+            .put("genre",categories[i%categories.length]).put("image",images[i%categories.length]).put("kind","app").put("package","audit.synthetic.game"+i).put("favorite",i%9==0).put("lastPlayed",i%7==0?1700000000000L+i*1000L:0));
+        replace(collection,new JSONArray(),order);js("reloadLibrary();query='';$('#search').value='';update()");
+        check(records().length()==1200,"persistent test library: 1200 games across 16 categories with covers, favorites and history");
+    }
     @Override public void onStart() {
         Bundle result=new Bundle();int status=0;
         try {
@@ -370,15 +487,19 @@ public class ReleaseAudit extends Instrumentation {
             check(Boolean.TRUE.equals(field("ready")),"native first launch completes");
             for(int i=0;i<100&&!"true".equals(js("typeof restoring !== 'undefined' && !restoring"));i++)Thread.sleep(100);
             check("true".equals(js("!restoring")),"initial settings restoration completes");
+            if("opening-fit".equals(args.getString("mode"))){openingFitAudit();result.putString("stream",log.toString());finish(0,result);return;}
+            if("aspect-seed".equals(args.getString("mode"))){aspectSeed();result.putString("stream",log.toString());finish(0,result);return;}
             if("settings".equals(args.getString("mode"))){settingsAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("startup".equals(args.getString("mode"))){startupAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("sustained".equals(args.getString("mode"))){sustainedDirectionAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("cover-reset".equals(args.getString("mode"))){coverResetAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("direction".equals(args.getString("mode"))){directionAudit();result.putString("stream",log.toString());finish(0,result);return;}
+            if("placement".equals(args.getString("mode"))){placementAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("keyboard".equals(args.getString("mode"))){keyboardAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("artwork".equals(args.getString("mode"))){artworkAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("smoke".equals(args.getString("mode"))){smokeAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("performance".equals(args.getString("mode"))){performanceAudit();result.putString("stream",log.toString());finish(0,result);return;}
+            if("buttons".equals(args.getString("mode"))){buttonAudit();result.putString("stream",log.toString());finish(0,result);return;}
             js("window.auditFallback=null;Promise.all(['icon/com.android.settings','app-icon/com.android.settings?pack=missing.pack&drawable=missing'].map(src=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);resolve(c.toDataURL())};im.onerror=reject;im.src=src}))).then(v=>window.auditFallback=v[0]===v[1]).catch(()=>window.auditFallback=false)");
             for(int i=0;i<100&&"null".equals(js("window.auditFallback"));i++)Thread.sleep(100);
             check("true".equals(js("window.auditFallback")),"missing icon pack renders identical system fallback");

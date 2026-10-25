@@ -95,8 +95,8 @@ body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-tab[hi
 @media(max-width:900px){.showcase-page-help{display:none}#showcase-position{margin-left:auto}body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-footer{gap:12px}body[data-presentation=milan] #main{column-gap:14px}body[data-presentation=bellevue] #main{padding-left:calc(var(--blade-left)*var(--blade-width) + 14px);padding-right:calc(var(--blade-right)*var(--blade-width) + 14px);column-gap:12px}.showcase-number{font-size:18px;min-width:24px}}
 @media(max-width:600px){body:is([data-presentation=milan],[data-presentation=bellevue]) .brand{font-size:12px;letter-spacing:2px}body:is([data-presentation=milan],[data-presentation=bellevue]) #add-game{display:none}body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar{padding-inline:12px;gap:6px}body[data-presentation=milan] .shell{padding-inline:12px}body[data-presentation=milan]{--print-stripe:16px}body[data-presentation=milan]::before{left:0}body:is([data-presentation=milan],[data-presentation=bellevue]) #main{grid-template-columns:minmax(0,1fr);grid-template-rows:72px 38px minmax(0,1fr) 46px}body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-art,body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-caption{display:none}body[data-presentation=milan] #showcase-tabs{grid-column:1;grid-row:2;padding-bottom:4px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid{grid-row:3}body[data-presentation=bellevue] #main{grid-template-rows:78px 0 minmax(0,1fr) 46px}body[data-presentation=bellevue]{--blade-width:25px}body[data-presentation=bellevue] .showcase-tab{font-size:14px;padding-inline:3px}body[data-presentation=bellevue] .showcase-tab.current{font-size:22px;padding-inline:18px}body[data-presentation=bellevue] #showcase-tabs{bottom:46px}body[data-presentation=bellevue] #main::before{bottom:46px}body:is([data-presentation=milan],[data-presentation=bellevue]) .showcase-hint span{display:none}body:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-footer{gap:10px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{font-size:15px}}
 @media(max-height:450px){body:is([data-presentation=milan],[data-presentation=bellevue]) .topbar{height:44px}body:is([data-presentation=milan],[data-presentation=bellevue]) .shell{height:calc(100dvh - 44px)}body:is([data-presentation=milan],[data-presentation=bellevue]) #main{grid-template-rows:60px minmax(0,1fr) 22px 36px}body[data-presentation=milan] #showcase-category{font-size:32px}body[data-presentation=bellevue] .showcase-tab.current{height:54px;font-size:22px}body[data-presentation=bellevue] #showcase-tabs,body[data-presentation=bellevue] #main::before{bottom:36px}body:is([data-presentation=milan],[data-presentation=bellevue]) #grid .game-title{font-size:14px}.showcase-page-help{display:none}.showcase-number{font-size:16px}}
-body.input-compact:is([data-presentation=milan],[data-presentation=bellevue]) .shell{height:calc(var(--input-height) - 58px)}
-body.input-compact:is([data-presentation=milan],[data-presentation=bellevue]) #grid{overflow:auto;grid-template-rows:repeat(8,minmax(30px,1fr))}
+body.input-compact:is([data-presentation=milan],[data-presentation=bellevue]) .shell{height:calc(var(--input-height) - 60px)}
+body:is([data-presentation=milan],[data-presentation=bellevue]) #grid{overflow:auto;grid-template-rows:repeat(8,minmax(30px,1fr));scrollbar-width:thin}
 body[data-presentation=bellevue][data-palette=enamel] #appearance-preview .appearance-sample-space::before{background:#d4d8c7}
 @media(max-width:600px){body[data-presentation=bellevue] #main::after{bottom:46px}}
 @media(max-height:450px){body[data-presentation=bellevue] #main::after{bottom:36px}}
@@ -187,3 +187,29 @@ body[data-presentation=bellevue] .showcase-tab:not(.current) .showcase-tab-label
 
 /* Keep the static metalwork on its own layer while titles and covers change. */
 body[data-presentation=bellevue] #blade-surfaces{will-change:transform}
+
+/* Empty-state actions sit on the light blade face, not the dark outer shell. */
+body[data-presentation=bellevue][data-palette=enamel] #grid .search-empty button{background:#245038;color:#f4f7ef;border-color:#1e402d}
+body[data-presentation=bellevue][data-palette=enamel] #grid .search-empty button:hover{background:#193e2a}
+@media(max-height:450px){body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{bottom:23px;font-size:10px}body[data-presentation=bellevue] .showcase-tab.current{padding-top:0;padding-bottom:40px;font-size:20px}}
+
+@media(max-height:280px){body[data-presentation=bellevue] .showcase-tab.current .showcase-tab-count{display:none}}
+
+/* Narrow and short can occur together when a handheld keyboard is open.
+   Retain the narrow layout's row assignment instead of shrinking its list to 22px. */
+@media(max-width:600px) and (max-height:450px){
+ body[data-presentation=milan] #main{grid-template-rows:60px 32px minmax(0,1fr) 36px}
+ body[data-presentation=bellevue] #main{grid-template-rows:80px 0 minmax(0,1fr) 36px}
+}
+@media(max-width:600px) and (max-height:280px){
+ body.input-compact[data-presentation=milan] #main{grid-template-rows:0 30px minmax(0,1fr) 36px}
+ body.input-compact[data-presentation=milan] #showcase-heading{display:none}
+}
+@media(max-height:200px){
+ body.input-compact:is([data-presentation=milan],[data-presentation=bellevue]) #showcase-footer{display:none}
+ body.input-compact[data-presentation=milan] #main{grid-template-rows:0 30px minmax(0,1fr) 0}
+ body.input-compact[data-presentation=bellevue] #main{grid-template-rows:48px 0 minmax(0,1fr) 0}
+ body.input-compact[data-presentation=bellevue] #showcase-tabs,body.input-compact[data-presentation=bellevue] #main::before{bottom:0}
+ body.input-compact[data-presentation=bellevue] #blade-surfaces{bottom:0;height:100%}
+ body.input-compact[data-presentation=bellevue] .showcase-tab.current{height:44px;padding-top:3px;padding-bottom:3px}
+}

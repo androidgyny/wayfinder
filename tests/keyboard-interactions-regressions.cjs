@@ -52,7 +52,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await nativePage.close();
  // Keep a selection deep in a populated list while the keyboard changes its
  // visible rows. This exercises virtualized Berlin and the text/artwork panes.
- for(const layout of ['kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto']){
+ for(const layout of ['sedona','bath','milan','bellevue','dashboard','redmond','atlantis','sanfrancisco','kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto']){
   await page.setViewportSize({width:1097,height:700});
   await page.evaluate(layout=>{
    window.wayfinderKeyboardChanged(false);document.activeElement.blur();

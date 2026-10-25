@@ -1,4 +1,6 @@
-function desktopDateLabel(value){const d=new Date(Number(value));if(!Number(value)||!Number.isFinite(d.getTime()))return 'Never';const today=new Date(),yesterday=new Date(today.getFullYear(),today.getMonth(),today.getDate()-1);if(d.toDateString()===today.toDateString())return 'Today';if(d.toDateString()===yesterday.toDateString())return 'Yesterday';return d.toLocaleDateString(undefined,{month:'short',day:'numeric',...(d.getFullYear()!==today.getFullYear()?{year:'numeric'}:{})});}
+// Reuse locale formatters for long lists; relative dates are still evaluated each time.
+const desktopDateFormats=[new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}),new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',year:'numeric'})];
+function desktopDateLabel(value){const d=new Date(Number(value));if(!Number(value)||!Number.isFinite(d.getTime()))return 'Never';const today=new Date(),yesterday=new Date(today.getFullYear(),today.getMonth(),today.getDate()-1);if(d.toDateString()===today.toDateString())return 'Today';if(d.toDateString()===yesterday.toDateString())return 'Yesterday';return desktopDateFormats[Number(d.getFullYear()!==today.getFullYear())].format(d);}
 
 // Shared three-pane desktop browser. Each instance owns its navigation and row cache;
 // DOM prefixes and presentation options keep the two visual designs independent.
