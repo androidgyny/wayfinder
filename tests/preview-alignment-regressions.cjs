@@ -20,7 +20,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  try{
  await page.addInitScript(fixture=>{window.auditDb=[fixture];window.calls={search:[],download:[],save:[],browser:[],files:[]};window.Portal={view:()=>'{}',saveView:()=>{},library:()=>JSON.stringify(auditDb),sound:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',showKeyboard:()=>{},artworkSearch:(...a)=>calls.search.push(a),artworkDownload:(...a)=>calls.download.push(a),artworkSave:(...a)=>calls.save.push(a),openArtworkBrowser:(...a)=>calls.browser.push(a),chooseCover:(...a)=>calls.files.push(a)};},fixture);
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof editGame==='function');
- const modes=['sedona','bath','milan','bellevue','dashboard','library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice','paloalto','redmond','sanfrancisco','atlantis'];
+ const modes=['hongkong','sedona','bath','milan','bellevue','dashboard','library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge','kyoto','cupertino','venice','paloalto','redmond','sanfrancisco','atlantis'];
 
  for(const viewport of [{width:1097,height:700},{width:640,height:600},{width:551,height:456},{width:800,height:576},{width:900,height:576},{width:960,height:576},{width:980,height:396}]){
  await page.setViewportSize(viewport);
@@ -41,6 +41,6 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await page.evaluate(()=>$('#settings-dialog').close());
  }
  }
- assert.deepEqual(errors,[]);console.log('PASS: centered appearance previews across 21 artwork layouts, seven viewport sizes, and small/normal/large source covers');
+ assert.deepEqual(errors,[]);console.log('PASS: centered appearance previews across 22 artwork layouts, seven viewport sizes, and small/normal/large source covers');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});

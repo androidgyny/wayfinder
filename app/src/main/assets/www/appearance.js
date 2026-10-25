@@ -33,7 +33,7 @@ async function loadCustomFont(info,candidate=false){
 function setTypography(value){
  if(value==='exo2')value='clean';
  if(value==='custom'){refreshCustomFont();if(customFontInfo.url){loadCustomFont(customFontInfo);return;}value='clean';toast('Choose a custom font to use this preset');}
- customFontRequest++;typography=['computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans','ibmvga','nunito','winetahoma','oswald','go'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=true;refreshApplicableAppearanceControls();persist();
+ customFontRequest++;typography=['gamepocket','computer','editorial','clean','spacegrotesk','outfit','oxanium','spacemono','ibmplexsans','ibmvga','nunito','winetahoma','oswald','go'].includes(value)?value:'computer';document.body.dataset.typography=typography;$('#typography').value=typography;$('#custom-font-controls').hidden=true;refreshApplicableAppearanceControls();persist();
 }
 
 function setCoverGlow(value){coverGlow=value!==false;document.body.dataset.coverGlow=String(coverGlow);$('#cover-glow').value=coverGlow?'subtle':'off';queueCoverGlow();persist();}
@@ -54,7 +54,7 @@ function coverColor(img){
  }catch{return null;}
 }
 function updateCoverGlow(){
- if(isShowcase()){syncShowcaseCover();return;}if(presentation==='sedona'){syncSedonaCover();return;}if(presentation==='bath'){syncBathCover();return;}if(presentation==='paloalto'){syncPaloaltoCover();return;}if(presentation==='cambridge'){syncCambridgeCover();return;}if(presentation==='ulm'){syncUlmCoverAppearance();return;}
+ if(presentation==='hongkong')return;if(isShowcase()){syncShowcaseCover();return;}if(presentation==='sedona'){syncSedonaCover();return;}if(presentation==='bath'){syncBathCover();return;}if(presentation==='paloalto'){syncPaloaltoCover();return;}if(presentation==='cambridge'){syncCambridgeCover();return;}if(presentation==='ulm'){syncUlmCoverAppearance();return;}
  const grid=$('#grid');if(grid.classList.contains('fluid-motion'))return;
  const carousel=['kyoto','cupertino','vienna','prague','copenhagen','oxford','berlin','venice'].includes(presentation);
  const selected=carousel?grid.querySelector('.presentation-selected'):(document.body.dataset.input!=='controller'&&hoverGlowCard?.isConnected?hoverGlowCard:document.activeElement?.closest('#grid .game')||grid.querySelector('.controller-selected')||grid.querySelector('.game'));
@@ -76,6 +76,7 @@ function setAtmosphere(background,selection){
 function setViennaSeparators(value){viennaSeparators=value==='space'?'space':'lines';document.body.dataset.viennaSeparators=viennaSeparators;$('#vienna-separators').value=viennaSeparators;persist();}
 function migrateRetiredAppearance(value){return value.presentation==='losangeles'?{...value,...builtinAppearancePresets.find(p=>p.name==='Smitchish Dark').values}:value;}
 function initAppearance(value){
+ hongkongRecent=value.hongkongRecent===true;setHongKongOptions(value.hongkongView,value.hongkongTone,false);
  setTerminalPalette(value.terminalPalette,false);
  setCambridgeArtwork(value.cambridgeArtwork,false);setUlmArtwork(value.ulmArtwork,false);
  setCoverShadow(value.coverShadow);
@@ -132,6 +133,7 @@ function refreshCupertinoControls(){
 }
 
 function refreshLayoutControls(){
+ $('#hongkong-options').hidden=presentation!=='hongkong';
  $('#cambridge-options').hidden=presentation!=='cambridge';$('#ulm-options').hidden=presentation!=='ulm';
  $('#vienna-options').hidden=presentation!=='vienna';
  const carousel=presentation==='kyoto'||presentation==='cupertino';
@@ -151,7 +153,7 @@ function setCoverOptions(corners,brightness,menus){
  document.body.dataset.coverCorners=coverCorners;document.body.dataset.coverBrightness=coverBrightness;document.body.dataset.menuButtons=menuButtons;
  $('#cover-corners').value=coverCorners;$('#cover-brightness').value=coverBrightness;$('#menu-buttons').value=menuButtons;persist();
 }
-function appearanceSnapshot(){return {terminalPalette,cambridgeArtwork,ulmArtwork,coverShadow,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
+function appearanceSnapshot(){return {hongkongView,hongkongTone,terminalPalette,cambridgeArtwork,ulmArtwork,coverShadow,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
 function availableAppearancePresets(){return [...builtinAppearancePresets.filter(b=>!appearancePresets.some(p=>p.name.toLowerCase()===b.name.toLowerCase())),...appearancePresets].sort((a,b)=>compareTitles(a.name,b.name))}
 function refreshPresetButtons(){const name=$('#appearance-presets').value;$('#preset-apply').disabled=!availableAppearancePresets().some(p=>p.name===name);$('#preset-preview').disabled=$('#preset-apply').disabled;$('#preset-delete').disabled=!appearancePresets.some(p=>p.name===name);const preset=availableAppearancePresets().find(p=>p.name===name);$('#preset-origin').textContent=preset?(builtinAppearancePresets.includes(preset)?'Built-in preset':'Your saved preset'):'';}
 function refreshPresets(selected=''){
@@ -167,14 +169,14 @@ function applyAppearancePreset(){
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;applyAppearanceValues(preset.values);$('#preset-status').textContent='Applied “'+preset.name+'”.';
 }
 function applyAppearanceValues(v){v=migrateRetiredAppearance(v);if(v.preserveOtherSettings)v={...appearanceSnapshot(),...v};const wasRestoring=restoring;restoring=true;
- try{if(['az','za','recent','favorites'].includes(v.sort)){sort=v.sort;$('#sort').value=sort;}if(v.terminalPalette!==undefined)setTerminalPalette(v.terminalPalette,false);setCoverShadow(v.coverShadow);setCambridgeArtwork(v.cambridgeArtwork,false);setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
+ try{setHongKongOptions(v.hongkongView??hongkongView,v.hongkongTone??hongkongTone,false);if(['az','za','recent','favorites'].includes(v.sort)){sort=v.sort;$('#sort').value=sort;}if(v.terminalPalette!==undefined)setTerminalPalette(v.terminalPalette,false);setCoverShadow(v.coverShadow);setCambridgeArtwork(v.cambridgeArtwork,false);setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
  finally{restoring=wasRestoring;persist()}
 }
 
 
 function updateInterfaceContrast(){
  const body=document.body;body.style.removeProperty('--line');body.style.removeProperty('--muted');
- if(interfaceContrast!=='crisp'||presentation==='abbotsford')return;
+ if(interfaceContrast!=='crisp'||['hongkong','abbotsford'].includes(presentation))return;
  const style=getComputedStyle(body),rgb=name=>{const hex=style.getPropertyValue(name).trim().replace('#','');return [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16));},bg=rgb('--bg'),text=rgb('--text');
  const mix=ratio=>'rgb('+text.map((v,i)=>Math.round(v*ratio+bg[i]*(1-ratio))).join(',')+')';
  body.style.setProperty('--line',mix(.60));body.style.setProperty('--muted',mix(.90));
@@ -204,7 +206,7 @@ function updateAppearancePreview(){
 
 function syncUlmSettingsSample(sample){
  const frame=sample.closest('.appearance-sample');
- if(!['sedona','milan','bellevue','bath','ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)){
+ if(presentation==='hongkong'&&hongkongView!=='list'||!['hongkong','sedona','milan','bellevue','bath','ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)){
   const selected=$('#grid .presentation-selected')||$('#grid .controller-selected')||$('#grid .game');
   const actual=['oxford'].includes(presentation)?$('#catalogue-art'):selected?.querySelector('.cover');
   sample.removeAttribute('style');frame.removeAttribute('style');frame.dataset.previewUnderline=String(!!actual&&!actual.matches('img')&&getComputedStyle(actual,'::before').content!=='none');
@@ -213,7 +215,7 @@ function syncUlmSettingsSample(sample){
  }
  frame.removeAttribute('style');frame.dataset.previewUnderline='false';sample.removeAttribute('style');
  if(!sample.naturalWidth)return;
- const actual=$(presentation==='sedona'?'#sedona-cover':isShowcase()?'#showcase-cover':presentation==='bath'?'#bath-cover':presentation==='atlantis'?'#atlantis-cover':presentation==='sanfrancisco'?'#sanfrancisco-cover':presentation==='redmond'?'#redmond-cover':presentation==='paloalto'?'#paloalto-cover':presentation==='cambridge'?'#cambridge-cover':'#ulm-cover'),style=getComputedStyle(actual),rect=actual.getBoundingClientRect();
+ const actual=$(presentation==='hongkong'?(hongkongView==='list'?'#hongkong-cover':'#grid .presentation-selected img'):presentation==='sedona'?'#sedona-cover':isShowcase()?'#showcase-cover':presentation==='bath'?'#bath-cover':presentation==='atlantis'?'#atlantis-cover':presentation==='sanfrancisco'?'#sanfrancisco-cover':presentation==='redmond'?'#redmond-cover':presentation==='paloalto'?'#paloalto-cover':presentation==='cambridge'?'#cambridge-cover':'#ulm-cover'),style=getComputedStyle(actual||$('#hongkong-cover')),rect=(actual||$('#hongkong-cover')).getBoundingClientRect();
  const width=rect.width||Math.min(innerWidth*.25,sample.naturalWidth);
  const height=rect.height||width*1.5;
  const scale=Math.min(102/width,153/height);
@@ -232,11 +234,11 @@ function refreshApplicableAppearanceControls(){
  document.body.dataset.coverShadowActive=String(shadow);
  const rows={
   'terminal-palette':bbs,'cover-shadow':shadow,
-  'presentation-sort':!['oxford','copenhagen'].includes(presentation)&&!(presentation==='cambridge'&&cambridgeSection==='recent')&&!(presentation==='ulm'&&ulmLevel==='games'&&ulmSection==='recent'),
-  'art-fit':artwork,'cover-border':artwork,'cover-corners':artwork,'cover-glow':artwork&&!['sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
-  'palette':!bbs,'backdrop':!['sedona','redmond','sanfrancisco'].includes(presentation),'interface-contrast':!bbs,'title-weight':typography!=='ibmvga',
-  'typography':true,'cover-brightness':!['sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)&&(!ulm||bbs),'menu-buttons':!['sedona','milan','bellevue','bath','ulm','cambridge','venice','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
-  'selection-style':!ulm&&!['sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)
+  'presentation-sort':!(presentation==='hongkong'&&hongkongRecent)&&!['oxford','copenhagen'].includes(presentation)&&!(presentation==='cambridge'&&cambridgeSection==='recent')&&!(presentation==='ulm'&&ulmLevel==='games'&&ulmSection==='recent'),
+  'art-fit':artwork,'cover-border':artwork,'cover-corners':artwork,'cover-glow':artwork&&!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
+  'palette':!bbs&&presentation!=='hongkong','backdrop':!['hongkong','sedona','redmond','sanfrancisco'].includes(presentation),'interface-contrast':!bbs&&presentation!=='hongkong','title-weight':!['ibmvga','gamepocket'].includes(typography),
+  'typography':true,'cover-brightness':!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)&&(!ulm||bbs),'menu-buttons':!['hongkong','sedona','milan','bellevue','bath','ulm','cambridge','venice','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
+  'selection-style':!ulm&&!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)
  };
  for(const [id,visible] of Object.entries(rows))$('#'+id).closest('.settings-row').hidden=!visible;
  $('#appearance-preview').hidden=!artwork;
@@ -256,7 +258,7 @@ function auditionAppearancePreset(){
  if(window.appearanceAudition)return;
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;
  rememberCategoryPlace();
- const navigation=JSON.parse(JSON.stringify({dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
+ const navigation=JSON.parse(JSON.stringify({dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
  window.appearanceAudition={name:preset.name,values:appearanceSnapshot(),navigation,scrollX:scrollX,scrollY:scrollY,settingsScroll:$('#settings-dialog').scrollTop,scrolls:[...document.querySelectorAll('[id]')].filter(n=>n.scrollTop||n.scrollLeft).map(n=>({id:n.id,top:n.scrollTop,left:n.scrollLeft}))};
  hideDialog('#settings-dialog');
  try{applyAppearanceValues(preset.values);$('#audition-name').textContent=preset.name;showDialog('#preset-audition');$('#audition-keep').focus({preventScroll:true});}
@@ -267,7 +269,7 @@ function finishAppearanceAudition(keep){
  hideDialog('#preset-audition');
  if(!keep){
   applyAppearanceValues(audition.values);
-  ({dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
+  ({dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
   renderedCategoryKey=null;$('#search').value=query;$('#sort').value=sort;update();
   for(const saved of audition.scrolls){const node=document.getElementById(saved.id);if(node){node.scrollTop=saved.top;node.scrollLeft=saved.left;}}
   window.scrollTo(audition.scrollX,audition.scrollY);
@@ -326,3 +328,5 @@ builtinAppearancePresets.push({name:'Homage',values:{...builtinAppearancePresets
 builtinAppearancePresets.push({name:'Blades',values:{...builtinAppearancePresets[0].values,presentation:'bellevue',palette:'enamel',typography:'ibmplexsans',titleWeight:'regular',coverCorners:'square',coverBorder:'hairline',coverShadow:'off',backdrop:'flat',artFit:'cover',sort:'az'}});
 
 builtinAppearancePresets.push({name:'Amped Up',values:{...builtinAppearancePresets[0].values,presentation:'sedona',palette:'ampere',typography:'ibmvga',titleWeight:'regular',coverCorners:'square',coverBorder:'hairline',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',sort:'az'}});
+
+builtinAppearancePresets.push({name:'Cognate',values:{...builtinAppearancePresets[0].values,presentation:'hongkong',hongkongView:'list',hongkongTone:'light',palette:'platinum',typography:'gamepocket',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',sort:'az'}});

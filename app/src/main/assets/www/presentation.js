@@ -1,15 +1,15 @@
 // The carousel moves covers with transforms; browser scrolling must not move its stage.
 function resetPresentationScroll(){
- if(isShowcase()||presentation==='sedona'||presentation==='bath'||presentation==='dashboard'||presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge'||presentation==='abbotsford'||presentation==='paloalto'||presentation==='redmond'||presentation==='sanfrancisco'||presentation==='atlantis')return;
+ if(isShowcase()||presentation==='hongkong'||presentation==='sedona'||presentation==='bath'||presentation==='dashboard'||presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge'||presentation==='abbotsford'||presentation==='paloalto'||presentation==='redmond'||presentation==='sanfrancisco'||presentation==='atlantis')return;
  for(const node of [$('#grid'),$('#main'),$('.shell'),document.scrollingElement]){if(node){node.scrollLeft=0;node.scrollTop=0}}
 }
 function presentationPageSize(){return Math.max(12,Math.ceil(filtered.length/10))}
 function sizePresentation(){
  if(isShowcase())sizeShowcaseCover();
- if(presentation==='sedona')sizeSedonaCover();if(presentation==='bath')sizeBathCover();
+ if(presentation==='hongkong')sizeHongKong();if(presentation==='sedona')sizeSedonaCover();if(presentation==='bath')sizeBathCover();
  if(presentation==='atlantis')sizeAtlantisCover();if(presentation==='sanfrancisco')sizeSanfranciscoCover();if(presentation==='redmond')sizeRedmondCover();if(presentation==='paloalto')sizePaloaltoCover();
  if(['oxford'].includes(presentation))sizeOxfordCover();
- if(isShowcase()||presentation==='sedona'||presentation==='bath'||presentation==='dashboard'||presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge'||presentation==='abbotsford'||presentation==='paloalto'||presentation==='redmond'||presentation==='sanfrancisco'||presentation==='atlantis')return;
+ if(isShowcase()||presentation==='hongkong'||presentation==='sedona'||presentation==='bath'||presentation==='dashboard'||presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge'||presentation==='abbotsford'||presentation==='paloalto'||presentation==='redmond'||presentation==='sanfrancisco'||presentation==='atlantis')return;
  const height=$('#grid').clientHeight;
  const width=Math.max(32,Math.floor(Math.min(innerWidth*(presentation==='venice'?.23:.38),(height-(presentation==='venice'?60:presentation==='cupertino'?84:34))/1.5)));
  if($('#grid').style.getPropertyValue('--tile')!==width+'px')$('#grid').style.setProperty('--tile',width+'px');
@@ -18,17 +18,18 @@ function setPresentation(value){
  window.cancelButtonPresses?.();
  rememberCategoryPlace();renderedCategoryKey=null;
  finishCopenhagenDrag(true);stopCarouselMotion();
- const previousSection=presentation==='cambridge'?cambridgeSection:presentation==='ulm'&&ulmLevel==='games'?ulmSection:favoritesOnly?'favorites':genre?'genre:'+genre:'all';
+ const previousSection=presentation==='hongkong'&&hongkongRecent?'recent':presentation==='cambridge'?cambridgeSection:presentation==='ulm'&&ulmLevel==='games'?ulmSection:favoritesOnly?'favorites':genre?'genre:'+genre:'all';
+ if(value==='hongkong'&&presentation!=='hongkong')hongkongRecent=previousSection==='recent';
  if(value==='cambridge'&&presentation!=='cambridge')cambridgeSection=previousSection;
  if(value==='ulm'&&presentation!=='ulm'){ulmSection=previousSection;ulmCategoryKey=previousSection;ulmLevel=query||previousSection!=='all'?'games':'categories';ulmSearchOpen=!!query;}
  if(value==='vienna'||value==='prague'||value==='copenhagen'){genre='';favoritesOnly=false;}
  if(value==='seattle'&&presentation!=='seattle')seattleBrowse=!!(query||genre||favoritesOnly);
- const next=['sedona','milan','bellevue','bath','dashboard','kyoto','cupertino','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(value)?value:'library';
+ const next=['hongkong','sedona','milan','bellevue','bath','dashboard','kyoto','cupertino','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(value)?value:'library';
  // Reuse cards only within a layout; shelf containers belong to Seattle.
- if(next!==presentation)$('#grid').replaceChildren();
+ if(next!==presentation){if(presentation==='hongkong'){hongkongRows.clear();hongkongKey='';clearTimeout(hongkongScrollTimer);}$('#grid').replaceChildren();}
  presentation=next;
  document.body.dataset.presentation=presentation;$('#presentation').value=presentation;
- updateInterfaceContrast();updateBackgroundPalette();syncCustomBackground();syncSystemBarColor();refreshLayoutControls();if(presentation!=='sedona')$('#sedona-cover').removeAttribute('src');if(presentation!=='bath')$('#bath-cover').removeAttribute('src');if(presentation!=='ulm'){$('#ulm-cover').removeAttribute('src');}if(presentation!=='cambridge')$('#cambridge-cover').removeAttribute('src');if(presentation!=='paloalto')$('#paloalto-cover').removeAttribute('src');if(presentation!=='redmond')$('#redmond-cover').removeAttribute('src');if(presentation!=='sanfrancisco')$('#sanfrancisco-cover').removeAttribute('src');if(presentation!=='atlantis')$('#atlantis-cover').removeAttribute('src');
+ updateInterfaceContrast();updateBackgroundPalette();syncCustomBackground();syncSystemBarColor();refreshLayoutControls();if(presentation!=='hongkong')$('#hongkong-cover').removeAttribute('src');if(presentation!=='sedona')$('#sedona-cover').removeAttribute('src');if(presentation!=='bath')$('#bath-cover').removeAttribute('src');if(presentation!=='ulm'){$('#ulm-cover').removeAttribute('src');}if(presentation!=='cambridge')$('#cambridge-cover').removeAttribute('src');if(presentation!=='paloalto')$('#paloalto-cover').removeAttribute('src');if(presentation!=='redmond')$('#redmond-cover').removeAttribute('src');if(presentation!=='sanfrancisco')$('#sanfrancisco-cover').removeAttribute('src');if(presentation!=='atlantis')$('#atlantis-cover').removeAttribute('src');
  if(!isShowcase())$('#showcase-cover').removeAttribute('src');closeMenu();window.scrollTo(0,0);sizePresentation();update();refreshCupertinoControls();refreshOxfordControls();persist();
 }
 function selectPresentation(id){stopCarouselMotion();presentationId=id;renderPresentation();controllerFocus($('#grid .presentation-selected'));persist()}
@@ -40,7 +41,7 @@ function movePresentation(delta,focus=false){
  presentationId=filtered[index].id;renderPresentation();
  if(focus)controllerFocus($('#grid .presentation-selected'));queueCarouselSave();
 }
-function renderPresentation(){if(presentation==='sedona'){renderSedona();return;}if(isShowcase()){renderShowcase();return;}if(presentation==='bath'){renderBath();return;}if(presentation==='dashboard'){renderDashboard();return;}if(presentation==='atlantis'){renderAtlantis();return;}if(presentation==='sanfrancisco'){renderSanfrancisco();return;}if(presentation==='redmond'){renderRedmond();return;}if(presentation==='paloalto'){renderPaloalto();return;}if(presentation==='abbotsford'){renderAbbotsford();return;}if(presentation==='cambridge'){renderCambridge();return;}if(presentation==='copenhagen'){renderCopenhagen();return;}if(presentation==='prague'){renderPrague();return;}if(presentation==='ulm'){renderUlm();return;}if(presentation==='berlin'){renderBerlin();return;}if(presentation==='oxford'){renderOxford();return;}if(presentation==='vienna'){renderVienna();return;}if(presentation==='seattle'){renderSeattle();return;}
+function renderPresentation(){if(presentation==='hongkong'){renderHongKong();return;}if(presentation==='sedona'){renderSedona();return;}if(isShowcase()){renderShowcase();return;}if(presentation==='bath'){renderBath();return;}if(presentation==='dashboard'){renderDashboard();return;}if(presentation==='atlantis'){renderAtlantis();return;}if(presentation==='sanfrancisco'){renderSanfrancisco();return;}if(presentation==='redmond'){renderRedmond();return;}if(presentation==='paloalto'){renderPaloalto();return;}if(presentation==='abbotsford'){renderAbbotsford();return;}if(presentation==='cambridge'){renderCambridge();return;}if(presentation==='copenhagen'){renderCopenhagen();return;}if(presentation==='prague'){renderPrague();return;}if(presentation==='ulm'){renderUlm();return;}if(presentation==='berlin'){renderBerlin();return;}if(presentation==='oxford'){renderOxford();return;}if(presentation==='vienna'){renderVienna();return;}if(presentation==='seattle'){renderSeattle();return;}
  let index=filtered.findIndex(g=>g.id===presentationId);if(index<0)index=0;
  const current=filtered[index];presentationId=current?.id||null;
  const options=sections(),gi=sectionIndex();
@@ -71,7 +72,7 @@ function renderPresentation(){if(presentation==='sedona'){renderSedona();return;
  $('#presentation-prev').disabled=!current||index===0;$('#presentation-next').disabled=!current||index===filtered.length-1;syncSearchFeedback();
 }
 function initPresentation(){
- initSedona();initShowcase();initBath();initDashboard();initAtlantis();initSanfrancisco();initRedmond();initPaloalto();initAbbotsford();initBerlin();initUlm();initCopenhagen();initCambridge();initKyotoDock();
+ initHongKong();initSedona();initShowcase();initBath();initDashboard();initAtlantis();initSanfrancisco();initRedmond();initPaloalto();initAbbotsford();initBerlin();initUlm();initCopenhagen();initCambridge();initKyotoDock();
  $('#presentation').onchange=e=>{setPresentation(e.target.value);effect('select')};
  $('#category-before').onclick=()=>controller('genrePrev');$('#category-after').onclick=()=>controller('genreNext');$('#category-current').onclick=()=>controller('genreNext');
  $('#presentation-prev').onclick=()=>movePresentation(-1,true);$('#presentation-next').onclick=()=>movePresentation(1,true);

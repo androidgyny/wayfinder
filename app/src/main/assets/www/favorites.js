@@ -59,8 +59,8 @@ function revealActiveCategory(){
 // Each layout owns its reading position; search results never replace the unfiltered one.
 let categoryPlaces={},renderedCategoryKey=null;
 function categoryPlaceKey(){
- if(!['bath','dashboard','library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation))return null;
- return JSON.stringify([presentation,presentation==='copenhagen'?'table':presentation==='seattle'&&!seattleBrowse&&!genre&&!favoritesOnly&&!query?'dashboard':favoritesOnly?'favorites':genre||'all',query]);
+ if(!['hongkong','bath','dashboard','library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation))return null;
+ return JSON.stringify([presentation,presentation==='hongkong'&&hongkongRecent?'recent':presentation==='copenhagen'?'table':presentation==='seattle'&&!seattleBrowse&&!genre&&!favoritesOnly&&!query?'dashboard':favoritesOnly?'favorites':genre||'all',query]);
 }
 function rememberCategoryPlace(){
  if(!renderedCategoryKey)return;
@@ -97,7 +97,7 @@ function restoreCategoryPlace(state){
  }
  window.scrollTo({top:place?.top||0,behavior:'instant'});
  // Restore selection visually for touch too, without pulling focus out of search/settings.
- if(card&&!(isShowcase()&&showcasePane==='tabs')&&!topDialog()&&!editingField()&&!(presentation==='bath'&&bathPane==='tabs')&&!(presentation==='dashboard'&&dashboard.pane!=='games')&&!(presentation==='abbotsford'&&abbotsfordPane==='categories')&&!(presentation==='redmond'&&redmondBrowser.state.pane==='categories')&&!(presentation==='sanfrancisco'&&sanfranciscoPane==='categories')&&!(presentation==='atlantis'&&atlantisBrowser.state.pane==='categories'))controllerFocus(card,true);
+ if(card&&!(presentation==='hongkong'&&hongkongPane==='tabs')&&!(isShowcase()&&showcasePane==='tabs')&&!topDialog()&&!editingField()&&!(presentation==='bath'&&bathPane==='tabs')&&!(presentation==='dashboard'&&dashboard.pane!=='games')&&!(presentation==='abbotsford'&&abbotsfordPane==='categories')&&!(presentation==='redmond'&&redmondBrowser.state.pane==='categories')&&!(presentation==='sanfrancisco'&&sanfranciscoPane==='categories')&&!(presentation==='atlantis'&&atlantisBrowser.state.pane==='categories'))controllerFocus(card,true);
 }
 
 function rememberedCategoryGame(items,id,key){

@@ -1,0 +1,63 @@
+// A restrained library with shared selection and categories across three views.
+let hongkongView='list',hongkongTone='light',hongkongRecent=false,hongkongPane='games',hongkongKey='';
+let hongkongRows=new Map();
+let hongkongScrollTimer=0,hongkongScrollIgnoreUntil=0;
+let hongkongStartupFocusPending=false;
+function setHongKongOptions(view,tone,save=true){
+ hongkongView=['list','carousel','grid'].includes(view)?view:'list';hongkongTone=tone==='dark'?'dark':'light';
+ document.body.dataset.hongkongView=hongkongView;document.body.dataset.hongkongTone=hongkongTone;
+ $('#hongkong-view').value=hongkongView;$('#hongkong-tone').value=hongkongTone;
+ if(presentation==='hongkong'){renderHongKong();syncSearchFeedback();sizeHongKong();hongkongReveal();syncSystemBarColor();updateAppearancePreview();}
+ if(save)persist();
+}
+function hongkongSections(){const s=sections();return [s[0],s[1],{label:'Recent',genre:'',favorite:false,recent:true},...s.slice(2)]}
+function hongkongSectionIndex(){return hongkongRecent?2:favoritesOnly?1:genre?Math.max(0,genres.indexOf(genre)+3):0}
+function hongkongOpen(index){const s=hongkongSections()[index];if(!s)return;rememberCategoryPlace();hongkongRecent=!!s.recent;favoritesOnly=s.favorite;setGenre(s.genre,true);persist();}
+function hongkongReveal(){const row=$('#grid .presentation-selected');if(!row)return;const grid=$('#grid');if(hongkongView==='carousel'){hongkongScrollIgnoreUntil=performance.now()+180;grid.scrollLeft=row.offsetLeft-parseFloat(getComputedStyle(grid).paddingLeft);}else{const r=row.getBoundingClientRect(),g=grid.getBoundingClientRect(),style=getComputedStyle(grid),top=g.top+parseFloat(style.paddingTop),bottom=g.bottom-parseFloat(style.paddingBottom);if(r.top<top)grid.scrollTop+=r.top-top;else if(r.bottom>bottom)grid.scrollTop+=r.bottom-bottom;}}
+function hongkongFocus(useController=true){const target=hongkongPane==='tabs'?$('#hongkong-tabs .current'):$('#grid .presentation-selected')||$('#grid .show-all-matches')||$('#hongkong-tabs .current');if(useController)controllerFocus(target,true);else target?.focus({preventScroll:true});document.body.dataset.hongkongPane=hongkongPane;if(hongkongPane==='games')hongkongReveal();else if(target)revealCategoryItem(target.parentElement,target,true);}
+function hongkongSelect(index,focus=true){const g=filtered[Math.max(0,Math.min(filtered.length-1,index))];presentationId=g?.id||null;controllerGameId=presentationId;renderHongKong(true);if(focus)hongkongFocus();queueCarouselSave();}
+function sizeHongKong(){if(presentation!=='hongkong')return;const panel=$('#hongkong-art'),grid=$('#grid');const width=Math.max(0,Math.min(panel.clientWidth-36,(panel.clientHeight-32)/1.5));Object.assign($('#hongkong-cover').style,{width:width+'px',height:width*1.5+'px'});grid.style.setProperty('--hk-carousel-width',Math.max(44,Math.min(grid.clientWidth*.19,(grid.clientHeight-62)/1.5))+'px');}
+function renderHongKong(selectionOnly=false){
+ if(!selectionOnly){const tabs=$('#hongkong-tabs'),list=hongkongSections(),signature=JSON.stringify([list,query,searchSummary?[searchSummary.all,searchSummary.favorites,searchSummary.recent,[...searchSummary.genres]]:[games.length,games.filter(g=>g.favorite).length]]);if(tabs.dataset.signature!==signature){tabs.dataset.signature=signature;tabs.replaceChildren(...list.map((s,i)=>{const b=el('button','hongkong-tab',s.label.replace('★ ',''));b.title=b.textContent;const key=s.recent?'recent':s.favorite?'favorites':s.genre?'genre:'+s.genre:'all';if(searchSummary){const n=searchSectionCount(key,0);b.append(el('small','',String(n)));b.classList.toggle('search-no-match',!n);}else if(i<2)b.append(el('small','',String(i===0?games.length:games.filter(g=>g.favorite).length)));b.onclick=e=>{hongkongPane='tabs';hongkongOpen(i);hongkongFocus(e.detail===0)};b.onfocus=()=>{hongkongPane='tabs';document.body.dataset.hongkongPane='tabs'};return b}));} [...tabs.children].forEach((b,i)=>{const on=i===hongkongSectionIndex();b.classList.toggle('current',on);b.setAttribute('aria-pressed',String(on));b.tabIndex=on?0:-1});revealCategoryItem(tabs,tabs.querySelector('.current'),true);}
+ let index=Math.max(0,filtered.findIndex(g=>g.id===presentationId));const game=filtered[index];presentationId=game?.id||null;controllerGameId=presentationId;
+ const grid=$('#grid'),key=selectionOnly?hongkongKey:JSON.stringify([hongkongView,query,filtered.map(g=>[g.id,g.title,g.image,!!g.favorite])]);
+ if(key!==hongkongKey||!grid.querySelector('.hongkong-game')){hongkongKey=key;hongkongRows=new Map();grid.replaceChildren(...filtered.map((g,i)=>{const b=el('button','game hongkong-game');b.dataset.id=g.id;b.tabIndex=-1;hongkongRows.set(g.id,b);b.title=g.title;b.setAttribute('aria-label',g.title+(g.favorite?' · Favorite':''));if(hongkongView!=='list'){const cover=el('div','cover'),img=el('img');img.src=g.image;img.alt='';img.loading='lazy';img.decoding='async';cover.append(img);b.append(cover);if(hongkongView==='carousel')b.append(el('span','hongkong-card-title',g.title));}else b.append(el('span','game-title',g.title),el('span','hongkong-star',g.favorite?'★':''));let pressedSelected=false;b.addEventListener('pointerdown',()=>{pressedSelected=presentationId===g.id},true);b.onclick=e=>{hongkongPane='games';if(presentationId===g.id&&(e.detail===0||pressedSelected))play(g.id,b);else{hongkongSelect(i,false);hongkongReveal();}};b.onfocus=()=>{hongkongPane='games';document.body.dataset.hongkongPane='games';if(presentationId!==g.id)hongkongSelect(i,false)};b.oncontextmenu=e=>{e.preventDefault();hongkongSelect(i,false);editGame(g)};return b}));if(!game)grid.append(el('p','hongkong-empty',query?'No matching titles.':!games.length?'Add a game to begin your collection.':hongkongRecent?'No recently played games.':favoritesOnly?'No favorites yet.':'No games in this category.'));}
+ for(const row of new Set([...grid.querySelectorAll('.presentation-selected,.controller-selected'),hongkongRows.get(presentationId)].filter(Boolean))){const on=row.dataset.id===presentationId;row.classList.toggle('presentation-selected',on);row.classList.remove('controller-selected');row.tabIndex=on?0:-1;row.setAttribute('aria-current',String(on));}
+ const img=$('#hongkong-cover');img.hidden=!game;if(game){if(img.getAttribute('src')!==game.image)img.src=game.image;img.alt=game.title+' cover';}else img.removeAttribute('src');
+ $('#hongkong-title').textContent=game?.title||'';$('#hongkong-meta').textContent=game?[Number(game.lastPlayed)>0&&Number.isFinite(new Date(Number(game.lastPlayed)).getTime())?'Last played: '+desktopDateLabel(game.lastPlayed):'Not played yet',game.favorite?'★ Favorite':''].filter(Boolean).join(' · '):'';$('#hongkong-position').textContent=game?`${index+1} / ${filtered.length.toLocaleString()}`:'0 / 0';$('#hongkong-sort').textContent='Sort: '+({az:'A–Z',za:'Z–A',recent:'Recent',favorites:'Favorites'}[hongkongRecent?'recent':sort]);$('#hongkong-sort').disabled=hongkongRecent;$('#hongkong-mode').textContent='View: '+hongkongView;for(const b of document.querySelectorAll('[data-hongkong-game]'))b.disabled=!game;$('#empty').hidden=true;$('#load').hidden=true;sizeHongKong();
+ if(!selectionOnly)hongkongReveal();
+}
+function hongkongBack(){if(document.activeElement===$('#search')){native?.hideKeyboard?.();$('#search').blur();}if(query){query='';$('#search').value='';update();hongkongFocus();persist();return true;}if(hongkongPane==='games'){hongkongPane='tabs';hongkongFocus();return true;}return false;}
+function hongkongController(action){
+ if(['search','menu','apps'].includes(action))return false;if(action==='back'){hongkongBack();return true;}
+ const active=document.activeElement;if(active?.matches('input,textarea,select')){if(['down','activate'].includes(action)){active.blur();native?.hideKeyboard?.();hongkongPane='games';hongkongFocus();return true;}return false;}
+ if(action==='activate'&&active?.matches('button')&&!active.closest('#grid,#hongkong-tabs')){document.body.dataset.input='controller';active.click();return true;}
+ if(action==='genrePrev'||action==='genreNext'){hongkongOpen((hongkongSectionIndex()+(action==='genreNext'?1:-1)+hongkongSections().length)%hongkongSections().length);hongkongFocus();return true;}
+ if(hongkongPane==='tabs'){if(action==='left'||action==='right'){hongkongOpen((hongkongSectionIndex()+(action==='right'?1:-1)+hongkongSections().length)%hongkongSections().length);hongkongFocus();return true;}if(action==='down'||action==='activate'){hongkongPane='games';hongkongFocus();return true;}if(action==='up'){controllerFocus($('#search'));return true;}}
+ const index=Math.max(0,filtered.findIndex(g=>g.id===presentationId)),cols=hongkongView==='grid'?getComputedStyle($('#grid')).gridTemplateColumns.split(' ').length:1;
+ if(action==='up'&&(hongkongView==='carousel'||index<cols)){hongkongPane='tabs';hongkongFocus();return true;}
+ const delta=hongkongView==='grid'?{up:-cols,down:cols,left:-1,right:1,pageUp:-cols*2,pageDown:cols*2}[action]:{up:-1,down:1,left:-1,right:1,pageUp:-8,pageDown:8}[action];if(delta!==undefined){hongkongPane='games';hongkongSelect(index+delta);return true;}
+ const g=filtered.find(g=>g.id===presentationId);if(['activate','edit','favorite'].includes(action)){if(g){if(action==='activate')play(g.id,$('#grid .presentation-selected'));else if(action==='edit')editGame(g);else{toggleFavorite(g.id);hongkongFocus();}}return true;}return false;
+}
+function initHongKong(){
+ const grid=$('#grid');
+ grid.addEventListener('scroll',()=>{
+  if(presentation!=='hongkong'||hongkongView!=='carousel'||performance.now()<hongkongScrollIgnoreUntil)return;
+  clearTimeout(hongkongScrollTimer);
+  hongkongScrollTimer=setTimeout(()=>{
+   if(presentation!=='hongkong'||hongkongView!=='carousel'||!filtered.length)return;
+   const center=grid.scrollLeft+parseFloat(getComputedStyle(grid).paddingLeft)+($('#grid .hongkong-game')?.offsetWidth||0)/2;let best=0,distance=Infinity;
+   for(let i=0;i<filtered.length;i++){const n=hongkongRows.get(filtered[i].id);if(!n)continue;const d=Math.abs(n.offsetLeft+n.offsetWidth/2-center);if(d<distance){best=i;distance=d;}}
+   hongkongPane='games';hongkongSelect(best,false);
+  },120);
+ },{passive:true});
+ const main=$('#main'),tabs=el('nav','hongkong-part');tabs.id='hongkong-tabs';tabs.setAttribute('aria-label','Categories');
+ const art=el('div','hongkong-part');art.id='hongkong-art';const img=el('img');img.id='hongkong-cover';art.append(img);
+ const caption=el('div','hongkong-part');caption.id='hongkong-caption';const title=el('span');title.id='hongkong-title';const meta=el('span');meta.id='hongkong-meta';caption.append(title,meta);
+ const footer=el('nav','hongkong-part');footer.id='hongkong-footer';footer.setAttribute('aria-label','Game controls');for(const [key,label,action] of [['A','Open','activate'],['B','Back','back'],['X','Edit','edit'],['Y','Search','search']]){const b=el('button','hongkong-hint');b.append(el('b','',key),el('span','',label));if(['activate','edit'].includes(action))b.dataset.hongkongGame='true';b.onclick=()=>{if(action==='search'){controller('search');return;}if(action==='back'){hongkongBack();return;}const g=filtered.find(g=>g.id===presentationId);if(g){if(action==='activate')play(g.id,b);else editGame(g)}};footer.append(b);}
+ const sortButton=el('button');sortButton.id='hongkong-sort';sortButton.onclick=()=>{const modes=['az','za','recent','favorites'];sort=modes[(modes.indexOf(sort)+1)%modes.length];$('#sort').value=sort;update();hongkongReveal();persist()};const mode=el('button');mode.id='hongkong-mode';mode.onclick=()=>{const modes=['list','carousel','grid'];setHongKongOptions(modes[(modes.indexOf(hongkongView)+1)%3],hongkongTone)};const position=el('span');position.id='hongkong-position';footer.append(sortButton,mode,position);const categoryBar=el('div','hongkong-part');categoryBar.id='hongkong-categories';for(const [key,delta] of [['LB',-1],['RB',1]]){const b=el('button','hongkong-shoulder',key);b.setAttribute('aria-label',delta<0?'Previous category':'Next category');b.onclick=()=>{hongkongPane='tabs';hongkongOpen((hongkongSectionIndex()+delta+hongkongSections().length)%hongkongSections().length)};if(delta<0)categoryBar.append(b,tabs);else categoryBar.append(b);}main.append(categoryBar,art,caption,footer);
+ $('#hongkong-view').onchange=e=>setHongKongOptions(e.target.value,hongkongTone);$('#hongkong-tone').onchange=e=>setHongKongOptions(hongkongView,e.target.value);
+ const revealTabs=()=>{if(presentation==='hongkong')revealCategoryItem(tabs,tabs.querySelector('.current'),true)};
+ document.fonts.addEventListener('loadingdone',revealTabs);
+ new ResizeObserver(()=>{sizeHongKong();revealTabs();if(presentation==='hongkong'&&hongkongView==='carousel')hongkongReveal()}).observe(main);
+}

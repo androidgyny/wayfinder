@@ -30,7 +30,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  assert.deepEqual(await page.evaluate(()=>[query,filtered.length,cambridgeSection]),['retro',2,'all']);
  await page.evaluate(()=>{query='no such game';update();});assert.equal(await page.locator('.show-all-matches').count(),0);
  await page.evaluate(()=>{query='';update();});assert.equal(await page.locator('.search-no-match').count(),0);
- for(const mode of ['library','seattle','cambridge','oxford','berlin','kyoto','cupertino','venice','ulm','abbotsford','paloalto','redmond','sanfrancisco','atlantis','dashboard','bath','milan','bellevue','sedona']){
+ for(const mode of ['library','seattle','cambridge','oxford','berlin','kyoto','cupertino','venice','ulm','abbotsford','paloalto','redmond','sanfrancisco','atlantis','dashboard','bath','milan','bellevue','sedona','hongkong']){
  await page.evaluate(mode=>{query='';setPresentation(mode);if(mode==='ulm')ulmOpen('genre:Alpha');else if(mode==='cambridge')cambridgeOpen('genre:Alpha');else {genre='Alpha';favoritesOnly=false;if(mode==='seattle')seattleBrowse=true;}query='retro';$('#search').value=query;update();},mode);
  assert.equal(await page.locator('.show-all-matches').count(),1,mode);assert.equal(await page.locator('.show-all-matches').isVisible(),true,mode);
  for(const width of [480,640,1097,1440]){
@@ -72,7 +72,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  }
  await page.evaluate(()=>{setPresentation('berlin');genre='Alpha';query='retro';update();controllerFocus($('#category-current'));controller('down');controller('up');});
  assert.equal(await page.evaluate(()=>document.activeElement.id),'category-current','Berlin can leave empty action');
- for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice','vienna','prague','copenhagen','paloalto','abbotsford','redmond','sanfrancisco','atlantis','dashboard','bath','milan','bellevue','sedona']){
+ for(const mode of ['library','seattle','cambridge','ulm','oxford','berlin','kyoto','cupertino','venice','vienna','prague','copenhagen','paloalto','abbotsford','redmond','sanfrancisco','atlantis','dashboard','bath','milan','bellevue','sedona','hongkong']){
  await page.evaluate(mode=>{query='';setPresentation(mode);if(mode==='ulm')ulmOpen('all');query='zz nonexistent';update();},mode);
  assert.equal(await page.locator('.show-all-matches').count(),0,mode+' global empty has no false escape');
  const count=await page.locator('.search-empty').count();assert.equal(count,1,mode+' single feedback');
@@ -82,6 +82,6 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  assert.deepEqual(await page.evaluate(()=>copenhagenIds.every(id=>filtered.some(g=>g.id===id))),true);
  await page.evaluate(()=>{query='no such title';update();});assert.equal(await page.evaluate(()=>copenhagenIds.length),0);
  await page.evaluate(()=>{query='';update();});assert.equal(await page.evaluate(()=>['a','b'].every(id=>copenhagenIds.includes(id))),true,'Hidden kept cards return when search clears');
- assert.deepEqual(errors,[]);console.log('PASS all 22 layouts: empty/cleared searches, category and query preservation, overview selection, controller escape/action, counts, and four viewport widths');
+ assert.deepEqual(errors,[]);console.log('PASS all 23 layouts: empty/cleared searches, category and query preservation, overview selection, controller escape/action, counts, and four viewport widths');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});

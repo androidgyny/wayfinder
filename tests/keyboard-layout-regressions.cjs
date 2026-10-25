@@ -20,7 +20,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  try{
  await page.goto('http://127.0.0.1:'+server.address().port);
  await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
- const layouts=['sedona','milan','bellevue','bath','dashboard','paloalto','abbotsford','library','kyoto','cupertino','venice','oxford','berlin','seattle','vienna','prague','copenhagen','cambridge','ulm','redmond','sanfrancisco','atlantis'];
+ const layouts=['hongkong','sedona','milan','bellevue','bath','dashboard','paloalto','abbotsford','library','kyoto','cupertino','venice','oxford','berlin','seattle','vienna','prague','copenhagen','cambridge','ulm','redmond','sanfrancisco','atlantis'];
  for(const layout of layouts)for(const width of (process.env.AUDIT_WIDTHS?process.env.AUDIT_WIDTHS.split(',').map(Number):[640,1097]))for(const height of (process.env.AUDIT_HEIGHTS?process.env.AUDIT_HEIGHTS.split(',').map(Number):[320,260,220]))for(const placement of (['kyoto','cupertino'].includes(layout)?['above','below']:['above'])){
   await page.setViewportSize({width,height:700});
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));

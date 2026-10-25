@@ -15,3 +15,5 @@ Caveat is used for Bath’s notebook headings and tabs. Source: https://github.c
 Anton is used for Milan packaging headlines. Unmodified source: https://github.com/google/fonts/tree/main/ofl/anton . SIL Open Font License 1.1; see anton-OFL.txt.
 
 Doto is used for Sedona’s dot-matrix title display. Unmodified source: https://github.com/google/fonts/tree/main/ofl/doto . Copyright The Doto Project Authors; SIL Open Font License 1.1, included in doto-OFL.txt.
+
+GamePocket Regular by mumchristmas, based on AbFarid (2022), is bundled unmodified under SIL OFL 1.1. Source: https://github.com/mumchristmas/GamePocket-font . See gamepocket-OFL.txt.

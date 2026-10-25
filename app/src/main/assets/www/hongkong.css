@@ -1,0 +1,136 @@
+@font-face{font-family:GamePocket;src:url('fonts/GamePocket-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+body[data-typography=gamepocket]{--display-font:GamePocket,WayfinderClean,sans-serif;font-synthesis:none}
+.hongkong-part{display:none}
+body[data-presentation=hongkong][data-hongkong-tone=light]{--bg:#eeeee9;--panel:#f7f7f3;--field:#e5e5df;--hover:#deded8;--line:#bcbdb6;--text:#252724;--muted:#646861;--accent:#252724;--accent-soft:#deded8;--accent-ink:#f7f7f3;--hk-bar:#f7f7f3;--hk-selected:#252724;--hk-ink:#f7f7f3;background:var(--bg);color:var(--text);overflow:hidden;color-scheme:light}
+body[data-presentation=hongkong][data-hongkong-tone=dark]{--bg:#22252a;--panel:#292c31;--field:#303339;--hover:#383c42;--line:#51555b;--text:#f0f1eb;--muted:#a7aba8;--accent:#f0f1eb;--accent-soft:#383c42;--accent-ink:#22252a;--hk-bar:#1c1f23;--hk-selected:#f0f1eb;--hk-ink:#22252a;color-scheme:dark}
+body[data-presentation=hongkong] :is(#soft-gradient,#cover-glow-layer,#custom-backdrop,.brand-sub,.mark,#menu,#sidebar,#scrim){display:none!important}
+body[data-presentation=hongkong] .topbar{height:54px;padding:0 24px;gap:20px;background:var(--hk-bar);border:0;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;backdrop-filter:none;font:14px var(--display-font)}
+body[data-presentation=hongkong] .brand{order:2;min-width:0;font:17px var(--display-font);letter-spacing:1px;color:var(--text)}
+body[data-presentation=hongkong] .search{order:1;flex:1;max-width:none;min-width:90px;background:none;border:0;border-radius:0;height:38px}
+body[data-presentation=hongkong] .search input{font:16px var(--display-font);color:var(--text)}
+body[data-presentation=hongkong] .topbar>.app-actions{order:3}
+body[data-presentation=hongkong] .topbar button{color:var(--text);background:none;border:0;box-shadow:none;border-radius:0;font:14px var(--display-font);min-height:40px;padding:8px}
+body[data-presentation=hongkong] #settings-button{display:grid;place-items:center;width:40px;padding:8px}
+body[data-presentation=hongkong] .shell{display:block;height:calc(100dvh - 54px);padding:0}
+body[data-presentation=hongkong] #main{display:grid;grid-template-columns:minmax(0,65fr) minmax(0,35fr);grid-template-rows:60px minmax(0,1fr) 46px;gap:0;height:100%;padding:0;overflow:hidden;min-width:0;min-height:0;background:var(--bg)}
+body[data-presentation=hongkong] #main>:not(.hongkong-part):not(#grid){display:none!important}
+body[data-presentation=hongkong] .hongkong-part{display:block;min-width:0;min-height:0}
+body[data-presentation=hongkong] #hongkong-tabs{grid-column:1/-1;grid-row:1;display:flex;align-items:center;gap:8px;padding:8px 24px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+#hongkong-tabs::-webkit-scrollbar{display:none}
+.hongkong-tab{flex:0 0 auto;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 16px;min-height:38px;border:1px solid transparent;border-radius:22px;background:none;color:var(--muted);font:15px var(--display-font);text-transform:uppercase}
+.hongkong-tab.current{background:var(--hk-selected);color:var(--hk-ink)}
+.hongkong-tab small{margin-left:8px;font:inherit;opacity:.7}
+body[data-presentation=hongkong][data-input=controller][data-hongkong-pane=tabs] .hongkong-tab.current{outline:2px solid var(--text);outline-offset:3px}
+body[data-presentation=hongkong] #grid{grid-column:1;grid-row:2;display:flex;flex-direction:column;gap:0;padding:14px 24px;margin:0;min-height:0;min-width:0;height:auto;overflow:auto;position:relative;transform:none;perspective:none;scrollbar-width:thin;scrollbar-color:var(--muted) transparent;scroll-padding:8px;background:none;align-items:stretch;overscroll-behavior:contain}
+body[data-presentation=hongkong] #grid .hongkong-game{position:relative;flex:0 0 auto;display:flex;align-items:center;min-height:50px;min-width:0;padding:8px 16px;gap:12px;border:0;border-radius:0;background:none;color:var(--text);box-shadow:none!important;transform:none;outline:none;text-align:left;transition:none}
+body[data-presentation=hongkong] #grid .game::before,body[data-presentation=hongkong] #grid .game::after{display:none!important}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid .presentation-selected{background:var(--hk-selected);color:var(--hk-ink)}
+body[data-presentation=hongkong] #grid .game-title{position:static;display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:inherit!important;padding:0;margin:0;text-shadow:none;font:28px/1.2 var(--display-font);font-weight:400;letter-spacing:0}
+.hongkong-star{font:20px WayfinderClean,sans-serif;flex:0 0 22px;text-align:center}
+body[data-presentation=hongkong] #hongkong-art{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;padding:16px 18px}
+#hongkong-cover{display:block;object-fit:cover;box-sizing:border-box;background:var(--field);border:0;border-radius:0;box-shadow:none}
+body[data-presentation=hongkong][data-art-fit=contain] :is(#hongkong-cover,#grid .cover img){object-fit:contain}
+body[data-presentation=hongkong][data-cover-corners=soft] :is(#hongkong-cover,#grid .cover){border-radius:5px}
+body[data-presentation=hongkong][data-cover-corners=rounded] :is(#hongkong-cover,#grid .cover){border-radius:14px}
+body[data-presentation=hongkong][data-cover-border=hairline] :is(#hongkong-cover,#grid .cover){border:1px solid var(--line)}
+body[data-presentation=hongkong][data-cover-border=matte] :is(#hongkong-cover,#grid .cover){border:5px solid var(--panel)}
+body[data-presentation=hongkong] #hongkong-caption{display:none}
+body[data-presentation=hongkong] #hongkong-footer{grid-column:1/-1;grid-row:3;display:flex;align-items:center;gap:18px;padding:0 24px;background:var(--hk-bar);border-top:1px solid var(--line);font:13px var(--display-font);overflow:hidden}
+#hongkong-footer button{display:flex;align-items:center;gap:8px;min-height:40px;padding:4px 0;border:0;border-radius:0;background:none;box-shadow:none;color:var(--text);font:inherit;white-space:nowrap}
+#hongkong-footer b{display:grid;place-items:center;border:1px solid currentColor;border-radius:4px;width:21px;height:21px;font:14px var(--display-font)}
+#hongkong-sort{margin-left:auto}
+#hongkong-position{min-width:65px;text-align:right;white-space:nowrap;color:var(--muted)}
+body[data-presentation=hongkong] #grid.search-empty-grid{display:flex!important;align-items:center;justify-content:center;padding:16px}
+body[data-presentation=hongkong] .search-empty{position:static;transform:none;max-width:100%;margin:auto;text-align:center;font:16px/1.6 var(--display-font)}
+.hongkong-empty{margin:auto;text-align:center;color:var(--muted);font:18px/1.6 var(--display-font)}
+body[data-presentation=hongkong][data-hongkong-view=grid] #grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:max-content;align-content:start;gap:14px;padding:20px 24px}
+body[data-presentation=hongkong]:not([data-hongkong-view=list]) #hongkong-art{display:none}
+body[data-presentation=hongkong]:not([data-hongkong-view=list]) #grid .hongkong-game{padding:0;min-height:0;display:block;align-self:center;overflow:visible}
+body[data-presentation=hongkong] #grid .cover{position:relative;display:block;aspect-ratio:2/3;width:100%;height:auto;overflow:hidden;border:0;background:var(--field);box-shadow:none;transform:none;box-sizing:border-box}
+body[data-presentation=hongkong] #grid .cover img{display:block;width:100%;height:100%;object-fit:cover;opacity:1;filter:none;transform:none}
+body[data-presentation=hongkong]:not([data-hongkong-view=list]) #grid .presentation-selected{outline:2px solid var(--text);outline-offset:4px}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #main{grid-template-rows:60px minmax(0,1fr) 44px 46px}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;gap:26px;padding:12px max(24px,calc((100% - var(--hk-carousel-width,220px))/2));overflow-y:hidden;scrollbar-width:none}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .hongkong-game{flex:0 0 var(--hk-carousel-width);width:var(--hk-carousel-width);transform:scale(.85);opacity:.65}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .presentation-selected{transform:none;opacity:1}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #hongkong-caption{display:flex;grid-column:1/-1;grid-row:3;align-items:center;justify-content:center;padding:0 24px;font:21px var(--display-font)}
+#hongkong-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #hongkong-footer{grid-row:4}
+body[data-presentation=hongkong] button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+@media(max-width:850px){body[data-presentation=hongkong] #grid .game-title{font-size:18px}body[data-presentation=hongkong] #hongkong-footer{gap:12px;padding:0 16px;font-size:11px}body[data-presentation=hongkong] .brand{display:none}body[data-presentation=hongkong][data-hongkong-view=grid] #grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:600px){body[data-presentation=hongkong][data-hongkong-view=grid] #grid{grid-template-columns:repeat(3,minmax(0,1fr))}body[data-presentation=hongkong] #hongkong-sort{display:none}body[data-presentation=hongkong] #hongkong-position{margin-left:auto}body[data-presentation=hongkong] #grid{padding:12px}body[data-presentation=hongkong] #hongkong-tabs{padding:8px 12px}.hongkong-tab{font-size:12px;padding:8px 12px}body[data-presentation=hongkong] #grid .hongkong-game{padding:8px}.hongkong-star{font-size:15px;flex-basis:16px}body[data-presentation=hongkong] #grid .game-title{font-size:16px}}
+@media(max-height:400px){body[data-presentation=hongkong] .topbar{height:42px}body[data-presentation=hongkong] .shell{height:calc(100dvh - 42px)}body[data-presentation=hongkong] #main{grid-template-rows:46px minmax(0,1fr) 40px}body[data-presentation=hongkong][data-hongkong-view=carousel] #main{grid-template-rows:46px minmax(0,1fr) 28px 40px}body[data-presentation=hongkong] #hongkong-tabs{padding-top:3px;padding-bottom:3px}body[data-presentation=hongkong] #grid{padding-top:8px;padding-bottom:8px}body[data-presentation=hongkong] #grid .hongkong-game{min-height:38px}body[data-presentation=hongkong] #grid .game-title{font-size:18px}body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .hongkong-game{min-height:0}body[data-presentation=hongkong] #hongkong-caption{font-size:16px}}
+
+
+body[data-presentation=hongkong] #hongkong-categories{grid-column:1/-1;grid-row:1;display:flex;align-items:center;gap:12px;padding:0 24px;min-width:0;border-bottom:1px solid var(--line)}
+body[data-presentation=hongkong] #hongkong-tabs{flex:1;padding:8px 4px;border:0}
+.hongkong-shoulder{flex:0 0 32px;min-height:30px;padding:3px;border:1px solid var(--text);border-radius:4px;background:none;color:var(--text);font:14px var(--display-font)}
+body[data-presentation=hongkong] #hongkong-footer{font-size:15px;text-transform:uppercase;gap:22px}
+body[data-presentation=hongkong] #hongkong-footer b{width:24px;height:24px;font-size:16px}
+body.input-compact[data-presentation=hongkong] .shell.shell{height:calc(var(--input-height) - 60px)}
+body.input-compact[data-presentation=hongkong] #main{grid-template-columns:minmax(0,1fr);grid-template-rows:46px minmax(0,1fr)}
+body.input-compact[data-presentation=hongkong] :is(#hongkong-art,#hongkong-footer,#hongkong-caption){display:none!important}
+body.input-compact[data-presentation=hongkong] #grid{grid-column:1;grid-row:2;padding:8px 16px}
+body.input-compact[data-presentation=hongkong] #grid.search-empty-grid{padding:4px}
+body[data-presentation=hongkong] #grid .search-empty{max-height:100%;min-height:0;width:100%;box-sizing:border-box}
+body.input-compact[data-presentation=hongkong] .topbar .brand{display:none}
+@media(max-width:850px){body[data-presentation=hongkong] #hongkong-footer{font-size:11px;gap:12px}body[data-presentation=hongkong] #hongkong-categories{padding:0 12px;gap:8px}}
+@media(max-width:500px){body[data-presentation=hongkong] #hongkong-mode{margin-left:auto}body[data-presentation=hongkong] #hongkong-position{display:none}body[data-presentation=hongkong] #add-game{font-size:0}body[data-presentation=hongkong] #add-game::before{content:'+';font-size:22px}}
+body[data-presentation=hongkong][data-cover-corners=soft]:not([data-hongkong-view=list]) #grid .hongkong-game{border-radius:5px}
+body[data-presentation=hongkong][data-cover-corners=rounded]:not([data-hongkong-view=list]) #grid .hongkong-game{border-radius:14px}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid{scroll-snap-type:x mandatory}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .hongkong-game{scroll-snap-align:center}
+body[data-presentation=hongkong] #hongkong-tabs{padding-inline:8px;scroll-padding-inline:8px}
+body[data-presentation=hongkong]{overflow:hidden;background:var(--bg);color:var(--text)}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid .hongkong-game{flex-basis:12.5%;box-sizing:border-box}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid{-webkit-mask-image:linear-gradient(to bottom,transparent 14px,#000 14px,#000 calc(100% - 14px),transparent calc(100% - 14px));mask-image:linear-gradient(to bottom,transparent 14px,#000 14px,#000 calc(100% - 14px),transparent calc(100% - 14px))}
+body[data-presentation=hongkong] #grid .cover::before,body[data-presentation=hongkong] #grid .cover::after{display:none!important}
+/* Pocket-inspired refinement: one quiet surface and a rounded selection. */
+body[data-presentation=hongkong][data-hongkong-tone=light]{--hk-bar:var(--bg)}
+body[data-presentation=hongkong][data-hongkong-tone=dark]{--bg:#191b1d;--hk-bar:var(--bg);--accent-ink:#191b1d;--hk-ink:#191b1d}
+body[data-presentation=hongkong] .topbar,
+body[data-presentation=hongkong] #hongkong-categories,
+body[data-presentation=hongkong] #hongkong-footer{border:0}
+body[data-presentation=hongkong] .brand{font-size:15px;letter-spacing:.5px;color:var(--muted)}
+body[data-presentation=hongkong] .search{flex:0 1 130px;margin-right:auto;min-width:100px}
+body[data-presentation=hongkong] .search:focus-within,
+body[data-presentation=hongkong] .search:has(input:not(:placeholder-shown)){flex:1 1 260px}
+body[data-presentation=hongkong] .search input{font-size:14px;text-overflow:ellipsis}
+body[data-presentation=hongkong] .topbar button{font-size:13px;color:var(--muted)}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid{padding:20px 32px;scroll-padding:20px;-webkit-mask-image:linear-gradient(to bottom,transparent 20px,#000 20px,#000 calc(100% - 20px),transparent calc(100% - 20px));mask-image:linear-gradient(to bottom,transparent 20px,#000 20px,#000 calc(100% - 20px),transparent calc(100% - 20px))}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid .hongkong-game{border-radius:999px;padding:8px 20px}
+body[data-presentation=hongkong] #grid .game-title{font-size:24px;font-weight:400}
+body[data-presentation=hongkong] #hongkong-footer{font-size:13px;color:var(--muted)}
+body[data-presentation=hongkong] #hongkong-footer button{color:var(--muted)}
+body[data-presentation=hongkong] #hongkong-footer b{width:21px;height:21px;font-size:14px}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .hongkong-game{transform:scale(.94);opacity:.82}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .presentation-selected{transform:none;opacity:1}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #hongkong-caption{font-size:19px}
+@media(max-width:850px){body[data-presentation=hongkong] #grid .game-title{font-size:18px}body[data-presentation=hongkong] #hongkong-footer{font-size:11px}}
+@media(max-width:600px){body[data-presentation=hongkong][data-hongkong-view=list] #grid{padding-inline:12px}body[data-presentation=hongkong][data-hongkong-view=list] #grid .hongkong-game{padding-inline:12px}body[data-presentation=hongkong] #grid .game-title{font-size:16px}}
+@media(max-height:400px){body[data-presentation=hongkong] #grid .game-title{font-size:18px}}
+body[data-presentation=hongkong] .search{position:relative}
+body[data-presentation=hongkong] .search:not(:focus-within):has(input:placeholder-shown)::after{content:'Search';position:absolute;left:40px;pointer-events:none;color:var(--muted);font:14px var(--display-font)}
+body[data-presentation=hongkong] .search:not(:focus-within) input:placeholder-shown::placeholder{color:transparent}
+body[data-presentation=hongkong] .search:focus-within~.brand{display:none}
+/* Artwork browsers share a frame; the carousel follows a left-hand reading anchor. */
+body[data-presentation=hongkong]:not([data-hongkong-view=list]) #grid .hongkong-game{padding:8px;border-radius:12px!important;box-sizing:border-box}
+body[data-presentation=hongkong]:not([data-hongkong-view=list]) #grid .presentation-selected{outline:2px solid var(--text);outline-offset:2px;background:var(--hk-selected);color:var(--hk-ink)}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #main{grid-template-rows:60px minmax(0,1fr) 106px 46px}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid{gap:24px;padding:16px calc(100% - 28% - var(--hk-carousel-width)) 16px 28%;scroll-padding-left:28%;scroll-padding-right:0}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .hongkong-game{transform:none;opacity:1;scroll-snap-align:start;background:var(--field)}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #grid .presentation-selected{background:var(--hk-selected)}
+.hongkong-card-title{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:12px/1.4 var(--display-font);padding:8px 2px 0;color:var(--muted);text-align:left}
+.presentation-selected .hongkong-card-title{visibility:hidden}
+body[data-presentation=hongkong][data-hongkong-view=carousel] #hongkong-caption{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:8px 32px 8px 28%;font:27px/1.2 var(--display-font)}
+#hongkong-meta{font:13px/1.4 var(--display-font);color:var(--muted);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=hongkong] #hongkong-title{max-width:100%}
+body[data-presentation=hongkong][data-hongkong-view=grid] #main{grid-template-rows:60px 48px minmax(0,1fr) 46px}
+body[data-presentation=hongkong][data-hongkong-view=grid] #hongkong-caption{display:flex;grid-column:1/-1;grid-row:2;align-items:center;padding:0 32px;font:20px var(--display-font)}
+body[data-presentation=hongkong][data-hongkong-view=grid] #hongkong-meta{display:none}
+body[data-presentation=hongkong][data-hongkong-view=grid] #grid{grid-row:3;padding:16px 32px;gap:22px}
+body[data-presentation=hongkong][data-hongkong-view=grid] #hongkong-footer{grid-row:4}
+@media(max-width:600px){body[data-presentation=hongkong][data-hongkong-view=grid] #grid{padding:12px 16px;gap:14px}body[data-presentation=hongkong][data-hongkong-view=carousel] #hongkong-caption{font-size:21px}}
+@media(max-height:400px){body[data-presentation=hongkong][data-hongkong-view=carousel] #main{grid-template-rows:46px minmax(0,1fr) 62px 40px}body[data-presentation=hongkong][data-hongkong-view=carousel] #hongkong-caption{font-size:18px;gap:4px}body[data-presentation=hongkong][data-hongkong-view=grid] #main{grid-template-rows:46px 32px minmax(0,1fr) 40px}}
+body.input-compact[data-presentation=hongkong]:not([data-hongkong-view=list]) #main{grid-template-rows:46px minmax(0,1fr)}
+body.input-compact[data-presentation=hongkong]:not([data-hongkong-view=list]) #grid{grid-row:2}
