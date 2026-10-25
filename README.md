@@ -6,9 +6,9 @@
 
 [Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.212-beta.16)
 
-Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. It turns installed games into a personal library of covers and categories, with controller navigation and a choice of ways to browse. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
+Wayfinder is an app for **organizing, browsing, and launching large collections of Android games**. Add the games already installed on your device, give them categories and cover art, and browse your collection with a controller or touchscreen. The goal is a console-like experience: pick up your handheld, find something you want to play, and launch it.
 
-It is designed for Android handhelds with a touchscreen and a game controller. You can open Wayfinder like any other app or make it your Android home screen. Games are installed separately; Wayfinder organizes and opens them.
+Wayfinder is designed for Android handhelds. You can open it like any other app or make it your Android home screen. It starts with an empty library; games and cover artwork are not included.
 
 ![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta16/01-paloalto.png)
 
@@ -62,13 +62,18 @@ Optional AI tools help organize a large library: **AI Sort** suggests placements
 
 Add your own [Gemini API key](https://aistudio.google.com/apikey) in **Settings → System & help → AI assistance**. Requests send titles, package names, and relevant category information to Gemini. Your key is encrypted on the device and excluded from backups.
 
-## Choose your layout
+## Make the collection your own
 
-New installations start with **Hyperstack**, a classic-computer-inspired card catalogue with category tabs, portrait artwork, and a paged title index. Prefer a cover grid? Try **Boxer**, pairing the **Durango** layout’s recent-games sidebar and cover grid with the **Evergreen** color scheme.
+Open **Settings → Appearance** and try a preset to see a complete look before keeping it. A **layout** determines how games and categories are arranged; a **preset** combines a layout with colors, fonts, and other styling choices. You can adjust those choices and save your own combinations.
 
-A **layout** changes how your library is arranged. Colors, backgrounds, fonts, and other appearance settings let you style it separately; a **preset** combines these choices into a complete look.
+Choose a way to browse that suits you:
 
-Wayfinder includes twenty-one layouts: aBBotSford, Alexandria, Atlantis, Bath, Bellevue, Berlin, Cambridge, Copenhagen, Cupertino, Durango, Kyoto, Milan, Oxford, Palo Alto, Prague, Redmond, San Francisco, Seattle, Ulm, Venice, and Vienna. You do not need to learn their names before starting—try an appearance preset and see which approach suits your collection and screen. **Field Notes** pairs Bath’s notebook-style title list with paper category tabs, a highlighter selection, and one large portrait cover. **Homage** pairs Milan’s numbered title index with bold print-inspired graphics. **Blades** pairs Bellevue’s sliding category panels with a title list and one portrait cover. Both use your existing artwork. aBBotSford recalls old-school bulletin boards with ANSI lettering, character-drawn windows, and a text directory; open a game’s details to see its cover art.
+- **See more artwork at once** with a cover grid or shelves.
+- **Focus on one game** with a carousel, a fan of covers, or a large cover beside a title list.
+- **Scan a large library quickly** with compact lists, category columns, or a dashboard with recently played games.
+- **Rediscover something to play** with a shuffled table of covers.
+
+The same portrait artwork works throughout. Styles range from restrained and modern to paper notebooks, desktop interfaces, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. You can switch to another style at any time without reorganizing your games.
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
@@ -76,9 +81,13 @@ You can also enable interface sounds, play the included background music or your
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
-![Bellevue: Across Age 2 beside a title list framed by curved metallic category panels.](docs/screenshots/beta16/03-bellevue.png)
+![Kyoto: Dream Machine selected on a bright shelf of portrait covers with colorful controller hints.](docs/screenshots/beta16/09-kyoto.png)
 
-*Bellevue · Blades preset · sculpted metallic panels and one large portrait cover.*
+*Kyoto · Smitchish preset · a bright cover shelf with colorful controller hints.*
+
+## Everyday apps, too
+
+The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
 
 ![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta16/15-apps.png)
 
@@ -86,7 +95,7 @@ You can also enable interface sounds, play the included background music or your
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
-The gallery’s fifteen screenshots were captured on a Pimax Portal with the Beta 16 build. Games and personal cover artwork are not bundled. [Explore all fifteen screenshots of library views and the Apps screen.](docs/GALLERY.md)
+The gallery shows fifteen views captured directly on a Pimax Portal. Games and personal cover artwork are not bundled. [Explore all fifteen screenshots of library views and the Apps screen.](docs/GALLERY.md)
 
 ## Controller reference
 
@@ -113,13 +122,11 @@ Use **Settings → Library → Back up** to export your titles, categories, cate
 
 App drawer preferences include names, pins and their order, section assignments, hidden-from-section choices, custom images, and individually selected pack icons. Icon packs themselves are not included; reinstall them separately. Missing pack icons fall back to the app's original icon. Overall appearance settings—including the global icon pack, layout, and theme—and custom background, music, font, and startup media are not included. Restoring a library leaves those device settings in place.
 
-## Latest release
-
-**Beta 16** adds notebook, classic desktop, sci-fi, and console-inspired ways to browse, including Field Notes, Droplet, Experience, Final Frontier, Boxer, Homage, and Blades. It also improves controller navigation, artwork previews, settings compatibility, and responsiveness. The gallery now includes fifteen fresh screenshots.
-
 ## Project status
 
 Wayfinder is an actively evolving personal project, developed and tested with a large game collection on a **Pimax Portal (Snapdragon 865), running Android 10 at 1920 × 1080 resolution**. Support for other Android devices and controllers is still being established.
+
+See the [release notes](https://github.com/androidgyny/wayfinder/releases) for version-by-version changes.
 
 If you report a problem, include your device, Android version, Wayfinder version, controller, selected layout, and the steps that reproduce it.
 
@@ -129,21 +136,18 @@ Game artwork belongs to its respective creators. Interface audio includes [Inter
 
 Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
 
-Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). New display choices include [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) for notebook lettering, [Anton](https://github.com/google/fonts/tree/main/ofl/anton) for bold packaging-inspired headlines, and [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) for condensed headings, all under the SIL Open Font License 1.1. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
+Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). Other bundled fonts include [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) for notebook lettering, [Anton](https://github.com/google/fonts/tree/main/ofl/anton) for bold packaging-inspired headlines, and [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) for condensed headings, all under the SIL Open Font License 1.1. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
 
 App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
 
 The notebook’s [paper](app/src/main/assets/www/notebook-paper.svg), [wood](app/src/main/assets/www/notebook-wood.svg), [binding rings](app/src/main/assets/www/notebook-rings.svg), and [tape](app/src/main/assets/www/notebook-tape.svg), along with the [Tidal Waves backdrop](app/src/main/assets/www/backgrounds/tidal-waves.svg) and procedural Blades metalwork, were created for Wayfinder.
 
-Design inspirations are credited separately from bundled assets:
+Themes from other launchers that inspired Wayfinder layouts:
 
 - **Bath / Field Notes:** [Notepad Pocket for ES-DE](https://github.com/anthonycaccese/notepad-pocket-es-de), based on Zoidburg’s original design and adapted for ES-DE by ant (Anthony Caccese).
 - **Milan / Homage:** [Homage for ES-DE by Weestuarty](https://github.com/Weestuarty-es-de/homage-es-de).
-- **Bellevue / Blades:** Microsoft’s original Xbox 360 Blades dashboard; **Durango / Boxer:** the Xbox app’s library and recent-games sidebar.
-- **Redmond / Experience:** Windows XP’s Explorer and Luna styling. **Atlantis / Droplet:** Mac OS X’s Aqua and Finder. **Palo Alto / Hyperstack:** HyperCard’s card-and-stack interface.
-- **San Francisco / Final Frontier:** Star Trek’s LCARS interface, associated with designer Michael Okuda.
 
-These are independent interpretations for Wayfinder, not official themes or endorsements by the original creators.
+These layouts are independent adaptations for Wayfinder; the linked projects credit their original theme creators.
 
 ## Build from source
 
