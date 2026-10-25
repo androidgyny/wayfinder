@@ -4,13 +4,13 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.226-beta.17)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.231-beta.18)
 
 Wayfinder organizes the Android games already on your device into a personal, console-like library. Give each game a category and a cover, then browse and launch it with a controller or touchscreen. Whether you have a few favorites or hundreds of titles, the goal is the same: make finding something to play a pleasure.
 
 Wayfinder is designed for Android handhelds. You can open it like any other app or make it your Android home screen. It starts with an empty library; games and cover artwork are not included.
 
-![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta17/01-paloalto.png)
+![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta18/01-paloalto.png)
 
 *Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
 
@@ -22,7 +22,7 @@ Wayfinder is designed for Android handhelds. You can open it like any other app 
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 22 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 23 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -77,19 +77,19 @@ Styles range from restrained and modern to paper notebooks, desktop interfaces, 
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta17/02-bath.png)
+![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta18/02-bath.png)
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
-![Kyoto: Dream Machine selected on a bright shelf of portrait covers with colorful controller hints.](docs/screenshots/beta17/09-kyoto.png)
+![Hong Kong: KAMI selected in a dark carousel of portrait covers with a title and play history below.](docs/screenshots/beta18/08-hongkong-carousel.png)
 
-*Kyoto · Smitchish preset · a bright cover shelf with colorful controller hints.*
+*Hong Kong · dark carousel view · portrait covers with a quiet, focused selection.*
 
 ## Everyday apps, too
 
 The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta17/15-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta18/15-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
@@ -142,14 +142,14 @@ App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the 
 
 The notebook’s [paper](app/src/main/assets/www/notebook-paper.svg), [wood](app/src/main/assets/www/notebook-wood.svg), [binding rings](app/src/main/assets/www/notebook-rings.svg), and [tape](app/src/main/assets/www/notebook-tape.svg), along with the [Tidal Waves backdrop](app/src/main/assets/www/backgrounds/tidal-waves.svg) and procedural Blades metalwork, were created for Wayfinder.
 
-Themes from other launchers that inspired Wayfinder layouts:
+Design inspirations for these Wayfinder layouts:
 
 - **Hong Kong / Cognate:** [Analogue OS Menu for ES-DE by Anthony Caccese](https://github.com/anthonycaccese/analogue-os-menu-es-de).
 
 - **Bath / Field Notes:** [Notepad Pocket for ES-DE](https://github.com/anthonycaccese/notepad-pocket-es-de), based on Zoidburg’s original design and adapted for ES-DE by ant (Anthony Caccese).
 - **Milan / Homage:** [Homage for ES-DE by Weestuarty](https://github.com/Weestuarty-es-de/homage-es-de).
 
-These layouts are independent adaptations for Wayfinder; the linked projects credit their original theme creators.
+These layouts are independent adaptations for Wayfinder, with no affiliation or endorsement implied. The linked theme projects credit their original creators.
 
 ## Build from source
 
