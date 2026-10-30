@@ -102,6 +102,8 @@ function initAppearance(value){
  const sample=$('.appearance-sample img');sample.hidden=true;sample.addEventListener('load',()=>{sample.hidden=false;updateAppearancePreview();$('#appearance-preview').style.setProperty('--cover-glow-rgb',coverColor(sample)||'150,160,150')});sample.addEventListener('error',()=>{sample.hidden=true;sample.closest('.appearance-sample').hidden=true;$('#appearance-preview>p').textContent='No artwork to preview'});
  new MutationObserver(()=>{updateAppearancePreview();syncCupertinoPreviewAppearance()}).observe(document.body,{attributes:true,attributeFilter:['data-cover-shadow','data-cover-shadow-active','data-cover-border','data-cover-corners','data-cover-glow','data-art-fit','data-palette','data-presentation','data-backdrop','data-background-color','data-selection-style','data-cover-brightness','data-title-weight','style']});
  window.addEventListener('resize',updateAppearancePreview);
+ const coverResize=new ResizeObserver(()=>{if($('#settings-dialog').open)updateAppearancePreview()});
+ for(const cover of document.querySelectorAll('#main img'))coverResize.observe(cover);
  new MutationObserver(()=>{refreshCupertinoControls();refreshApplicableAppearanceControls();updateAppearancePreview();if(!$('#settings-dialog').open)document.querySelectorAll('.preview-backdrop').forEach(image=>image.removeAttribute('src'))}).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
  refreshCustomFont();$('#custom-font-choose').onclick=chooseCustomFont;$('#typography').onchange=e=>{if(e.target.value==='custom'){refreshCustomFont();if(customFontInfo.url)setTypography('custom');else{$('#typography').value=typography;chooseCustomFont();}}else setTypography(e.target.value);effect('select')};$('#cover-glow').onchange=e=>setCoverGlow(e.target.value==='subtle');
  const grid=$('#grid');new MutationObserver(queueCoverGlow).observe(grid,{childList:true,subtree:true,attributes:true,attributeFilter:['class','src']});
@@ -209,7 +211,7 @@ function syncUlmSettingsSample(sample){
  if(presentation==='hongkong'&&hongkongView!=='list'||!['hongkong','sedona','milan','bellevue','bath','ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)){
   const selected=$('#grid .presentation-selected')||$('#grid .controller-selected')||$('#grid .game');
   const actual=['oxford'].includes(presentation)?$('#catalogue-art'):selected?.querySelector('.cover');
-  sample.removeAttribute('style');frame.removeAttribute('style');frame.dataset.previewUnderline=String(!!actual&&!actual.matches('img')&&getComputedStyle(actual,'::before').content!=='none');
+  sample.removeAttribute('style');frame.removeAttribute('style');frame.dataset.previewUnderline=String(selectionStyle==='underline'&&!!actual&&!actual.matches('img')&&getComputedStyle(actual,'::before').content!=='none');
   if(actual){const style=getComputedStyle(actual),width=actual.offsetWidth||180,height=actual.offsetHeight||width*1.5,scale=Math.min(102/width,153/height);Object.assign(frame.style,{width:width+'px',height:height+'px',margin:'0',left:(102-width*scale)/2+'px',transform:`scale(${scale})`,transformOrigin:'top left',border:style.border,borderRadius:style.borderRadius,background:style.backgroundColor,overflow:style.overflow,boxShadow:style.boxShadow,outline:style.outline,outlineOffset:style.outlineOffset});}
   return;
  }
@@ -223,7 +225,8 @@ function syncUlmSettingsSample(sample){
  // Scale a full-size artwork treatment, including its border, corners and halo.
  Object.assign(sample.style,{display:'block',margin:'0',width:width+'px',height:height+'px',maxWidth:'none',maxHeight:'none',objectFit:style.objectFit,objectPosition:style.objectPosition,background:style.backgroundColor,boxSizing:'border-box',border:style.border,borderRadius:style.borderRadius,transform:`scale(${scale})`,transformOrigin:'top left'});
  sample.style.boxShadow=style.boxShadow;
- if(presentation==='bath')frame.style.setProperty('--bath-tape-scale',String(scale));
+ if(presentation==='cambridge')frame.style.setProperty('--preview-bracket-scale',String(scale));
+ if(presentation==='bath'){frame.style.setProperty('--bath-tape-scale',String(scale));frame.style.setProperty('--bath-tape-angle',$('#bath-print').style.getPropertyValue('--bath-tape-angle'));}
 }
 
 // Visibility describes actual layout behavior; hidden values remain saved.

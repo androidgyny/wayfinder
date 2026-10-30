@@ -1,5 +1,14 @@
 // A paged card catalogue. Only the current cover and eight title rows are rendered.
 let paloaltoPane='index',paloaltoPageKey='';
+let paloaltoTurnState=null,paloaltoTurnAnimation=null;
+window.cancelPaloaltoTurn=()=>{paloaltoTurnAnimation?.cancel();paloaltoTurnAnimation=null;};
+function paloaltoTurn(page){
+ const next={page,genre,favoritesOnly,query},old=paloaltoTurnState;paloaltoTurnState=next;
+ if(!old||old.query!==query||!filtered.length||document.querySelector('dialog[open]')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ if(old.page===page&&old.genre===genre&&old.favoritesOnly===favoritesOnly)return;
+ const veil=$('#paloalto-page-flash');paloaltoTurnAnimation?.cancel();
+ paloaltoTurnAnimation=veil.animate([{opacity:1},{opacity:1}],{duration:70});
+}
 function sizePaloaltoCover(){if(presentation!=='paloalto')return;const panel=$('#paloalto-art'),width=Math.max(0,Math.min(panel.clientWidth-4,(panel.clientHeight-4)/1.5));Object.assign($('#paloalto-cover').style,{width:width+'px',height:width*1.5+'px'});}
 function paloaltoFocus(){
  const target=paloaltoPane==='tabs'?$('#paloalto-tabs .current'):$('#grid .presentation-selected')||$('#grid .show-all-matches')||$('#paloalto-tabs .current');
@@ -19,6 +28,7 @@ function syncPaloaltoCover(){
  if(backdrop==='gradient')$('#soft-gradient').style.setProperty('--backdrop-rgb',rgb||'128,128,128');
 }
 function renderPaloalto(){
+ if(!$('#grid .paloalto-row')){paloaltoTurnState=null;window.cancelPaloaltoTurn();}
  const tabs=$('#paloalto-tabs'),list=sections();
  const signature=JSON.stringify(list.map(s=>[s.label,searchSummary?searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0):null]));
  if(tabs.dataset.signature!==signature){tabs.dataset.signature=signature;tabs.replaceChildren(...list.map((s,i)=>{
@@ -49,6 +59,7 @@ function renderPaloalto(){
  $('#paloalto-prev').disabled=!g||index===0;$('#paloalto-next').disabled=!g||index===filtered.length-1;
  for(const button of document.querySelectorAll('[data-paloalto-game]'))button.disabled=!g;
  setFavoriteButton($('#paloalto-favorite'),g);$('#empty').hidden=true;$('#load').hidden=true;sizePaloaltoCover();syncPaloaltoCover();
+ paloaltoTurn(page);
 }
 function paloaltoBack(){
  if(query){query='';$('#search').value='';$('#search').blur();update();paloaltoFocus();persist();return true;}
@@ -93,5 +104,6 @@ function initPaloalto(){
  for(const [key,text,action] of [['A','Play','activate'],['B','Index','back'],['X','Details','edit'],['Y','Find','search']]){const b=el('button');const badge=el('span','paloalto-key '+key.toLowerCase(),key);b.append(badge,el('span','',text));b.onclick=()=>controller(action);if(action==='activate'||action==='edit')b.dataset.paloaltoGame='true';hints.append(b);}
  hints.append(el('small','','LB/RB Categories · LT/RT Page'));
  main.append(bar,tabs,art,heading,label,actions,footer,hints);
+ const stipple=el('div','paloalto-part');stipple.id='paloalto-page-flash';stipple.setAttribute('aria-hidden','true');main.append(stipple);
  new ResizeObserver(sizePaloaltoCover).observe(art);
 }

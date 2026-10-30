@@ -6,13 +6,16 @@ const http=require('node:http');
 const path=require('node:path');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../app/src/main/assets/www');
+// Optional committed baseline, served without modifying the working tree.
+const baseline=process.env.AUDIT_BASELINE,assetCache=new Map();
+function asset(file){if(!baseline)return fs.readFileSync(file);const name=path.relative(root,file).split(path.sep).join('/');if(!assetCache.has(name))assetCache.set(name,require('node:child_process').execFileSync('git',['show',baseline+':app/src/main/assets/www/'+name],{cwd:path.resolve(__dirname,'..'),maxBuffer:30*1024*1024}));return assetCache.get(name);}
 const fixture={id:'audit',title:'Audit & Cover',genre:'Alpha',kind:'app',package:'test.audit',image:'audit-image.svg',lastPlayed:0};
 const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rect width="600" height="900" fill="#357a62"/></svg>';
 (async()=>{
  const server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http://localhost').pathname;
  if(pathname.includes('audit-image')||pathname.startsWith('/icon/')||pathname.startsWith('/art-icon/')){res.setHeader('Content-Type','image/svg+xml');res.end(svg);return;}
  if(pathname==='/games.js'){res.setHeader('Content-Type','application/javascript');res.end('window.GAMES='+JSON.stringify([fixture]));return;}
- const file=path.join(root,pathname==='/'?'index.html':pathname);try{res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.ttf')?'font/ttf':'text/html');res.end(fs.readFileSync(file));}catch{res.statusCode=404;res.end();}});
+ const file=path.join(root,pathname==='/'?'index.html':pathname);try{res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.ttf')?'font/ttf':'text/html');res.end(asset(file));}catch{res.statusCode=404;res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'msedge',headless:true});
 
@@ -28,7 +31,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   const now=new Date(),dates=[0,NaN,Infinity,now.getTime(),new Date(now.getFullYear(),now.getMonth(),now.getDate()-1).getTime(),new Date(now.getFullYear(),0,1).getTime(),new Date(2001,1,3).getTime()];
   return dates.every(value=>{const d=new Date(Number(value));let expected='Never';if(Number(value)&&Number.isFinite(d.getTime())){const yesterday=new Date(now.getFullYear(),now.getMonth(),now.getDate()-1);expected=d.toDateString()===now.toDateString()?'Today':d.toDateString()===yesterday.toDateString()?'Yesterday':d.toLocaleDateString(undefined,{month:'short',day:'numeric',...(d.getFullYear()!==now.getFullYear()?{year:'numeric'}:{})});}return desktopDateLabel(value)===expected});
  }),true,'reused date formatters preserve relative dates, invalid dates and year labels');
- const layouts=await page.evaluate(()=>[...$('#presentation').options].map(o=>o.value));
+ const layouts=process.env.AUDIT_LAYOUTS?.split(',')||await page.evaluate(()=>[...$('#presentation').options].map(o=>o.value));
  for(const mode of layouts){
   await page.evaluate(mode=>{document.activeElement.blur();query='';genre='';favoritesOnly=false;const p=builtinAppearancePresets.find(p=>p.values.presentation===mode);if(p)applyAppearanceValues(p.values);setPresentation(mode);if(mode==='cambridge')cambridgeOpen('all','games');if(mode==='prague')pragueOpen('genre:Category 0',true);if(mode==='vienna')viennaOpen('genre:Category 0',true);if(mode==='ulm')ulmOpen('all');if(mode==='seattle')seattleBrowse=true;update();controllerFocus(document.querySelector("#grid .presentation-selected")||document.querySelector("#grid .game"),true);},mode);
   await page.waitForTimeout(100);

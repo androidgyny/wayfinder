@@ -1,0 +1,32 @@
+/* Small layout accents: scoped to game screens, without changing hit targets. */
+/* Quiet accents remain inside existing controls and never intercept input. */
+body[data-presentation=sanfrancisco] .sf-category{position:relative}
+body[data-presentation=sanfrancisco] .sf-category.current::after{content:'';position:absolute;left:2px;top:8px;bottom:8px;width:5px;border-radius:2px;background:#fff;pointer-events:none;opacity:0;animation:console-ack 220ms ease-out}
+@keyframes console-ack{0%{opacity:.7}100%{opacity:0}}
+body.flourishes-paused .sf-category.current::after{animation:none!important;opacity:0}
+@media(prefers-reduced-motion:reduce){body[data-presentation=sanfrancisco] .sf-category.current::after{animation:none!important;opacity:0}}
+body[data-presentation=vienna] .vienna-section.expanded>.vienna-heading::before{content:'';position:absolute;left:18px;top:10px;width:8px;height:15px;background:var(--accent);clip-path:polygon(0 0,100% 0,100% 100%,50% 73%,0 100%);pointer-events:none}
+body[data-presentation=prague] .prague-heading{position:relative;height:94px}
+body[data-presentation=prague] .prague-heading small{position:relative}
+body[data-presentation=prague] .prague-column.expanded>.prague-heading small::after{content:'';position:absolute;bottom:-7px;left:calc(50% - 16px);width:32px;height:2px;background:var(--accent);pointer-events:none}
+#cambridge-cover-frame{position:relative;flex:none;line-height:0}
+#cambridge-cover-frame[hidden]{display:none}
+body[data-presentation=cambridge][data-cover-border=hairline] #cambridge-cover-frame::after{content:'';position:absolute;inset:-5px;pointer-events:none;background:linear-gradient(var(--muted),var(--muted)) left top/10px 1px no-repeat,linear-gradient(var(--muted),var(--muted)) left top/1px 10px no-repeat,linear-gradient(var(--muted),var(--muted)) right bottom/10px 1px no-repeat,linear-gradient(var(--muted),var(--muted)) right bottom/1px 10px no-repeat}
+body[data-presentation=redmond] #redmond-categories .current .folder::after{content:'';position:absolute;inset:3px -3px -1px 1px;background:linear-gradient(#ffffff80,transparent),var(--folder-color,#e7ad24);border:1px solid #0005;border-radius:2px;transform:skewX(-12deg);transform-origin:bottom}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid .hongkong-game{padding-left:30px}
+body[data-presentation=hongkong][data-hongkong-view=list] #grid .presentation-selected::before{content:'';display:block!important;position:absolute;left:10px;top:calc(50% - 5px);width:8px;height:10px;background:currentColor;clip-path:polygon(0 0,50% 0,50% 20%,75% 20%,75% 40%,100% 40%,100% 60%,75% 60%,75% 80%,50% 80%,50% 100%,0 100%);animation:pixel-arrive 100ms steps(2,end)}
+@keyframes pixel-arrive{from{transform:translateX(-4px)}to{transform:translateX(0)}}
+body[data-presentation=abbotsford][data-abbotsford-pane=games] #grid .presentation-selected .bbs-cursor{font-size:0;width:.6em;min-width:8px;height:1em;min-height:14px;background:currentColor;animation:terminal-cursor 1.2s steps(1,end) infinite;animation-delay:.7s}
+@keyframes terminal-cursor{0%,49%{opacity:1}50%,100%{opacity:0}}
+body[data-presentation=kyoto][data-selection-style=outline] #grid .presentation-selected .cover::before{content:'';display:block;position:absolute;inset:0;z-index:2;border:3px solid var(--accent);box-shadow:inset 0 0 14px var(--accent);border-radius:inherit;pointer-events:none;animation:kyoto-arrive 380ms ease-out forwards}
+@keyframes kyoto-arrive{0%,20%{opacity:1}100%{opacity:0}}
+body.flourishes-paused #grid .bbs-cursor{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){body[data-presentation=hongkong] #grid .presentation-selected::before,body[data-presentation=abbotsford] #grid .bbs-cursor{animation:none!important}body[data-presentation=kyoto] #grid .presentation-selected .cover::before{display:none!important}}
+/* Table cards lift inside the existing 24px inset; dragging retains its own transform. */
+body[data-presentation=copenhagen] #grid .game:not(.copenhagen-dragging){transform:rotate(var(--card-tilt,0deg));transform-origin:center;transition:transform 140ms ease-out}
+body[data-presentation=copenhagen] #grid .game.presentation-selected:not(.copenhagen-dragging){transform:translateY(-6px) rotate(0deg);z-index:2}
+@media(prefers-reduced-motion:reduce){body[data-presentation=copenhagen] #grid .game:not(.copenhagen-dragging){transform:none!important;transition:none!important}}
+/* A covered/backgrounded table should not keep settling cards offscreen. */
+body.flourishes-paused[data-presentation=copenhagen] #grid .game{transition:none!important}
+
+body[data-presentation=cambridge][data-cover-border=hairline] #appearance-preview .appearance-sample::before{content:'';position:absolute;inset:calc(-5px * var(--preview-bracket-scale,1));pointer-events:none;background:linear-gradient(var(--muted),var(--muted)) left top/calc(10px * var(--preview-bracket-scale,1)) calc(1px * var(--preview-bracket-scale,1)) no-repeat,linear-gradient(var(--muted),var(--muted)) left top/calc(1px * var(--preview-bracket-scale,1)) calc(10px * var(--preview-bracket-scale,1)) no-repeat,linear-gradient(var(--muted),var(--muted)) right bottom/calc(10px * var(--preview-bracket-scale,1)) calc(1px * var(--preview-bracket-scale,1)) no-repeat,linear-gradient(var(--muted),var(--muted)) right bottom/calc(1px * var(--preview-bracket-scale,1)) calc(10px * var(--preview-bracket-scale,1)) no-repeat}

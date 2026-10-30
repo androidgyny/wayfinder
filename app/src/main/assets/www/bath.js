@@ -1,5 +1,10 @@
 // A notebook index: eight text rows and a single portrait cover, regardless of library size.
 let bathPane='games',bathPageKey='',bathStartupFocusPending=false;
+// A repeatable angle per game keeps the tape from jumping on redraw or restart.
+function bathTapeAngle(id){
+ let hash=2166136261;for(const c of String(id||''))hash=Math.imul(hash^c.charCodeAt(0),16777619);
+ return ((hash>>>0)%241/10-12).toFixed(1)+'deg';
+}
 function bathFocus(){
  const target=bathPane==='tabs'?$('#bath-tabs .current'):$('#grid .presentation-selected')||$('#grid .show-all-matches')||$('#bath-tabs .current');
  controllerFocus(target,true);if(bathPane==='tabs'&&target)revealCategoryItem(target.parentElement,target,true);
@@ -32,6 +37,7 @@ function renderBath(){
  }));if(!game)grid.append(el('p','bath-empty',query?'No matching titles.':!games.length?'Your notebook is empty. Choose Add game to begin.':favoritesOnly?'No favorites yet.':'No games in this category.'));}
  for(const row of grid.querySelectorAll('.game')){const on=row.dataset.id===presentationId;row.classList.toggle('presentation-selected',on);row.classList.remove('controller-selected');row.tabIndex=on?0:-1;row.setAttribute('aria-label','Select '+row.title+(on?' · Selected':''));}
  const img=$('#bath-cover');img.hidden=!game;$('#bath-print').hidden=!game;
+ $('#bath-print').style.setProperty('--bath-tape-angle',bathTapeAngle(game?.id));
  if(game){if(img.getAttribute('src')!==game.image)img.src=game.image;img.alt=game.title+' cover';}else{img.removeAttribute('src');img.alt='';}
  $('#bath-title').textContent=game?.title||'';$('#bath-type').textContent=game?(game.intentUri?'Shortcut':game.kind==='app'?'Android game':'Game'):'';
  $('#bath-position').textContent=game?`${index+1} / ${filtered.length}`:'0 / 0';

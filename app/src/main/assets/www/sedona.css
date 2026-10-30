@@ -99,3 +99,10 @@ body.input-compact[data-presentation=sedona] #sedona-scroll{grid-row:3}
 body[data-presentation=sedona] #main #grid{overflow-y:auto;grid-template-rows:repeat(8,minmax(32px,1fr));scrollbar-width:none}
 body[data-presentation=sedona] #main #grid::-webkit-scrollbar{display:none}
 @media(max-height:480px){body[data-presentation=sedona] #sedona-heading{padding:5px 12px}body[data-presentation=sedona] #sedona-title{margin-bottom:2px}body[data-presentation=sedona] :is(#sedona-category,#sedona-count){font-size:13px}}
+/* Keep motion inside the dot-matrix display; never resize the player around it. */
+#sedona-title{min-width:0;max-width:100%;text-overflow:clip}
+.sedona-title-track{display:inline-flex;width:max-content;white-space:nowrap;gap:64px}
+.sedona-title-copy,.sedona-title-repeat{flex:none}
+.sedona-title-repeat{display:none}
+#sedona-title.marquee .sedona-title-repeat{display:block}
+@media(prefers-reduced-motion:reduce){#sedona-title{text-overflow:ellipsis}.sedona-title-track{display:inline}.sedona-title-repeat{display:none!important}}

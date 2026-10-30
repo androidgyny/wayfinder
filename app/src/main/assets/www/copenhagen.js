@@ -18,6 +18,7 @@ function renderCopenhagen(){
  if(!copenhagenIds.includes(presentationId))presentationId=copenhagenIds[0]||null;
  const grid=$('#grid'),existing=new Map([...grid.querySelectorAll('.game')].map(b=>[b.dataset.id,b]));
  let slot=0;for(const id of copenhagenIds){const g=filtered.find(g=>g.id===id),b=existing.get(id)||card(g);syncGameCard(b,g);b.classList.toggle('presentation-selected',id===presentationId);if(id!==presentationId)b.classList.remove('controller-selected');b.tabIndex=id===presentationId?0:-1;
+  let hash=0;for(const c of String(id))hash=Math.imul(hash,31)+c.charCodeAt(0)|0;b.style.setProperty('--card-tilt',((hash>>>0)%21/10-1)+'deg');
   let kept=b.querySelector('.copenhagen-kept');if(copenhagenKept.includes(id)){if(!kept){kept=el('span','copenhagen-kept','Kept');b.append(kept)}}else kept?.remove();if(grid.children[slot]!==b)grid.insertBefore(b,grid.children[slot]||null);slot++;existing.delete(id);
  }
  for(const b of existing.values())b.remove();
@@ -28,7 +29,7 @@ function renderCopenhagen(){
  $('#copenhagen-replace').disabled=!g||kept||filtered.length<=copenhagenIds.length;
  $('#copenhagen-shuffle').disabled=!copenhagenIds.length||copenhagenIds.every(id=>copenhagenKept.includes(id));queueCoverGlow();
 }
-function copenhagenAnimate(ids){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;for(const b of $('#grid').querySelectorAll('.game'))if(ids.includes(b.dataset.id))b.animate([{opacity:.25,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:150,easing:'ease-out'});}
+function copenhagenAnimate(ids){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;for(const b of $('#grid').querySelectorAll('.game'))if(ids.includes(b.dataset.id)){const base=b.classList.contains('presentation-selected')?'translateY(-6px) rotate(0deg)':`rotate(${b.style.getPropertyValue('--card-tilt')||'0deg'})`;b.animate([{opacity:.25,transform:'translateY(5px) '+base},{opacity:1,transform:base}],{duration:150,easing:'ease-out'});}}
 function copenhagenShuffle(){
  if($('#copenhagen-shuffle').disabled)return;const old=copenhagenIds.slice(),next=old.map(id=>copenhagenKept.includes(id)?id:null),chosen=next.filter(Boolean);const excluded=new Set(old);
  for(let i=0;i<next.length;i++)if(!next[i]){let id=copenhagenPick(excluded,chosen);if(!id)id=copenhagenPick(new Set(chosen),chosen);next[i]=id;chosen.push(id);excluded.add(id)}
@@ -67,7 +68,7 @@ function finishCopenhagenDrag(cancel=false){
  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)for(const b of grid.querySelectorAll('.game')){
   const old=before.get(b.dataset.id),now=b.getBoundingClientRect();if(!old)continue;
   const x=old.left-now.left,y=old.top-now.top;if(Math.abs(x)+Math.abs(y)<1)continue;
-  const base=b.classList.contains('presentation-selected')?'translateY(-3px)':'translateY(0)';
+  const base=b.classList.contains('presentation-selected')?'translateY(-6px) rotate(0deg)':`rotate(${b.style.getPropertyValue('--card-tilt')||'0deg'})`;
   b.animate([{transform:`translate(${x}px,${y}px) ${base}`},{transform:base}],{duration:180,easing:'cubic-bezier(.2,.8,.2,1)'});
  }
  if(from!==to)effect('select');persist();
@@ -93,8 +94,10 @@ function initCopenhagenDrag(){
   const d=copenhagenDrag;if(!d||d.pointer!==e.pointerId)return;d.x=e.clientX;d.y=e.clientY;
   if(!d.active){if(Math.hypot(d.x-d.startX,d.y-d.startY)<8)return;
    copenhagenDrag=null;presentationId=d.id;renderCopenhagen();updateCoverGlow();copenhagenDrag=d;d.active=true;
-   d.bounds=grid.getBoundingClientRect();d.origin=d.card.getBoundingClientRect();d.slots=[...grid.querySelectorAll('.game')].map(b=>{const r=b.getBoundingClientRect();return {id:b.dataset.id,x:r.left+r.width/2,y:r.top+r.height/2}});
+   d.bounds=grid.getBoundingClientRect();d.slots=[...grid.querySelectorAll('.game')].map(b=>{const r=b.getBoundingClientRect();return {id:b.dataset.id,x:r.left+r.width/2,y:r.top+r.height/2}});
    grid.setPointerCapture(e.pointerId);grid.classList.add('copenhagen-drag-active');d.card.classList.add('copenhagen-dragging');
+   // Clamp the actual enlarged drag footprint, not the tilted/lifted resting card.
+   d.origin=d.card.getBoundingClientRect();
   }
   if(!copenhagenDragFrame)copenhagenDragFrame=requestAnimationFrame(paint);e.preventDefault();
  });

@@ -63,3 +63,6 @@ body.input-compact[data-presentation=paloalto] #paloalto-tabs{grid-row:1}
 body.input-compact[data-presentation=paloalto] #paloalto-index-label{grid-column:1;grid-row:2}
 body.input-compact[data-presentation=paloalto] #grid{grid-column:1;grid-row:3;grid-template-rows:repeat(4,minmax(28px,1fr));overflow-y:auto}
 @media(max-height:200px){body.input-compact[data-presentation=paloalto] #main{grid-template-rows:28px 0 minmax(0,1fr)}body.input-compact[data-presentation=paloalto] #paloalto-index-label{display:none}}
+/* Static one-bit texture; only opacity animates, never layout or artwork pixels. */
+body[data-presentation=paloalto] #paloalto-page-flash{position:absolute;grid-area:1 / 1 / -1 / -1;inset:0;z-index:5;pointer-events:none;opacity:0;background:#fff;mix-blend-mode:difference}
+@media(prefers-reduced-motion:reduce){#paloalto-page-flash{display:none!important}}

@@ -44,7 +44,8 @@ public class MainActivity extends Activity {
     private void stopDirection(){directionHandler.removeCallbacks(repeatDirection);heldDirection=null;heldKey=-1;heldDevice=-1;}
     private boolean leftTriggerKey,rightTriggerKey,leftTriggerAxis,rightTriggerAxis;
     private InputManager inputManager;
-    private void cancelControllerInput(){stopDirection();leftTriggerKey=rightTriggerKey=leftTriggerAxis=rightTriggerAxis=false;startupSkipKey=-1;}
+    private final StickNavigation stickNavigation=new StickNavigation();
+    private void cancelControllerInput(){for(int id:InputDevice.getDeviceIds())stickNavigation.suppress(id);stopDirection();leftTriggerKey=rightTriggerKey=leftTriggerAxis=rightTriggerAxis=false;startupSkipKey=-1;}
     private final InputManager.InputDeviceListener inputDevices=new InputManager.InputDeviceListener(){
         public void onInputDeviceAdded(int id){}
         public void onInputDeviceChanged(int id){}
@@ -124,7 +125,7 @@ public class MainActivity extends Activity {
         if(k==KeyEvent.KEYCODE_BUTTON_THUMBR)return true;
         if(k==KeyEvent.KEYCODE_BUTTON_THUMBL)action="apps";else if(k==KeyEvent.KEYCODE_BUTTON_SELECT)action="favorite";else if(k==KeyEvent.KEYCODE_BUTTON_A||k==KeyEvent.KEYCODE_DPAD_CENTER)action="activate";else if(k==KeyEvent.KEYCODE_BUTTON_B)action="back";else if(k==KeyEvent.KEYCODE_BUTTON_X)action="edit";else if(k==KeyEvent.KEYCODE_BUTTON_Y)action="search";else if(k==KeyEvent.KEYCODE_BUTTON_L1)action="genrePrev";else if(k==KeyEvent.KEYCODE_BUTTON_R1)action="genreNext";else if(k==KeyEvent.KEYCODE_BUTTON_START)action="menu";
         else if(k==KeyEvent.KEYCODE_DPAD_UP)action="up";else if(k==KeyEvent.KEYCODE_DPAD_DOWN)action="down";else if(k==KeyEvent.KEYCODE_DPAD_LEFT)action="left";else if(k==KeyEvent.KEYCODE_DPAD_RIGHT)action="right";
-        if(action!=null&&ready&&(k==KeyEvent.KEYCODE_DPAD_UP||k==KeyEvent.KEYCODE_DPAD_DOWN||k==KeyEvent.KEYCODE_DPAD_LEFT||k==KeyEvent.KEYCODE_DPAD_RIGHT)){if(e.getAction()==KeyEvent.ACTION_UP){if(k==heldKey&&e.getDeviceId()==heldDevice)stopDirection();}else if(e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()==0){startDirection(action,k,e.getDeviceId());}return true;}
+        if(action!=null&&ready&&(k==KeyEvent.KEYCODE_DPAD_UP||k==KeyEvent.KEYCODE_DPAD_DOWN||k==KeyEvent.KEYCODE_DPAD_LEFT||k==KeyEvent.KEYCODE_DPAD_RIGHT)){if(e.getAction()==KeyEvent.ACTION_UP){if(k==heldKey&&e.getDeviceId()==heldDevice)stopDirection();}else if(e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()==0){stickNavigation.suppress(e.getDeviceId());startDirection(action,k,e.getDeviceId());}return true;}
         if(action!=null&&ready){if(e.getAction()==KeyEvent.ACTION_DOWN&&(action.equals("genrePrev")||action.equals("genreNext")||e.getRepeatCount()==0))key(action);return true;}return super.dispatchKeyEvent(e);
     }
     @Override public void onWindowFocusChanged(boolean focused){super.onWindowFocusChanged(focused);if(!focused)cancelControllerInput();}
@@ -135,18 +136,28 @@ public class MainActivity extends Activity {
         boolean pressed=left?(leftTriggerKey||leftTriggerAxis):(rightTriggerKey||rightTriggerAxis);
         if(ready&&pressed&&!was)key(left?"pageUp":"pageDown");
     }
+    @Override public boolean dispatchGenericMotionEvent(MotionEvent e){
+        // Handle controller axes before WebView can consume them as browser navigation.
+        if((e.getSource()&InputDevice.SOURCE_JOYSTICK)==InputDevice.SOURCE_JOYSTICK&&e.getAction()==MotionEvent.ACTION_MOVE)return onGenericMotionEvent(e);
+        return super.dispatchGenericMotionEvent(e);
+    }
     @Override public boolean onGenericMotionEvent(MotionEvent e){
         if(startup.active())return true;
         if((e.getSource()&InputDevice.SOURCE_JOYSTICK)!=InputDevice.SOURCE_JOYSTICK||e.getAction()!=MotionEvent.ACTION_MOVE)return super.onGenericMotionEvent(e);
         if(!ready||!hasWindowFocus())return true;
         float lt=Math.max(e.getAxisValue(MotionEvent.AXIS_LTRIGGER),e.getAxisValue(MotionEvent.AXIS_BRAKE)),rt=Math.max(e.getAxisValue(MotionEvent.AXIS_RTRIGGER),e.getAxisValue(MotionEvent.AXIS_GAS));
         trigger(true,lt>(leftTriggerAxis?.25f:.55f),true);trigger(false,rt>(rightTriggerAxis?.25f:.55f),true);
-        if(heldKey!=-1)return true;
+        if(heldKey!=-1){stickNavigation.observeNeutral(e.getDeviceId(),e.getAxisValue(MotionEvent.AXIS_X),e.getAxisValue(MotionEvent.AXIS_Y));return true;}
         float x=e.getAxisValue(MotionEvent.AXIS_HAT_X),y=e.getAxisValue(MotionEvent.AXIS_HAT_Y);
-        // A held D-pad takes priority over stick drift on either axis.
-        if(Math.max(Math.abs(x),Math.abs(y))<.4f){x=e.getAxisValue(MotionEvent.AXIS_X);y=e.getAxisValue(MotionEvent.AXIS_Y);}
-        if(Math.max(Math.abs(x),Math.abs(y))<=.6f){if(e.getDeviceId()==heldDevice)stopDirection();}
-        else startDirection(Math.abs(x)>Math.abs(y)?(x>0?"right":"left"):(y>0?"down":"up"),-1,e.getDeviceId());
+        // Hats and digital D-pad keys must not hand control to an already displaced stick.
+        String direction;
+        if(Math.max(Math.abs(x),Math.abs(y))>=.4f){
+            stickNavigation.suppress(e.getDeviceId());
+            stickNavigation.observeNeutral(e.getDeviceId(),e.getAxisValue(MotionEvent.AXIS_X),e.getAxisValue(MotionEvent.AXIS_Y));
+            direction=Math.abs(x)>Math.abs(y)?(x>0?"right":"left"):(y>0?"down":"up");
+        }else direction=stickNavigation.direction(e.getDeviceId(),e.getAxisValue(MotionEvent.AXIS_X),e.getAxisValue(MotionEvent.AXIS_Y));
+        if(direction==null){if(e.getDeviceId()==heldDevice)stopDirection();}
+        else startDirection(direction,-1,e.getDeviceId());
         return true;
     }
 

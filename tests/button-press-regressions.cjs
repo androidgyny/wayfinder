@@ -23,13 +23,26 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
    return {count:face.getAnimations().length,same:face.getAnimations()[0]===first,action:window.pressActionCount,duration:first?.effect.getTiming().duration};
   },selector);
   assert.deepEqual(result,{count:1,same:true,action:1,duration:130},layout+' one pulse, immediate action');
-  await page.waitForTimeout(190);
+  await page.waitForFunction(()=>pressTestFace.getAnimations().length===0,null,{timeout:1000});
   assert.equal(await page.evaluate(()=>pressTestFace.getAnimations().length),0,layout+' effect clears');
   assert.equal(await page.evaluate(()=>{pressTestButton.focus();controller('activate');return pressTestFace.getAnimations().length}),1,layout+' controller activation');
-  await page.waitForTimeout(160);
+  await page.waitForFunction(()=>pressTestFace.getAnimations().length===0,null,{timeout:1000});
   assert.equal(await page.evaluate(()=>{pressTestButton.disabled=true;pressTestButton.dispatchEvent(new MouseEvent('click',{bubbles:true}));return pressTestFace.getAnimations().length}),0,layout+' disabled control');
   await page.evaluate(()=>pressTestButton.disabled=false);
  }
+ for(const layout of ['sedona','atlantis']){
+  await page.evaluate(layout=>{
+   setPresentation(layout);const b=$(layout==='sedona'?'#sedona-track-next':'#atlantis-favorite');b.onclick=()=>{};
+   const face=layout==='sedona'?b.querySelector('b'):b;window.glowFace=face;window.glowPosition=face.style.position;
+   for(let i=0;i<8;i++)b.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button:0,isPrimary:true}));
+   if(face.querySelectorAll('.button-lamp').length!==1)throw Error('Repeated presses stack glows');
+   b.dispatchEvent(new PointerEvent('pointercancel',{bubbles:true}));
+  },layout);
+  await page.waitForTimeout(30);
+  assert.equal(await page.evaluate(()=>glowFace.querySelectorAll('.button-lamp').length),0,'cancel clears glow');
+  assert.equal(await page.evaluate(()=>glowFace.style.position===glowPosition),true,'press restores inline positioning');
+ }
+ await page.evaluate(()=>setPresentation('paloalto'));
  await page.emulateMedia({reducedMotion:'reduce'});
  assert.equal(await page.evaluate(()=>{pressTestButton.click();const keys=pressTestFace.getAnimations()[0].effect.getKeyframes();return keys.every(k=>k.transform===keys[0].transform)}),true,'reduced motion avoids displacement');
  await page.waitForTimeout(160);
