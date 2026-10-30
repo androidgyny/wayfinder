@@ -6,11 +6,11 @@
 
 [Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.232-beta.19)
 
-Wayfinder organizes the Android games already on your device into a personal, console-like library. Give each game a category and a cover, then browse and launch it with a controller or touchscreen. Whether you have a few favorites or hundreds of titles, the goal is the same: make finding something to play a pleasure.
+Wayfinder organizes the Android games already on your device into a personal, console-like library. Add your installed games, choose a category and a cover for each, then browse and launch them with a controller or touchscreen. Whether you have a few favorites or hundreds of titles, the goal is the same: make finding something to play a pleasure.
 
 Wayfinder is designed for Android handhelds. You can open it like any other app or make it your Android home screen. It starts with an empty library; games and cover artwork are not included.
 
-![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta18/01-paloalto.png)
+![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta19/01-paloalto.png)
 
 *Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
 
@@ -77,11 +77,11 @@ Styles range from restrained and modern to paper notebooks, desktop interfaces, 
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta18/02-bath.png)
+![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta19/02-bath.png)
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
-![Hong Kong: KAMI selected in a dark carousel of portrait covers with a title and play history below.](docs/screenshots/beta18/08-hongkong-carousel.png)
+![Hong Kong: KAMI selected in a dark carousel of portrait covers with a title and play history below.](docs/screenshots/beta19/08-hongkong-carousel.png)
 
 *Hong Kong · dark carousel view · portrait covers with a quiet, focused selection.*
 
@@ -89,13 +89,13 @@ You can also enable interface sounds, play the included background music or your
 
 The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta18/15-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta19/15-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
-The gallery shows fifteen views captured directly on a Pimax Portal. Games and personal cover artwork are not bundled. [Explore all fifteen screenshots of library views and the Apps screen.](docs/GALLERY.md)
+The gallery shows fifteen views of version 0.9.232, captured directly on a Pimax Portal. Games and personal cover artwork are not bundled. [Explore all fifteen screenshots of library views and the Apps screen.](docs/GALLERY.md)
 
 ## Controller reference
 
