@@ -1,0 +1,91 @@
+.tc-part{display:none}
+body[data-presentation=tacoma]{background:#090909;color:#f5f1ec}
+body[data-presentation=tacoma] .topbar{background:#090909;color:#eee;border:0;padding-inline:4vw;height:48px;min-height:0}
+body[data-presentation=tacoma] .topbar .brand{font:500 13px Roboto,sans-serif;letter-spacing:.36em}
+body[data-presentation=tacoma] :is(.brand-sub,.brand .mark,#menu,#sidebar,#soft-gradient,#custom-backdrop){display:none!important}
+body[data-presentation=tacoma] .topbar .search:not(:focus-within){opacity:.65}
+body[data-presentation=tacoma] .shell{display:block;padding:0}
+body[data-presentation=tacoma] #main{position:fixed;inset:48px 0 0;display:grid;grid-template-columns:48% 1fr;grid-template-rows:auto minmax(0,1fr) auto auto;gap:1.5vh 3vw;padding:1vh 4vw;overflow:hidden;background:#090909;color:#f5f1ec;font-family:Roboto,'Segoe UI',sans-serif}
+body[data-presentation=tacoma] #main>:not(.tc-part):not(#grid){display:none!important}
+body[data-presentation=tacoma] .tc-part{display:flex;min-width:0}
+.tc-heading{grid-area:1/1/2/2;align-items:center;overflow:hidden}
+#tacoma-heading,#tacoma-next{font:200 clamp(32px,10vh,110px)/1.1 Roboto,'Segoe UI',sans-serif;letter-spacing:-.055em;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;margin:0;padding:0;color:#f6f3ee;text-transform:none}
+#tacoma-next{background:none;border:0;color:#898683;flex:none;width:26%;text-align:left}
+body[data-tacoma-mode=shelf][data-presentation=tacoma] .tc-heading{grid-column:1/-1;justify-content:space-between}
+body[data-presentation=tacoma] #grid{grid-area:2/1/3/2;display:flex;flex-direction:column;align-items:stretch;gap:0;min-height:0;overflow:auto;padding:4px;margin:0;background:none;scrollbar-width:none}
+body[data-presentation=tacoma] #grid .tc-row{display:block;position:relative;text-align:left;border:none;border-radius:0;box-shadow:none;background:transparent;color:#aaa6a3;font:300 clamp(18px,4.9vh,52px)/1.25 Roboto,sans-serif;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;width:100%;height:auto;flex:none;transform:none;padding:.16em .5em}
+body[data-presentation=tacoma] #grid .tc-row.presentation-selected{color:white;outline:none;box-shadow:inset 3px 0 #ff745c}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid{grid-column:1/-1;flex-direction:row;gap:1.5vw;align-items:center}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row{height:100%;aspect-ratio:2/3;width:auto;max-width:32vw;padding:0}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .presentation-selected{outline:3px solid #ff745c;outline-offset:0}
+.tc-row img,#tacoma-art img{width:100%;height:100%;object-fit:cover;display:block}
+body[data-art-fit=contain] :is(.tc-row,#tacoma-art) img{object-fit:contain}
+#tacoma-art{grid-area:1/2/3/3;align-items:center;justify-content:center;gap:.7vw;overflow:hidden}
+#tacoma-art img{width:auto;max-width:100%;height:auto;max-height:100%;aspect-ratio:2/3;min-width:0}
+body[data-tacoma-mode=directory] #tacoma-art img{width:31%}
+body[data-presentation=tacoma][data-tacoma-mode=directory] #main{grid-template-columns:29% 1fr}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #tacoma-art{display:none}
+#tacoma-caption{grid-area:3/2;text-align:center;justify-content:center;font:300 15px Roboto,sans-serif;letter-spacing:.1em}
+body[data-tacoma-mode=shelf] #tacoma-caption{grid-column:1/-1;justify-content:flex-start}
+#tacoma-hints{grid-area:4/1/5/-1;gap:1.5vw;align-items:center}
+#tacoma-hints button{background:none;color:#ccc;border:0;padding:4px 0;font:400 12px Roboto,sans-serif}
+#tacoma-hints b{border:1px solid #ff745c;color:#ff957e;border-radius:12px;padding:1px 5px;margin-right:5px}
+#tacoma-hints button:nth-last-child(2){margin-left:auto}
+body[data-tacoma-mode=directory] #tacoma-hints button:nth-child(3){display:none}
+@media(max-height:360px){body[data-presentation=tacoma] #main{gap:2px;padding-block:0}#tacoma-heading,#tacoma-next{font-size:28px}}
+.tc-clip{display:block;overflow:hidden}
+.tc-label{display:block;width:max-content}
+#tc-header-toggle{display:none}
+body[data-presentation=tacoma] #tc-header-toggle{display:block;margin-left:auto;flex:none;min-width:44px;height:44px;background:transparent;color:#a6a29e;border:0;font-size:20px;letter-spacing:.08em}
+body[data-presentation=tacoma]:not(.tc-header-open) .topbar :is(.search,.app-actions){display:none}
+body[data-presentation=tacoma][data-tacoma-mode=directory] #grid .tc-row:is(:focus,:focus-visible,.controller-selected){outline:none!important;box-shadow:none!important}
+body[data-presentation=tacoma][data-tacoma-mode=directory] #grid .tc-row.presentation-selected{box-shadow:none}
+body[data-presentation=tacoma][data-tacoma-mode=directory] .presentation-selected .tc-label{text-decoration:underline;text-decoration-color:#ff745c;text-decoration-thickness:1px;text-underline-offset:.06em}
+/* Whole rows at either edge, including when the final item is selected. */
+body[data-presentation=tacoma]:not([data-tacoma-mode=shelf]) #grid{
+ --tc-visible-rows:8;
+ padding-block:0;
+ scroll-snap-type:y mandatory;
+}
+body[data-presentation=tacoma]:not([data-tacoma-mode=shelf]) #grid .tc-row{
+ flex:0 0 calc(100% / var(--tc-visible-rows));
+ min-height:0;
+ padding-block:0;
+ scroll-snap-align:start;
+}
+@media(max-height:480px){
+ body[data-presentation=tacoma]:not([data-tacoma-mode=shelf]) #grid{--tc-visible-rows:5}
+}
+@media(max-height:320px){
+ body[data-presentation=tacoma]:not([data-tacoma-mode=shelf]) #grid{--tc-visible-rows:3}
+}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #tacoma-caption{
+ display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#tacoma-next{text-overflow:clip}
+body[data-presentation=tacoma]:not([data-tacoma-mode=shelf]) #grid{scroll-padding:0;scroll-behavior:auto}
+body[data-presentation=tacoma] #grid .tc-row{scroll-margin:0}
+body[data-presentation=tacoma] #grid.search-empty-grid{position:relative}
+/* Appearance controls preserve the original Mixtape defaults. */
+body[data-presentation=tacoma]{--tc-bg:var(--bg);--tc-text:var(--text);--tc-muted:var(--muted);--tc-accent:var(--accent);--tc-font:var(--display-font);--tc-weight:var(--game-title-weight,400);background:var(--tc-bg);color:var(--tc-text)}
+body[data-presentation=tacoma][data-palette=graphite]{--tc-bg:#090909;--tc-text:#f5f1ec;--tc-muted:#aaa6a3;--tc-accent:#ff745c}
+
+body[data-presentation=tacoma][data-title-weight=regular]{--tc-weight:300}
+body[data-presentation=tacoma][data-typography=ibmvga],body[data-presentation=tacoma][data-typography=gamepocket]{--tc-weight:400}
+body[data-presentation=tacoma] :is(#main,.topbar){background:var(--tc-bg);color:var(--tc-text);font-family:var(--tc-font)}
+body[data-presentation=tacoma] :is(#tacoma-heading,#tacoma-next,#tacoma-caption,#tacoma-hints button){font-family:var(--tc-font);color:var(--tc-text)}
+body[data-presentation=tacoma] :is(#tacoma-next,#tc-header-toggle){color:var(--tc-muted)}
+body[data-presentation=tacoma] #grid .tc-row{font-family:var(--tc-font);font-weight:var(--tc-weight);color:var(--tc-muted)}
+body[data-presentation=tacoma] #grid .tc-row.presentation-selected{color:var(--tc-text);box-shadow:inset 3px 0 var(--tc-accent)}
+body[data-presentation=tacoma][data-tacoma-mode=directory] #grid .tc-row.presentation-selected{box-shadow:none}
+body[data-presentation=tacoma][data-tacoma-mode=directory] .presentation-selected .tc-label{text-decoration-color:var(--tc-accent)}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .presentation-selected{outline-color:var(--tc-accent)}
+body[data-presentation=tacoma] #tacoma-hints b{color:var(--tc-accent);border-color:var(--tc-accent)}
+body[data-presentation=tacoma] :is(.tc-row img,#tacoma-art img){box-sizing:border-box;border-radius:var(--art-radius,0px)}
+body[data-presentation=tacoma][data-cover-border=hairline] :is(.tc-row img,#tacoma-art img){border:1px solid var(--line)}
+body[data-presentation=tacoma][data-cover-border=matte] :is(.tc-row img,#tacoma-art img){border:6px solid var(--panel)}
+body[data-presentation=tacoma][data-tacoma-mode=shelf][data-cover-brightness=dimmed] #grid .tc-row:not(.presentation-selected) img{opacity:.65}
+
+/* Shared tile dimming must not fade list text or compound shelf dimming. */
+body[data-presentation=tacoma] #grid .tc-row{opacity:1!important}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row{border-radius:var(--art-radius,0px)}

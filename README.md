@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.232-beta.19)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.233-beta.20)
 
 Wayfinder organizes the Android games already on your device into a personal, console-like library. Add your installed games, choose a category and a cover for each, then browse and launch them with a controller or touchscreen. Whether you have a few favorites or hundreds of titles, the goal is the same: make finding something to play a pleasure.
 

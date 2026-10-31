@@ -830,3 +830,5 @@ body[data-typography=go]{--display-font:WayfinderGo,sans-serif}
 
 /* Cool neutral panels with an icy selection accent. */
 body[data-palette="slateblue"]{--bg:#141e2b;--panel:#1d2a3b;--field:#243347;--hover:#30445c;--line:#435870;--muted:#acbdd0;--accent:#9bdcff;--text:#eff5fc;--accent-soft:#2c455d;--accent-ink:#142738;--glow:#9bdcff55;}
+
+body[data-typography=system]{--display-font:Roboto,"Segoe UI",sans-serif}

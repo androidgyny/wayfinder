@@ -1,0 +1,74 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http');
+const {chromium}=require('playwright');
+const root=path.resolve(__dirname,'../app/src/main/assets/www'),out=path.resolve(__dirname,'../output/hongkong-audit');fs.mkdirSync(out,{recursive:true});
+const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument Valley':'Title '+String(i).padStart(4,'0'),genre:['Puzzles','Story adventures','Racing','A very long user category name that must remain usable'][i%4],image:'audit.svg',package:'test.app',kind:'app',favorite:i<3}));
+(async()=>{
+ const server=http.createServer((req,res)=>{const url=new URL(req.url,'http://localhost').pathname;
+ if(url==='/audit.svg'){res.setHeader('Content-Type','image/svg+xml');return res.end('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rect width="600" height="900" fill="#367c83"/><circle cx="300" cy="350" r="180" fill="#f4b5c2"/><text x="300" y="750" text-anchor="middle" font-size="50">MONUMENT VALLEY</text></svg>')}
+ if(url==='/games.js'){res.setHeader('Content-Type','application/javascript');return res.end('window.GAMES='+JSON.stringify(fixture))}
+ try{const file=path.join(root,url==='/'?'index.html':url);res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':file.endsWith('.css')?'text/css':file.endsWith('.ttf')?'font/ttf':file.endsWith('.svg')?'image/svg+xml':'text/html');res.end(fs.readFileSync(file))}catch{res.statusCode=404;res.end()}});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({channel:'msedge',headless:true}),errors=[];
+ try{const page=await browser.newPage({viewport:{width:1097,height:592}});page.on('pageerror',e=>errors.push(e.message));
+ await page.addInitScript(g=>{window.auditGames=g;window.Portal={view:()=>localStorage.getItem('view')||'{}',saveView:v=>localStorage.setItem('view',v),library:()=>JSON.stringify(auditGames),sound:()=>{},hideKeyboard:()=>window.keyboardDismissals=(window.keyboardDismissals||0)+1,setThemeColor:c=>window.themeColor=c,appsPreferences:()=>'[]',launch:id=>window.launched=id,favorite:(id,on)=>{auditGames.find(g=>g.id===id).favorite=on;return '{"ok":true}'}}},fixture);
+ await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Cognate').values);hongkongPane='games';hongkongSelect(0)});await page.waitForTimeout(300);await page.evaluate(()=>document.fonts.ready);
+ await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Mixtape').values));
+ assert.equal(await page.evaluate(()=>presentation),'tacoma');
+ assert.equal(await page.locator('#search').isVisible(),false);
+ await page.locator('#tc-header-toggle').click();
+ assert.ok(await page.locator('#settings-button').isVisible());
+ await page.locator('#tc-header-toggle').click();
+ await page.evaluate(()=>controller('search'));
+ assert.equal(await page.evaluate(()=>document.activeElement.id),'search');
+ await page.evaluate(()=>controller('back'));
+ await page.evaluate(()=>{controller('genreNext');controller('genreNext');controller('down')});
+ console.log(await page.evaluate(()=>({category:tacomaCategory,labels:[...document.querySelectorAll('.tc-label')].map(x=>x.textContent),animations:$('#grid .presentation-selected .tc-label')?.getAnimations().length,rect:$('#grid').getBoundingClientRect().toJSON()})));
+ assert.equal(await page.evaluate(()=>$('#grid .presentation-selected .tc-label').getAnimations().length),1);
+ await page.evaluate(()=>controller('activate'));assert.ok(await page.evaluate(()=>tacomaInside&&filtered.length));
+ await page.evaluate(()=>{controller('down');controller('back')});assert.ok(await page.evaluate(()=>tacomaDirectory()));
+ await page.reload();await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);assert.equal(await page.evaluate(()=>presentation),'tacoma');
+ assert.equal(await page.locator('#search').isVisible(),false);
+ await page.locator('#tc-header-toggle').click();
+ assert.ok(await page.locator('#settings-button').isVisible());
+ await page.locator('#tc-header-toggle').click();
+ await page.evaluate(()=>controller('search'));
+ assert.equal(await page.evaluate(()=>document.activeElement.id),'search');
+ await page.evaluate(()=>controller('back'));assert.deepEqual(errors,[]);
+ await page.evaluate(()=>{games[0].title='An extraordinarily long game title '.repeat(7);tacomaPageTo(2);tacomaOpenCategory('');tacomaSelect(filtered.findIndex(g=>g===games[0]));});
+ const label=page.locator('#grid .presentation-selected .tc-label');
+ assert.equal(await label.evaluate(n=>n.getAnimations().length),1);
+ await page.evaluate(()=>controller('down'));
+ assert.equal(await page.locator('#grid .tc-label').evaluateAll(nodes=>nodes.reduce((a,n)=>a+n.getAnimations().length,0)),0);
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.evaluate(()=>tacomaSelect(filtered.findIndex(g=>g===games[0])));
+ assert.equal(await label.evaluate(n=>n.getAnimations().length),0);
+ await page.evaluate(()=>{applyAppearanceValues({...builtinAppearancePresets.find(p=>p.name==='Mixtape').values,palette:'slateblue',typography:'spacemono',coverCorners:'rounded',coverBorder:'matte',titleWeight:'bold'});tacomaPageTo(2);tacomaOpenCategory('')});
+ const appearance=await page.evaluate(()=>({bg:getComputedStyle($('#main')).backgroundColor,font:getComputedStyle($('#grid .tc-row')).fontFamily,weight:getComputedStyle($('#grid .tc-row')).fontWeight,radius:getComputedStyle($('#tacoma-art img')).borderRadius,border:getComputedStyle($('#tacoma-art img')).borderTopWidth,shown:['palette','typography','title-weight','cover-corners','cover-border'].every(id=>!$('#'+id).closest('.settings-row').hidden)}));
+ assert.equal(appearance.bg,'rgb(20, 30, 43)');assert.equal(appearance.radius,'16px');assert.equal(appearance.border,'6px');assert.equal(appearance.weight,'700');assert.ok(appearance.shown);assert.ok(/mono/i.test(appearance.font));
+ assert.deepEqual(errors,[]);
+ await page.evaluate(()=>{tacomaPageTo(0);setCoverOptions('rounded','dimmed','all')});
+ assert.equal(await page.locator('#grid .tc-row:not(.presentation-selected)').first().evaluate(n=>getComputedStyle(n).opacity),'1');
+ assert.equal(await page.locator('#grid .tc-row:not(.presentation-selected) img').first().evaluate(n=>getComputedStyle(n).opacity),'0.65');
+ await page.evaluate(()=>{tacomaPageTo(2);tacomaOpenCategory('Puzzles');tacomaSelect(3);showDialog('#settings-dialog');$('#appearance-presets').value='Mixtape';auditionAppearancePreset();hideDialog('#preset-audition');tacomaPageTo(0);finishAppearanceAudition(false)});
+ assert.deepEqual(await page.evaluate(()=>[tacomaPage,tacomaCategory,tacomaInside]),[2,'Puzzles',true]);
+ assert.equal(await page.locator('#grid .tc-row:not(.presentation-selected)').first().evaluate(n=>getComputedStyle(n).opacity),'1');
+ await page.evaluate(()=>{hideDialog('#settings-dialog');setTypography('outfit')});
+ assert.match(await page.locator('#grid .tc-row').first().evaluate(n=>getComputedStyle(n).fontFamily),/Outfit/);
+ await page.evaluate(()=>{setTypography('system');persist()});await page.reload();await page.waitForFunction(()=>!restoring);
+ assert.equal(await page.evaluate(()=>typography),'system');
+ await page.evaluate(()=>{setTypography('ibmvga');openApps()});
+ assert.match(await page.locator('#apps-drawer').evaluate(n=>getComputedStyle(n).fontFamily),/WayfinderClean/);
+ await page.evaluate(()=>nativeBack());assert.equal(await page.locator('#apps-drawer').isVisible(),false);
+ for(const paletteName of ['daylight','graphite','slateblue']){
+  await page.evaluate(p=>{setPalette(p);tacomaPageTo(2);tacomaOpenCategory('Puzzles');controller('search')},paletteName);
+  await page.setViewportSize({width:800,height:320});
+  assert.ok(await page.locator('#search').isVisible());
+  const bounds=await page.locator('#search').boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=800);
+  await page.evaluate(()=>controller('back'));await page.setViewportSize({width:1097,height:592});
+ }
+ await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Mixtape').values));
+ await page.screenshot({path:'output/tacoma-audit-final.png'});
+ assert.deepEqual(errors,[]);
+ console.log('Appearance, dimming, fonts, preset cancellation, reload, Apps isolation and narrow search passed');
+ }finally{await browser.close();server.close();}
+})().catch(e=>{console.error(e);process.exitCode=1});
