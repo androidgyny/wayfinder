@@ -6,11 +6,11 @@
 
 [Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.233-beta.20)
 
-Wayfinder organizes the Android games already on your device into a personal, console-like library. Add your installed games, choose a category and a cover for each, then browse and launch them with a controller or touchscreen. Whether you have a few favorites or hundreds of titles, the goal is the same: make finding something to play a pleasure.
+Wayfinder is a launcher for the Android games you already own. Give each game a category and a cover, then use a controller or the touchscreen to browse your collection and launch a game. The same artwork can fill a cover wall, sit on a notebook page, or appear beside a compact list of hundreds of titles.
 
-Wayfinder is designed for Android handhelds. You can open it like any other app or make it your Android home screen. It starts with an empty library; games and cover artwork are not included.
+Use Wayfinder as an ordinary app or make it your handheld’s home screen. A fresh installation starts empty: you choose which installed games and shortcuts to add. Games and cover artwork are not included.
 
-![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta19/01-paloalto.png)
+![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta20/01-paloalto.png)
 
 *Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
 
@@ -22,7 +22,7 @@ Wayfinder is designed for Android handhelds. You can open it like any other app 
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 23 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 24 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -77,25 +77,25 @@ Styles range from restrained and modern to paper notebooks, desktop interfaces, 
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta19/02-bath.png)
+![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta20/02-bath.png)
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
-![Hong Kong: KAMI selected in a dark carousel of portrait covers with a title and play history below.](docs/screenshots/beta19/08-hongkong-carousel.png)
+![Tacoma: a shelf of favorite Android games beneath a large favorites heading.](docs/screenshots/beta20/15-tacoma.png)
 
-*Hong Kong · dark carousel view · portrait covers with a quiet, focused selection.*
+*Tacoma · Mixtape preset · move from a shelf of favorites to recent games or a category directory.*
 
 ## Everyday apps, too
 
 The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta19/15-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta20/20-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 
-The gallery shows fifteen views of version 0.9.232, captured directly on a Pimax Portal. Games and personal cover artwork are not bundled. [Explore all fifteen screenshots of library views and the Apps screen.](docs/GALLERY.md)
+[See all 20 screenshots](docs/GALLERY.md), captured on a Pimax Portal: from a green card table and a BBS directory to a desktop folder browser and a wall of game covers.
 
 ## Controller reference
 
