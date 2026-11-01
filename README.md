@@ -10,9 +10,9 @@ Wayfinder is a launcher for the Android games you already own. Give each game a 
 
 Use Wayfinder as an ordinary app or make it your handheld’s home screen. A fresh installation starts empty: you choose which installed games and shortcuts to add. Games and cover artwork are not included.
 
-![Palo Alto: Tengami artwork beside a tabbed card index in the Hyperstack preset.](docs/screenshots/beta20/01-paloalto.png)
+![Wayfinder on a Pimax Portal, displaying the Mixtape favorites shelf with Hades selected.](docs/branding/wayfinder-portal-mixtape.png)
 
-*Palo Alto · Hyperstack, the default preset · a classic card catalogue for your games.*
+*Wayfinder on a Pimax Portal, showing the Mixtape preset. AI-assisted screen composite based on an actual screenshot.*
 
 [Explore the screenshot gallery →](docs/GALLERY.md)
 
@@ -80,10 +80,6 @@ You can also enable interface sounds, play the included background music or your
 ![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta20/02-bath.png)
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
-
-![Tacoma: a shelf of favorite Android games beneath a large favorites heading.](docs/screenshots/beta20/15-tacoma.png)
-
-*Tacoma · Mixtape preset · move from a shelf of favorites to recent games or a category directory.*
 
 ## Everyday apps, too
 
