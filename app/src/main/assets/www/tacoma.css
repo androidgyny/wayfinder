@@ -94,3 +94,5 @@ body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row{border-radi
    the startup row after selection moves, producing clipped horizontal rules. */
 body[data-presentation=tacoma] #grid .tc-row:is(:focus,:focus-visible,.controller-selected){outline:none!important}
 body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row.presentation-selected{outline:3px solid var(--tc-accent)!important;outline-offset:0}
+/* Reveal the outer focus ring, not just the image's border box. */
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid{scroll-padding:4px}
