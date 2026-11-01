@@ -89,3 +89,8 @@ body[data-presentation=tacoma][data-tacoma-mode=shelf][data-cover-brightness=dim
 /* Shared tile dimming must not fade list text or compound shelf dimming. */
 body[data-presentation=tacoma] #grid .tc-row{opacity:1!important}
 body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row{border-radius:var(--art-radius,0px)}
+
+/* Tacoma owns its focus marker. The shared controller outline can remain on
+   the startup row after selection moves, producing clipped horizontal rules. */
+body[data-presentation=tacoma] #grid .tc-row:is(:focus,:focus-visible,.controller-selected){outline:none!important}
+body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row.presentation-selected{outline:3px solid var(--tc-accent)!important;outline-offset:0}

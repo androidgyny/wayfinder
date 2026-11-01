@@ -1,0 +1,63 @@
+.ithaca-part{display:none}
+body[data-palette=lcd]{--bg:#ece8dd;--panel:#d3ddd6;--field:#dce3da;--hover:#bfcfc9;--line:#7b8c89;--muted:#465c60;--accent:#1c3440;--text:#182f3b;--accent-soft:#d3ddd6;--accent-ink:#f0f0dd;--glow:#1c344033}
+body[data-presentation=ithaca] .topbar{height:48px;min-height:48px;padding-inline:4vw;gap:16px;background:var(--bg);border:0}
+body[data-presentation=ithaca] .brand{min-width:0;font-size:16px;letter-spacing:.25em}
+body[data-presentation=ithaca] :is(.brand-sub,.brand .mark,#menu,#sidebar,#soft-gradient,#custom-backdrop){display:none!important}
+body[data-presentation=ithaca] .topbar .search{margin-left:auto;max-width:300px;height:34px}
+body[data-presentation=ithaca] .shell{display:block;padding:0}
+body[data-presentation=ithaca] #main{position:fixed;inset:48px 0 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(100px,1fr) minmax(140px,1.3fr) 30px;gap:0 4vw;padding:1vh 4vw;overflow:hidden;background:var(--bg);font-family:var(--display-font)}
+body[data-presentation=ithaca] #main>:not(.ithaca-part):not(#grid){display:none!important}
+body[data-presentation=ithaca] .ithaca-part{display:flex;min-width:0;min-height:0}
+.ithaca-head{grid-area:1/1;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;padding:12px 16px;gap:12px}
+#ithaca-heading{font:400 clamp(15px,2.8vh,26px)/1.2 var(--display-font);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin:0}
+#ithaca-count{font:12px var(--display-font);white-space:nowrap}
+body[data-presentation=ithaca] #grid{grid-area:2/1;display:flex;flex-direction:column;gap:0;background:var(--panel);padding:4px 10px 8px;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;box-shadow:inset 0 -2px 5px #0001;overflow:hidden;min-height:0;margin:0;position:relative}
+body[data-presentation=ithaca] #grid .ithaca-row{display:flex;align-items:center;gap:12px;flex:1 1 0;min-height:0;width:100%;padding:0 10px;border:0;border-radius:0;background:none;color:var(--text);font:var(--game-title-weight,400) clamp(15px,3.1vh,27px)/1.15 var(--display-font);text-align:left;box-shadow:none!important;outline:none!important;transform:none!important;opacity:1!important}
+body[data-presentation=ithaca] #grid .ithaca-row.presentation-selected{background:var(--accent);color:var(--accent-ink)}
+.ithaca-clip{display:block;overflow:hidden;flex:1;min-width:0}.ithaca-label{display:block;width:max-content;white-space:nowrap}.ithaca-arrow{flex:none}
+.ithaca-art{grid-area:1/2/5/3;justify-content:center;align-items:center;overflow:hidden;padding:4px}
+#ithaca-cover{display:block;max-width:100%;max-height:100%;width:min(100%,calc((100vh - 76px)*2/3));height:auto;aspect-ratio:2/3;object-fit:cover;border-radius:var(--art-radius);box-sizing:border-box}
+#ithaca-cover[hidden],#ithaca-cover-empty[hidden]{display:none}
+body[data-art-fit=contain] #ithaca-cover{object-fit:contain}
+body[data-cover-border=hairline] #ithaca-cover{border:1px solid var(--line)}body[data-cover-border=matte] #ithaca-cover{border:6px solid var(--panel)}
+body[data-presentation=ithaca] #ithaca-wheel{grid-area:3/1;position:relative;display:block;aspect-ratio:1;height:calc(100% - 12px);max-width:100%;justify-self:center;align-self:center;touch-action:none;user-select:none}
+.ithaca-ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--line);background:linear-gradient(135deg,var(--field),var(--bg));box-shadow:inset 2px 2px 3px #fff7,2px 3px 6px #0002;touch-action:none}
+#ithaca-wheel button{position:absolute;z-index:1;background:transparent;color:var(--muted);border:0;padding:6px;min-width:38px;min-height:32px;font:12px var(--display-font);transform:translate(-50%,-50%);touch-action:manipulation}
+#ithaca-wheel #ithaca-play{left:50%;top:50%;width:44%;height:44%;border:1px solid var(--line);border-radius:50%;background:linear-gradient(145deg,var(--bg),var(--field));box-shadow:inset 1px 2px 4px #0003;font-size:14px;color:var(--text)}
+#ithaca-wheel #ithaca-play:active{box-shadow:inset 2px 3px 7px #0004}
+#ithaca-menu{left:50%;top:16%}#ithaca-prev{left:15%;top:50%}#ithaca-next{left:85%;top:50%}
+.ithaca-dot{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:var(--accent);transform:rotate(var(--wheel-angle,0rad)) translateX(calc(var(--wheel-radius,100px))) translate(-50%,-50%);opacity:0;pointer-events:none}
+#ithaca-wheel.turning .ithaca-dot{opacity:1}
+.ithaca-hints{grid-area:4/1;justify-content:space-between;align-items:center;gap:6px}
+.ithaca-hints button{background:none;border:0;color:var(--text);padding:4px 0;font:11px var(--display-font)}
+@media(max-height:420px){body[data-presentation=ithaca] #main{grid-template-rows:auto minmax(0,1fr) 0 28px}body[data-presentation=ithaca] #ithaca-wheel{display:none}.ithaca-head{padding:5px 12px}body[data-presentation=ithaca] #grid .ithaca-row{font-size:16px}}
+@media(max-width:800px){body[data-presentation=ithaca] .topbar .brand{display:none}body[data-presentation=ithaca] .topbar .search{margin-left:0;max-width:none}}
+
+/* Physical-looking controller badges, matching the wheel's restrained finish. */
+.ithaca-hints button{display:flex;align-items:center;gap:7px;min-height:28px}
+.ithaca-key{display:inline-flex;align-items:center;justify-content:center;flex:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(145deg,var(--muted),var(--accent));color:var(--accent-ink);font:400 12px var(--display-font);box-shadow:inset 0 1px 1px #fff5,0 1px 2px #0002}
+
+/* Printed labels, transport symbols, and LCD heading hierarchy. */
+body[data-presentation=ithaca] .brand{font-family:SpaceMono,monospace;font-weight:700;font-size:19px;letter-spacing:.22em;color:var(--muted)}
+#ithaca-wheel button{font-family:WayfinderComputer,monospace;font-size:15px;letter-spacing:.06em;color:var(--muted)}
+#ithaca-wheel #ithaca-play{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;font-size:15px;color:var(--muted)}
+.ithaca-play-symbol{display:block;width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:16px solid currentColor;margin-left:4px}
+#ithaca-wheel :is(#ithaca-prev,#ithaca-next){display:flex;align-items:center;justify-content:center;gap:1px}
+.ithaca-skip{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:10px solid currentColor}
+#ithaca-prev .ithaca-skip{border-left:0;border-right:10px solid currentColor}
+.ithaca-head{position:relative;padding-bottom:14px}
+.ithaca-head:after{content:'';position:absolute;bottom:3px;left:12px;right:12px;height:1px;background:var(--muted);opacity:.8}
+body[data-presentation=ithaca] #ithaca-heading{font-size:26px;letter-spacing:.035em}
+body[data-presentation=ithaca][data-typography=gamepocket] #ithaca-heading{-webkit-text-stroke:.35px currentColor}
+body[data-presentation=ithaca][data-typography=gamepocket] #grid .ithaca-row{font-size:22px;letter-spacing:.035em}
+@media(max-height:420px){body[data-presentation=ithaca] #ithaca-heading{font-size:20px}body[data-presentation=ithaca][data-typography=gamepocket] #grid .ithaca-row{font-size:16px}.ithaca-head{padding-bottom:9px}}
+body[data-presentation=ithaca] .brand>span:last-child{font-family:SpaceMono,monospace;font-weight:700}
+/* Quiet depth: inset screen, raised controls, and a framed cover. */
+body[data-presentation=ithaca] #main{padding:2vh 4vw;column-gap:5vw;grid-template-rows:auto minmax(100px,1fr) minmax(140px,1.3fr) 34px}
+.ithaca-head{background:linear-gradient(180deg,#0000000a,transparent),var(--panel);box-shadow:inset 2px 3px 4px #0002,inset -2px 0 3px #fff5;padding-top:15px}
+body[data-presentation=ithaca] #grid{box-shadow:inset 2px 0 4px #0002,inset -2px -3px 4px #fff5;padding-inline:14px;padding-bottom:12px}
+body[data-presentation=ithaca] #ithaca-wheel{height:calc(100% - 26px)}
+.ithaca-ring{border-color:var(--line);background:linear-gradient(135deg,#ffffff45,transparent 55%,#00000008),var(--bg);box-shadow:inset 2px 3px 2px #fffa,inset -2px -2px 3px #0002,0 3px 2px #0002,0 6px 9px #0002}
+.ithaca-art{padding:8px 12px}
+#ithaca-cover{max-height:calc(100% - 12px);width:min(calc(100% - 12px),calc((100vh - 112px)*2/3));box-shadow:0 0 0 3px var(--bg),0 0 0 4px var(--line),2px 5px 9px #0003}
+@media(max-height:420px){body[data-presentation=ithaca] #main{grid-template-rows:auto minmax(0,1fr) 0 28px;padding-block:1vh}.ithaca-head{padding-top:5px}body[data-presentation=ithaca] #grid{padding-bottom:8px}}

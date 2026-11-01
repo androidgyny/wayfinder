@@ -69,6 +69,13 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
  await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Mixtape').values));
  await page.screenshot({path:'output/tacoma-audit-final.png'});
  assert.deepEqual(errors,[]);
- console.log('Appearance, dimming, fonts, preset cancellation, reload, Apps isolation and narrow search passed');
+ await page.evaluate(()=>{tacomaPageTo(2);tacomaOpenCategory('');document.body.dataset.input='controller';const row=$('#grid .presentation-selected');row.classList.add('controller-selected');row.focus();});
+ assert.equal(await page.locator('#grid .controller-selected').evaluate(n=>getComputedStyle(n).outlineStyle),'none');
+ await page.evaluate(()=>controller('down'));
+ assert.equal(await page.locator('#grid .controller-selected').count(),0);
+ assert.equal(await page.locator('#grid .presentation-selected').evaluate(n=>getComputedStyle(n).outlineStyle),'none');
+ await page.evaluate(()=>{tacomaPageTo(0);tacomaFocus()});
+ assert.equal(await page.locator('#grid .presentation-selected').evaluate(n=>getComputedStyle(n).outlineStyle),'solid');
+ console.log('Tacoma regression checks passed, including stale controller outlines and shelf focus');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});

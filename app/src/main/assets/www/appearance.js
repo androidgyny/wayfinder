@@ -196,7 +196,7 @@ function updateAppearancePreview(){
  if(backdrop==='gradient')$('#appearance-preview').style.setProperty('--backdrop-rgb',$('#soft-gradient').style.getPropertyValue('--backdrop-rgb')||'128,128,128');
  const sample=$('.appearance-sample img');
  const selectedId=presentation==='ulm'?presentationId:$('#grid .presentation-selected')?.dataset.id||$('#grid .controller-selected')?.dataset.id||glowCard?.dataset.id||presentationId;
- const game=presentation==='tacoma'&&tacomaDirectory()?tacomaPreviews.get(tacomaCategory)?.[0]:filtered.find(g=>g.id===selectedId)||filtered[0];
+ const game=presentation==='ithaca'?ithacaArtwork():presentation==='tacoma'&&tacomaDirectory()?tacomaPreviews.get(tacomaCategory)?.[0]:filtered.find(g=>g.id===selectedId)||filtered[0];
  if(!game?.image){sample.hidden=true;sample.closest('.appearance-sample').hidden=true;sample.removeAttribute('src');$('#appearance-preview>p').textContent='No artwork to preview';syncPreviewBackdrop();return;}
  if(sample.getAttribute('src')!==game.image){sample.hidden=true;sample.src=game.image;}
  else sample.hidden=!(sample.complete&&sample.naturalWidth>0);
@@ -208,7 +208,7 @@ function updateAppearancePreview(){
 
 function syncUlmSettingsSample(sample){
  const frame=sample.closest('.appearance-sample');
- if(presentation==='hongkong'&&hongkongView!=='list'||!['tacoma','hongkong','sedona','milan','bellevue','bath','ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)){
+ if(presentation==='hongkong'&&hongkongView!=='list'||!['ithaca','tacoma','hongkong','sedona','milan','bellevue','bath','ulm','cambridge','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)){
   const selected=$('#grid .presentation-selected')||$('#grid .controller-selected')||$('#grid .game');
   const actual=['oxford'].includes(presentation)?$('#catalogue-art'):selected?.querySelector('.cover');
   sample.removeAttribute('style');frame.removeAttribute('style');frame.dataset.previewUnderline=String(selectionStyle==='underline'&&!!actual&&!actual.matches('img')&&getComputedStyle(actual,'::before').content!=='none');
@@ -217,7 +217,7 @@ function syncUlmSettingsSample(sample){
  }
  frame.removeAttribute('style');frame.dataset.previewUnderline='false';sample.removeAttribute('style');
  if(!sample.naturalWidth)return;
- const actual=$(presentation==='tacoma'?(tacomaPage<2?'#grid .presentation-selected img':'#tacoma-art img'):presentation==='hongkong'?(hongkongView==='list'?'#hongkong-cover':'#grid .presentation-selected img'):presentation==='sedona'?'#sedona-cover':isShowcase()?'#showcase-cover':presentation==='bath'?'#bath-cover':presentation==='atlantis'?'#atlantis-cover':presentation==='sanfrancisco'?'#sanfrancisco-cover':presentation==='redmond'?'#redmond-cover':presentation==='paloalto'?'#paloalto-cover':presentation==='cambridge'?'#cambridge-cover':'#ulm-cover'),style=getComputedStyle(actual||$('#hongkong-cover')),rect=(actual||$('#hongkong-cover')).getBoundingClientRect();
+ const actual=$(presentation==='ithaca'?'#ithaca-cover':presentation==='tacoma'?(tacomaPage<2?'#grid .presentation-selected img':'#tacoma-art img'):presentation==='hongkong'?(hongkongView==='list'?'#hongkong-cover':'#grid .presentation-selected img'):presentation==='sedona'?'#sedona-cover':isShowcase()?'#showcase-cover':presentation==='bath'?'#bath-cover':presentation==='atlantis'?'#atlantis-cover':presentation==='sanfrancisco'?'#sanfrancisco-cover':presentation==='redmond'?'#redmond-cover':presentation==='paloalto'?'#paloalto-cover':presentation==='cambridge'?'#cambridge-cover':'#ulm-cover'),style=getComputedStyle(actual||$('#hongkong-cover')),rect=(actual||$('#hongkong-cover')).getBoundingClientRect();
  const width=rect.width||Math.min(innerWidth*.25,sample.naturalWidth);
  const height=rect.height||width*1.5;
  const scale=Math.min(102/width,153/height);
@@ -243,6 +243,7 @@ function refreshApplicableAppearanceControls(){
   'typography':true,'cover-brightness':!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)&&(!ulm||bbs),'menu-buttons':!['hongkong','sedona','milan','bellevue','bath','ulm','cambridge','venice','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
   'selection-style':!ulm&&!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)
  };
+ if(presentation==='ithaca'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;rows['presentation-sort']=ithacaLevel==='games'&&ithacaScope!=='recent';}
  if(presentation==='tacoma'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast'])rows[id]=false;rows['presentation-sort']=tacomaPage!==1;rows['cover-brightness']=tacomaPage<2;}
  for(const [id,visible] of Object.entries(rows))$('#'+id).closest('.settings-row').hidden=!visible;
  $('#appearance-preview').hidden=!artwork;
@@ -262,7 +263,7 @@ function auditionAppearancePreset(){
  if(window.appearanceAudition)return;
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;
  rememberCategoryPlace();
- const navigation=JSON.parse(JSON.stringify({tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
+ const navigation=JSON.parse(JSON.stringify({ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
  window.appearanceAudition={name:preset.name,values:appearanceSnapshot(),navigation,scrollX:scrollX,scrollY:scrollY,settingsScroll:$('#settings-dialog').scrollTop,scrolls:[...document.querySelectorAll('[id]')].filter(n=>n.scrollTop||n.scrollLeft).map(n=>({id:n.id,top:n.scrollTop,left:n.scrollLeft}))};
  hideDialog('#settings-dialog');
  try{applyAppearanceValues(preset.values);$('#audition-name').textContent=preset.name;showDialog('#preset-audition');$('#audition-keep').focus({preventScroll:true});}
@@ -273,7 +274,7 @@ function finishAppearanceAudition(keep){
  hideDialog('#preset-audition');
  if(!keep){
   applyAppearanceValues(audition.values);
-  ({tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
+  ({ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
   renderedCategoryKey=null;$('#search').value=query;$('#sort').value=sort;update();
   for(const saved of audition.scrolls){const node=document.getElementById(saved.id);if(node){node.scrollTop=saved.top;node.scrollLeft=saved.left;}}
   window.scrollTo(audition.scrollX,audition.scrollY);
@@ -335,3 +336,5 @@ builtinAppearancePresets.push({name:'Amped Up',values:{...builtinAppearancePrese
 
 builtinAppearancePresets.push({name:'Mixtape',values:{...builtinAppearancePresets[0].values,coverBrightness:'even',presentation:'tacoma',palette:'graphite',typography:'system',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',sort:'az'}});
 builtinAppearancePresets.push({name:'Cognate',values:{...builtinAppearancePresets[0].values,presentation:'hongkong',hongkongView:'list',hongkongTone:'light',palette:'platinum',typography:'gamepocket',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',sort:'az'}});
+
+builtinAppearancePresets.push({name:'Scroll Wheel',values:{...builtinAppearancePresets[0].values,presentation:'ithaca',palette:'lcd',typography:'gamepocket',titleWeight:'regular',coverCorners:'soft',coverBorder:'hairline',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',coverBrightness:'even',sort:'az'}});

@@ -4,7 +4,7 @@
 
 > **Beta software.** Made with the help of **GPT-6 Astra**.
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.233-beta.20)
+[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.234-beta.21)
 
 Wayfinder is a launcher for the Android games you already own. Give each game a category and a cover, then use a controller or the touchscreen to browse your collection and launch a game. The same artwork can fill a cover wall, sit on a notebook page, or appear beside a compact list of hundreds of titles.
 
@@ -22,7 +22,7 @@ Use Wayfinder as an ordinary app or make it your handheld’s home screen. A fre
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 24 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 25 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -73,11 +73,11 @@ Choose a way to browse that suits you:
 - **Scan a large library quickly** with compact lists, category columns, or a dashboard with recently played games.
 - **Rediscover something to play** with a shuffled table of covers.
 
-Styles range from restrained and modern to paper notebooks, desktop interfaces, music-player panels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
+Styles range from restrained and modern to paper notebooks, desktop interfaces, music-player panels, tactile scroll wheels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
 
 You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
 
-![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta20/02-bath.png)
+![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta21/02-bath.png)
 
 *Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
 
@@ -85,7 +85,7 @@ You can also enable interface sounds, play the included background music or your
 
 The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
 
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta20/20-apps.png)
+![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta21/20-apps.png)
 
 *Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
 

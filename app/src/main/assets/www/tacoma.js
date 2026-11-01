@@ -59,6 +59,7 @@ function tacomaBack(){
 function tacomaSelect(index){
  const grid=$('#grid'),row=grid.children[index];if(!row||!row.classList.contains('tc-row'))return;
  const directory=tacomaDirectory(),shelf=tacomaPage<2;
+ grid.querySelectorAll('.controller-selected').forEach(n=>n.classList.remove('controller-selected'));
  const old=grid.querySelector('.presentation-selected');
  if(old){old.querySelector('.tc-label')?.getAnimations().forEach(a=>a.cancel());old.classList.remove('presentation-selected');old.tabIndex=-1;old.removeAttribute('aria-current');}
  row.classList.add('presentation-selected');row.tabIndex=0;row.setAttribute('aria-current','true');
