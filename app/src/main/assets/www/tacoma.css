@@ -96,3 +96,10 @@ body[data-presentation=tacoma] #grid .tc-row:is(:focus,:focus-visible,.controlle
 body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid .tc-row.presentation-selected{outline:3px solid var(--tc-accent)!important;outline-offset:0}
 /* Reveal the outer focus ring, not just the image's border box. */
 body[data-presentation=tacoma][data-tacoma-mode=shelf] #grid{scroll-padding:4px}
+
+/* Press inward within existing bounds; never enlarge the shelf's focus ring. */
+body[data-presentation=tacoma] :is(.tc-row img,.tc-clip,#tacoma-hints b){transition:transform 110ms ease-out,opacity 110ms ease-out;transform-origin:center}
+body[data-presentation=tacoma] #tacoma-hints b{display:inline-block}
+body[data-presentation=tacoma] :is(.tc-row:active img,.tc-row:active .tc-clip,#tacoma-hints button:active b){transform:scale(.97);opacity:.82}
+body[data-presentation=tacoma] :is(#tacoma-next,#tc-header-toggle):active{opacity:.6}
+@media(prefers-reduced-motion:reduce){body[data-presentation=tacoma] :is(.tc-row img,.tc-clip,#tacoma-hints b){transition:none}body[data-presentation=tacoma] :is(.tc-row:active img,.tc-row:active .tc-clip,#tacoma-hints button:active b){transform:none}}

@@ -76,6 +76,13 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
  assert.equal(await page.locator('#grid .presentation-selected').evaluate(n=>getComputedStyle(n).outlineStyle),'none');
  await page.evaluate(()=>{tacomaPageTo(0);tacomaFocus()});
  assert.equal(await page.locator('#grid .presentation-selected').evaluate(n=>getComputedStyle(n).outlineStyle),'solid');
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ await page.evaluate(()=>{const b=$('#grid .presentation-selected');tacomaPress(b);tacomaPress(b)});
+ assert.equal(await page.locator('#grid .presentation-selected img').evaluate(n=>n.getAnimations().filter(a=>a.id==='tacoma-press').length),1);
+ await page.waitForTimeout(180);
+ assert.equal(await page.locator('#grid .presentation-selected img').evaluate(n=>n.getAnimations().length),0);
+ await page.emulateMedia({reducedMotion:'reduce'});await page.evaluate(()=>tacomaPress($('#grid .presentation-selected')));
+ assert.equal(await page.locator('#grid .presentation-selected img').evaluate(n=>n.getAnimations().length),0);
  console.log('Tacoma regression checks passed, including stale controller outlines and shelf focus');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});

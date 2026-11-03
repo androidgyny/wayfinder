@@ -24,21 +24,26 @@
  window.addEventListener('blur',window.cancelButtonPresses);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)window.cancelButtonPresses()});
  function buttonFor(event){
-  const button=event.target.closest?.('button'),selector=selectors[document.body.dataset.presentation];
-  if(!button||button.disabled||button.getAttribute('aria-disabled')==='true'||button.closest('dialog')||!selector||!button.matches(selector))return null;
+  const button=event.target.closest?.('button,.game');
+  if(!button||button.disabled||button.getAttribute('aria-disabled')==='true'||button.closest('dialog')||!button.closest('#main,.topbar,#sidebar'))return null;
+  if(['tacoma','ithaca'].includes(document.body.dataset.presentation)&&button.closest('#main'))return null;
   return button;
  }
  function press(button,pointer=false){
   const old=presses.get(button);old?.animation?.cancel();old?.glow?.cancel();old?.cleanup?.();
-  const face=button.closest('#sedona-transport')?button.querySelector('b'):button;
+  const raised=!!selectors[document.body.dataset.presentation]&&button.matches(selectors[document.body.dataset.presentation]);
+  const face=button.closest('#sedona-transport')?button.querySelector('b'):!raised&&button.matches('.game')?(button.querySelector('img')||button):button;
   if(!face?.animate)return;
   const style=getComputedStyle(face),normal={transform:style.transform,filter:style.filter,boxShadow:style.boxShadow};
   const down={transform:reduced.matches?normal.transform:(normal.transform==='none'?'':normal.transform+' ')+'translate(1px, 1px)',filter:(normal.filter==='none'?'':normal.filter+' ')+'brightness(.88)',boxShadow:'inset 1px 2px 3px #0005'};
-  const animation=face.animate([normal,{...down,offset:.25},{...down,offset:.6},normal],{duration:130,easing:'ease-out'});
+  // Flat layouts use opacity only: preserve cover transforms, hit areas and outlines.
+  const opacity=Number(style.opacity),frames=raised?[normal,{...down,offset:.25},{...down,offset:.6},normal]:[{opacity},{opacity:opacity*.84,offset:.3},{opacity}];
+  const animation=face.animate(frames,{duration:130,easing:'ease-out'});
+  animation.id='layout-press';
   active.add(animation);animation.onfinish=animation.oncancel=()=>active.delete(animation);
   presses.set(button,{animation,pointerAt:pointer?performance.now():null});
   const layout=document.body.dataset.presentation;
-  if(!reduced.matches&&(layout==='atlantis'||layout==='sedona'&&button.closest('#sedona-transport'))){
+  if(raised&&!reduced.matches&&(layout==='atlantis'||layout==='sedona'&&button.closest('#sedona-transport'))){
    const lamp=document.createElement('span');lamp.className='button-lamp';lamp.setAttribute('aria-hidden','true');
    Object.assign(lamp.style,{position:'absolute',inset:'2px',borderRadius:'inherit',pointerEvents:'none',background:layout==='sedona'?'radial-gradient(ellipse at center,#ffd36a66,transparent 75%)':'linear-gradient(#ffffff66,transparent 60%)'});
    const previousPosition=face.style.position,changedPosition=getComputedStyle(face).position==='static';

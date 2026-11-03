@@ -97,6 +97,13 @@ function renderTacoma(){
  else if(!query)grid.append(el('p','tc-empty',shelf?(tacomaPage?'Play a game to see it here.':'Mark games as favorites to see them here.'):'No games in this category.'));
  $('#empty').hidden=true;$('#load').hidden=true;
 }
+function tacomaPress(button){
+ if(!button||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const face=button.querySelector('img,b,.tc-clip')||button;
+ face.getAnimations().filter(a=>a.id==='tacoma-press').forEach(a=>a.cancel());
+ const animation=face.animate([{transform:'scale(.97)',opacity:.82},{transform:'scale(1)',opacity:1}],{duration:140,easing:'ease-out'});
+ animation.id='tacoma-press';
+}
 function tacomaController(action){
  if(action==='genrePrev'||action==='genreNext'){tacomaPageTo(tacomaPage+(action==='genreNext'?1:-1));return true;}
  if(action==='back')return tacomaBack();
@@ -107,7 +114,7 @@ function tacomaController(action){
  const row=$('#grid .presentation-selected');
  const delta={down:1,up:-1,left:-1,right:1,pageDown:6,pageUp:-6}[action];
  if(delta!==undefined){if(row){const next=row.parentElement.children[Math.min(row.parentElement.children.length-1,Math.max(0,Number(row.dataset.index)+delta))];next?.focus({preventScroll:true});tacomaFocus();queueCarouselSave();}else tacomaFocus();return true;}
- if(action==='activate'){(row||$('#grid .show-all-matches'))?.click();return true;}
+ if(action==='activate'){tacomaPress(row);(row||$('#grid .show-all-matches'))?.click();return true;}
  if(['edit','favorite'].includes(action)){const game=!tacomaDirectory()&&filtered.find(g=>g.id===presentationId);if(game){if(action==='edit')editGame(game);else toggleFavorite(game.id);}return true;}
  return false;
 }

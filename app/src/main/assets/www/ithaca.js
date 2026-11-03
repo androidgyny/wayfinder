@@ -27,8 +27,16 @@ function ithacaBack(){
  else{ithacaIndex=ithacaLevel==='categories'?1:Math.max(0,{all:0,favorites:2,recent:3}[ithacaScope]||0);ithacaLevel='home';update();}
  ithacaFocus();refreshApplicableAppearanceControls();persist();return true;
 }
+function ithacaPress(id){
+ const button=$('#ithaca-'+id);
+ if(!button||presentation!=='ithaca'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ button.getAnimations().filter(a=>a.id==='ithaca-press').forEach(a=>a.cancel());
+ const animation=button.animate([{opacity:.72},{opacity:1}],{duration:140,easing:'ease-out'});
+ animation.id='ithaca-press';
+}
 function ithacaActivate(){
  if(topDialog()||presentation!=='ithaca')return;
+ ithacaPress('play');
  if(ithacaLevel==='home'){
   if(ithacaIndex===1){ithacaLevel='categories';ithacaIndex=0;update();ithacaFocus();persist();}
   else if(ithacaIndex===4){ithacaOpen('all');if(filtered.length)ithacaSelect(Math.floor(Math.random()*filtered.length),true);}
@@ -76,11 +84,11 @@ function renderIthaca(){
  ithacaDrawRows();ithacaSyncArt();$('#empty').hidden=true;$('#load').hidden=true;
 }
 function ithacaController(action){
- if(action==='back')return ithacaBack();
+ if(action==='back'){const handled=ithacaBack();ithacaPress('menu');return handled;}
  if(action==='search'){ithacaStop();if(ithacaLevel!=='games')ithacaOpen('all');return false;}
  if(document.activeElement===$('#search')){if(action==='down'||action==='activate'){$('#search').blur();native?.hideKeyboard?.();ithacaFocus();return true;}return false;}
  const delta={up:-1,down:1,left:-1,right:1,pageUp:-5,pageDown:5}[action];
- if(delta!==undefined){ithacaStop();ithacaMove(delta,true);return true;}
+ if(delta!==undefined){ithacaStop();ithacaMove(delta,true);ithacaPress(delta<0?'prev':'next');return true;}
  if(action==='genrePrev'||action==='genreNext'){const keys=['all',...genres.map(g=>'genre:'+g)],i=Math.max(0,keys.indexOf(ithacaScope));ithacaOpen(keys[(i+(action==='genreNext'?1:-1)+keys.length)%keys.length]);return true;}
  if(action==='activate'){const active=document.activeElement;if(active?.matches('button')&&!active.closest('#grid'))active.click();else ithacaActivate();return true;}
  if(action==='edit'||action==='favorite'){const g=ithacaLevel==='games'&&filtered[ithacaIndex];if(g){ithacaStop();if(action==='edit')editGame(g);else toggleFavorite(g.id);}return true;}
@@ -92,7 +100,7 @@ function initIthaca(){
  const wheel=el('div','ithaca-part');wheel.id='ithaca-wheel';wheel.oncontextmenu=e=>e.preventDefault();wheel.setAttribute('aria-label','Touch wheel. Trace clockwise or counterclockwise to browse.');
  const ring=el('div','ithaca-ring'),dot=el('span','ithaca-dot');ring.append(dot);ring.setAttribute('aria-hidden','true');
  const buttons=[['menu','MENU',()=>ithacaBack()],['prev','◀',()=>ithacaMove(-1)],['next','▶',()=>ithacaMove(1)],['play','Open',ithacaActivate]];
- for(const [id,label,fn] of buttons){const b=el('button','',label);b.id='ithaca-'+id;b.onclick=fn;if(id==='prev'||id==='next')b.setAttribute('aria-label',id==='prev'?'Previous title':'Next title');if(id==='play'){b.replaceChildren(el('span','ithaca-play-symbol'),el('span','','OPEN'));b.lastChild.id='ithaca-play-label';b.firstChild.setAttribute('aria-hidden','true');}else if(id==='prev'||id==='next'){b.textContent='';b.append(el('span','ithaca-skip'),el('span','ithaca-skip'));}wheel.append(b);}
+ for(const [id,label,fn] of buttons){const b=el('button','',label);b.id='ithaca-'+id;b.onclick=()=>{if(id!=='play')ithacaPress(id);fn();};if(id==='prev'||id==='next')b.setAttribute('aria-label',id==='prev'?'Previous title':'Next title');if(id==='play'){b.replaceChildren(el('span','ithaca-play-symbol'),el('span','','OPEN'));b.lastChild.id='ithaca-play-label';b.firstChild.setAttribute('aria-hidden','true');}else if(id==='prev'||id==='next'){b.textContent='';b.append(el('span','ithaca-skip'),el('span','ithaca-skip'));}wheel.append(b);}
  wheel.prepend(ring);const hints=el('div','ithaca-part ithaca-hints');
  for(const [label,action] of [['A Open','activate'],['B Back','back'],['X Edit','edit'],['Y Search','search']]){const b=el('button');b.append(el('b','ithaca-key',label[0]),el('span','',label.slice(2)));b.onclick=()=>action==='activate'?ithacaActivate():controller(action);hints.append(b);}
  main.append(head,art,wheel,hints);

@@ -50,8 +50,8 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
  assert.equal(await page.evaluate(()=>{pressTestButton.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button:0,isPrimary:true}));pressTestButton.dispatchEvent(new PointerEvent('pointercancel',{bubbles:true}));return pressTestFace.getAnimations().length}),0,'cancelled gesture clears feedback');
  const layouts=await page.evaluate(()=>[...$('#presentation').options].map(o=>o.value));
  for(const layout of layouts){
-  const count=await page.evaluate(layout=>{setPresentation(layout);const row=$('#grid .game');if(!row)return 0;row.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button:0,isPrimary:true}));return row.getAnimations().filter(a=>a.effect.getTiming().duration===130).length},layout);
-  assert.equal(count,0,layout+' game rows unchanged');
+  const count=await page.evaluate(layout=>{setPresentation(layout);const row=$('#grid .game');if(!row)return 0;row.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button:0,isPrimary:true}));if(!row.isConnected)return -1;return row.getAnimations({subtree:true}).filter(a=>a.effect.getTiming().duration===130).length},layout);
+  if(count!==-1)assert.equal(count,['tacoma','ithaca'].includes(layout)?0:await page.locator('#grid .game').count()?1:0,layout+' game rows receive one non-geometric pulse');
   assert.equal(await page.locator('#settings-button').evaluate(b=>getComputedStyle(b).webkitTapHighlightColor),'rgba(0, 0, 0, 0)',layout+' no native tap rectangle');
   if(await page.locator('#settings-button').isVisible())await page.locator('#settings-button').tap();
   else await page.evaluate(()=>showDialog('#settings-dialog'));
@@ -89,6 +89,6 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
  const starColor=await page.locator('#sedona-favorite b').evaluate(b=>getComputedStyle(b).color);
  await page.locator('#sedona-favorite').tap();await page.waitForTimeout(180);
  assert.notEqual(await page.locator('#sedona-favorite b').evaluate(b=>getComputedStyle(b).color),starColor,'Favorite star visually distinguishes on and off');
- assert.deepEqual(errors,[]);console.log('PASS raised-button feedback: touch, controller, no double pulse, immediate actions, cleanup, disabled controls, reduced motion, cancellation and 22-layout row isolation');
+ assert.deepEqual(errors,[]);console.log('PASS raised-button feedback: touch, controller, no double pulse, immediate actions, cleanup, disabled controls, reduced motion, cancellation and all-layout press feedback');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1});

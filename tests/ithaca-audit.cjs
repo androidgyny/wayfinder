@@ -32,7 +32,7 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
  await page.evaluate(()=>{ithacaOpen('favorites');controller('genrePrev')});assert.equal(await page.evaluate(()=>ithacaScope),'genre:Story adventures');
  await page.evaluate(()=>ithacaOpen('all'));
  await page.evaluate(()=>{controller('edit')});assert.ok(await page.locator('#editor').isVisible());await page.evaluate(()=>nativeBack());
- await page.locator('#ithaca-play').hover();await page.mouse.down();await page.waitForTimeout(720);assert.ok(await page.locator('#editor').isVisible());await page.mouse.up();assert.equal(await page.evaluate(()=>window.launched),undefined,'Hold-to-edit must not launch');await page.evaluate(()=>nativeBack());
+ const holdBounds=await page.locator('#ithaca-play').boundingBox();await page.mouse.move(holdBounds.x+2,holdBounds.y+holdBounds.height/2);await page.mouse.down();await page.waitForTimeout(120);const pressedBounds=await page.locator('#ithaca-play').boundingBox();assert.ok(Math.abs(pressedBounds.x-holdBounds.x)<.1&&Math.abs(pressedBounds.width-holdBounds.width)<.1,'Pressed button retains its hit area');await page.waitForTimeout(720);assert.ok(await page.locator('#editor').isVisible());await page.mouse.up();assert.equal(await page.evaluate(()=>window.launched),undefined,'Hold-to-edit must not launch');await page.evaluate(()=>nativeBack());
  await page.evaluate(()=>ithacaOpen('recent'));assert.equal(await page.evaluate(()=>filtered.length),0);
  await page.evaluate(()=>{ithacaOpen('favorites')});assert.equal(await page.evaluate(()=>filtered.length),3);
  await page.evaluate(()=>{ithacaOpen('genre:Puzzles');controller('search')});await page.locator('#search').fill('zzzz-no-match');assert.ok(await page.locator('.search-empty').isVisible());await page.setViewportSize({width:1097,height:320});await page.waitForTimeout(100);assert.ok(await page.locator('.search-empty').isVisible());await page.setViewportSize({width:1097,height:592});await page.evaluate(()=>controller('back'));
@@ -45,6 +45,10 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
   assert.ok(info.scroll<=w);assert.ok(info.rows.every(n=>n>=20),JSON.stringify(info));assert.ok(info.art.right<=w&&info.art.bottom<=h+1,JSON.stringify(info));
  }
  await page.setViewportSize({width:1097,height:592});await page.screenshot({path:'output/ithaca-browser.png'});
+ await page.evaluate(()=>{ithacaPress('next');ithacaPress('next')});
+ assert.equal(await page.locator('#ithaca-next').evaluate(n=>n.getAnimations().filter(a=>a.id==='ithaca-press').length),1);
+ await page.waitForTimeout(180);assert.equal(await page.locator('#ithaca-next').evaluate(n=>n.getAnimations().length),0);
+ await page.emulateMedia({reducedMotion:'reduce'});await page.evaluate(()=>ithacaPress('play'));assert.equal(await page.locator('#ithaca-play').evaluate(n=>n.getAnimations().length),0);
  assert.deepEqual(errors,[]);console.log('PASS wheel drag/release, controller, edit, recent/favorites/search, preview, reload and seven viewports');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});
