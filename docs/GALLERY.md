@@ -2,137 +2,177 @@
 
 [← Back to the README](../README.md)
 
-One Android game library, nineteen ways to browse it, and a separate home for everyday apps. Each layout works with the same titles, categories, and portrait covers. Presets give those layouts a particular look; you can change the styling without reorganizing your games.
+One collection can feel very different depending on how you browse it. These **26 screenshots** show a selection of Wayfinder’s layouts and presets, followed by its separate Apps screen. Every game view uses the same basic ingredients: titles, categories, and portrait covers.
 
-All 20 images are unretouched screenshots from **Wayfinder 0.9.234 Beta 21** on a **Pimax Portal (Snapdragon 865), Android 10, at 1920 × 1080**. The games, covers, and app icon pack shown belong to this device’s collection and are not bundled with Wayfinder.
+Captured from **Wayfinder 0.9.236 Beta 23** on a **Pimax Portal (Snapdragon 865), Android 10, at 1920 × 1080**. These are unretouched device screenshots of a curated personal collection. Games, cover artwork, and the app icon pack shown are not bundled with Wayfinder.
 
-[Indexes and desktops](#indexes-and-desktops) · [Shelves and cover walls](#shelves-and-cover-walls) · [Playful interfaces](#playful-interfaces) · [Everyday apps](#beyond-the-game-library)
+A **layout** determines the arrangement; a **preset** supplies a coordinated appearance. Custom variations are labeled below.
+
+[Indexes and desktops](#indexes-and-desktops) · [Light, paper, and color](#light-paper-and-color) · [Shelves and cover walls](#shelves-and-cover-walls) · [Playful interfaces](#playful-interfaces) · [Everyday apps](#beyond-the-game-library)
 
 ## Indexes and desktops
 
 ### Palo Alto
 
-**Hyperstack** — the default for new installations: a crisp card catalogue with category tabs, a paged title index, and Tengami’s portrait artwork.
+**Hyperstack** — A crisp card catalogue with category tabs, a paged title index, and a single portrait cover. This is the starting preset for fresh installations.
 
-![Palo Alto — Hyperstack.](screenshots/beta21/01-paloalto.png)
+![Palo Alto — Hyperstack.](screenshots/beta23/01-paloalto.png)
 
 ### Bath
 
-**Field Notes** — warm paper, colored tabs, handwritten headings, and KAMI held in place with a strip of tape.
+**Field Notes** — Warm paper, colored tabs, handwritten headings, and a taped portrait cover.
 
-![Bath — Field Notes.](screenshots/beta21/02-bath.png)
+![Bath — Field Notes.](screenshots/beta23/02-bath.png)
+
+### Manhattan
+
+**Extra! Extra!** — A newspaper index with serif headlines, a central illustration, and more titles from the same section.
+
+![Manhattan — Extra! Extra!.](screenshots/beta23/21-manhattan.png)
 
 ### Redmond
 
-**Experience** — browse folders and a sortable game list, with the selected cover and launch information in a preview pane.
+**Experience** — Colorful folders and a sortable title list, with artwork and launch information in a preview pane.
 
-![A desktop-style folder browser and game preview.](screenshots/beta21/16-redmond.png)
-
-### Prague
-
-**Cross Reference** — deep green colors and parallel category columns for browsing several parts of a collection at once.
-
-![Prague — Cross Reference.](screenshots/beta21/13-prague.png)
+![Redmond — Experience.](screenshots/beta23/16-redmond.png)
 
 ### Atlantis
 
-**Droplet** — cool blue desktop styling, colorful folders, and a large preview of Night in the Woods.
+**Droplet** — Cool blue desktop styling and glossy controls around a spacious artwork preview.
 
-![Atlantis — Droplet.](screenshots/beta21/05-atlantis.png)
+![Atlantis — Droplet.](screenshots/beta23/05-atlantis.png)
+
+### Prague
+
+**Cross Reference** — Deep green category columns for browsing several parts of a collection at once.
+
+![Prague — Cross Reference.](screenshots/beta23/13-prague.png)
+
+### Oxford
+
+**After Hours** — A restrained dark title list beside a large cover, with room to scan a substantial collection.
+
+![Oxford — After Hours.](screenshots/beta23/20-oxford.png)
+
+## Light, paper, and color
+
+### Florence
+
+**Private Collection** — Portrait artwork in softly shadowed gallery frames against a warm plaster wall.
+
+![Florence — Private Collection.](screenshots/beta23/23-florence.png)
+
+### Rochester
+
+**Exposure** — Ivory slide mounts, illuminated glass, and an amber selection rim turn the covers into a light-table collection.
+
+![Rochester — Exposure.](screenshots/beta23/25-rochester.png)
+
+### Brussels
+
+**Graphic Content** — Bold lettering, slanted controls, and subdued comic scenery surround a portrait cover and a title index.
+
+![Brussels — Graphic Content.](screenshots/beta23/24-brussels.png)
+
+### Milan
+
+**Homage** — Orange graphics, oversized lettering, and a numbered title index give the artwork a packaging-inspired presentation.
+
+![Milan — Homage.](screenshots/beta23/04-milan.png)
 
 ## Shelves and cover walls
 
 ### Tacoma
 
-**Mixtape** — a shelf of favorite games with large portrait covers. Move between favorites, recent games, and a category directory.
+**Mixtape** — A minimal shelf of favorites with large portrait covers. Move between favorites, recent games, and the category directory.
 
-![Portrait covers beneath the favorites heading.](screenshots/beta21/15-tacoma.png)
+![Tacoma — Mixtape.](screenshots/beta23/15-tacoma.png)
 
 ### Kyoto
 
-**Smitchish** — a bright cover shelf, cyan selection glow, soft shadows, and a floating dock of colorful controller hints.
+**Smitchish** — A bright cover shelf, cyan selection glow, and a floating dock of colorful controller hints.
 
-![Kyoto — Smitchish.](screenshots/beta21/09-kyoto.png)
+![Kyoto — Smitchish.](screenshots/beta23/09-kyoto.png)
 
-### Hong Kong: grid
+### Bend
 
-**Dark grid** — scan a wall of portrait artwork under a strip of selectable categories. A custom variation of Cognate.
+**Be Kind, Rewind** — Warm signs, softly lit wooden shelves, and portrait cases evoke a video rental shop.
 
-![A dense grid of portrait game covers.](screenshots/beta21/17-hongkong-grid.png)
+![Bend — Be Kind, Rewind.](screenshots/beta23/22-bend.png)
 
 ### Durango
 
-**Boxer** — a dashboard with a recent-games sidebar for returning to something you played earlier.
+**Boxer** — A cover dashboard with a recent-games sidebar for returning to something you played earlier.
 
-![The Durango game dashboard.](screenshots/beta21/19-dashboard.png)
+![Durango — Boxer.](screenshots/beta23/19-dashboard.png)
 
 ### Cupertino
 
-**Midnight favorites** — a custom combination of Cupertino, Midnight colors, and artwork glow, with angled covers and reflections.
+**Midnight favorites · custom variation** — Angled covers, reflections, and artwork glow against a dark backdrop.
 
-![Cupertino — Midnight favorites.](screenshots/beta21/12-cupertino.png)
+![Cupertino — Midnight favorites · custom variation.](screenshots/beta23/12-cupertino.png)
+
+### Hong Kong: grid
+
+**Dark grid · custom Cognate variation** — A dense wall of portrait artwork beneath selectable categories.
+
+![Hong Kong: grid — Dark grid · custom Cognate variation.](screenshots/beta23/17-hongkong-grid.png)
 
 ### Hong Kong: carousel
 
-**Dark carousel** — equal-sized portrait cards and a fixed selection position, with the selected title, play history, and favorite status underneath. A custom variation of Cognate.
+**Dark carousel · custom Cognate variation** — Equal-sized covers with a fixed selection position and concise play-history information.
 
-![Hong Kong — dark carousel view.](screenshots/beta21/08-hongkong-carousel.png)
+![Hong Kong: carousel — Dark carousel · custom Cognate variation.](screenshots/beta23/08-hongkong-carousel.png)
 
 ## Playful interfaces
 
 ### Ithaca
 
-**Scroll Wheel** — an inset LCD-style title list, a raised touch wheel, and a framed portrait cover. Trace the wheel to browse, or use the controller.
+**Scroll Wheel** — An inset LCD-style title list, a raised touch wheel, and a framed cover. Trace the wheel or use a controller.
 
-![Ithaca — Scroll Wheel, with KAMI selected.](screenshots/beta21/18-ithaca.png)
+![Ithaca — Scroll Wheel.](screenshots/beta23/18-ithaca.png)
 
 ### Copenhagen
 
-**Full House** — twelve covers on a green card table. Keep a pick, replace it, or shuffle to rediscover something.
+**Full House** — Twelve covers on a green card table: keep a pick, replace it, or shuffle to rediscover something.
 
-![Copenhagen — Full House.](screenshots/beta21/10-copenhagen.png)
-
-### Milan
-
-**Homage** — bold orange graphics, oversized lettering, and a numbered title index give Sonic Mania Plus a packaging-inspired presentation.
-
-![Milan — Homage.](screenshots/beta21/04-milan.png)
+![Copenhagen — Full House.](screenshots/beta23/10-copenhagen.png)
 
 ### aBBotSford
 
 **MyNameIsMUD** — ANSI colors, IBM VGA lettering, and character-drawn windows. Open a title’s details to see its cover.
 
-![aBBotSford — MyNameIsMUD.](screenshots/beta21/11-abbotsford.png)
+![aBBotSford — MyNameIsMUD.](screenshots/beta23/11-abbotsford.png)
 
 ### Hong Kong: list
 
-**Cognate** — a quiet light palette, capsule selection, and pixel lettering beside KAMI’s portrait cover.
+**Cognate** — A quiet light palette, capsule selection, and pixel lettering beside a portrait cover.
 
-![Hong Kong — Cognate list view.](screenshots/beta21/06-hongkong-list.png)
+![Hong Kong: list — Cognate.](screenshots/beta23/06-hongkong-list.png)
 
 ### Bellevue
 
-**Blades** — curved metallic category panels frame a compact title list and Across Age 2’s cover.
+**Blades** — Curved metallic category panels frame a compact title list and large artwork.
 
-![Bellevue — Blades.](screenshots/beta21/03-bellevue.png)
+![Bellevue — Blades.](screenshots/beta23/03-bellevue.png)
 
 ### San Francisco
 
-**Final Frontier** — peach, lavender, and gold control panels surround a sci-fi library and Space Expedition.
+**Final Frontier** — Peach, lavender, and gold control panels give a sci-fi collection a distinctive setting.
 
-![San Francisco — Final Frontier.](screenshots/beta21/07-sanfrancisco.png)
+![San Francisco — Final Frontier.](screenshots/beta23/07-sanfrancisco.png)
 
 ### Sedona
 
-**Amped Up** — dark metallic panels, a green dot-matrix title display, and tactile player controls alongside Hollow Knight’s portrait cover.
+**Amped Up** — Dark metallic panels, green dot-matrix lettering, and tactile player controls.
 
-![Sedona — Amped Up.](screenshots/beta21/14-sedona.png)
+![Sedona — Amped Up.](screenshots/beta23/14-sedona.png)
 
 ## Beyond the game library
 
-Wayfinder also keeps everyday Android apps close at hand. News, Media, Social, Tools, and System sit above a favorites dock, with colorful controller hints along the bottom.
+The Apps screen has its own visual style. News, Media, Social, Tools, and System sit above a dock for up to eight favorites. Apps left out of sections remain available in All apps.
 
-![Apps: five illustrated sections and seven pinned apps above colorful controller hints.](screenshots/beta21/20-apps.png)
+![Apps: illustrated sections, pinned favorites, and colorful controller hints.](screenshots/beta23/26-apps.png)
 
 App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
 

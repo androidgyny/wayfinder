@@ -25,6 +25,9 @@ function seattleDashboard(){seattleBrowse=false;reset();persist()}
 function seattleOpen(g='',favorite=false){seattleBrowse=true;favoritesOnly=favorite;setGenre(g,true);persist()}
 function renderSeattle(){renderPinnedApps();
  const home=!seattleBrowse&&!genre&&!favoritesOnly&&!query;
+ const grid=$('#grid'),context=JSON.stringify([home,genre,favoritesOnly,query,sort]);
+ const oldScroll=new Map(grid.dataset.seattleContext===context?[...grid.querySelectorAll('.seattle-shelf')].map(row=>[row.getAttribute('aria-label'),row.scrollLeft]):[]);
+ grid.dataset.seattleContext=context;
  $('#seattle-title').textContent=home?'Welcome back.':sectionLabel();
  $('#seattle-subtitle').textContent=home?'Pick up where you left off, or find your next favorite.':`${filtered.length.toLocaleString()} games${query?' matching “'+query+'”':''}`;
  $('#seattle-home').onclick=seattleDashboard;$('#seattle-home').hidden=home;
@@ -52,7 +55,7 @@ function renderSeattle(){renderPinnedApps();
    actions.append(shuffle,heading.querySelector('button'));heading.append(actions);
   }
  }else shelf(sectionLabel(),filtered,filtered.length,favoritesOnly&&!query?'No favorites yet. Use the star in game details or press Select to add one.':'No games match this search.');
- $('#grid').replaceChildren(fragment);$('#load').hidden=true;$('#empty').hidden=true;syncSearchFeedback();
+ grid.replaceChildren(fragment);for(const row of grid.querySelectorAll('.seattle-shelf'))if(oldScroll.has(row.getAttribute('aria-label')))row.scrollLeft=oldScroll.get(row.getAttribute('aria-label'));$('#load').hidden=true;$('#empty').hidden=true;syncSearchFeedback();
 }
 function seattleMove(start,action){
  const rows=[...document.querySelectorAll('.seattle-shelf')].filter(r=>r.querySelector('.game'));

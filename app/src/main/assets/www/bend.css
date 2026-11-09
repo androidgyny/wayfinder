@@ -1,0 +1,94 @@
+/* Original rental-shop materials: layered, static gradients; no per-frame lighting. */
+.bend-part{display:none}
+body[data-presentation=bend]{--rental-wood:linear-gradient(0deg,#170c08cc,transparent 24%,#e5a56529 31%,#130a0744 40%,transparent 70%),linear-gradient(#190b08a0,#190b0850),url('rental-wood.svg');overflow:hidden;background:#102b29;color:#f6e2b8}
+body[data-presentation=bend] .topbar{height:72px;min-height:72px;padding:8px 24px;gap:18px;background-color:#4b2716;background-image:var(--rental-wood);border-bottom:5px ridge #a16c40;backdrop-filter:none}
+body[data-presentation=bend] .brand{position:relative;display:flex;flex-direction:column;gap:0;justify-content:center;padding:3px 26px 4px;background:linear-gradient(110deg,#fff5d4,#dfbd7c 6%,#fff1cc 17%,#ecd4a2 65%,#fff1d0);border:3px double #a87c3b;border-radius:12px 4px;box-shadow:0 2px 5px #000b,inset 0 0 0 2px #fff2c870;color:#42170b;flex-shrink:0}
+body[data-presentation=bend] .brand>*{display:none}
+body[data-presentation=bend] .brand::before{content:'WAYFINDER';font:700 clamp(19px,2.9vw,36px)/1.1 LibreCaslon,Georgia,serif;letter-spacing:1px;text-shadow:0 1px #fff6da}
+body[data-presentation=bend] .brand::after{content:'VIDEO CLUB';font:700 10px/1.4 var(--display-font);letter-spacing:5px;text-align:center}
+body[data-presentation=bend] :is(#sidebar,#scrim,#menu){display:none!important}
+body[data-presentation=bend] .app-actions{margin-left:auto;gap:16px}
+body[data-presentation=bend] .app-actions button,.bend-tab{color:#2a1b0c;background:linear-gradient(115deg,#fff1ce 0%,#e4c591 22%,#fff0c8 49%,#eed5a0 75%,#d7b577);border:3px double #b48d50;border-radius:7px;box-shadow:inset 0 1px 2px #fff9e9,0 3px 5px #0009;font:700 16px var(--display-font);text-shadow:0 1px #fff3d5;padding:6px 16px}
+body[data-presentation=bend] #settings-button{width:38px;height:38px;padding:0}
+body[data-presentation=bend] .topbar .search{position:absolute;inset:10px 26%;width:auto;min-width:0;height:44px;max-width:none;z-index:20;opacity:0;pointer-events:none;background:#102b29;border:2px solid #dfbd7c}
+body[data-presentation=bend]:is(.search-focused,.search-active) .topbar .search,body[data-presentation=bend] .topbar .search:focus-within{opacity:1;pointer-events:auto}
+body[data-presentation=bend] .shell{display:block;height:calc(var(--input-height,100dvh) - 72px);padding:0}
+body[data-presentation=bend] #main{display:grid;grid-template-rows:64px minmax(0,1fr) 46px;height:100%;padding:0;gap:0;min-height:0;background:radial-gradient(ellipse at 50% 0,#28625c55,transparent 75%),#102b29;font-family:var(--display-font);color:#f6e2b8;isolation:isolate}
+body[data-presentation=bend] #main>:not(.bend-part):not(#grid){display:none!important}
+body[data-presentation=bend] .bend-part{display:flex;min-width:0;min-height:0}
+body[data-presentation=bend] #bend-tabs{grid-row:1;align-items:center;gap:26px;overflow:auto;scrollbar-width:none;padding:12px 26px 10px;border-bottom:7px ridge #92562c;background:linear-gradient(#0006,transparent)}
+#bend-tabs::-webkit-scrollbar{display:none}
+.bend-tab{position:relative;flex:1 0 auto;max-width:260px;min-width:110px;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:6px;overflow:visible}
+.bend-tab span{overflow:hidden;text-overflow:ellipsis}
+.bend-tab::before,.bend-tab::after{content:'';position:absolute;top:-13px;width:4px;height:15px;border:1px solid #d8b56b;border-radius:4px;background:linear-gradient(90deg,#36200e,#fce3a2,#6a401b);box-shadow:1px 1px 2px #0008}
+.bend-tab::before{left:12px}.bend-tab::after{right:12px}
+.bend-tab.current{background:radial-gradient(ellipse at 50% 10%,#fff6a6 0%,#ffc84d 42%,#e8941b 85%,#b76912);border-color:#ffcf72;box-shadow:inset 0 0 0 1px #fff4b7,0 0 9px #ffb52c99,0 3px 5px #000b}
+.bend-tab.search-no-match{opacity:.65}.bend-tab small{font:11px Roboto,sans-serif}
+body[data-presentation=bend] #grid{grid-row:2;display:grid;grid-template-rows:repeat(var(--bend-rows,2),minmax(0,1fr));grid-template-columns:minmax(0,1fr);gap:0;position:relative;padding:0 10px;margin:0;overflow:hidden;min-height:0;max-height:none;height:100%;width:100%;border-inline:10px ridge #754322}
+.bend-shelf{display:grid;grid-template-columns:repeat(var(--bend-cols,5),minmax(0,1fr));position:relative;align-items:end;justify-items:center;min-height:0;padding:15px 12px 24px;isolation:isolate}
+.bend-shelf::before{content:'';position:absolute;inset:0 0 25px;background:radial-gradient(ellipse at 50% 0,#f5c66f28,transparent 66%),linear-gradient(#0006,transparent 40%,#0005);z-index:-1;pointer-events:none}
+.bend-shelf::after{content:'';position:absolute;bottom:0;left:-10px;right:-10px;height:25px;background-color:#754322;background-image:var(--rental-wood);border-top:3px ridge #c18a4e;border-bottom:4px ridge #472719;box-shadow:0 7px 7px #0009,inset 0 4px 4px #e6b67460;z-index:-1;pointer-events:none}
+body[data-presentation=bend] #grid .game{position:relative;display:block;width:calc(var(--bend-cover,120px) + 8px);height:auto;min-height:0;margin:0;padding:4px;border:0;border-radius:4px;background:linear-gradient(115deg,#080b0d,#5a5e5a 2%,#151b1d 4%,#030608 93%,#535755 98%,#090c0d);box-shadow:0 4px 6px #000b,inset 0 0 0 1px #959a9170;transform:none;opacity:1;overflow:visible;color:#2a1b0c;transition:transform 110ms ease-out;align-self:end;text-align:center;flex:none}
+body[data-presentation=bend] #grid .game .cover{display:block;width:var(--bend-cover,120px);height:calc(var(--bend-cover,120px)*1.5);aspect-ratio:2/3;padding:0;margin:0;border:0;border-radius:0;overflow:hidden;background:#081514;box-shadow:none;transform:none}
+body[data-presentation=bend] #grid .game img{display:block;position:static;width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:2/3;object-fit:cover;border:0;border-radius:0;box-shadow:none;opacity:1;filter:none;transform:none}
+body[data-presentation=bend] #grid .game :is(.game-title,.game-genre,.card-edit,.card-favorite,.favorite-badge){display:none!important}
+body[data-presentation=bend] #grid .game::before,body[data-presentation=bend] #grid .game::after,body[data-presentation=bend] #grid .cover::after{display:none!important}
+body[data-presentation=bend] #grid .game.presentation-selected{transform:translateY(-3px);outline:2px solid #ffcc65;outline-offset:1px;box-shadow:0 0 5px #fff1ac,0 0 13px #ffb52c88,0 6px 7px #000a}
+body[data-presentation=bend] #grid .game:focus{outline:2px solid #ffcc65;outline-offset:1px}
+.bend-label{position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);display:block;max-width:calc(100% + 18px);min-width:30px;padding:1px 10px;border:2px ridge #d8b475;border-radius:4px;background:linear-gradient(110deg,#fff3ce,#e5c796 40%,#fff0c5 75%,#cfab70);box-shadow:0 2px 3px #0008;color:#291b10;font:700 10px/1.35 var(--display-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.presentation-selected .bend-label{min-width:100%;border-color:#ffcb6c;box-shadow:0 0 5px #ffc05266,0 2px 3px #0008}
+body[data-presentation=bend] #bend-footer{grid-row:3;align-items:center;gap:20px;padding:0 22px;background:linear-gradient(#173c37,#0b2220);border-top:1px solid #b78945;font-size:14px}
+.bend-hint{display:flex;align-items:center;gap:7px;padding:4px 7px;margin:0 -7px;background:none;color:#fff0ce;font:700 14px var(--display-font);white-space:nowrap}
+.bend-hint b{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;border:1px solid #faedba;box-shadow:inset 0 1px 2px #fff9,0 2px 3px #000a;font:700 18px Georgia,serif;color:#fff9df;text-shadow:0 1px 2px #000}
+.bend-hint .a{background:radial-gradient(circle at 35% 20%,#a8d971,#268a26 54%,#0a3b10)}
+.bend-hint .b{background:radial-gradient(circle at 35% 20%,#ff9479,#bd2323 54%,#580b0b)}
+.bend-hint .x{background:radial-gradient(circle at 35% 20%,#90deff,#077fb6 54%,#07394c)}
+.bend-hint .y{background:radial-gradient(circle at 35% 20%,#fff0a2,#e4a016 54%,#8b4c06)}
+.bend-categories{display:flex;align-items:center;gap:7px;margin-left:auto;white-space:nowrap}.bend-categories button{padding:2px 9px;background:linear-gradient(#fff5d8,#cfb485);color:#302414;border:2px ridge #e1c794;border-radius:6px;font:bold 11px Roboto,sans-serif;box-shadow:0 2px 2px #0009}
+#bend-position{min-width:65px;text-align:right;font-variant-numeric:tabular-nums}
+.bend-empty{position:absolute;inset:20px;display:grid;place-items:center;color:#f6e2b8;text-align:center}
+body[data-presentation=bend] #grid.search-empty-grid{display:flex;align-items:center;justify-content:center;color:#f6e2b8}
+body[data-presentation=bend] .search-empty-grid .bend-shelf{display:none}
+@media(max-width:800px){body[data-presentation=bend] .topbar{padding-inline:12px;gap:8px}.bend-tab{font-size:13px;min-width:100px}body[data-presentation=bend] #bend-tabs{gap:16px;padding-inline:16px}.bend-categories>span{display:none}body[data-presentation=bend] #bend-footer{gap:14px;padding-inline:14px}.bend-hint{font-size:12px}body[data-presentation=bend] .app-actions{gap:7px}body[data-presentation=bend] .app-actions button{font-size:12px;padding:6px 9px}}
+@media(max-height:480px){body[data-presentation=bend] .topbar{height:54px;min-height:54px}body[data-presentation=bend] .shell{height:calc(var(--input-height,100dvh) - 54px)}body[data-presentation=bend] #main{grid-template-rows:54px minmax(0,1fr) 38px}body[data-presentation=bend] .brand::before{font-size:22px}body[data-presentation=bend] .brand::after{font-size:8px}body[data-presentation=bend] #bend-tabs{padding-block:12px 7px}}
+@media(max-width:600px){.bend-hint span{display:none}body[data-presentation=bend] .brand{padding-inline:10px}body[data-presentation=bend] .brand::before{font-size:18px}body[data-presentation=bend] #bend-footer{gap:18px}.bend-label{font-size:9px}}
+body[data-presentation=bend].input-compact #main{grid-template-rows:48px minmax(0,1fr)}
+body[data-presentation=bend].input-compact #bend-footer{display:none}
+@media(prefers-reduced-motion:reduce){body[data-presentation=bend] #grid .game{transition:none}}
+
+body[data-presentation=bend][data-art-fit=contain] #grid .game img{object-fit:contain}
+body[data-presentation=bend] .bend-shelf::before{background:radial-gradient(ellipse 40% 5px at 50% 0,#fff4bf 5%,#ffcf6c99 38%,transparent 100%) 0 0/calc(100% / var(--bend-cols,5)) 100% repeat-x,radial-gradient(ellipse at 50% 0,#f1bc5a24,transparent 65%),linear-gradient(#0003,transparent 50%,#0005)}
+body[data-presentation=bend].input-compact .topbar{height:54px;min-height:54px}
+body[data-presentation=bend].input-compact .shell{height:calc(var(--input-height,100dvh) - 54px)}
+body[data-presentation=bend].input-compact .topbar .search{inset:6px 12px;width:auto;height:42px}
+
+.bend-pages{display:flex;gap:4px}.bend-pages button{background:none;color:#f6e2b8;font:24px/1 Georgia,serif;padding:2px 8px}.bend-pages button:disabled{opacity:.35}
+body[data-presentation=bend] #grid{touch-action:pan-y}
+body[data-presentation=bend] #appearance-preview{background:#102b29}
+
+/* Keep the shop fittings compact so the artwork owns the screen. */
+body[data-presentation=bend] .topbar{height:54px;min-height:54px;padding-block:4px}
+body[data-presentation=bend] .brand{padding:2px 22px 3px}
+body[data-presentation=bend] .brand::before{font-size:clamp(18px,2.5vw,28px)}
+body[data-presentation=bend] .brand::after{font-size:8px;letter-spacing:4px}
+body[data-presentation=bend] .shell{height:calc(var(--input-height,100dvh) - 54px)}
+body[data-presentation=bend] #main{grid-template-rows:50px minmax(0,1fr) 38px}
+body[data-presentation=bend] #bend-tabs{padding-top:10px;padding-bottom:6px;border-bottom-width:5px}
+body[data-presentation=bend] .bend-tab{padding-block:3px}
+body[data-presentation=bend] .bend-shelf{padding:10px 8px 20px}
+body[data-presentation=bend] .bend-shelf::after{height:20px;border-top-width:2px;border-bottom-width:2px}
+body[data-presentation=bend] .bend-shelf::before{bottom:20px}
+body[data-presentation=bend] .bend-label{top:calc(100% + 2px);padding-block:0;font-size:10px}
+body[data-presentation=bend] #bend-footer{font-size:12px}
+body[data-presentation=bend].input-compact #main{grid-template-rows:46px minmax(0,1fr)}
+
+body[data-presentation=bend]:not(.input-compact) .topbar{height:60px;min-height:60px}
+body[data-presentation=bend]:not(.input-compact) .shell{height:calc(var(--input-height,100dvh) - 60px)}
+body[data-presentation=bend] .brand::before{font-size:clamp(18px,2.3vw,25px);line-height:1}
+
+/* Search takes the available header space instead of covering adjacent controls. */
+body[data-presentation=bend] .topbar .search{position:relative;inset:auto;flex:1 1 0;width:auto;min-width:0;height:38px;max-width:none}
+body[data-presentation=bend] .app-actions{flex:0 0 auto;margin-left:0}
+body[data-presentation=bend].input-compact .topbar .search{position:relative;inset:auto;height:38px;width:auto}
+body[data-presentation=bend].input-compact .brand{display:none}
+@media(max-width:800px){body[data-presentation=bend]:is(.search-focused,.search-active) .brand{display:none}}

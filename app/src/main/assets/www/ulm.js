@@ -89,6 +89,7 @@ function initUlm(){
  $('#ulm-back').onclick=()=>ulmBack();$('#ulm-search-button').onclick=ulmSearch;$('#ulm-menu-button').onclick=()=>showDialog('#ulm-menu');$('#ulm-apps-button').onclick=openApps;
  $('#ulm-search').oninput=e=>{query=e.target.value;$('#search').value=query;update();persist();};
  $('#ulm-artwork').onchange=e=>setUlmArtwork(e.target.value==='on');
+ $('#ulm-menu-add-game').onclick=()=>{hideDialog('#ulm-menu');appPicker()};
  $('#ulm-menu-close').onclick=()=>hideDialog('#ulm-menu');$('#ulm-menu-settings').onclick=()=>{hideDialog('#ulm-menu');showDialog('#settings-dialog')};$('#ulm-menu-apps').onclick=()=>{hideDialog('#ulm-menu');openApps()};
 }
 

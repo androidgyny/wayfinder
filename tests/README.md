@@ -210,3 +210,11 @@ remain unchanged. Use the isolated build and installation instructions above.
 - Native `opening-fit` checks actual animation bounds and saves `opening-fit.png` in the audit app's external files folder. Native `placement` and `settings` exercise the actual Android IME and controller/dialog paths.
 
 Android recommends reading the actual IME insets rather than assuming a keyboard height: [software keyboard guidance](https://developer.android.com/develop/ui/views/layout/sw-keyboard). Keyboard apps can also be resized independently of screen ratio: [Microsoft SwiftKey resizing](https://support.microsoft.com/en-us/swiftkey-keyboard/how-to-resize-microsoft-swiftkey-keyboard). Consequently the simulated matrix covers a range of remaining viewport heights; it does not claim to reproduce every keyboard, floating-keyboard placement, cutout or manufacturer configuration.
+
+## Collection layouts and controller access
+
+The Manhattan, Bend, Florence, Brussels, and Rochester audit scripts check their layout geometry, portrait artwork, paging, search, and controller behavior across multiple screen sizes. `new-layout-interactions.cjs` checks dialog return focus, search dismissal, layout switching, and preview fidelity across those five layouts.
+
+`gamepad-access-audit.cjs` covers Add game, settings, search, Apps, nested artwork controls, and empty libraries across all 30 layouts. `controller-focus-audit.cjs` and `layout-spacing-audit.cjs` check focus visibility and clipped category controls; Rochester’s shaped focus rim is checked alongside rectangular outlines. `layout-settings-regressions.cjs` covers 72 settings states across all 30 layouts.
+
+`shortcut-editor-audit.cjs` uses synthetic pin requests to check supplied titles and icons, cancellation, save, category refresh, duplicates, and expired requests. It complements the device check of Android’s shortcut request flow; it does not emulate the Android shortcut service.

@@ -78,6 +78,9 @@ function renderTacoma(){
  $('#tacoma-heading').textContent=tacomaInside?(tacomaCategory||'all games').toLowerCase():tacomaPages[tacomaPage];
  $('#tacoma-next').textContent=tacomaPages[(tacomaPage+1)%3];$('#tacoma-next').hidden=!shelf;
  const grid=$('#grid'),items=directory?tacomaCategories():filtered;
+ const context=JSON.stringify([tacomaPage,tacomaInside,tacomaInside?tacomaCategory:'',query,sort]);
+ const previousScroll=grid.dataset.tacomaContext===context?{top:grid.scrollTop,left:grid.scrollLeft}:null;
+ grid.dataset.tacomaContext=context;
  if(directory)tacomaBuildPreviews();
  const selected=directory?items.indexOf(tacomaCategory):items.findIndex(g=>g.id===presentationId);
  const rows=items.map((item,i)=>{
@@ -93,7 +96,12 @@ function renderTacoma(){
   return row;
  });
  grid.replaceChildren(...rows);$('#tacoma-art').replaceChildren();$('#tacoma-caption').textContent='';
- if(rows.length){tacomaSelect(Math.max(0,selected));tacomaReveal(grid.querySelector('.presentation-selected'));}
+ if(rows.length){
+  tacomaSelect(Math.max(0,selected));
+  // Rebuilding rows can reset their scroller before the selection is revealed.
+  if(previousScroll)grid.scrollTo({...previousScroll,behavior:'instant'});
+  tacomaReveal(grid.querySelector('.presentation-selected'));
+ }
  else if(!query)grid.append(el('p','tc-empty',shelf?(tacomaPage?'Play a game to see it here.':'Mark games as favorites to see them here.'):'No games in this category.'));
  $('#empty').hidden=true;$('#load').hidden=true;
 }

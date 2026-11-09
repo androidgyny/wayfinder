@@ -6,6 +6,8 @@ function renderPrague(){
  pragueColumns=[{key:'favorites',label:'★ Favorites',items:filtered.filter(g=>g.favorite)},...genres.map(name=>({key:'genre:'+name,label:name,items:filtered.filter(g=>g.genre===name)})).filter(s=>s.items.length||!!query)];
  if(!pragueCurrent())pragueKey=pragueColumns[0].key;
  const grid=$('#grid'),oldLeft=grid.scrollLeft,fragment=document.createDocumentFragment();
+ const oldScroll=new Map(grid.dataset.pragueQuery===query?[...grid.querySelectorAll('.prague-column')].map(section=>[section.dataset.category,section.querySelector('.prague-list').scrollTop]):[]);
+ grid.dataset.pragueQuery=query;
  for(const column of pragueColumns){
   const active=column.key===pragueKey,section=el('section','prague-column');section.dataset.category=column.key;section.classList.toggle('expanded',active);
   const heading=el('button','prague-heading');heading.append(el('span','',column.label),el('small','',column.items.length+' games'));heading.setAttribute('aria-expanded',String(active));heading.onclick=()=>pragueOpen(column.key,true);section.append(heading);
@@ -26,7 +28,7 @@ function renderPrague(){
  grid.replaceChildren(fragment);grid.scrollLeft=oldLeft;
  const active=grid.querySelector('.expanded');if(active&&(active.offsetLeft<grid.scrollLeft||active.offsetLeft+active.offsetWidth>grid.scrollLeft+grid.clientWidth))grid.scrollLeft=Math.max(0,active.offsetLeft-(grid.clientWidth-active.offsetWidth)/2);
  $('#load').hidden=true;$('#empty').hidden=true;
- for(const section of grid.querySelectorAll('.prague-column')){const id=praguePositions[section.dataset.category],target=[...section.querySelectorAll('.game')].find(b=>b.dataset.id===id);if(target)pragueReveal(target);}
+ for(const section of grid.querySelectorAll('.prague-column')){const key=section.dataset.category,list=section.querySelector('.prague-list');list.ignoreUntil=performance.now()+250;if(oldScroll.has(key))list.scrollTop=oldScroll.get(key);const id=praguePositions[key],target=[...section.querySelectorAll('.game')].find(b=>b.dataset.id===id);if(target)pragueReveal(target);}
  queueCoverGlow();syncSearchFeedback();
 }
 function pragueReveal(target){const list=target.parentElement;list.ignoreUntil=performance.now()+250;const top=target.offsetTop-10,bottom=target.offsetTop+target.offsetHeight+10;if(top<list.scrollTop)list.scrollTop=Math.max(0,top);else if(bottom>list.scrollTop+list.clientHeight)list.scrollTop=bottom-list.clientHeight;}

@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../app/src/main/assets/www');
-const modes=['hongkong','sedona','milan','bellevue','bath','dashboard','abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna','paloalto','redmond','sanfrancisco','atlantis'];
+const modes=['rochester','florence','bend','brussels','manhattan','ithaca','tacoma','hongkong','sedona','milan','bellevue','bath','dashboard','abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna','paloalto','redmond','sanfrancisco','atlantis'];
 const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,genre:'Puzzles',kind:'app',package:'test.audit',image:'audit.svg',favorite:i<2,lastPlayed:i+1}));
 (async()=>{
  const server=http.createServer((req,res)=>{
@@ -25,7 +25,7 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
     for(const artwork of ['ulm','cambridge'].includes(mode)?[true,false]:[true]){
      for(const recent of ['ulm','cambridge'].includes(mode)?[false,true]:[false]){
       const result=await page.evaluate(({mode,artwork,recent})=>{
-       while(topDialog())nativeBack();setPresentation(mode);setUlmArtwork(artwork,false);setCambridgeArtwork(artwork,false);
+       while(topDialog())nativeBack();ithacaLevel='games';ithacaScope='all';tacomaPage=0;setPresentation(mode);setUlmArtwork(artwork,false);setCambridgeArtwork(artwork,false);
        if(mode==='ulm'){ulmLevel='games';ulmSection=recent?'recent':'all';}
        if(mode==='cambridge')cambridgeSection=recent?'recent':'all';
        showDialog('#settings-dialog');selectSettingsSection('appearance');refreshCupertinoControls();refreshApplicableAppearanceControls();
@@ -44,6 +44,10 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
        'cover-shadow':art&&!['hongkong','sedona','milan','bellevue','bath','kyoto','cupertino','venice','paloalto','redmond','sanfrancisco','atlantis'].includes(mode),'typography':true,
        'cover-brightness':!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(mode)&&(!text||mode==='abbotsford'),'menu-buttons':!['hongkong','sedona','milan','bellevue','bath','ulm','cambridge','venice','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(mode),'selection-style':!text&&!['hongkong','sedona','milan','bellevue','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(mode)
       };
+      if(['rochester','florence','bend','brussels'].includes(mode))for(const id of ['cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','cover-brightness'])expected[id]=false;
+      if(['manhattan','ithaca','tacoma'].includes(mode))for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons'])expected[id]=false;
+      if(['manhattan','ithaca'].includes(mode))expected['cover-brightness']=false;
+      if(mode==='brussels')expected.typography=false;
       assert.deepEqual(result.rows,expected,JSON.stringify({mode,artwork,recent,width}));
       for(const [id,visible] of Object.entries(expected))if(!visible)assert.ok(!result.controls.includes(id),'hidden control reachable: '+mode+' '+id);
       assert.ok(result.overflow<=1,mode+' settings overflow');

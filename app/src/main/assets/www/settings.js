@@ -70,6 +70,7 @@ function setupSettings(){
  const startup=settingsSubmenu('settings-startup-dialog','Startup');
  while(home.children.length>1)startup.append(home.children[1]);home.remove();
  const startupRow=settingsRow('Startup','',settingsButton('settings-open-startup','Configure…',()=>showDialog('#settings-startup-dialog')));startupRow.querySelector('p').id='settings-startup-summary';sound.append(startupRow);$('#settings-sound-heading').textContent='Sound & startup';
+ library.insertBefore(settingsRow('Add game','Add an installed game to your collection.',settingsButton('settings-add-game','Add game',()=>{hideDialog('#settings-dialog');appPicker()})),library.children[1]);
  library.insertBefore($('#presentation-sort').closest('.settings-row'),library.children[1]);
  $('#presentation').closest('.settings-row').querySelector('h3').textContent='Layout';$('#presentation').setAttribute('aria-label','Layout');
  const preset=$('#preset-options'),manage=settingsSubmenu('settings-presets-dialog','Manage presets');

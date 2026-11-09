@@ -28,6 +28,8 @@ import java.util.zip.*;
 public class MainActivity extends Activity {
     private static final String ORIGIN="https://appassets.androidplatform.net";
     private static final int COVER=10, EXPORT=11, IMPORT=12, SHORTCUT=13, UNINSTALL=19, FONT=20;
+    private volatile LauncherApps.PinItemRequest pendingPin;
+    private volatile JSONObject pendingShortcut;
     private boolean startupTouch; private StartupVideo startup; private int startupSkipKey=-1; private WebView web; private Library db; private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private volatile boolean keyboardVisible;
     private ArtworkBrowser artworkBrowser; private final ExecutorService artworkWorker=Executors.newFixedThreadPool(2);
@@ -103,10 +105,10 @@ public class MainActivity extends Activity {
                     Map<String,String> headers=new HashMap<>();headers.put("Content-Security-Policy","default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'");out.setResponseHeaders(headers);return out;
                 }catch(Exception e){return response("text/plain",new byte[0],404);}
             }
-            @Override public void onPageFinished(WebView v,String url){if(!ready){ready=true;finishUninstall(false);focusStartupGame();}}
-        });web.loadUrl(ORIGIN+"/index.html");startup.initial();
+            @Override public void onPageFinished(WebView v,String url){if(!ready){ready=true;finishUninstall(false);focusStartupGame();deliverPendingShortcut();}}
+        });web.loadUrl(ORIGIN+"/index.html");startup.initial();receivePinnedShortcut(state!=null&&state.containsKey("pinIntent")?(Intent)state.getParcelable("pinIntent"):getIntent());
     }
-    @Override protected void onNewIntent(Intent intent){super.onNewIntent(intent);setIntent(intent);}
+    @Override protected void onNewIntent(Intent intent){super.onNewIntent(intent);setIntent(intent);receivePinnedShortcut(intent);}
     void focusStartupGame(){if(web!=null)web.post(()->{if(web!=null){web.requestFocus();web.evaluateJavascript("window.focusStartupGame&&window.focusStartupGame()",null);}});}
     private boolean local(Uri u){return "https".equals(u.getScheme())&&"appassets.androidplatform.net".equals(u.getHost())&&(u.getPort()==-1||u.getPort()==443);}
     private WebResourceResponse response(String mime,byte[] b,int status){return new WebResourceResponse(mime,null,status,status==200?"OK":status==404?"Not Found":"Forbidden",Collections.emptyMap(),new ByteArrayInputStream(b));}
@@ -122,7 +124,7 @@ public class MainActivity extends Activity {
         if(k==startupSkipKey){if(e.getAction()==KeyEvent.ACTION_UP)startupSkipKey=-1;return true;}
         if(startup.active()&&k!=KeyEvent.KEYCODE_VOLUME_UP&&k!=KeyEvent.KEYCODE_VOLUME_DOWN&&k!=KeyEvent.KEYCODE_POWER){if(e.getAction()==KeyEvent.ACTION_DOWN){startupSkipKey=k;startup.finishPlayback();}return true;}
         if(ready&&(k==KeyEvent.KEYCODE_BUTTON_L2||k==KeyEvent.KEYCODE_BUTTON_R2)){trigger(k==KeyEvent.KEYCODE_BUTTON_L2,e.getAction()==KeyEvent.ACTION_DOWN,false);return true;}
-        if(k==KeyEvent.KEYCODE_BUTTON_THUMBR)return true;
+        if(k==KeyEvent.KEYCODE_BUTTON_THUMBR){if(ready&&e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()==0)key("controls");return true;}
         if(k==KeyEvent.KEYCODE_BUTTON_THUMBL)action="apps";else if(k==KeyEvent.KEYCODE_BUTTON_SELECT)action="favorite";else if(k==KeyEvent.KEYCODE_BUTTON_A||k==KeyEvent.KEYCODE_DPAD_CENTER)action="activate";else if(k==KeyEvent.KEYCODE_BUTTON_B)action="back";else if(k==KeyEvent.KEYCODE_BUTTON_X)action="edit";else if(k==KeyEvent.KEYCODE_BUTTON_Y)action="search";else if(k==KeyEvent.KEYCODE_BUTTON_L1)action="genrePrev";else if(k==KeyEvent.KEYCODE_BUTTON_R1)action="genreNext";else if(k==KeyEvent.KEYCODE_BUTTON_START)action="menu";
         else if(k==KeyEvent.KEYCODE_DPAD_UP)action="up";else if(k==KeyEvent.KEYCODE_DPAD_DOWN)action="down";else if(k==KeyEvent.KEYCODE_DPAD_LEFT)action="left";else if(k==KeyEvent.KEYCODE_DPAD_RIGHT)action="right";
         if(action!=null&&ready&&(k==KeyEvent.KEYCODE_DPAD_UP||k==KeyEvent.KEYCODE_DPAD_DOWN||k==KeyEvent.KEYCODE_DPAD_LEFT||k==KeyEvent.KEYCODE_DPAD_RIGHT)){if(e.getAction()==KeyEvent.ACTION_UP){if(k==heldKey&&e.getDeviceId()==heldDevice)stopDirection();}else if(e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()==0){stickNavigation.suppress(e.getDeviceId());startDirection(action,k,e.getDeviceId());}return true;}
@@ -296,6 +298,7 @@ public class MainActivity extends Activity {
         if(!id.matches("[a-zA-Z0-9_-]{1,100}")||title.trim().isEmpty()||title.length()>250||genre.trim().isEmpty()||genre.length()>100||!pkg.matches("[a-zA-Z0-9_.]+"))throw new IOException("Invalid game details");
         if(!image.matches("art/[0-9]+\\.jpg|user/[a-zA-Z0-9-]+\\.jpg|icon/[a-zA-Z0-9_.]+"))throw new IOException("Invalid cover image");
         if(g.has("component")){ComponentName component=ComponentName.unflattenFromString(g.getString("component"));if(component==null||!pkg.equals(component.getPackageName()))throw new IOException("Invalid game target");}
+        if(g.has("shortcutId")&&(!g.optString("kind").equals("shortcut")||g.getString("shortcutId").isEmpty()||g.getString("shortcutId").length()>1000))throw new IOException("Invalid pinned shortcut");
         if(g.optString("intentUri").length()>16000)throw new IOException("Shortcut is too long");
     }
     private Intent target(JSONObject g) throws Exception {
@@ -310,6 +313,7 @@ public class MainActivity extends Activity {
         for(int i=0;i<order.length();i++){Object value=order.get(i);if(!(value instanceof String))throw new IOException("Invalid category order");String name=(String)value;if(name.trim().isEmpty()||name.length()>100||!names.add(name))throw new IOException("Invalid category order");}
     }
     public class Bridge {
+        @JavascriptInterface public void cancelShortcut(String id){if(pendingShortcut!=null&&pendingShortcut.optString("id").equals(id)){pendingShortcut=null;pendingPin=null;}}
         @JavascriptInterface public void geminiCheckKey(){aiWorker.execute(()->{
             try{gemini.checkConnection(message->emit("aiKeyCheck",data("message",message)));emit("aiKeyCheckDone",data("message","Gemini connection and category requests work."));}
             catch(Exception e){emit("aiKeyCheckDone",data("message",e instanceof IOException?e.getMessage():"Could not check Gemini connection."));}
@@ -407,11 +411,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface public String view(){return getPreferences(0).getString("view","{}");}
         @JavascriptInterface public boolean keyboardVisible(){return keyboardVisible;}
         @JavascriptInterface public void hideKeyboard(){runOnUiThread(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(web.getWindowToken(),0);});}
-        @JavascriptInterface public void showKeyboard(){runOnUiThread(()->{if(web==null)return;web.requestFocus();web.post(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);});});}
+        @JavascriptInterface public void showKeyboard(){runOnUiThread(()->{if(web==null)return;if(!web.hasFocus())web.requestFocus();web.post(()->{if(web!=null)((android.view.inputmethod.InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);});});}
         @JavascriptInterface public void saveView(String value){if(value!=null&&value.length()<=512000)getPreferences(0).edit().putString("view",value).apply();else notice("Could not save settings: navigation history is too large");}
         @JavascriptInterface public String clearRecent(String id){try{JSONObject g=db.get(id);g.put("lastPlayed",0);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public String favorite(String id,boolean value){try{JSONObject g=db.get(id);g.put("favorite",value);db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
-        @JavascriptInterface public String save(String raw){try{JSONObject g=obj(raw);validate(g);if(g.optString("kind").equals("app")&&g.has("component")){ActivityInfo a=getPackageManager().getActivityInfo(ComponentName.unflattenFromString(g.getString("component")),0);if(!a.exported)throw new IOException("App does not allow launching this screen");}db.put(g);return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
+        @JavascriptInterface public String save(String raw){try{JSONObject g=obj(raw);validate(g);if(g.optString("kind").equals("app")&&g.has("component")){ActivityInfo a=getPackageManager().getActivityInfo(ComponentName.unflattenFromString(g.getString("component")),0);if(!a.exported)throw new IOException("App does not allow launching this screen");}confirmPendingShortcut(g);db.put(g);if(pendingShortcut!=null&&pendingShortcut.optString("id").equals(g.optString("id"))){pendingShortcut=null;pendingPin=null;}return result(true,"Saved");}catch(Exception e){return result(false,e.getMessage());}}
         @JavascriptInterface public boolean canUninstall(String id){try{JSONObject g=db.get(id);return uninstallableRecord(g)&&packageInstalled(g.getString("package"));}catch(Exception e){return false;}}
         @JavascriptInterface public boolean canUninstallApp(String pkg){try{if(pkg==null||!pkg.matches("[a-zA-Z0-9_.]+")||getPackageName().equals(pkg)||!packageInstalled(pkg))return false;ApplicationInfo info=getPackageManager().getApplicationInfo(pkg,0);return (info.flags&ApplicationInfo.FLAG_SYSTEM)==0;}catch(Exception e){return false;}}
         @JavascriptInterface public void uninstallApp(String pkg){runOnUiThread(()->{try{if(!canUninstallApp(pkg))throw new IOException("This app cannot be uninstalled");requestUninstall(pkg);}catch(Exception e){notice("Could not open uninstall: "+e.getMessage());}});}
@@ -426,7 +430,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void launch(String id){runOnUiThread(()->{
             JSONObject g;
             try{g=db.get(id);}catch(Exception e){notice("This game is no longer in the library");return;}
-            try{startActivity(target(g));}
+            try{if(g.has("shortcutId"))getSystemService(LauncherApps.class).startShortcut(g.getString("package"),g.getString("shortcutId"),null,null,android.os.Process.myUserHandle());else startActivity(target(g));}
             catch(ActivityNotFoundException e){Log.w("WayfinderLaunch",id,e);emit("launchMissing",data("id",id));return;}
             catch(Exception e){Log.w("WayfinderLaunch",id,e);notice("Could not launch: "+e.getMessage());return;}
             try{g.put("lastPlayed",System.currentTimeMillis());db.put(g);emit("launched",data("id",id));}
@@ -470,7 +474,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void backup(){runOnUiThread(()->startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).setType("application/zip").addCategory(Intent.CATEGORY_OPENABLE).putExtra(Intent.EXTRA_TITLE,"Wayfinder-Backup.zip"),EXPORT));}
         @JavascriptInterface public void restore(){runOnUiThread(()->startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),IMPORT));}
         @JavascriptInterface public void createShortcut(){runOnUiThread(()->{try{startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_CREATE_SHORTCUT),"Add a game shortcut"),SHORTCUT);}catch(Exception e){notice("No apps offer shortcut creation on this device");}});}
-        @JavascriptInterface public String launchAudit(){JSONArray a=new JSONArray();JSONArray all=db.all();for(int i=0;i<all.length();i++){try{JSONObject g=all.getJSONObject(i);JSONObject r=data("id",g.getString("id"));r.put("title",g.getString("title"));try{Intent intent=target(g);ActivityInfo info=getPackageManager().getActivityInfo(intent.getComponent(),0);r.put("ok",info.exported&&info.enabled);r.put("component",intent.getComponent().flattenToString());}catch(Exception e){r.put("ok",false);r.put("error",e.toString());}a.put(r);}catch(Exception ignored){}}return a.toString();}
+        @JavascriptInterface public String launchAudit(){JSONArray a=new JSONArray();JSONArray all=db.all();for(int i=0;i<all.length();i++){try{JSONObject g=all.getJSONObject(i);JSONObject r=data("id",g.getString("id"));r.put("title",g.getString("title"));try{if(g.has("shortcutId")){List<ShortcutInfo> shortcuts=getSystemService(LauncherApps.class).getShortcuts(new LauncherApps.ShortcutQuery().setPackage(g.getString("package")).setShortcutIds(Collections.singletonList(g.getString("shortcutId"))).setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED),android.os.Process.myUserHandle());r.put("ok",shortcuts!=null&&!shortcuts.isEmpty()&&shortcuts.get(0).isEnabled());r.put("shortcutId",g.getString("shortcutId"));}else{Intent intent=target(g);ActivityInfo info=getPackageManager().getActivityInfo(intent.getComponent(),0);r.put("ok",info.exported&&info.enabled);r.put("component",intent.getComponent().flattenToString());}}catch(Exception e){r.put("ok",false);r.put("error",e.toString());}a.put(r);}catch(Exception ignored){}}return a.toString();}
     }
     @Override protected void onActivityResult(int request,int result,Intent intent){super.onActivityResult(request,result,intent);if(request==UNINSTALL){finishUninstall(true);return;}if(request==FONT){if(result==RESULT_OK&&intent!=null&&intent.getData()!=null){Uri fontUri=intent.getData();worker.execute(()->{try{emit("customFontCandidate",customFont.stage(fontUri));}catch(Exception e){notice("Could not use font: "+e.getMessage());}});}return;}if(result!=RESULT_OK||intent==null){if(request==COVER)emit("coverCanceled",new JSONObject());return;}if(request==14){Uri uri=intent.getData();if(uri!=null)worker.execute(()->{try{startup.importVideo(uri);emit("startupChanged",new JSONObject());notice("Startup video saved");}catch(Exception e){notice("Could not use video: "+e.getMessage());}});return;}
         if(request==16){Uri uri=intent.getData();if(uri!=null)worker.execute(()->{try{background.importImage(uri);emit("backgroundChanged",new JSONObject());notice("Background saved");}catch(Exception e){notice("Could not use background: "+e.getMessage());}});return;}
@@ -555,5 +559,48 @@ public class MainActivity extends Activity {
         for(int i=0;i<old.length();i++){JSONObject a=old.getJSONObject(i);if(a.getString("package").equals(value.getString("package"))){next.put(value);found=true;}else next.put(a);}
         if(!found)next.put(value);validateAppPreferences(next);if(!getPreferences(0).edit().putString("apps",next.toString()).commit())throw new IOException("Could not save app preferences");
     }
-    private void captureShortcut(Intent result){try{Intent target=result.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);String name=result.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);if(target==null)throw new IOException("No launch target returned");if(target.getComponent()==null){ResolveInfo r=getPackageManager().resolveActivity(target,0);if(r==null)throw new IOException("Shortcut target unavailable");target.setComponent(new ComponentName(r.activityInfo.packageName,r.activityInfo.name));}JSONObject g=data("id","new_"+UUID.randomUUID());g.put("title",name==null?"New shortcut":name);g.put("genre","Uncategorized");g.put("kind","shortcut");g.put("package",target.getComponent().getPackageName());g.put("intentUri",target.toUri(0));g.put("image","icon/"+g.getString("package"));g.put("lastPlayed",0);validate(g);emit("newShortcut",data("game",g));}catch(Exception e){notice("Could not add shortcut: "+e.getMessage());}}
+    // Android owns the shortcut's intent stack; launch by its stable publisher ID.
+    private void receivePinnedShortcut(Intent intent){
+        if(intent==null||!LauncherApps.ACTION_CONFIRM_PIN_SHORTCUT.equals(intent.getAction()))return;
+        setIntent(new Intent(this,MainActivity.class));
+        try{
+            LauncherApps.PinItemRequest request=getSystemService(LauncherApps.class).getPinItemRequest(intent);
+            if(request==null||request.getRequestType()!=LauncherApps.PinItemRequest.REQUEST_TYPE_SHORTCUT||!request.isValid())throw new IOException("This shortcut request has expired. Please add it again from the app.");
+            if(pendingPin!=null){notice("Finish or cancel the current shortcut first.");return;}
+            ShortcutInfo info=request.getShortcutInfo();
+            if(!android.os.Process.myUserHandle().equals(info.getUserHandle()))throw new IOException("Add this shortcut from the current Android profile.");
+            String id="pin_"+UUID.nameUUIDFromBytes((info.getPackage()+"\n"+info.getId()).getBytes(StandardCharsets.UTF_8));
+            JSONObject game;
+            try{game=db.get(id);}catch(Exception absent){game=data("id",id);game.put("title",info.getShortLabel().toString());game.put("genre","Uncategorized");game.put("lastPlayed",0);}
+            game.put("kind","shortcut");game.put("package",info.getPackage());game.put("shortcutId",info.getId());
+            if(!game.has("image")){
+                String image="icon/"+info.getPackage();
+                try{Drawable icon=getSystemService(LauncherApps.class).getShortcutIconDrawable(info,320);if(icon!=null)image=saveShortcutIcon(icon);}catch(Exception e){Log.w("WayfinderShortcut","Shortcut icon unavailable",e);}
+                game.put("image",image);
+            }
+            validate(game);pendingPin=request;pendingShortcut=game;
+            if(startup!=null)startup.dismiss();
+            deliverPendingShortcut();
+        }catch(Exception e){notice("Could not add shortcut: "+e.getMessage());}
+    }
+    private String saveShortcutIcon(Drawable icon) throws IOException {
+        int w=icon.getIntrinsicWidth(),h=icon.getIntrinsicHeight();if(w<=0||h<=0){w=h=512;}
+        float scale=Math.min(1f,1024f/Math.max(w,h));w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));
+        Bitmap bitmap=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+        String name=UUID.randomUUID()+".jpg";
+        try{Canvas canvas=new Canvas(bitmap);canvas.drawColor(Color.BLACK);icon.setBounds(0,0,w,h);icon.draw(canvas);try(FileOutputStream out=new FileOutputStream(new File(covers,name))){if(!bitmap.compress(Bitmap.CompressFormat.JPEG,95,out))throw new IOException("Could not store shortcut icon");}}finally{bitmap.recycle();}
+        return "user/"+name;
+    }
+    private void deliverPendingShortcut(){if(ready&&pendingShortcut!=null)emit("newShortcut",data("game",pendingShortcut));}
+    private synchronized void confirmPendingShortcut(JSONObject game) throws Exception {
+        if(!game.has("shortcutId"))return;
+        JSONObject pending=pendingShortcut;
+        if(pending!=null&&pending.optString("id").equals(game.optString("id"))){
+            if(!pending.getString("package").equals(game.getString("package"))||!pending.getString("shortcutId").equals(game.getString("shortcutId")))throw new IOException("Shortcut target changed");
+            LauncherApps.PinItemRequest request=pendingPin;
+            if(request!=null){if(!request.isValid()||!request.accept())throw new IOException("Shortcut request expired. Please add it again from the app.");pendingPin=null;}
+        }
+    }
+    @Override protected void onSaveInstanceState(Bundle state){super.onSaveInstanceState(state);if(pendingPin!=null)state.putParcelable("pinIntent",new Intent(LauncherApps.ACTION_CONFIRM_PIN_SHORTCUT).putExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST,pendingPin));}
+    private void captureShortcut(Intent result){try{Intent target=result.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);String name=result.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);if(target==null)throw new IOException("No launch target returned");if(target.getComponent()==null){ResolveInfo r=getPackageManager().resolveActivity(target,0);if(r==null)throw new IOException("Shortcut target unavailable");target.setComponent(new ComponentName(r.activityInfo.packageName,r.activityInfo.name));}JSONObject g=data("id","new_"+UUID.randomUUID());g.put("title",name==null?"New shortcut":name);g.put("genre","Uncategorized");g.put("kind","shortcut");g.put("package",target.getComponent().getPackageName());g.put("intentUri",target.toUri(0));String image="icon/"+g.getString("package");try{Bitmap bitmap=result.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);Drawable icon=null;if(bitmap!=null)icon=new android.graphics.drawable.BitmapDrawable(getResources(),bitmap);else{Intent.ShortcutIconResource resource=result.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);if(resource!=null){android.content.res.Resources resources=getPackageManager().getResourcesForApplication(resource.packageName);icon=resources.getDrawable(resources.getIdentifier(resource.resourceName,null,null),null);}}if(icon!=null)image=saveShortcutIcon(icon);}catch(Exception e){Log.w("WayfinderShortcut","Legacy icon unavailable",e);}g.put("image",image);g.put("lastPlayed",0);validate(g);emit("newShortcut",data("game",g));}catch(Exception e){notice("Could not add shortcut: "+e.getMessage());}}
 }

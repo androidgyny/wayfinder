@@ -14,6 +14,31 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
  await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Cognate').values);hongkongPane='games';hongkongSelect(0)});await page.waitForTimeout(300);await page.evaluate(()=>document.fonts.ready);
  await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Mixtape').values));
  assert.equal(await page.evaluate(()=>presentation),'tacoma');
+ const favoritePosition=await page.evaluate(()=>{
+  tacomaPageTo(2);tacomaOpenCategory('Puzzles');sort='az';update();
+  tacomaSelect(30);tacomaFocus();
+  const grid=$('#grid'),row=grid.querySelector('.presentation-selected'),height=row.getBoundingClientRect().height;
+  grid.scrollTop=28*height;
+  const before={top:grid.scrollTop,y:row.getBoundingClientRect().top,id:presentationId};
+  toggleFavorite(presentationId);
+  const after={top:grid.scrollTop,y:grid.querySelector('.presentation-selected').getBoundingClientRect().top,id:presentationId};
+  toggleFavorite(presentationId);
+  return {before,after,again:grid.scrollTop};
+ });
+ assert.equal(favoritePosition.after.id,favoritePosition.before.id);
+ assert.ok(Math.abs(favoritePosition.after.top-favoritePosition.before.top)<1,'favorite preserves Tacoma scroll position');
+ assert.ok(Math.abs(favoritePosition.after.y-favoritePosition.before.y)<1,'favorite preserves selected row position');
+ assert.ok(Math.abs(favoritePosition.again-favoritePosition.before.top)<1,'unfavorite preserves Tacoma scroll position');
+ const reordered=await page.evaluate(()=>{
+  sort='favorites';update();tacomaSelect(30);tacomaFocus();const id=presentationId;
+  toggleFavorite(id);const row=$('#grid .presentation-selected'),r=row.getBoundingClientRect(),g=$('#grid').getBoundingClientRect();
+  const result={id,selected:presentationId,visible:r.top>=g.top-1&&r.bottom<=g.bottom+1};
+  toggleFavorite(id);sort='az';query='Monument Valley';tacomaPageTo(0);toggleFavorite('g0');
+  result.empty=filtered.length===0;controller('down');toggleFavorite('g0');query='';update();return result;
+ });
+ assert.equal(reordered.selected,reordered.id,'favorites-first sorting keeps the selected game');
+ assert.ok(reordered.visible,'reordered selection remains visible');assert.ok(reordered.empty,'removing the last search result produces a usable empty shelf');
+ await page.evaluate(()=>{tacomaCategory='';tacomaPageTo(0)});
  assert.equal(await page.locator('#search').isVisible(),false);
  await page.locator('#tc-header-toggle').click();
  assert.ok(await page.locator('#settings-button').isVisible());

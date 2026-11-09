@@ -23,7 +23,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const findings=[];
  async function check(name,condition){if(!condition)findings.push(name);}
  await page.setViewportSize({width:1097,height:700});
- await page.evaluate(()=>{setPresentation('kyoto');$('#search').focus();});
+ await page.evaluate(()=>{setPresentation('kyoto');controller('search');});
  await page.setViewportSize({width:1097,height:260});await page.waitForTimeout(80);
  await page.evaluate(()=>$('#category-current').focus());await page.waitForTimeout(80);
  await check('Moving focus to a controller/category button must not expand beneath an open keyboard',await page.locator('body').evaluate(e=>e.classList.contains('input-compact')));
@@ -52,7 +52,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await nativePage.close();
  // Keep a selection deep in a populated list while the keyboard changes its
  // visible rows. This exercises virtualized Berlin and the text/artwork panes.
- for(const layout of ['sedona','bath','milan','bellevue','dashboard','redmond','atlantis','sanfrancisco','kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto']){
+ for(const layout of ['sedona','bath','milan','bellevue','dashboard','redmond','atlantis','sanfrancisco','kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto','manhattan','bend','florence','brussels','rochester']){
   await page.setViewportSize({width:1097,height:700});
   await page.evaluate(layout=>{
    window.wayfinderKeyboardChanged(false);document.activeElement.blur();
@@ -66,6 +66,13 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   await page.setViewportSize({width:1097,height:700});await page.evaluate(()=>window.wayfinderKeyboardChanged(false));await page.waitForTimeout(300);
   const after=await page.evaluate(()=>JSON.stringify({presentationId,query,genre,palette,placement:document.body.dataset.titlePlacement}));
   await check(layout+' retains selection, filters and appearance across keyboard transitions',before===after);
+ }
+ for(const layout of await page.locator('#presentation option').evaluateAll(options=>options.map(o=>o.value))){
+  await page.evaluate(layout=>{document.activeElement.blur();query='';$('#search').value='';setPresentation(layout);update();controller('search');window.wayfinderKeyboardChanged(true);},layout);
+  await page.setViewportSize({width:1097,height:320});await page.waitForTimeout(100);
+  assert.equal(await page.evaluate(()=>document.activeElement.id),layout==='ulm'?'ulm-search':'search',layout+' Y keeps focus after keyboard opens');
+  await page.keyboard.type('Game');assert.equal(await page.evaluate(()=>query),'Game',layout+' accepts search text');
+  await page.evaluate(()=>{document.activeElement.blur();window.wayfinderKeyboardChanged(false)});await page.setViewportSize({width:1097,height:700});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(findings,[]);
  console.log('PASS keyboard focus transfers, short-display dismissal, native state, reload initialization and populated-list selection preservation');

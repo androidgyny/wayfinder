@@ -17,3 +17,5 @@ Anton is used for Milan packaging headlines. Unmodified source: https://github.c
 Doto is used for Sedona’s dot-matrix title display. Unmodified source: https://github.com/google/fonts/tree/main/ofl/doto . Copyright The Doto Project Authors; SIL Open Font License 1.1, included in doto-OFL.txt.
 
 GamePocket Regular by mumchristmas, based on AbFarid (2022), is bundled unmodified under SIL OFL 1.1. Source: https://github.com/mumchristmas/GamePocket-font . See gamepocket-OFL.txt.
+
+UnifrakturMaguntia (masthead) and Libre Caslon Text (newspaper serif) are bundled unmodified from https://github.com/google/fonts/tree/main/ofl/unifrakturmaguntia and https://github.com/google/fonts/tree/main/ofl/librecaslontext under SIL OFL 1.1. See unifrakturmaguntia-OFL.txt and librecaslontext-OFL.txt.

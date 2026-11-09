@@ -14,7 +14,9 @@ function toggleFavorite(id){
  g.favorite=value;update();
  if(detailOpen){selected=filtered.findIndex(g=>g.id===detailId);if(selected>=0){showGame();$('#favorite-detail').focus({preventScroll:true})}else{closeGame();selected=-1}}
  if(!$('#detail').open){const next=filtered.find(g=>g.id===id)||filtered[Math.min(Math.max(0,oldIndex),filtered.length-1)];if(presentation!=='library'&&next){presentationId=next.id;renderPresentation()}
-  const target=(focusId&&document.getElementById(focusId)&&!document.getElementById(focusId).disabled&&document.getElementById(focusId).getClientRects().length)?document.getElementById(focusId):next?[...document.querySelectorAll('#grid .game')].find(b=>b.dataset.id===next.id):presentation==='library'?$('#favorites-section'):presentation==='seattle'?$('#seattle-home'):$('#category-current');controllerFocus(focusableControl(target)?target:libraryFocusTarget());
+  const matches=next?[...document.querySelectorAll('#grid .game')].filter(b=>b.dataset.id===next.id):[];
+  const nextCard=matches.find(b=>b.classList.contains('presentation-selected'))||matches[0];
+  const target=(focusId&&document.getElementById(focusId)&&!document.getElementById(focusId).disabled&&document.getElementById(focusId).getClientRects().length)?document.getElementById(focusId):next?nextCard:presentation==='library'?$('#favorites-section'):presentation==='seattle'?$('#seattle-home'):$('#category-current');controllerFocus(focusableControl(target)?target:libraryFocusTarget());
  }
  // Restoring focus after rebuilding rows must not turn a touch into controller input.
  if(inputMode==='touch'||inputMode==='pointer')document.body.dataset.input=inputMode;
@@ -59,7 +61,7 @@ function revealActiveCategory(){
 // Each layout owns its reading position; search results never replace the unfiltered one.
 let categoryPlaces={},renderedCategoryKey=null;
 function categoryPlaceKey(){
- if(!['hongkong','bath','dashboard','library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation))return null;
+ if(!['hongkong','manhattan','bath','dashboard','library','seattle','kyoto','cupertino','oxford','berlin','venice','copenhagen','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation))return null;
  return JSON.stringify([presentation,presentation==='hongkong'&&hongkongRecent?'recent':presentation==='copenhagen'?'table':presentation==='seattle'&&!seattleBrowse&&!genre&&!favoritesOnly&&!query?'dashboard':favoritesOnly?'favorites':genre||'all',query]);
 }
 function rememberCategoryPlace(){
@@ -97,7 +99,7 @@ function restoreCategoryPlace(state){
  }
  window.scrollTo({top:place?.top||0,behavior:'instant'});
  // Restore selection visually for touch too, without pulling focus out of search/settings.
- if(card&&!(presentation==='hongkong'&&hongkongPane==='tabs')&&!(isShowcase()&&showcasePane==='tabs')&&!topDialog()&&!editingField()&&!(presentation==='bath'&&bathPane==='tabs')&&!(presentation==='dashboard'&&dashboard.pane!=='games')&&!(presentation==='abbotsford'&&abbotsfordPane==='categories')&&!(presentation==='redmond'&&redmondBrowser.state.pane==='categories')&&!(presentation==='sanfrancisco'&&sanfranciscoPane==='categories')&&!(presentation==='atlantis'&&atlantisBrowser.state.pane==='categories'))controllerFocus(card,true);
+ if(card&&!(presentation==='hongkong'&&hongkongPane==='tabs')&&!(isShowcase()&&showcasePane==='tabs')&&!topDialog()&&!editingField()&&!(presentation==='manhattan'&&manhattanPane==='tabs')&&!(presentation==='bath'&&bathPane==='tabs')&&!(presentation==='dashboard'&&dashboard.pane!=='games')&&!(presentation==='abbotsford'&&abbotsfordPane==='categories')&&!(presentation==='redmond'&&redmondBrowser.state.pane==='categories')&&!(presentation==='sanfrancisco'&&sanfranciscoPane==='categories')&&!(presentation==='atlantis'&&atlantisBrowser.state.pane==='categories'))controllerFocus(card,true);
 }
 
 function rememberedCategoryGame(items,id,key){

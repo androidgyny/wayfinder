@@ -1,0 +1,90 @@
+@font-face{font-family:NewspaperMasthead;src:url('fonts/UnifrakturMaguntia.ttf') format('truetype');font-display:swap}
+@font-face{font-family:LibreCaslon;src:url('fonts/LibreCaslonText.ttf') format('truetype');font-weight:400 700;font-display:swap}
+body[data-typography=caslon]{--display-font:LibreCaslon,Georgia,serif}
+body[data-palette=newsprint]{--bg:#f5efdf;--panel:#f5efdf;--field:#fffaf0;--hover:#e6decc;--line:#968d7c;--muted:#665f53;--accent:#282722;--text:#24231f;--accent-soft:#dfd7c6;--accent-ink:#fffaf0;color-scheme:light}
+.manhattan-part{display:none}
+body[data-presentation=manhattan]{overflow:hidden;background:var(--bg)}
+body[data-presentation=manhattan] .topbar{height:76px;min-height:76px;padding:0 24px;gap:12px;border:0;background:var(--bg);backdrop-filter:none;font-family:var(--display-font)}
+body[data-presentation=manhattan] .topbar::before{content:attr(data-edition);text-transform:uppercase;font:700 clamp(12px,1.7vw,24px) var(--display-font);width:24%;white-space:nowrap}
+body[data-presentation=manhattan] .brand{position:absolute;left:26%;right:26%;justify-content:center;min-width:0;pointer-events:none}
+body[data-presentation=manhattan] .brand>*,body[data-presentation=manhattan] #menu{display:none!important}
+body[data-presentation=manhattan] .brand::after{content:'The Wayfinder';font:400 clamp(30px,4.8vw,68px)/1.1 NewspaperMasthead,serif;letter-spacing:-1px;white-space:nowrap;color:var(--text)}
+body[data-presentation=manhattan] .app-actions{gap:12px;margin-left:auto;font:700 16px var(--display-font)}
+body[data-presentation=manhattan] .app-actions button{background:none;border:0;border-radius:0;padding:6px;color:var(--text);font:inherit}
+body[data-presentation=manhattan] #settings-button{border:1px solid var(--line);border-radius:3px;width:36px;height:36px}
+body[data-presentation=manhattan] .topbar .search{position:absolute;inset:8px 25%;width:auto;max-width:none;height:48px;z-index:10;opacity:0;pointer-events:none;background:var(--field);border:1px solid var(--line);border-radius:0}
+body[data-presentation=manhattan]:is(.search-focused,.search-active) .topbar .search,body[data-presentation=manhattan] .topbar .search:focus-within{opacity:1;pointer-events:auto}
+body[data-presentation=manhattan] :is(#sidebar,#scrim){display:none!important}
+body[data-presentation=manhattan] .shell{display:block;height:calc(var(--input-height,100dvh) - 76px);padding:0 16px}
+body[data-presentation=manhattan] #main{display:grid;grid-template-columns:minmax(0,35fr) minmax(0,31fr) minmax(0,34fr);grid-template-rows:28px 48px minmax(82px,max-content) minmax(0,1fr) 44px;column-gap:12px;row-gap:0;position:relative;height:100%;padding:0;background:var(--bg);font-family:var(--display-font);color:var(--text);isolation:isolate}
+body[data-presentation=manhattan][data-palette=newsprint] :is(.topbar,#main){background-image:url('notebook-paper.svg')}
+body[data-presentation=manhattan][data-palette=newsprint]{--accent:#713c40;--accent-ink:#fffaf0}
+body[data-presentation=manhattan][data-palette=newsprint] .topbar::before{color:#96513d}
+body[data-presentation=manhattan][data-palette=newsprint] .manhattan-tab.current{text-decoration-color:#476674}
+body[data-presentation=manhattan][data-palette=newsprint] #manhattan-elsewhere-heading{color:#476674}
+body[data-presentation=manhattan] #main>:not(.manhattan-part):not(#grid){display:none!important}
+body[data-presentation=manhattan] .manhattan-part{display:block;min-width:0;min-height:0}
+body[data-presentation=manhattan] #manhattan-issue{grid-column:1/-1;grid-row:1;display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:4px double var(--text);border-bottom:1px solid var(--line);font-size:clamp(9px,1.15vw,16px);text-transform:uppercase;overflow:hidden;white-space:nowrap}
+#manhattan-date,#manhattan-total{overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=manhattan] #manhattan-tabs{grid-column:1/-1;grid-row:2;display:flex;align-items:stretch;gap:12px;overflow:auto;scrollbar-width:none;border-bottom:4px double var(--text);padding:0 6px}
+#manhattan-tabs::-webkit-scrollbar{display:none}
+.manhattan-tab{flex:1 0 auto;max-width:240px;min-width:60px;background:none;border-radius:0;padding:6px 10px;color:var(--text);font:400 clamp(15px,1.7vw,25px) var(--display-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
+.manhattan-tab.current{font-weight:700;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+.manhattan-tab small{font:11px WayfinderClean,sans-serif;margin-left:6px}
+body[data-presentation=manhattan] #manhattan-heading{grid-column:1;grid-row:3;align-self:center;max-height:30vh;overflow:auto;padding:8px 0}
+body[data-presentation=manhattan] #manhattan-category{font:700 clamp(26px,3.6vw,52px)/1.15 var(--display-font);letter-spacing:-1.3px;margin:0;white-space:normal;overflow-wrap:anywhere;text-wrap:balance}
+#manhattan-count{font-size:17px;margin:3px 0 0}
+body[data-presentation=manhattan] #grid{grid-column:1;grid-row:4;position:static;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(8,minmax(34px,1fr));gap:0;min-height:0;padding:0 0 12px;margin:0;overflow:auto;transform:none;perspective:none;inset:auto}
+body[data-presentation=manhattan] #grid .manhattan-row{position:relative;display:flex;align-items:center;gap:8px;min-width:0;min-height:0;width:100%;height:auto;padding:2px 10px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;color:var(--text);transform:none!important;box-shadow:none!important;outline:none}
+body[data-presentation=manhattan] #grid .manhattan-row.presentation-selected{background:var(--accent);color:var(--accent-ink)}
+body[data-presentation=manhattan] #grid .game-title{position:static;flex:1;min-width:0;margin:0;padding:2px 0;font:var(--game-title-weight,400) clamp(14px,1.65vw,24px)/1.3 var(--display-font);letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit!important}
+body[data-presentation=manhattan] #grid .favorite-badge{position:static;flex:none;padding:0;background:none;box-shadow:none;font:22px WayfinderClean,sans-serif;color:inherit}
+body[data-presentation=manhattan] #manhattan-art{grid-column:2;grid-row:3/5;margin:14px 0;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line);border-right:1px solid var(--line);overflow:hidden}
+#manhattan-cover{display:block;box-sizing:border-box;max-width:100%;max-height:100%;object-fit:contain;border:1px solid var(--text);border-radius:var(--art-radius,0);background:var(--field)}
+body[data-presentation=manhattan][data-art-fit=cover] #manhattan-cover{object-fit:cover}
+body[data-presentation=manhattan][data-cover-border=none] #manhattan-cover{border:0}
+body[data-presentation=manhattan][data-cover-border=matte] #manhattan-cover{border:8px solid var(--field)}
+body[data-presentation=manhattan] #manhattan-details{grid-column:3;grid-row:3/5;padding:16px 4px 12px 4px;overflow:auto;overscroll-behavior:contain;scroll-padding-block:12px;display:grid;grid-template-rows:repeat(4,max-content);align-content:start}
+
+
+#manhattan-type{font-size:16px;line-height:1.35;margin:0 0 12px;display:block;overflow:hidden}
+.manhattan-actions{display:flex;gap:8px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.manhattan-actions button{min-height:40px;min-width:38px;padding:5px 12px;background:none;border:1px solid var(--text);border-radius:2px;color:var(--text);font:400 18px var(--display-font)}
+#manhattan-play{flex:1;font-weight:700;font-size:23px}
+#manhattan-favorite{font-family:WayfinderClean,sans-serif;font-size:25px}
+#manhattan-details h3{font:700 22px var(--display-font);margin:24px 0 12px}
+#manhattan-recent{display:grid;grid-auto-rows:max-content;min-height:0;padding-bottom:10px}
+#manhattan-recent[hidden],#manhattan-elsewhere-heading[hidden]{display:none}
+#manhattan-recent button{display:block;width:100%;min-height:0;text-align:left;background:none;color:var(--text);border-bottom:1px solid var(--line);padding:3px 2px;font:18px var(--display-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#manhattan-recent p{font-size:14px;line-height:1.5;color:var(--muted)}
+body[data-presentation=manhattan] #manhattan-footer{grid-column:1/-1;grid-row:5;display:flex;align-items:center;gap:20px;border-top:4px double var(--text);padding:0 6px}
+.manhattan-hint{display:flex;align-items:center;gap:7px;background:none;color:var(--text);padding:5px 0;font:16px var(--display-font)}
+.manhattan-key{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;font:16px WayfinderClean,sans-serif;color:#fff}
+.manhattan-key.a{background:#238339}.manhattan-key.b{background:#c53c3c}.manhattan-key.x{background:#087cc0}.manhattan-key.y{background:#c58b0d}
+.manhattan-section-help{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px}
+.manhattan-section-help button{width:52px;height:27px;background:linear-gradient(var(--field),var(--panel));color:var(--text);border:1px solid var(--line);border-bottom:3px solid var(--muted);border-radius:14px 7px 5px 5px;padding:2px 6px;font:700 12px WayfinderClean,sans-serif;box-shadow:inset 0 1px #fff6}
+.manhattan-section-help button:nth-child(2){border-radius:7px 14px 5px 5px}
+.manhattan-section-help button:active{border-bottom-width:1px;transform:translateY(1px)}
+#manhattan-position{margin-left:20px;font-size:16px;white-space:nowrap}
+body[data-presentation=manhattan] :is(.manhattan-part button,.app-actions button):focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+body[data-presentation=manhattan] #main #grid.search-empty-grid{position:relative;display:block}
+body[data-presentation=manhattan] #grid .manhattan-empty{font:17px/1.5 var(--display-font);padding:16px}
+@media(max-width:850px){body[data-presentation=manhattan] .topbar{padding:0 16px;height:64px;min-height:64px}body[data-presentation=manhattan] .shell{height:calc(var(--input-height,100dvh) - 64px)}body[data-presentation=manhattan] #main{grid-template-columns:minmax(0,36fr) minmax(0,32fr) minmax(0,32fr);column-gap:8px}body[data-presentation=manhattan] .app-actions{gap:5px;font-size:13px}.manhattan-actions{gap:4px}.manhattan-actions button{padding:3px 6px;font-size:15px}#manhattan-play{font-size:18px}#manhattan-type{font-size:14px}#manhattan-details h3{font-size:18px}#manhattan-recent button{font-size:15px}body[data-presentation=manhattan] #manhattan-footer{gap:12px}}
+@media(max-height:470px){body[data-presentation=manhattan] .topbar{height:50px;min-height:50px}body[data-presentation=manhattan] .brand::after{font-size:36px}body[data-presentation=manhattan] .shell{height:calc(var(--input-height,100dvh) - 50px)}body[data-presentation=manhattan] #main{grid-template-rows:22px 34px 56px minmax(0,1fr) 36px}body[data-presentation=manhattan] #manhattan-category{font-size:27px}#manhattan-count{font-size:13px}body[data-presentation=manhattan] #manhattan-details{padding-top:10px}.manhattan-actions{padding:8px 0}#manhattan-details h3{margin-top:10px}.manhattan-tab{font-size:15px}}
+@media(max-width:620px){body[data-presentation=manhattan] .topbar::before{display:none}body[data-presentation=manhattan] .brand{left:12px;right:auto}body[data-presentation=manhattan] .brand::after{font-size:30px}body[data-presentation=manhattan] #main{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}body[data-presentation=manhattan] #manhattan-details{display:none}.manhattan-section-help{display:none}#manhattan-position{margin-left:auto}.manhattan-hint{font-size:12px}#manhattan-total{display:none}}
+@media(max-height:470px){body[data-presentation=manhattan] #manhattan-details{padding:8px 4px}body[data-presentation=manhattan] #manhattan-details{grid-template-rows:repeat(4,max-content)}#manhattan-type{font-size:12px;margin-bottom:5px}.manhattan-actions{padding:5px 0}.manhattan-actions button{min-height:30px}#manhattan-details h3{font-size:16px;margin:6px 0 3px}#manhattan-recent button{font-size:13px;padding:2px}}
+body[data-presentation=manhattan].input-compact .topbar{height:48px;min-height:48px}
+body[data-presentation=manhattan].input-compact .topbar :is(.brand,.app-actions),body[data-presentation=manhattan].input-compact .topbar::before{display:none}
+body[data-presentation=manhattan].input-compact .topbar .search{inset:4px 16px;height:40px;opacity:1;pointer-events:auto}
+body[data-presentation=manhattan].input-compact .shell{height:calc(var(--input-height,100dvh) - 48px)}
+body[data-presentation=manhattan].input-compact #main{grid-template-rows:32px minmax(0,1fr);grid-template-columns:1fr 1fr}
+body[data-presentation=manhattan].input-compact #manhattan-tabs{grid-row:1}
+body[data-presentation=manhattan].input-compact :is(#manhattan-heading,#manhattan-issue,#manhattan-details,#manhattan-footer){display:none}
+body[data-presentation=manhattan].input-compact #main #grid{grid-row:2;overflow:auto;display:block}
+body[data-presentation=manhattan].input-compact #grid .manhattan-row{min-height:34px}
+body[data-presentation=manhattan].input-compact #manhattan-art{grid-column:2;grid-row:2;margin:4px 0}
+
+#manhattan-type .manhattan-target{display:block;font-size:12px;line-height:1.5;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#manhattan-recent button[hidden]{display:none}
+
+@media(max-height:470px){body[data-presentation=manhattan] #manhattan-heading{max-height:56px;align-self:start}}

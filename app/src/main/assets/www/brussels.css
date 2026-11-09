@@ -1,0 +1,93 @@
+.brussels-part{display:none}
+body[data-presentation=brussels]{--comic-paper:#fff1d3;--comic-ink:#141414;--comic-red:#e44643;background:var(--comic-paper);color:var(--comic-ink);overflow:hidden}
+body[data-presentation=brussels] .topbar{height:70px;min-height:70px;padding:8px 20px;background:radial-gradient(#16161655 .6px,transparent .9px) 0 0/4px 4px,var(--comic-red);border-bottom:3px solid #161616;gap:20px}
+body[data-presentation=brussels] .brand{font:italic 900 clamp(26px,4vw,48px)/1 WayfinderClean,sans-serif;color:#fff1d3;text-shadow:3px 3px #111;letter-spacing:-1px;white-space:nowrap}
+body[data-presentation=brussels] :is(.mark,.brand-sub,#menu,#sidebar,#scrim){display:none!important}
+body[data-presentation=brussels] .topbar button{background:#fff1d3;color:#111;border:2px solid #111;border-radius:0;font-style:italic;font-weight:800;box-shadow:2px 2px #111}
+body[data-presentation=brussels] .search{min-width:0;width:100%;opacity:0;pointer-events:none;height:34px;background:#fff1d3;color:#111}
+body[data-presentation=brussels] .search:focus-within,body[data-presentation=brussels].search-active .search{opacity:1;pointer-events:auto}
+body[data-presentation=brussels] .shell{display:block;height:calc(100dvh - 70px);padding:0}
+body[data-presentation=brussels] #main{height:100%;padding:0 6px;display:grid;grid-template-columns:minmax(0,55fr) minmax(0,45fr);grid-template-rows:46px minmax(0,1fr) 54px;gap:7px;overflow:hidden;background:#fff1d3;color:#111}
+body[data-presentation=brussels] #main>:not(.brussels-part):not(#grid){display:none!important}
+body[data-presentation=brussels] .brussels-part{display:block;min-width:0;min-height:0}
+body[data-presentation=brussels] #brussels-tabs{grid-column:1/-1;display:flex;gap:8px;overflow:auto;padding:5px 4px;scrollbar-width:none}
+.brussels-tab{flex:1 0 auto;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#fff1d3;border:2px solid #111;border-radius:0;color:#111;font:italic 800 19px/1.2 WayfinderClean,sans-serif;padding:4px 18px;box-shadow:2px 2px #111}
+.brussels-tab.current{background:#ffe443}.brussels-tab small{font:12px sans-serif;margin-left:6px}
+body[data-presentation=brussels] :is(#brussels-heading,#brussels-caption){display:none}
+body[data-presentation=brussels] #brussels-art{grid-column:1;grid-row:2;display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center;border:3px solid #111;overflow:hidden;padding:10px}
+#brussels-print{line-height:0;flex:none;padding:5px;background:#fff1d3;border:2px solid #111}
+#brussels-cover{display:block;object-fit:cover;border:0;border-radius:0;max-width:100%;max-height:100%}
+body[data-presentation=brussels][data-art-fit=contain] #brussels-cover{object-fit:contain}
+body[data-presentation=brussels] #grid{grid-column:2;grid-row:2;position:static;inset:auto;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(6,minmax(0,1fr));gap:0;min-height:0;min-width:0;overflow:hidden;margin:0;padding:12px 0;border:3px solid #111;background:#fff1d3;transform:none}
+body[data-presentation=brussels] #grid .brussels-row{position:relative;display:flex;align-items:center;gap:10px;min-width:0;min-height:0;height:auto;padding:4px 18px 4px 34px;text-align:left;border:0;border-bottom:1px solid #111;border-radius:0;background:transparent;color:#111;transform:none!important;box-shadow:none!important}
+body[data-presentation=brussels] #grid .brussels-row.presentation-selected{background:#ffe443}
+body[data-presentation=brussels] #grid .brussels-row.presentation-selected:before{content:'▶';position:absolute;left:5px;top:50%;transform:translateY(-50%);font:24px sans-serif;color:#df3737;-webkit-text-stroke:1px #111}
+body[data-presentation=brussels] #grid .game-title{position:static;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;padding:0;color:#111!important;font:italic 800 clamp(16px,2.1vw,28px)/1.2 WayfinderClean,sans-serif;text-shadow:none}
+body[data-presentation=brussels] #grid .favorite-badge{position:static;background:none;color:#111;font-size:24px;box-shadow:none;padding:0}
+.brussels-unstar{display:none}
+body[data-presentation=brussels] #brussels-footer{grid-column:1/-1;grid-row:3;display:flex;align-items:center;gap:18px;background:radial-gradient(#1114 .6px,transparent .9px) 0 0/4px 4px,#e44643;border-top:3px solid #111;margin:0 -6px;padding:5px 18px}
+.brussels-hint{display:flex;align-items:center;gap:7px;background:#fff1d3;color:#111;border:2px solid #111;border-radius:0;padding:2px 10px 2px 2px;font:italic 800 19px/1.2 WayfinderClean,sans-serif;box-shadow:2px 2px #111}
+.brussels-key{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2px solid #111;font:800 21px/1 sans-serif;color:#111}
+.brussels-key.a{background:#36d441}.brussels-key.b{background:#ef4444}.brussels-key.x{background:#22aeef}.brussels-key.y{background:#ffdb29}
+#brussels-footer :is(.brussels-page-help,.brussels-page,#brussels-position){display:none}
+.brussels-shoulders{display:flex;align-items:stretch;margin-left:auto;background:#fff1d3;border:2px solid #111;border-radius:10px;box-shadow:2px 2px #111;color:#111;font:italic 800 18px/1 WayfinderClean,sans-serif}
+.brussels-shoulders button{width:51px;padding:7px 5px;background:#fff1d3;color:#111;border:0;border-radius:8px;font:inherit}
+.brussels-shoulders button:first-child{border-right:2px solid #111}.brussels-shoulders button:last-child{border-left:2px solid #111}.brussels-shoulders span{align-self:center;padding:0 15px}
+body[data-presentation=brussels][data-input=controller] :focus{outline:2px solid #186bad;outline-offset:-3px}
+.brussels-empty{grid-row:1/-1;align-self:center;text-align:center;padding:15px;font:18px sans-serif}
+@media(max-width:800px){body[data-presentation=brussels] #brussels-footer{gap:8px;padding-inline:8px}.brussels-hint{font-size:15px}.brussels-shoulders{font-size:14px}.brussels-shoulders span{padding:0 7px}.brussels-shoulders button{width:36px}}
+@media(max-height:420px){body[data-presentation=brussels] .topbar{height:46px;min-height:46px}body[data-presentation=brussels] .shell{height:calc(100dvh - 46px)}body[data-presentation=brussels] #main{grid-template-rows:38px minmax(0,1fr) 44px}.brussels-key{width:23px;height:23px;font-size:16px}}
+body.input-compact[data-presentation=brussels] #main{grid-template-columns:1fr}body.input-compact[data-presentation=brussels] #brussels-art{display:none}body.input-compact[data-presentation=brussels] #grid{grid-column:1}
+/* Recede the scenery without dimming the game artwork. */
+body[data-presentation=brussels] #brussels-art{position:relative;isolation:isolate}
+body[data-presentation=brussels] #brussels-art::before{content:'';position:absolute;inset:0;background:rgba(255,241,211,.42);pointer-events:none;z-index:0}
+body[data-presentation=brussels] #brussels-print{position:relative;z-index:1;box-shadow:0 3px 10px #0004}
+.brussels-tab{display:flex;align-items:center;min-width:0;gap:6px}
+.brussels-tab-clip{display:block;min-width:0;overflow:hidden;flex:1;text-overflow:ellipsis;white-space:nowrap}
+.brussels-tab-label{display:inline-block;white-space:nowrap}
+.brussels-tab small{flex:none}
+.brussels-tab.marquee .brussels-tab-clip{text-overflow:clip}
+body[data-presentation=brussels] .brussels-tab.marquee .brussels-tab-label{animation:brussels-category-scroll var(--marquee-duration,8s) linear infinite alternate}
+@keyframes brussels-category-scroll{0%,15%{transform:translateX(0)}85%,100%{transform:translateX(var(--marquee-distance))}}
+@media(prefers-reduced-motion:reduce){body[data-presentation=brussels] .brussels-tab.marquee .brussels-tab-label{animation:none}}
+body[data-presentation=brussels] #brussels-art{background-color:#fff1d3}
+body[data-presentation=brussels] #brussels-art::before{background-image:var(--comic-scene);background-color:transparent;background-position:center;background-size:var(--comic-scene-size,cover);opacity:var(--comic-strength,.58);filter:var(--comic-scene-filter,none)}
+body[data-presentation=brussels] #grid{grid-template-rows:repeat(var(--comic-rows,6),minmax(0,1fr))}
+#brussels-strength-value{margin-left:10px;font-variant-numeric:tabular-nums}
+/* A splash-page masthead: heavy ink, a lightning underline, and caption-shaped controls. */
+body[data-presentation=brussels] .topbar{height:84px;min-height:84px;padding:7px 20px 13px;background:#e94c46 url('comic-header.svg') left center/cover no-repeat;gap:14px;border-bottom:4px solid #111;overflow:visible}
+body[data-presentation=brussels] .shell{height:calc(100dvh - 84px)}
+body[data-presentation=brussels] .brand{position:relative;margin-left:clamp(0px,12vw,170px);font:italic 900 clamp(34px,5.2vw,68px)/1 WayfinderClean,sans-serif;letter-spacing:-2px;color:#fff1d3;-webkit-text-stroke:3px #111;paint-order:stroke fill;text-shadow:4px 5px 0 #111;transform:skewX(-6deg);padding:0 4px 6px;flex-shrink:0}
+body[data-presentation=brussels] .brand::after{content:'';position:absolute;left:19%;right:-2%;bottom:-5px;height:12px;background:#ffe43a;clip-path:polygon(0 75%,38% 15%,31% 49%,91% 0,100% 72%,48% 65%,27% 100%,32% 67%);filter:drop-shadow(2px 2px #111)}
+body[data-presentation=brussels] .app-actions{margin-left:auto;gap:10px}
+body[data-presentation=brussels] .topbar .app-actions button{transform:skewX(-9deg);border-width:3px;box-shadow:3px 3px #111;font-weight:900;padding:8px 12px}
+body[data-presentation=brussels] #settings-button{display:grid;place-items:center;min-width:36px}
+body[data-presentation=brussels] #brussels-tabs{padding:5px 10px 6px;gap:12px}
+body[data-presentation=brussels] .brussels-tab{transform:skewX(-9deg);border-width:3px;box-shadow:3px 3px #111}
+body[data-presentation=brussels] .brussels-tab-clip{transform:skewX(9deg)}
+body[data-presentation=brussels] .brussels-hint{transform:skewX(-9deg);border-width:2px;box-shadow:3px 3px #111}
+body[data-presentation=brussels] .brussels-hint>*{transform:skewX(9deg)}
+body[data-presentation=brussels] .topbar .search:focus-within{position:absolute;left:15px;top:17px;width:40%;z-index:5;opacity:1;background:#fff1d3;border:2px solid #111;pointer-events:auto}
+@media(max-width:850px){body[data-presentation=brussels] .brand{margin-left:35px;font-size:clamp(28px,4.8vw,42px);letter-spacing:-1px}body[data-presentation=brussels] .topbar{gap:8px;padding-inline:12px}body[data-presentation=brussels] .app-actions{gap:6px}body[data-presentation=brussels] .topbar .app-actions button{padding:6px 8px}}
+@media(max-height:420px){body[data-presentation=brussels] .topbar{height:58px;min-height:58px;padding-bottom:9px}body[data-presentation=brussels] .shell{height:calc(100dvh - 58px)}body[data-presentation=brussels] .brand{font-size:32px}body[data-presentation=brussels] .topbar .search:focus-within{top:10px}}
+/* Stronger comic-caption angles in the footer, with readable lettering. */
+body[data-presentation=brussels] #brussels-footer{padding-inline:24px;gap:22px}
+body[data-presentation=brussels] .brussels-hint{transform:skewX(-16deg);box-shadow:4px 3px #111}
+body[data-presentation=brussels] .brussels-hint>*{transform:skewX(16deg)}
+body[data-presentation=brussels] .brussels-shoulders{transform:skewX(-12deg);border-radius:5px;box-shadow:4px 3px #111}
+body[data-presentation=brussels] .brussels-shoulders button{border-radius:3px}
+@media(max-width:800px){body[data-presentation=brussels] #brussels-footer{padding-inline:12px;gap:10px}}
+/* Original illustrated masthead, retaining the accessible text in the DOM. */
+body[data-presentation=brussels] .brand{width:clamp(190px,33vw,430px);height:74px;padding:0;margin-left:clamp(0px,10vw,130px);transform:none;background:url('comic-wordmark.png') center/contain no-repeat;text-shadow:none;-webkit-text-stroke:0;flex-shrink:0}
+body[data-presentation=brussels] .brand>span{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap}
+body[data-presentation=brussels] .brand::after{display:none}
+@media(max-width:850px){body[data-presentation=brussels] .brand{margin-left:20px;width:clamp(180px,35vw,300px)}}
+@media(max-height:420px){body[data-presentation=brussels] .brand{height:48px;width:190px;margin-left:25px}}
+body[data-presentation=brussels] .brand{background-size:100% 100%}
+#settings-dialog #brussels-options .settings-row{flex-wrap:wrap}
+#settings-dialog #brussels-options .settings-row>label{flex:1 1 145px}
+#settings-dialog #brussels-options .settings-row>select{width:auto;min-width:200px;max-width:100%;flex:0 1 auto}
+#settings-dialog #brussels-options #brussels-background{width:270px;min-width:250px;max-width:100%}
+@media(max-width:600px){#settings-dialog #brussels-options #brussels-background{width:100%;min-width:0;flex-basis:100%}}
+/* Reserve space for italic glyph overhang, including the last S in SHMUPS. */
+.brussels-tab-label{padding-right:.22em;padding-left:.04em}

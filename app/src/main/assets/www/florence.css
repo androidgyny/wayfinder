@@ -1,0 +1,69 @@
+/* A plaster wall and mitered oak frames; lighting is static, selection is a transform. */
+.florence-part{display:none}
+body[data-presentation=florence]{background:#e9dfcf;color:#30291f;overflow:hidden;--gallery-wall:radial-gradient(ellipse at 45% 15%,#fff9e877,transparent 70%),url('gallery-plaster.svg'),linear-gradient(110deg,#e4d8c7,#f2e8d9 50%,#e8dccb)}
+body[data-presentation=florence] .topbar{height:68px;min-height:68px;padding:5px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;background:var(--gallery-wall);border-bottom:1px solid #ad947b55;box-shadow:0 1px #fff6;backdrop-filter:none;color:#30291f}
+body[data-presentation=florence] .brand{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:4px;align-items:center;margin:0;padding:0}
+body[data-presentation=florence] .brand>*{display:none}
+body[data-presentation=florence] .brand::before{content:'WAYFINDER';font:400 28px/1.05 LibreCaslon,Georgia,serif;letter-spacing:8px}
+body[data-presentation=florence] .brand::after{content:'—  COLLECTION  —';font:400 9px/1.3 LibreCaslon,Georgia,serif;letter-spacing:5px}
+body[data-presentation=florence] .app-actions{grid-column:3;grid-row:1;justify-self:end;display:flex;gap:12px;margin:0}
+body[data-presentation=florence] .app-actions button{background:none;color:#30291f;border:0;border-radius:0;padding:7px 10px;font:400 15px var(--display-font);white-space:nowrap}
+body[data-presentation=florence] .app-actions button+button{border-left:1px solid #9f87705c}
+body[data-presentation=florence] #settings-button{width:34px;height:34px;display:grid;place-items:center;padding:5px;border:1px solid #a68c6d66;border-radius:50%}
+body[data-presentation=florence] :is(#sidebar,#scrim,#menu){display:none!important}
+body[data-presentation=florence] .topbar .search{grid-column:1;grid-row:1;position:relative;inset:auto;width:100%;min-width:0;max-width:none;height:38px;opacity:0;pointer-events:none;background:#fff9;border:1px solid #ad947b;color:#30291f}
+body[data-presentation=florence] .search input{color:#30291f}
+body[data-presentation=florence] .search input::placeholder{color:#786956}
+body[data-presentation=florence]:is(.search-focused,.search-active) .topbar .search{opacity:1;pointer-events:auto;grid-column:1/3}
+body[data-presentation=florence]:is(.search-focused,.search-active) .brand{visibility:hidden;pointer-events:none}
+body[data-presentation=florence] .shell{display:block;height:calc(var(--input-height,100dvh) - 68px);padding:0}
+body[data-presentation=florence] #main{display:grid;grid-template-rows:45px 44px minmax(0,1fr) 44px;height:100%;min-height:0;padding:0;gap:0;background:var(--gallery-wall);color:#30291f;isolation:isolate;font-family:var(--display-font)}
+body[data-presentation=florence] #main>:not(.florence-part):not(#grid){display:none!important}
+body[data-presentation=florence] .florence-part{display:flex;min-width:0;min-height:0}
+body[data-presentation=florence] #florence-tabs{grid-row:1;align-items:stretch;gap:24px;padding:0 36px;overflow:auto;scrollbar-width:none;border-bottom:1px solid #ad947b66;box-shadow:0 1px #fff5}
+#florence-tabs::-webkit-scrollbar{display:none}
+.florence-tab{flex:0 0 auto;position:relative;display:flex;align-items:center;justify-content:center;gap:7px;max-width:260px;padding:6px 12px;background:none;border:0;border-radius:0;color:#332a1e;font:400 15px var(--display-font)}
+.florence-tab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.florence-tab::after{content:'';position:absolute;bottom:0;left:10px;right:10px;height:2px;background:transparent}
+.florence-tab.current::after{background:linear-gradient(90deg,#a78045,#896335,#b58d52);box-shadow:0 -1px #fff8}
+.florence-tab.search-no-match{opacity:.5}.florence-tab small{font:11px Roboto,sans-serif}
+body[data-presentation=florence] #florence-intro{grid-row:2;gap:18px;align-items:center;padding:0 38px;overflow:hidden}
+#florence-heading{font:var(--title-weight,400) 25px/1.3 var(--display-font);margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#florence-count{flex:0 0 auto;border-left:1px solid #8b72547a;padding-left:18px;color:#75614b;font:14px var(--display-font)}
+body[data-presentation=florence] #grid{grid-row:3;display:block;min-height:0;height:100%;width:100%;max-height:none;position:relative;padding:0 24px;margin:0;overflow:hidden;touch-action:pan-y}
+.florence-shelf{display:grid;grid-template-columns:repeat(var(--gallery-cols,4),minmax(0,1fr));align-items:center;justify-items:center;gap:18px;height:100%;min-height:0;padding:15px 8px 68px;isolation:isolate}
+body[data-presentation=florence] #grid .game{display:block;position:relative;flex:none;align-self:center;min-height:0;width:calc(var(--gallery-art,170px) + 40px);height:auto;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;opacity:1;filter:none;transform:none;overflow:visible;color:#30291f;text-align:center;outline:none;transition:none}
+body[data-presentation=florence] #grid .game .cover{display:block;position:relative;box-sizing:content-box;width:var(--gallery-art,170px);height:calc(var(--gallery-art,170px)*1.5);aspect-ratio:auto;padding:12px;border:8px solid #b18a58;border-image:url('gallery-frame.svg') 16 stretch;border-radius:0;background:linear-gradient(120deg,#fbf5e9,#eee6d8);box-shadow:0 2px 2px #42301966,2px 8px 9px -2px #49301b50,6px 18px 18px -8px #49301b65,inset 1px 1px 4px #624a2e55;overflow:visible;transform:none;transition:transform 140ms ease-out}
+body[data-presentation=florence] #grid .game img{position:static;display:block;width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:2/3;object-fit:cover;opacity:1;filter:none;transform:none;border:0;border-radius:0;box-shadow:0 0 0 1px #98866c80,0 -1px 2px #3b291c50}
+body[data-presentation=florence][data-art-fit=contain] #grid .game img{object-fit:contain;background:#efe7da}
+body[data-presentation=florence] #grid .game :is(.game-title,.game-genre,.card-edit,.card-favorite,.favorite-badge){display:none!important}
+body[data-presentation=florence] #grid .game::before,body[data-presentation=florence] #grid .game::after,body[data-presentation=florence] #grid .cover::before,body[data-presentation=florence] #grid .cover::after{display:none!important}
+body[data-presentation=florence] #grid .game.presentation-selected .cover{transform:scale(1.045);box-shadow:0 2px 2px #42301966,3px 10px 12px -2px #49301b65,7px 22px 22px -9px #49301b70,inset 1px 1px 4px #624a2e55}
+body[data-presentation=florence] #grid .game:focus-visible .cover{outline:none}
+.florence-label{position:absolute;top:calc(100% + 19px);left:-12px;right:-12px;display:block;text-align:center;color:#33291d}
+.gallery-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font:var(--title-weight,400) 16px/1.22 var(--display-font);overflow-wrap:anywhere}
+.gallery-kind{display:block;font:italic 12px/1.6 var(--display-font);color:#725d45}
+body[data-presentation=florence] #florence-footer{grid-row:4;align-items:center;gap:23px;padding:0 25px;border-top:1px solid #a58a6b55;box-shadow:inset 0 1px #fff8;font:14px var(--display-font)}
+.florence-hint{display:flex;align-items:center;gap:8px;padding:6px 8px;margin:0 -8px;background:none;color:#30291f;white-space:nowrap;font:14px var(--display-font)}
+.florence-hint b{display:grid;place-items:center;width:23px;height:23px;border:1px solid #fff7;border-radius:50%;font:500 15px Roboto,sans-serif;color:white;box-shadow:inset 0 1px 2px #fff5,0 1px 1px #533b2933}
+.florence-hint .a{background:linear-gradient(#7c9d43,#4d792d)}.florence-hint .b{background:linear-gradient(#c54226,#9f2816)}.florence-hint .x{background:linear-gradient(#318fc0,#07629b)}.florence-hint .y{background:linear-gradient(#e2ad26,#bd850b)}
+.florence-categories{display:flex;align-items:center;gap:8px;margin-left:auto;white-space:nowrap}.florence-categories button{padding:2px 9px;border:1px solid #7d6f5e;border-radius:6px;background:linear-gradient(#f8f1e6,#dfd3c0);color:#342a1d;font:600 10px Roboto,sans-serif;box-shadow:0 1px #fff8}
+.florence-pages{display:flex;gap:4px}.florence-pages button{padding:4px 8px;background:none;color:#604c35;font:23px/1 Georgia,serif}.florence-pages button:disabled{opacity:.3}
+#florence-position{min-width:55px;text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
+.florence-empty{position:absolute;inset:20px;display:grid;place-items:center;text-align:center}
+body[data-presentation=florence] #grid.search-empty-grid{display:flex;align-items:center;justify-content:center;color:#30291f}
+body[data-presentation=florence] .search-empty-grid .florence-shelf{display:none}
+body[data-presentation=florence] .search-empty-grid .secondary{background:#fff8;color:#30291f;border:1px solid #ac9779}
+body[data-presentation=florence] #appearance-preview{background:var(--gallery-wall)}
+@media(max-width:950px){body[data-presentation=florence] .brand::before{font-size:22px;letter-spacing:5px}body[data-presentation=florence] .brand::after{font-size:8px;letter-spacing:3px}body[data-presentation=florence] .app-actions{gap:5px}body[data-presentation=florence] .app-actions button{font-size:12px;padding-inline:6px}.florence-categories>span{display:none}body[data-presentation=florence] #florence-footer{gap:18px;padding-inline:18px}}
+@media(max-width:700px){body[data-presentation=florence] .topbar{grid-template-columns:auto minmax(0,1fr) auto;padding-inline:14px}body[data-presentation=florence] .brand{grid-column:1}body[data-presentation=florence] .brand::before{font-size:19px;letter-spacing:3px}body[data-presentation=florence] .topbar .search{grid-column:2}.florence-hint span{display:none}.florence-label{left:0;right:0}}
+@media(max-height:480px){body[data-presentation=florence] .topbar{height:52px;min-height:52px}body[data-presentation=florence] .shell{height:calc(var(--input-height,100dvh) - 52px)}body[data-presentation=florence] #main{grid-template-rows:38px 32px minmax(0,1fr) 36px}body[data-presentation=florence] .brand::before{font-size:21px}.florence-tab{font-size:13px}#florence-heading{font-size:20px}.gallery-title{font-size:13px}.gallery-kind{font-size:10px}}
+body[data-presentation=florence].input-compact .topbar{height:48px;min-height:48px}
+body[data-presentation=florence].input-compact .shell{height:calc(var(--input-height,100dvh) - 48px)}
+body[data-presentation=florence].input-compact #main{grid-template-rows:36px minmax(0,1fr)}
+body[data-presentation=florence].input-compact #florence-intro,body[data-presentation=florence].input-compact #florence-footer{display:none}
+body[data-presentation=florence].input-compact #grid{grid-row:2}
+@media(prefers-reduced-motion:reduce){body[data-presentation=florence] #grid .game .cover{transition:none}}
+body[data-presentation=florence] #grid .florence-label{white-space:normal;width:auto;min-width:0;overflow:hidden}
+body[data-presentation=florence] #grid .gallery-title{white-space:normal;width:100%;max-width:100%;overflow:hidden;text-overflow:ellipsis;word-break:normal;overflow-wrap:anywhere}
+body[data-presentation=florence] #grid .gallery-title{display:block;max-height:2.44em;word-break:break-word;overflow-wrap:break-word}

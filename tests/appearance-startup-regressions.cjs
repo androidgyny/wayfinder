@@ -23,6 +23,8 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="80" height="120"><rect
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).visibility),'visible');assert.equal(await page.evaluate(()=>presentation),'atlantis');assert.equal(await page.evaluate(()=>palette),'pearl');
   await page.evaluate(()=>window.onNativeResume());assert.equal(await page.evaluate(()=>getComputedStyle(document.body).visibility),'visible','warm resume remains visible');
   await page.reload();await page.waitForFunction(()=>!restoring);assert.equal(await page.evaluate(()=>presentation),'atlantis');assert.equal(await page.evaluate(()=>getComputedStyle(document.body).visibility),'visible');assert.deepEqual(errors,[]);
+  await page.evaluate(()=>{localStorage.view=JSON.stringify({...JSON.parse(localStorage.view),presentation:'ithaca',ithacaLevel:'games',ithacaScope:'favorites'});window.onNativeResume()});
+  await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring&&document.body.dataset.presentation==='ithaca');assert.equal(await page.evaluate(()=>ithacaScope),'favorites');assert.deepEqual(errors,[]);
   console.log('PASS delayed startup hides default layout, reveals saved Atlantis appearance, warm resume and reload preserve appearance');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1});

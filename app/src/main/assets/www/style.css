@@ -464,6 +464,8 @@ body[data-presentation=venice] #presentation-position{font-size:12px}
 body[data-presentation=venice] .presentation-actions{right:22px;top:12px;position:absolute;margin:0}
 body[data-presentation=venice] #presentation-play{display:none}
 body[data-presentation=venice] #grid .game:not(.presentation-selected) .card-edit{visibility:hidden;pointer-events:none}
+/* Flow through held navigation rather than easing to a halt on each repeat. */
+body:is([data-presentation=cupertino],[data-presentation=venice]) #grid .game{transition:transform 140ms linear,opacity 100ms ease-out}
 @media(prefers-reduced-motion:reduce){body[data-presentation=venice] #grid .game{transition:none}}
 
 /* Quiet, consistently shaped controller badges for Ulm. */
@@ -832,3 +834,9 @@ body[data-typography=go]{--display-font:WayfinderGo,sans-serif}
 body[data-palette="slateblue"]{--bg:#141e2b;--panel:#1d2a3b;--field:#243347;--hover:#30445c;--line:#435870;--muted:#acbdd0;--accent:#9bdcff;--text:#eff5fc;--accent-soft:#2c455d;--accent-ink:#142738;--glow:#9bdcff55;}
 
 body[data-typography=system]{--display-font:Roboto,"Segoe UI",sans-serif}
+
+body[data-input=controller] .app-actions button:focus,body[data-input=controller][data-controller-navigation=controls] :is(#main,#grid,dialog,.topbar,.shell) :focus{outline:2px solid currentColor!important;outline-offset:var(--controller-focus-offset,2px)!important}
+
+/* Reserve breathing room for footer focus rings without moving their labels. */
+body :is(.manhattan-hint,.bath-hint,.dashboard-hint,.sedona-hint,.showcase-hint,.ithaca-hints button,#paloalto-hints button,#tacoma-hints button){padding-inline:8px;margin-inline:-8px}
+@media(max-width:700px){body :is(.manhattan-hint,.bath-hint,.dashboard-hint,.sedona-hint,.showcase-hint,.ithaca-hints button,#paloalto-hints button,#tacoma-hints button){padding-inline:5px;margin-inline:-5px}}
