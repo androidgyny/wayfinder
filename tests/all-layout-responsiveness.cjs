@@ -33,13 +33,13 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  }),true,'reused date formatters preserve relative dates, invalid dates and year labels');
  const layouts=process.env.AUDIT_LAYOUTS?.split(',')||await page.evaluate(()=>[...$('#presentation').options].map(o=>o.value));
  for(const mode of layouts){
-  await page.evaluate(mode=>{document.activeElement.blur();query='';genre='';favoritesOnly=false;const p=builtinAppearancePresets.find(p=>p.values.presentation===mode);if(p)applyAppearanceValues(p.values);setPresentation(mode);if(mode==='cambridge')cambridgeOpen('all','games');if(mode==='prague')pragueOpen('genre:Category 0',true);if(mode==='vienna')viennaOpen('genre:Category 0',true);if(mode==='ulm')ulmOpen('all');if(mode==='seattle')seattleBrowse=true;update();controllerFocus(document.querySelector("#grid .presentation-selected")||document.querySelector("#grid .game"),true);},mode);
+  await page.evaluate(mode=>{document.activeElement.blur();query='';genre='';favoritesOnly=false;const p=builtinAppearancePresets.find(p=>p.values.presentation===mode);if(p)applyAppearanceValues(p.values);setPresentation(mode);if(mode==='cambridge')cambridgeOpen('all','games');if(mode==='prague')pragueOpen('genre:Category 0',true);if(mode==='vienna')viennaOpen('genre:Category 0',true);if(mode==='ulm')ulmOpen('all');if(mode==='ithaca')ithacaOpen('all');if(mode==='tacoma')tacomaOpenCategory('Category 0');if(mode==='seattle')seattleBrowse=true;update();controllerFocus(document.querySelector("#grid .presentation-selected")||document.querySelector("#grid .game"),true);},mode);
   await page.waitForTimeout(100);
   metrics[mode]=await page.evaluate(async()=>{
    const sample=async(fn,n)=>{const times=[];for(let i=0;i<n;i++){await new Promise(requestAnimationFrame);const t=performance.now();fn(i);document.body.offsetHeight;times.push(performance.now()-t)}times.sort((a,b)=>a-b);return {median:times[Math.floor(times.length/2)],p95:times[Math.floor(times.length*.95)],max:times.at(-1)}};
    const updateTimes=await sample(()=>update(),5);
    const visited=new Set();
-   const navigation=await sample(i=>{controller(['kyoto','cupertino','venice','vienna','seattle'].includes(presentation)?'right':'down');visited.add(document.activeElement?.closest('.game')?.dataset.id||presentationId)},32);
+   const navigation=await sample(i=>{controller(['kyoto','cupertino','venice','vienna','seattle','florence','rochester','cannes'].includes(presentation)?'right':'down');visited.add(document.activeElement?.closest('.game')?.dataset.id||presentationId)},32);
    const category=await sample(()=>controller('genreNext'),8);
    const search=await sample(i=>{query=['retro','retro 1','puzzle',''][i%4];update()},8);
    query='';update();

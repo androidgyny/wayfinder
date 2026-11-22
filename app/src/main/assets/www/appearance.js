@@ -228,7 +228,7 @@ function syncUlmSettingsSample(sample){
   Object.assign(frame.style,{boxSizing:'border-box',width:w+'px',height:h+'px',padding:c.padding,border:c.border,borderImage:c.borderImage,background:c.background,boxShadow:c.boxShadow,borderRadius:c.borderRadius,overflow:'visible',transform:`scale(${scale})`,transformOrigin:'top left'});
   Object.assign(sample.style,{width:im.width,height:im.height,maxWidth:'none',maxHeight:'none',objectFit:im.objectFit,borderRadius:im.borderRadius,boxShadow:im.boxShadow,position:'static',display:'block',margin:'0',transform:'none'});return;
  }
- if(presentation==='florence'){
+ if(presentation==='florence'||presentation==='cannes'){
   frame.removeAttribute('style');sample.removeAttribute('style');frame.dataset.previewUnderline='false';
   const actual=$('#grid .presentation-selected .cover');if(!actual)return;
   const c=getComputedStyle(actual),im=getComputedStyle(actual.querySelector('img')),w=actual.offsetWidth,h=actual.offsetHeight,scale=Math.min(102/w,153/h);
@@ -276,6 +276,8 @@ function refreshApplicableAppearanceControls(){
  if(presentation==='ithaca'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;rows['presentation-sort']=ithacaLevel==='games'&&ithacaScope!=='recent';}
  if(['rochester','florence','bend','brussels'].includes(presentation)){for(const id of ['palette','cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;}
  if(presentation==='brussels'){rows['typography']=false;rows['title-weight']=false;}
+ // Cannes keeps its own lobby colors and frames; typography sets the nameplates and box office.
+ if(presentation==='cannes'){for(const id of ['palette','cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast'])rows[id]=false;}
  if(presentation==='manhattan'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;}
  if(presentation==='tacoma'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast'])rows[id]=false;rows['presentation-sort']=tacomaPage!==1;rows['cover-brightness']=tacomaPage<2;}
  for(const [id,visible] of Object.entries(rows))$('#'+id).closest('.settings-row').hidden=!visible;
@@ -380,4 +382,5 @@ builtinAppearancePresets.push({name:'Private Collection',values:{...builtinAppea
 
 builtinAppearancePresets.push({name:'Graphic Content',values:{...builtinAppearancePresets[0].values,presentation:'brussels',sort:'az',brusselsOptions:{strength:75,background:'rotate',density:8,sceneryColor:'muted',coverColor:'original'},palette:'notebook',typography:'clean',backdrop:'flat',coverGlow:false,coverCorners:'square',coverBorder:'none',titleWeight:'bold',coverShadow:'off',artFit:'cover'}});
 
+builtinAppearancePresets.push({name:'Now Showing',values:{...builtinAppearancePresets[0].values,presentation:'cannes',palette:'graphite',typography:'oswald',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,coverBrightness:'dimmed',backdrop:'flat',artFit:'cover',sort:'az'}});
 builtinAppearancePresets.push({name:'Exposure',values:{...builtinAppearancePresets[0].values,presentation:'rochester',palette:'graphite',typography:'clean',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',sort:'az'}});

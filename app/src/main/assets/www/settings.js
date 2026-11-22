@@ -51,9 +51,14 @@ function settingsController(action){
  }
  return false;
 }
+// Presets contain nested layout options; compare their values, not object identity.
+function presetValueMatches(actual,expected){
+ if(expected&&typeof expected==='object')return !!actual&&typeof actual==='object'&&Object.entries(expected).every(([key,value])=>presetValueMatches(actual[key],value));
+ return actual===expected;
+}
 function refreshSettingsSummaries(){
  if(!$('#settings-current-look'))return;
- const snapshot=appearanceSnapshot(),matches=availableAppearancePresets().filter(p=>Object.entries(p.values).every(([k,v])=>k==='preserveOtherSettings'||(k==='sort'?sort:snapshot[k])===v));
+ const snapshot=appearanceSnapshot(),matches=availableAppearancePresets().filter(p=>Object.entries(p.values).every(([k,v])=>k==='preserveOtherSettings'||presetValueMatches(k==='sort'?sort:snapshot[k],v)));
  const chosen=matches.find(p=>p.name===$('#appearance-presets').value)||matches[matches.length-1];
  $('#settings-current-look').textContent=chosen?'Current look · '+chosen.name:'Current look · Custom';
  $('#settings-ai-summary').textContent=!$('#gemini-remove').disabled?'API key saved on this device':'Optional · No API key saved';

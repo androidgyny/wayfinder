@@ -1,0 +1,99 @@
+/* Cannes: a cinema lobby. Lighting is static gradients; selection is a class and a transform. */
+.cannes-part{display:none}
+body[data-presentation=cannes]{
+ --cannes-gold:#d6b064;--cannes-gold-hi:#f7e2a8;--cannes-gold-lo:#7e5f2c;--cannes-red:#b0242c;--cannes-text:#f2e7d3;--cannes-muted:#b89f8a;
+ --cannes-wall:radial-gradient(110% 62% at 50% 0%,#7a222a8c,transparent 62%),repeating-linear-gradient(90deg,#0000002e 0 2px,transparent 2px 44px,#ffe2b408 44px 46px),linear-gradient(#2e1015,#1d090d 72%,#14060a);
+ background:#1b090d;color:var(--cannes-text);overflow:hidden
+}
+body[data-presentation=cannes] #soft-gradient,body[data-presentation=cannes] #custom-backdrop{display:none!important}
+body[data-presentation=cannes] .topbar{height:48px;min-height:48px;padding:0 22px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;background:var(--cannes-wall);background-attachment:fixed;border:0;box-shadow:none;backdrop-filter:none;color:var(--cannes-text)}
+body[data-presentation=cannes] .brand{grid-column:1;grid-row:1;margin:0;padding:0;display:flex;align-items:center}
+body[data-presentation=cannes] .brand>*{display:none}
+body[data-presentation=cannes] .brand::before{content:'◆  WAYFINDER  ◆';white-space:pre;font:400 16px/1 Anton,Oswald,sans-serif;letter-spacing:.3em;color:var(--cannes-gold)}
+body[data-presentation=cannes] .app-actions{grid-column:3;grid-row:1;display:flex;gap:8px;margin:0}
+body[data-presentation=cannes] .app-actions button{height:30px;padding:0 12px;border:1px solid #d6b06473;border-radius:3px;background:#14060973;color:#e9d6b2;font:500 14px Oswald,sans-serif;letter-spacing:.08em;text-transform:uppercase;box-shadow:none}
+body[data-presentation=cannes] .app-actions #add-game{background:linear-gradient(#d9b46a,#a77f3c);border-color:#e8c985;color:#24170a}
+body[data-presentation=cannes] #settings-button{width:30px;padding:0;display:grid;place-items:center}
+body[data-presentation=cannes] #settings-button svg{width:17px;height:17px;stroke:currentColor}
+body[data-presentation=cannes] :is(#sidebar,#scrim,#menu){display:none!important}
+body[data-presentation=cannes] .topbar .search{grid-column:2;grid-row:1;position:relative;inset:auto;width:100%;min-width:0;max-width:440px;justify-self:end;height:32px;opacity:0;pointer-events:none;background:#14060ad9;border:1px solid #d6b06499;border-radius:3px;color:var(--cannes-text)}
+body[data-presentation=cannes] .search input{color:var(--cannes-text);font-family:Oswald,sans-serif;letter-spacing:.04em}
+body[data-presentation=cannes] .search input::placeholder{color:var(--cannes-muted)}
+body[data-presentation=cannes] .search svg{stroke:var(--cannes-gold)}
+body[data-presentation=cannes]:is(.search-focused,.search-active) .topbar .search{opacity:1;pointer-events:auto}
+body[data-presentation=cannes] .shell{display:block;height:calc(var(--input-height,100dvh) - 48px);padding:0;background:none}
+body[data-presentation=cannes] #main{display:grid;grid-template-rows:clamp(80px,21vh,124px) minmax(0,1fr) 60px;height:100%;min-height:0;padding:0;gap:0;background:var(--cannes-wall);background-attachment:fixed;color:var(--cannes-text);isolation:isolate}
+body[data-presentation=cannes] #main>:not(.cannes-part):not(#grid){display:none!important}
+body[data-presentation=cannes] .cannes-part{display:flex;min-width:0;min-height:0}
+
+/* Marquee: a backlit board of changeable letters in a frame of bulbs. */
+body[data-presentation=cannes] #cannes-marquee{grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,min(720px,62vw)) minmax(0,1fr);align-items:center;gap:14px;padding:0 18px 4px}
+.cannes-side{display:flex;align-items:center;gap:8px;min-width:0;padding:6px 4px;background:none;border:0;color:var(--cannes-muted);font:400 14px Oswald,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.cannes-prev{justify-content:flex-end;text-align:right}
+.cannes-side-name{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cannes-side b{flex:none;padding:1px 7px;border:1px solid #d6b06480;border-radius:9px;font:600 12px Oswald,sans-serif;letter-spacing:.06em;color:var(--cannes-gold)}
+.cannes-frame{position:relative;height:calc(100% - 10px);min-width:0;padding:13px 14px;border-radius:6px;background:linear-gradient(#3a1a12,#24100b);box-shadow:0 0 0 2px #7e5f2c,0 0 0 3px #1a0a06,0 14px 30px #0000008c,0 0 60px #ffd6961f}
+.cannes-frame::before,.cannes-frame::after{content:'';position:absolute;left:10px;right:10px;height:10px;pointer-events:none;background:radial-gradient(circle,#fffbe9 0 1.6px,#ffd27a 2.4px,#ffbe5a59 3.6px,transparent 5px) 0 50%/15px 10px repeat-x}
+.cannes-frame::before{top:2px}.cannes-frame::after{bottom:2px}
+.cannes-board{height:100%;min-width:0;border-radius:2px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3px 18px;background:radial-gradient(90% 120% at 50% 40%,#fffaf0,#f6eedb 55%,#e6d8b8);box-shadow:inset 0 0 18px #78501e59,0 0 22px #ffecbe47}
+body[data-presentation=cannes] #cannes-kicker{margin:0 0 3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 12px/1.2 Anton,Oswald,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:var(--cannes-red)}
+/* Rails sit under each line at whatever size the label fits. */
+body[data-presentation=cannes] .cannes-tight #cannes-kicker{display:none}
+body[data-presentation=cannes] #cannes-board #cannes-letters{width:calc(100% + 36px);margin:0 -18px;padding:0 18px .06em;font:400 30px/1.1 Anton,Oswald,sans-serif;color:#1a1310;text-align:center;text-wrap:balance;overflow:hidden;background:repeating-linear-gradient(transparent 0 calc(1.1em - 2px),#50381e38 calc(1.1em - 2px) 1.1em)}
+.cannes-word{display:inline-block;white-space:nowrap}
+.cannes-letter{display:inline-block;padding:0 .035em;transform:translateY(var(--lift,0))}
+
+/* Poster wall: absolutely placed cases inside one translated strip. */
+body[data-presentation=cannes] #grid{grid-row:2;display:block;position:relative;width:100%;height:100%;min-height:0;max-height:none;margin:0;padding:0;overflow:hidden;touch-action:pan-y}
+.cannes-strip{position:absolute;top:0;bottom:0;left:0;transition:transform 170ms cubic-bezier(.2,.7,.25,1);will-change:transform}
+.cannes-strip.cannes-instant{transition:none}
+body[data-presentation=cannes] #grid .game{position:absolute;top:18px;left:calc(var(--cannes-edge,28px) + var(--cannes-i,0) * var(--cannes-pitch,220px));display:flex;flex-direction:column;align-items:center;width:calc(var(--cannes-art,176px) + 14px);height:auto;min-height:0;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none;opacity:1!important;filter:none;overflow:visible;color:var(--cannes-text);text-align:center;outline:none;transform:none;transition:transform 140ms ease-out}
+body[data-presentation=cannes] #grid .game .cover{display:block;position:relative;box-sizing:content-box;width:var(--cannes-art,176px);height:calc(var(--cannes-art,176px)*1.5);aspect-ratio:auto;padding:7px;margin:0;border:0;border-radius:3px;overflow:visible;transform:none;background:linear-gradient(150deg,var(--cannes-gold-hi),var(--cannes-gold) 28%,var(--cannes-gold-lo) 58%,var(--cannes-gold) 82%,var(--cannes-gold-hi));box-shadow:0 0 0 1px #2a1808,0 12px 18px #00000099;outline:none}
+body[data-presentation=cannes] #grid .game img{position:relative;display:block;width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:2/3;object-fit:cover;opacity:1;filter:none;transform:none;border:0;border-radius:1px;box-shadow:0 0 0 1px #0009;background:#0d0807}
+body[data-presentation=cannes][data-art-fit=contain] #grid .game img{object-fit:contain}
+/* Glass: a fixed reflection, plus house-light dimming of unlit cases when chosen. */
+body[data-presentation=cannes] #grid .game .cover::after{content:'';display:block!important;position:absolute;inset:7px;pointer-events:none;border-radius:1px;background:linear-gradient(118deg,#ffffff29 0 14%,#fff0 30%),linear-gradient(transparent 70%,#00000040)}
+body[data-presentation=cannes][data-cover-brightness=dimmed] #grid .game:not(.presentation-selected) .cover::after{background:linear-gradient(118deg,#ffffff1f 0 14%,#fff0 30%),#12040661}
+body[data-presentation=cannes] #grid .game::before,body[data-presentation=cannes] #grid .game::after,body[data-presentation=cannes] #grid .cover::before{display:none!important}
+body[data-presentation=cannes] #grid .game :is(.game-title,.game-genre,.card-edit,.card-favorite){display:none!important}
+body[data-presentation=cannes] #grid .game .favorite-badge{position:absolute;left:auto;top:-6px;right:-6px;z-index:2;display:grid!important;place-items:center;width:22px;height:22px;margin:0;padding:0;border:0;border-radius:50%;font:12px/1 sans-serif;color:#2a1a08;background:radial-gradient(circle at 35% 30%,#fff1c2,#d6a845 70%);box-shadow:0 2px 5px #0009}
+.cannes-plate{display:flex;align-items:center;justify-content:center;margin-top:9px;width:calc(100% - 18px);min-height:40px;padding:4px 8px;border-radius:2px;background:linear-gradient(#b99050,#86642e);color:#23170a;box-shadow:inset 0 1px #fff0c859,0 2px 4px #00000080;opacity:.74}
+.cannes-plate-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere;font:var(--title-weight,400) 14px/1.15 var(--display-font);letter-spacing:.06em;text-transform:uppercase}
+body[data-presentation=cannes] #grid .game.presentation-selected{transform:translateY(-5px)}
+body[data-presentation=cannes] #grid .game.presentation-selected::before{content:'';display:block!important;position:absolute;left:-40px;right:-40px;top:-18px;height:70%;pointer-events:none;z-index:-1;background:radial-gradient(50% 60% at 50% 0%,#ffdea542,transparent 70%)}
+body[data-presentation=cannes] #grid .game.presentation-selected .cover{background:linear-gradient(150deg,#fff3cc,#f0cd7e 28%,#a37a36 58%,#e8c272 82%,#fff3cc);box-shadow:0 0 0 1px #3a230b,0 14px 22px #00000099,0 0 26px 3px #ffd48c6b}
+body[data-presentation=cannes] #grid .game.presentation-selected img{box-shadow:0 0 0 1px #0009,0 0 14px #fff0d280}
+body[data-presentation=cannes] #grid .game.presentation-selected .cannes-plate{opacity:1;background:linear-gradient(#f0d38f,#b88d45)}
+body[data-presentation=cannes][data-input=controller] #grid .game.presentation-selected:focus-visible .cover{outline:2px solid #fff3cc;outline-offset:3px}
+.cannes-empty{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100% - 32px));padding:20px 28px;text-align:center;border:1px solid #d6b0645c;border-radius:4px;background:#0a030573}
+.cannes-empty b{display:block;font:400 30px/1.1 Anton,Oswald,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#7a6556}
+.cannes-empty p{margin:8px 0 0;font:400 14px/1.35 Oswald,sans-serif;letter-spacing:.03em;color:var(--cannes-muted)}
+body[data-presentation=cannes] #grid.search-empty-grid{display:flex;align-items:center;justify-content:center}
+body[data-presentation=cannes] .search-empty-grid .cannes-strip{display:none}
+body[data-presentation=cannes] .search-empty{color:var(--cannes-text);font-family:Oswald,sans-serif;text-align:center}
+body[data-presentation=cannes] .search-empty .secondary{background:#14060ad9;color:var(--cannes-text);border:1px solid #d6b06499}
+
+/* Box office: the selected title, a ticket and controller hints over a carpet border. */
+body[data-presentation=cannes] #cannes-footer{grid-row:3;align-items:center;gap:20px;padding:0 24px;border-top:1px solid #d6b06466;background:linear-gradient(#100407db,#0c0305f2),repeating-linear-gradient(45deg,#561620 0 9px,#3c0e15 9px 18px)}
+.cannes-now{flex:1;min-width:0}
+body[data-presentation=cannes] #cannes-footer #cannes-title{margin:0;font:400 24px/1.2 Anton,Oswald,sans-serif;letter-spacing:.03em;color:#fbf1de;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-presentation=cannes] #cannes-meta{margin:2px 0 0;font:400 13px/1.3 var(--display-font);letter-spacing:.14em;text-transform:uppercase;color:var(--cannes-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cannes-ticket{flex:none;display:flex;flex-direction:column;justify-content:center;min-height:36px;padding:4px 18px 4px 20px;background:var(--cannes-red);color:#fbe9cf;font:500 13px/1.25 Oswald,sans-serif;letter-spacing:.14em;text-transform:uppercase;-webkit-mask:radial-gradient(circle at 0 50%,transparent 6px,#000 6.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,transparent 6px,#000 6.5px) right/51% 100% no-repeat}
+.cannes-ticket small{font-size:11px;opacity:.78}
+.cannes-ticket small:empty{display:none}
+.cannes-hints{flex:none;display:flex;gap:6px}
+.cannes-hint{display:flex;align-items:center;gap:6px;padding:5px 6px;background:none;border:0;color:#d9c6a8;font:400 14px Oswald,sans-serif;letter-spacing:.06em;white-space:nowrap}
+.cannes-hint b{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 5px;border-radius:11px;font:600 12px Oswald,sans-serif;color:#1c1209;background:var(--cannes-gold)}
+.cannes-hint:disabled{opacity:.35}
+body.cannes-dark .cannes-hint[data-cannes-game]{visibility:hidden}
+
+body[data-presentation=cannes] #appearance-preview{background:var(--cannes-wall)}
+@media(max-width:900px){.cannes-side-name{display:none}body[data-presentation=cannes] #cannes-marquee{grid-template-columns:auto minmax(0,1fr) auto}.cannes-hint span{display:none}}
+@media(max-width:640px){body[data-presentation=cannes] .topbar{padding:0 12px;gap:8px}body[data-presentation=cannes] .brand::before{font-size:12px;letter-spacing:.2em}body[data-presentation=cannes] #open-apps{display:none}body[data-presentation=cannes] #cannes-footer{gap:12px;padding:0 14px}.cannes-hints{display:none}}
+@media(max-height:480px){body[data-presentation=cannes] #main{grid-template-rows:clamp(70px,20vh,96px) minmax(0,1fr) 50px}body[data-presentation=cannes] #cannes-footer #cannes-title{font-size:20px}.cannes-frame{padding:10px 10px}.cannes-frame::before,.cannes-frame::after{height:8px;background-size:12px 8px}body[data-presentation=cannes] #cannes-kicker{font-size:9px;margin-bottom:1px}body[data-presentation=cannes] #grid .game{top:14px}}
+body[data-presentation=cannes].input-compact .topbar{height:44px;min-height:44px}
+body[data-presentation=cannes].input-compact .shell{height:calc(var(--input-height,100dvh) - 44px)}
+body[data-presentation=cannes].input-compact #main{grid-template-rows:48px minmax(0,1fr)}
+body[data-presentation=cannes].input-compact #cannes-footer,body[data-presentation=cannes].input-compact #cannes-kicker,body[data-presentation=cannes].input-compact .cannes-frame::before,body[data-presentation=cannes].input-compact .cannes-frame::after{display:none}
+body[data-presentation=cannes].input-compact .cannes-frame{padding:4px 8px}
+@media(prefers-reduced-motion:reduce){.cannes-strip,body[data-presentation=cannes] #grid .game{transition:none}}

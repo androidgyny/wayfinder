@@ -371,6 +371,69 @@ public class ReleaseAudit extends Instrumentation {
         }
         runOnMainSync(()->activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN));
     }
+    private void cannesAudit() throws Exception {
+        runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
+        Thread.sleep(400);
+        js("window.cannesAuditErrors=[];addEventListener('error',e=>cannesAuditErrors.push(e.message));games=Array.from({length:1200},(_,i)=>({id:'cinema'+i,title:'Feature '+String(i).padStart(4,'0'),genre:'Screen '+i%8,image:'icon/com.android.settings',package:'com.android.settings',kind:'app',favorite:i%7===0}));rebuildGenres();query='';genre='';favoritesOnly=false;applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Now Showing').values);update();cannesSelect(200);window.cannesLaunches=0;window.cannesSavedPlay=play;play=()=>cannesLaunches++;");
+        Thread.sleep(500);
+        try{
+            for(int direction:new int[]{1,-1}){
+                int before=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
+                int key=direction>0?KeyEvent.KEYCODE_DPAD_RIGHT:KeyEvent.KEYCODE_DPAD_LEFT;
+                runOnMainSync(()->activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,key)));
+                Thread.sleep(4000);
+                runOnMainSync(()->activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,key)));
+                Thread.sleep(500);
+                int after=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
+                check((after-before)*direction>25,"Cannes held D-pad advances continuously in direction "+direction);
+                Thread.sleep(250);check(after==Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)")),"Cannes stops on release");
+                check("true".equals(js("document.activeElement?.closest('.game')?.dataset.id===presentationId")),"Cannes focus follows held selection");
+            }
+            js("cannesSelect(200);cannesLaunches=0");Thread.sleep(500);
+            tapControl("#grid [data-id=cinema201]");
+            check("0".equals(js("cannesLaunches"))&&"\"cinema201\"".equals(js("presentationId")),"Cannes first tap selects without launching");
+            tapControl("#grid [data-id=cinema201]");check("1".equals(js("cannesLaunches")),"Cannes second tap launches exactly once");
+            js("cannesLaunches=0;cannesSelect(200)");Thread.sleep(500);
+            for(int direction:new int[]{1,-1}){
+                int before=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)")),count=Integer.parseInt(js("cannesVisibleCount()"));
+                swipeCannes(direction);Thread.sleep(600);
+                int after=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
+                check(after-before==direction*count,"Cannes touchscreen swipe moves exactly one page: "+direction+" / "+before+" to "+after+" expected step "+count);
+                check("0".equals(js("cannesLaunches")),"Cannes swipe does not launch a game");
+            }
+            for(String index:new String[]{"0","filtered.length-1"}){
+                js("cannesSelect("+index+")");Thread.sleep(500);
+                check("true".equals(js("(()=>{const r=$('#grid .presentation-selected .cover').getBoundingClientRect(),g=$('#grid').getBoundingClientRect();return r.left>=g.left+2&&r.right<=g.right-2&&r.top>=g.top+2&&r.bottom<=g.bottom-2})()")),"Cannes complete framed cover visible at boundary "+index);
+            }
+            settingsKey(KeyEvent.KEYCODE_BUTTON_Y);waitKeyboard(true);Thread.sleep(400);
+            check("true".equals(js("document.activeElement.id==='search'")),"Cannes Y opens real keyboard and keeps search focus");
+            js("$('#search').value='Feature';$('#search').dispatchEvent(new Event('input',{bubbles:true}))");Thread.sleep(300);
+            check("true".equals(js("(()=>{const r=$('#search').getBoundingClientRect(),g=$('#grid').getBoundingClientRect(),s=$('#grid .presentation-selected .cover').getBoundingClientRect();return filtered.length>0&&r.top>=0&&r.bottom<=innerHeight&&s.top>=g.top&&s.bottom<=innerHeight})()")),"Cannes populated search fits above real keyboard");
+            js("$('#search').value='No matching title';$('#search').dispatchEvent(new Event('input',{bubbles:true}))");Thread.sleep(300);
+            saveAuditScreenshot("cannes-keyboard.png");
+            log.append("Empty search bounds: ").append(js("JSON.stringify({height:innerHeight,grid:$('#grid').getBoundingClientRect(),panel:$('#grid .search-empty').getBoundingClientRect()})")).append('\n');
+            check("true".equals(js("(()=>{const r=$('#grid .search-empty').getBoundingClientRect();return r.top>=-1&&r.bottom<=innerHeight+1})()")),"Cannes empty search fits above real keyboard");
+            saveAuditScreenshot("cannes-keyboard.png");
+            js("Portal.hideKeyboard();$('#search').blur();query='';$('#search').value='';update();cannesSelect(12)");waitKeyboard(false);Thread.sleep(500);
+            saveAuditScreenshot("cannes-device.png");
+            check("0".equals(js("cannesAuditErrors.length")),"Cannes device navigation has no JavaScript errors: "+js("JSON.stringify(cannesAuditErrors)"));
+        }finally{directionAxis(0,0);js("play=cannesSavedPlay;Portal.hideKeyboard();reloadLibrary()");}
+    }
+    private void saveAuditScreenshot(String name) throws Exception {
+        Bitmap image=getUiAutomation().takeScreenshot();if(image!=null){try(FileOutputStream out=new FileOutputStream(new File(activity.getExternalFilesDir(null),name))){image.compress(Bitmap.CompressFormat.PNG,100,out);}image.recycle();}
+    }
+    private void swipeCannes(int direction) throws Exception {
+        android.webkit.WebView web=(android.webkit.WebView)field("web");
+        JSONObject rect=new JSONObject(js("(()=>{const r=$('#grid').getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,width:innerWidth}})()"));
+        int[] location=new int[2];runOnMainSync(()->web.getLocationOnScreen(location));float scale=web.getWidth()/(float)rect.getDouble("width");
+        long start=android.os.SystemClock.uptimeMillis();
+        for(int i=0;i<=12;i++){
+            android.view.MotionEvent.PointerProperties finger=new android.view.MotionEvent.PointerProperties();finger.id=0;finger.toolType=android.view.MotionEvent.TOOL_TYPE_FINGER;
+            android.view.MotionEvent.PointerCoords point=new android.view.MotionEvent.PointerCoords();point.x=location[0]+scale*(float)(rect.getDouble("x")+rect.getDouble("w")*(direction>0?.75-.5*i/12:.25+.5*i/12));point.y=location[1]+scale*(float)(rect.getDouble("y")+rect.getDouble("h")*.5);point.pressure=1;point.size=1;
+            android.view.MotionEvent event=android.view.MotionEvent.obtain(start,android.os.SystemClock.uptimeMillis(),i==0?android.view.MotionEvent.ACTION_DOWN:i==12?android.view.MotionEvent.ACTION_UP:android.view.MotionEvent.ACTION_MOVE,1,new android.view.MotionEvent.PointerProperties[]{finger},new android.view.MotionEvent.PointerCoords[]{point},0,0,1,1,0,0,android.view.InputDevice.SOURCE_TOUCHSCREEN,0);
+            try{sendPointerSync(event);}finally{event.recycle();}Thread.sleep(20);
+        }
+    }
     private void sustainedDirectionAudit() throws Exception {
         JSONArray original=records(),order=new JSONArray((String)call(field("db"),"order",new Class<?>[]{})),many=new JSONArray();
         for(int i=0;i<1200;i++)many.put(new JSONObject(original.getJSONObject(0).toString()).put("id","hold_"+i).put("title",String.format(java.util.Locale.US,"Game %04d",i)).put("genre","Games").put("favorite",false));
@@ -487,6 +550,7 @@ public class ReleaseAudit extends Instrumentation {
             check(Boolean.TRUE.equals(field("ready")),"native first launch completes");
             for(int i=0;i<100&&!"true".equals(js("typeof restoring !== 'undefined' && !restoring"));i++)Thread.sleep(100);
             check("true".equals(js("!restoring")),"initial settings restoration completes");
+            if("cannes".equals(args.getString("mode"))){cannesAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("opening-fit".equals(args.getString("mode"))){openingFitAudit();result.putString("stream",log.toString());finish(0,result);return;}
             if("aspect-seed".equals(args.getString("mode"))){aspectSeed();result.putString("stream",log.toString());finish(0,result);return;}
             if("settings".equals(args.getString("mode"))){settingsAudit();result.putString("stream",log.toString());finish(0,result);return;}

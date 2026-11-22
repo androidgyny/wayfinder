@@ -24,14 +24,14 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
   const rows=await page.evaluate(()=>[...document.querySelectorAll('#grid .game')].slice(0,8).flatMap(e=>{const r=e.getBoundingClientRect(),t=e.querySelector('.game-title'),s=t&&getComputedStyle(t);return t&&s.position==='static'&&r.height>0&&r.height<parseFloat(s.fontSize)?[{height:r.height,font:s.fontSize,text:t.textContent}]:[]}));
   if(rows.length)issues.push({layout,height,rows});
   await page.screenshot({path:path.join(output,layout+'-'+height+'.png')});
-  if(['sedona','bath','milan','bellevue','paloalto','copenhagen'].includes(layout)){
+  if(['sedona','bath','milan','bellevue','paloalto','copenhagen','brussels'].includes(layout)){
    await page.evaluate(()=>{controller('down');for(let i=0;i<7;i++)controller('down')});
    const focus=await page.evaluate(()=>{const a=$('#grid .presentation-selected').getBoundingClientRect(),b=$('#grid').getBoundingClientRect();return {visible:a.top>=b.top-1&&a.bottom<=b.bottom+1,top:a.top,bottom:a.bottom,gridBottom:b.bottom}});
    if(!focus.visible)issues.push({layout,height,focus});
   }
 
  }
- fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(issues,null,2));assert.deepEqual(issues,[]);console.log('PASS all 22 populated layouts at requested IME heights; readable rows and focused-row visibility');assert.deepEqual(errors,[]);
+ fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(issues,null,2));assert.deepEqual(issues,[]);console.log('PASS all offered populated layouts at requested IME heights; readable rows and focused-row visibility');assert.deepEqual(errors,[]);
  }finally{await browser.close();server.close()}
 })().catch(e=>{console.error(e);process.exit(1)});
 

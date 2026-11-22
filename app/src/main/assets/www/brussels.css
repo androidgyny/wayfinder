@@ -91,3 +91,6 @@ body[data-presentation=brussels] .brand{background-size:100% 100%}
 @media(max-width:600px){#settings-dialog #brussels-options #brussels-background{width:100%;min-width:0;flex-basis:100%}}
 /* Reserve space for italic glyph overhang, including the last S in SHMUPS. */
 .brussels-tab-label{padding-right:.22em;padding-left:.04em}
+
+/* Keep comic lettering readable when the keyboard leaves only a short list. */
+body.input-compact[data-presentation=brussels] #grid{grid-template-rows:repeat(var(--comic-rows,6),minmax(38px,1fr));overflow-y:auto}

@@ -22,7 +22,7 @@ Use Wayfinder as an ordinary app or make it your handheld’s home screen. A fre
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 30 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 31 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -73,7 +73,7 @@ Choose a way to browse that suits you:
 - **Scan a large library quickly** with compact lists, category columns, or a dashboard with recently played games.
 - **Rediscover something to play** with a shuffled table of covers.
 
-Styles range from restrained and modern to paper notebooks, illuminated slide mounts, galleries, desktop interfaces, music-player panels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
+Styles range from restrained and modern to paper notebooks, illuminated slide mounts, galleries, a cinema lobby of lit poster cases, desktop interfaces, music-player panels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
 
 You can also enable interface sounds, choose between the included background tracks or play your own audio, and choose a startup video under **Settings → Sound & startup**.
 

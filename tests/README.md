@@ -3,7 +3,7 @@
 `button-press-regressions.cjs` checks tactile feedback on raised controls in
 Sedona, Atlantis, Redmond and Palo Alto: touch/controller activation, immediate
 actions, single pulses, cleanup, canceled gestures, disabled controls, reduced
-motion, and isolation from game rows in all 22 layouts and dialog controls.
+motion, and isolation from game rows in every offered layout and dialog controls.
 It also checks the real Sedona Favorite action, touch-to-controller handoff,
 and distinct on/off star colors. The isolated Android runner's `-e mode buttons`
 uses finger taps and controller keys to verify favorites, dialog focus return,
@@ -13,14 +13,14 @@ The isolated Android runner supports `-e mode direction` to check held D-pad
 repeat without new axis events, acceleration, neutral release, direction reversal,
 focus loss, controller removal, startup overlays, and combined button/hat input.
 
-`layout-settings-regressions.cjs` audits all 22 offered layouts at two
+`layout-settings-regressions.cjs` audits every offered layout at two
 widths, including artwork on/off and Recent states in Cambridge and Ulm.
 It checks which settings are visible, exclusion of hidden controls from
 controller navigation, Oxford's title-brightness wording, and dialog overflow.
 Set `SETTINGS_AUDIT_REPORT` to save the visibility matrix as JSON.
 
 
-`keyboard-layout-regressions.cjs` checks all 22 layouts at 320, 260, and 220
+`keyboard-layout-regressions.cjs` checks every offered layout at 320, 260, and 220
 pixels of available height at 640 and 1097 pixels wide with a text field focused,
 both carousel title positions, search recovery actions,
 restoration after keyboard dismissal, and visibility of text fields in dialogs.
@@ -139,7 +139,7 @@ isolated Android runner accepts `-e mode settings` for native key dispatch and
 submenu focus checks; wake and unlock the device before running. The keyboard
 mode also checks the preset-name field in its new submenu.
 
-`all-layout-responsiveness.cjs` measures all 22 layouts with 1,200 synthetic
+`all-layout-responsiveness.cjs` measures every offered layout with 1,200 synthetic
 games and 24 categories. It separates full updates, game navigation, category
 switching and search; navigation must actually visit multiple games. It also
 checks date-label equivalence for the shared desktop browser. `AUDIT_TAG` names
@@ -185,12 +185,12 @@ The showcase suite also checks whole-category paging arrows, vertical label boun
 
 ## UI placement audit
 
-`placement-audit.cjs` exercises all 22 layouts with their built-in preset styling,
+`placement-audit.cjs` exercises every offered layout with its built-in preset styling,
 normal and keyboard-open empty searches, hardware-keyboard searches in the floating-search
 layouts, and Edit, Settings, and populated Apps dialogs while the keyboard is open.
 It writes screenshots and a geometry report to `output/placement-audit/`.
 
-`populated-placement-audit.cjs` checks all 22 layouts with populated searches at
+`populated-placement-audit.cjs` checks every offered layout with populated searches at
 320px and 220px available height. It rejects rows shorter than their text and
 verifies that controller selection remains visible in the paged text layouts.
 
@@ -201,7 +201,7 @@ remain unchanged. Use the isolated build and installation instructions above.
 
 ## Handheld aspect-ratio audit
 
-- `aspect-ratio-regressions.cjs`: all 22 layouts at Pocket DMG (551 x 456 CSS pixels), 4:3, 3:2, 16:10, and 21:9 landscape profiles, including smaller displays. Profile heights allow 24 pixels for the system bar. Screenshots and geometry reports go to `output/aspect-audit/`.
+- `aspect-ratio-regressions.cjs`: every offered layout at Pocket DMG (551 x 456 CSS pixels), 4:3, 3:2, 16:10, and 21:9 landscape profiles, including smaller displays. Profile heights allow 24 pixels for the system bar. Screenshots and geometry reports go to `output/aspect-audit/`.
 - `opening-aspect-regressions.cjs`: the complete startup console must fit and remain centered at every target ratio.
 - `placement-audit.cjs`: accepts `AUDIT_WIDTH`, `AUDIT_HEIGHT`, `AUDIT_IME_HEIGHT`, and `AUDIT_PROFILE` for empty search, keyboard and dialog checks.
 - `populated-placement-audit.cjs`: accepts the same width/normal-height/profile variables and `AUDIT_HEIGHTS` (comma-separated remaining app heights). Stress coverage includes 160, 180, 220, 260 and 320 pixels. These are test boundaries, not assumed keyboard dimensions.
@@ -215,14 +215,16 @@ Android recommends reading the actual IME insets rather than assuming a keyboard
 
 The Manhattan, Bend, Florence, Brussels, and Rochester audit scripts check their layout geometry, portrait artwork, paging, search, and controller behavior across multiple screen sizes. `new-layout-interactions.cjs` checks dialog return focus, search dismissal, layout switching, and preview fidelity across those five layouts.
 
-`gamepad-access-audit.cjs` covers Add game, settings, search, Apps, nested artwork controls, and empty libraries across all 30 layouts. `controller-focus-audit.cjs` and `layout-spacing-audit.cjs` check focus visibility and clipped category controls; Rochester’s shaped focus rim is checked alongside rectangular outlines. `layout-settings-regressions.cjs` covers 72 settings states across all 30 layouts.
+`gamepad-access-audit.cjs` covers Add game, settings, search, Apps, nested artwork controls, and empty libraries across every offered layout. `controller-focus-audit.cjs` and `layout-spacing-audit.cjs` check focus visibility and clipped category controls; Rochester’s shaped focus rim is checked alongside rectangular outlines. `layout-settings-regressions.cjs` covers the settings states of every offered layout.
+
+`cannes-regressions.cjs` checks Cannes (Now Showing preset) with 1,200 synthetic games in 24 categories, including a 66-character category name. At seven screen sizes, from Pocket DMG and a 640 × 360 keyboard-height view up to 21:9, it confirms 2:3 poster cases, that only cases near the view are mounted, that the selected case and its nameplate stay above the footer, that the marquee lettering uses Anton and fits at a legible size, and that footer and header controls do not overlap. It also covers held, reversed and paged movement at both ends of a row; changing categories with the bumpers or the vertical D-pad; favorites keeping the row still; empty Favorites; search recovery and Back; editing; layout switching; which appearance settings are shown; the settings preview; and restoring position after a reload. Screenshots go to `output/cannes-audit/`.
 
 `shortcut-editor-audit.cjs` uses synthetic pin requests to check supplied titles and icons, cancellation, save, category refresh, duplicates, and expired requests. It complements the device check of Android’s shortcut request flow; it does not emulate the Android shortcut service.
 
 ## Apps, navigation, and preview checks
 
 - `app-sections-regressions.cjs` and `apps-spacing-audit.cjs` cover custom sections, built-in colors and ordering, search by Android and library titles, editor interactions, persistent docks, and controller focus at multiple viewport sizes.
-- `category-track-motion.cjs` checks retargeted Vienna/Prague scrolling, reversal, reduced motion, touch cancellation, and coalesced saves. `all-layout-held-navigation.cjs` exercises repeated navigation across all 30 layouts; reported timings are diagnostic, not device frame-rate measurements.
+- `category-track-motion.cjs` checks retargeted Vienna/Prague scrolling, reversal, reduced motion, touch cancellation, and coalesced saves. `all-layout-held-navigation.cjs` exercises repeated navigation across every offered layout; reported timings are diagnostic, not device frame-rate measurements.
 - `preview-contrast-audit.cjs` checks the appearance-preview heading in all built-in presets against solid backgrounds and opaque gradient stops. It does not substitute for pixel-level testing over arbitrary user artwork.
 - `recent-polish-audit.cjs`, `bend-launch-audit.cjs`, `milan-marquee-audit.cjs`, and `bellevue-marquee-audit.cjs` cover animation lifecycle, clipping, long labels, dialog isolation, and reduced motion.
 

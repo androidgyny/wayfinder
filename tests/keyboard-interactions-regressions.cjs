@@ -23,8 +23,10 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  const findings=[];
  async function check(name,condition){if(!condition)findings.push(name);}
  await page.setViewportSize({width:1097,height:700});
+ await page.waitForFunction(()=>getComputedStyle(document.documentElement).getPropertyValue('--visible-height').trim()==='700px');
  await page.evaluate(()=>{setPresentation('kyoto');controller('search');});
- await page.setViewportSize({width:1097,height:260});await page.waitForTimeout(80);
+ await page.setViewportSize({width:1097,height:260});
+ await page.waitForFunction(()=>document.body.classList.contains('input-compact'));
  await page.evaluate(()=>$('#category-current').focus());await page.waitForTimeout(80);
  await check('Moving focus to a controller/category button must not expand beneath an open keyboard',await page.locator('body').evaluate(e=>e.classList.contains('input-compact')));
  await page.setViewportSize({width:640,height:360});
@@ -52,7 +54,7 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await nativePage.close();
  // Keep a selection deep in a populated list while the keyboard changes its
  // visible rows. This exercises virtualized Berlin and the text/artwork panes.
- for(const layout of ['sedona','bath','milan','bellevue','dashboard','redmond','atlantis','sanfrancisco','kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto','manhattan','bend','florence','brussels','rochester']){
+ for(const layout of ['sedona','bath','milan','bellevue','dashboard','redmond','atlantis','sanfrancisco','kyoto','cupertino','venice','berlin','oxford','cambridge','ulm','paloalto','manhattan','bend','florence','brussels','rochester','cannes']){
   await page.setViewportSize({width:1097,height:700});
   await page.evaluate(layout=>{
    window.wayfinderKeyboardChanged(false);document.activeElement.blur();

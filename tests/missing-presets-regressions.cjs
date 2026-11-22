@@ -24,6 +24,10 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
   await page.setViewportSize({width:1097,height:592});await page.evaluate(()=>persist());await page.reload();await page.waitForFunction(()=>!restoring);assert.equal(await page.evaluate(()=>presentation),expected.presentation);assert.equal(await page.evaluate(()=>sort),'az');
   await page.evaluate(()=>{sort='recent';$('#sort').value=sort;update();showDialog('#settings-dialog');$('#appearance-presets').value='Raincheck';auditionAppearancePreset();finishAppearanceAudition(false)});assert.equal(await page.evaluate(()=>sort),'recent','Cancel restores previous sorting');assert.equal(await page.evaluate(()=>presentation),expected.presentation);await page.evaluate(()=>hideDialog('#settings-dialog'));
  }
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Boxer').values);refreshSettingsSummaries()});
+ assert.equal(await page.locator('#settings-current-look').textContent(),'Current look \u00b7 Boxer','nested options match by value');
+ await page.evaluate(()=>{setDashboardOptions({...dashboardOptions,density:'dense'});refreshSettingsSummaries()});
+ assert.equal(await page.locator('#settings-current-look').textContent(),'Current look \u00b7 Custom','changed nested option is not a preset match');
  const missing=await page.evaluate(()=>[...$('#presentation').options].filter(o=>!builtinAppearancePresets.some(p=>p.values.presentation===o.value)).map(o=>o.textContent));assert.deepEqual(missing,[],'Every layout has a preset');
  assert.equal(await page.evaluate(()=>games.length),1200);assert.deepEqual(errors,[]);console.log('PASS Cross Reference and Raincheck: settings from every preset, A-Z sorting, current-look label, preview cancellation, reload, three sizes, full layout coverage.');
  }finally{await browser.close();server.close()}

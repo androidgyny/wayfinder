@@ -1,6 +1,6 @@
 // The carousel moves covers with transforms; browser scrolling must not move its stage.
 function resetPresentationScroll(){
- if(presentation==='rochester'||presentation==='florence'||presentation==='bend'){for(const node of [$('#grid'),$('#main'),$('.shell'),document.body,document.scrollingElement])if(node){node.scrollLeft=0;node.scrollTop=0;}window.scrollTo(0,0);return;}
+ if(presentation==='rochester'||presentation==='florence'||presentation==='bend'||presentation==='cannes'){for(const node of [$('#grid'),$('#main'),$('.shell'),document.body,document.scrollingElement])if(node){node.scrollLeft=0;node.scrollTop=0;}window.scrollTo(0,0);return;}
  if(presentation==='rochester'||presentation==='florence'||presentation==='bend'||presentation==='manhattan'||isShowcase()||presentation==='ithaca'||presentation==='tacoma'||presentation==='hongkong'||presentation==='sedona'||presentation==='brussels'||presentation==='bath'||presentation==='dashboard'||presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge'||presentation==='abbotsford'||presentation==='paloalto'||presentation==='redmond'||presentation==='sanfrancisco'||presentation==='atlantis')return;
  for(const node of [$('#grid'),$('#main'),$('.shell'),document.scrollingElement]){if(node){node.scrollLeft=0;node.scrollTop=0}}
 }
@@ -8,6 +8,7 @@ function presentationPageSize(){return Math.max(12,Math.ceil(filtered.length/10)
 function sizePresentation(){
  if(presentation==='rochester')sizeRochester();if(presentation==='florence')sizeFlorence();
  if(presentation==='bend')sizeBend();
+ if(presentation==='cannes'){sizeCannes();return;}
  if(presentation==='manhattan')sizeManhattanCover();
  if(isShowcase())sizeShowcaseCover();
  if(presentation==='hongkong')sizeHongKong();if(presentation==='sedona')sizeSedonaCover();if(presentation==='brussels')sizeBrusselsCover();if(presentation==='bath')sizeBathCover();
@@ -28,7 +29,7 @@ function setPresentation(value){
  if(value==='ulm'&&presentation!=='ulm'){ulmSection=previousSection;ulmCategoryKey=previousSection;ulmLevel=query||previousSection!=='all'?'games':'categories';ulmSearchOpen=!!query;}
  if(value==='vienna'||value==='prague'||value==='copenhagen'){genre='';favoritesOnly=false;}
  if(value==='seattle'&&presentation!=='seattle')seattleBrowse=!!(query||genre||favoritesOnly);
- const next=['rochester','florence','bend','ithaca','tacoma','hongkong','sedona','milan','bellevue','manhattan','brussels','bath','dashboard','kyoto','cupertino','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(value)?value:'library';
+ const next=['rochester','florence','bend','cannes','ithaca','tacoma','hongkong','sedona','milan','bellevue','manhattan','brussels','bath','dashboard','kyoto','cupertino','seattle','vienna','prague','copenhagen','oxford','berlin','ulm','venice','cambridge','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(value)?value:'library';
  // Reuse cards only within a layout; shelf containers belong to Seattle.
  if(next!==presentation){ithacaStop();if(presentation==='ithaca'){genre='';favoritesOnly=false;}if(presentation==='tacoma'){genre='';favoritesOnly=false;}if(presentation==='hongkong'){hongkongRows.clear();hongkongKey='';clearTimeout(hongkongScrollTimer);}$('#grid').replaceChildren();}
  presentation=next;
@@ -45,7 +46,7 @@ function movePresentation(delta,focus=false){
  presentationId=filtered[index].id;renderPresentation();
  if(focus)controllerFocus($('#grid .presentation-selected'));queueCarouselSave();
 }
-function renderPresentation(){if(presentation==='rochester'){renderRochester();return;}if(presentation==='florence'){renderFlorence();return;}if(presentation==='bend'){renderBend();return;}if(presentation==='manhattan'){renderManhattan();return;}if(presentation==='ithaca'){renderIthaca();return;}if(presentation==='tacoma'){renderTacoma();return;}if(presentation==='hongkong'){renderHongKong();return;}if(presentation==='sedona'){renderSedona();return;}if(isShowcase()){renderShowcase();return;}if(presentation==='brussels'){renderBrussels();return;}if(presentation==='bath'){renderBath();return;}if(presentation==='dashboard'){renderDashboard();return;}if(presentation==='atlantis'){renderAtlantis();return;}if(presentation==='sanfrancisco'){renderSanfrancisco();return;}if(presentation==='redmond'){renderRedmond();return;}if(presentation==='paloalto'){renderPaloalto();return;}if(presentation==='abbotsford'){renderAbbotsford();return;}if(presentation==='cambridge'){renderCambridge();return;}if(presentation==='copenhagen'){renderCopenhagen();return;}if(presentation==='prague'){renderPrague();return;}if(presentation==='ulm'){renderUlm();return;}if(presentation==='berlin'){renderBerlin();return;}if(presentation==='oxford'){renderOxford();return;}if(presentation==='vienna'){renderVienna();return;}if(presentation==='seattle'){renderSeattle();return;}
+function renderPresentation(){if(presentation==='cannes'){renderCannes();return;}if(presentation==='rochester'){renderRochester();return;}if(presentation==='florence'){renderFlorence();return;}if(presentation==='bend'){renderBend();return;}if(presentation==='manhattan'){renderManhattan();return;}if(presentation==='ithaca'){renderIthaca();return;}if(presentation==='tacoma'){renderTacoma();return;}if(presentation==='hongkong'){renderHongKong();return;}if(presentation==='sedona'){renderSedona();return;}if(isShowcase()){renderShowcase();return;}if(presentation==='brussels'){renderBrussels();return;}if(presentation==='bath'){renderBath();return;}if(presentation==='dashboard'){renderDashboard();return;}if(presentation==='atlantis'){renderAtlantis();return;}if(presentation==='sanfrancisco'){renderSanfrancisco();return;}if(presentation==='redmond'){renderRedmond();return;}if(presentation==='paloalto'){renderPaloalto();return;}if(presentation==='abbotsford'){renderAbbotsford();return;}if(presentation==='cambridge'){renderCambridge();return;}if(presentation==='copenhagen'){renderCopenhagen();return;}if(presentation==='prague'){renderPrague();return;}if(presentation==='ulm'){renderUlm();return;}if(presentation==='berlin'){renderBerlin();return;}if(presentation==='oxford'){renderOxford();return;}if(presentation==='vienna'){renderVienna();return;}if(presentation==='seattle'){renderSeattle();return;}
  let index=filtered.findIndex(g=>g.id===presentationId);if(index<0)index=0;
  const current=filtered[index];presentationId=current?.id||null;
  const options=sections(),gi=sectionIndex();
@@ -76,7 +77,7 @@ function renderPresentation(){if(presentation==='rochester'){renderRochester();r
  $('#presentation-prev').disabled=!current||index===0;$('#presentation-next').disabled=!current||index===filtered.length-1;syncSearchFeedback();
 }
 function initPresentation(){
- initRochester();initFlorence();initBend();initIthaca();initTacoma();initHongKong();initSedona();initShowcase();initBrussels();initBath();initManhattan();initDashboard();initAtlantis();initSanfrancisco();initRedmond();initPaloalto();initAbbotsford();initBerlin();initUlm();initCopenhagen();initCambridge();initKyotoDock();
+ initRochester();initCannes();initFlorence();initBend();initIthaca();initTacoma();initHongKong();initSedona();initShowcase();initBrussels();initBath();initManhattan();initDashboard();initAtlantis();initSanfrancisco();initRedmond();initPaloalto();initAbbotsford();initBerlin();initUlm();initCopenhagen();initCambridge();initKyotoDock();
  $('#presentation').onchange=e=>{setPresentation(e.target.value);effect('select')};
  $('#category-before').onclick=()=>controller('genrePrev');$('#category-after').onclick=()=>controller('genreNext');$('#category-current').onclick=()=>controller('genreNext');
  $('#presentation-prev').onclick=()=>movePresentation(-1,true);$('#presentation-next').onclick=()=>movePresentation(1,true);
