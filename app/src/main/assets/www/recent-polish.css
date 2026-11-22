@@ -1,0 +1,26 @@
+.recent-polish-layer{position:absolute;inset:0;pointer-events:none!important;border-radius:inherit;z-index:3;display:block}
+body[data-presentation=manhattan] #manhattan-category{position:relative}
+#manhattan-category .ink-rule{inset:auto 0 0;height:2px;background:#8a3932;transform-origin:left}
+body[data-presentation=manhattan] .manhattan-actions button{box-shadow:0 2px 0 #6c604d66,inset 0 1px #fff8}
+body[data-presentation=florence] #grid .game.presentation-selected .cover{transform:translateY(-2px) scale(1.045);box-shadow:0 3px 3px #42301955,3px 12px 14px -3px #49301b60,7px 22px 22px -9px #49301b65,inset 1px 1px 4px #624a2e55}
+body[data-presentation=florence] .florence-label::after{content:'';display:block;width:24px;height:2px;margin:5px auto 0;background:linear-gradient(90deg,#98713d,#c4a16b,#98713d);opacity:0}
+body[data-presentation=florence] .presentation-selected .florence-label::after{opacity:1}
+body[data-presentation=brussels] #grid .comic-nudge.presentation-selected::before{animation:comic-pointer-nudge 140ms ease-out}
+@keyframes comic-pointer-nudge{0%,100%{transform:translate(0,-50%)}45%{transform:translate(2px,-50%)}}
+@media(prefers-reduced-motion:reduce){body[data-presentation=brussels] #grid .comic-nudge.presentation-selected::before{animation:none}body[data-presentation=florence] #grid .game .cover{transition:none}}
+
+/* A fixed sleeve reflection catches the light with the selected case lift. */
+body[data-presentation=bend] #grid .bend-sleeve-reflection{position:absolute;left:2%;top:2%;bottom:2%;width:9%;max-width:16px;pointer-events:none;z-index:2;background:linear-gradient(90deg,transparent,#ffffff38 42%,#ffffff18 65%,transparent);opacity:.18;transition:opacity 240ms ease-out}
+body[data-presentation=bend] #grid .presentation-selected .bend-sleeve-reflection{opacity:.55}
+body[data-presentation=bend] #grid .game{transition:transform 240ms cubic-bezier(.2,.7,.3,1)}
+body[data-presentation=bend] #grid .game.presentation-selected{transform:translateY(-7px)}
+@media(prefers-reduced-motion:reduce){body[data-presentation=bend] #grid .bend-sleeve-reflection{animation:none!important;transition:none!important}}
+body.flourishes-paused[data-presentation=bend] #grid .bend-sleeve-reflection{animation:none!important}
+
+@media(prefers-reduced-motion:reduce){body[data-presentation=bend] #grid .game{transition:none!important}}
+
+/* Slides stay still; a prepainted selection glow fades to a steady level. */
+body[data-presentation=rochester] #grid .rochester-selection-light{position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 1px #fff,0 0 0 1px #ffb52c,0 0 0 3px #fff3d6,0 0 14px 5px #ffc05785,0 5px 24px 9px #ffd59860;opacity:0;transition:opacity 150ms ease-out}
+body[data-presentation=rochester] #grid .game.presentation-selected .cover{transform:none;box-shadow:inset 0 1px 1px 1px #fff,0 2px 2px #7c7b7555,2px 9px 10px -3px #555d6555}
+body[data-presentation=rochester] #grid .presentation-selected .rochester-selection-light{opacity:1}
+@media(prefers-reduced-motion:reduce){body[data-presentation=rochester] #grid .rochester-selection-light{transition:none}}

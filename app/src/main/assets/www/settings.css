@@ -61,3 +61,6 @@ body.input-compact #settings-dialog{padding:12px}
 body.input-compact #settings-dialog>.eyebrow,body.input-compact #settings-navigation-hint{display:none}
 body.input-compact #settings-dialog>h2{font-size:20px;margin-bottom:8px}
 body.input-compact #settings-appearance #appearance-preview{display:none}
+
+/* Size soundtrack names intrinsically while respecting the settings pane. */
+#settings-dialog #ambient-source{width:auto;min-width:min(180px,100%);max-width:100%;flex-shrink:1}

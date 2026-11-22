@@ -17,10 +17,29 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Tengami':'
  await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Boxer').values));
  await page.waitForTimeout(200);
  assert.equal(await page.evaluate(()=>presentation),'dashboard');
+ await page.selectOption('#dashboard-sort','za');assert.equal(await page.evaluate(()=>sort),'za');assert.equal(await page.locator('#sort').inputValue(),'za');
+ await page.selectOption('#dashboard-sort','az');
+ assert.equal(await page.locator('#dashboard-hints .key-lb').count(),1);assert.equal(await page.locator('#dashboard-hints .key-rb').count(),1);
+
  assert.equal(await page.locator('#presentation option[value=dashboard]').textContent(),'Durango');
  assert.deepEqual(await page.evaluate(()=>builtinAppearancePresets.filter(p=>p.values.presentation==='dashboard').map(p=>p.name)),['Boxer']);
  assert.equal(await page.evaluate(()=>builtinAppearancePresets.find(p=>p.name==='Launchbiz').values.presentation),'library');
  assert.equal(await page.locator('.dashboard-recent').count(),20);
+ for(const density of ['compact','comfortable','large']){
+ await page.evaluate(d=>{setSize(d);dashboardOpen(1,'games')},density);
+ const overlaps=await page.locator('#grid .game').evaluateAll(cards=>cards.filter(c=>{const badge=c.querySelector('.favorite-badge'),title=c.querySelector('.game-title');if(!badge)return false;const b=badge.getBoundingClientRect(),t=title.getBoundingClientRect(),r=c.getBoundingClientRect(),padding=parseFloat(getComputedStyle(title).paddingRight);return b.left<t.right-padding||b.right>r.right||b.bottom>r.bottom} ).length);
+ assert.equal(overlaps,0,'favorite stars occupy reserved right-hand space at '+density);
+ }
+ await page.evaluate(()=>{setSize('comfortable');dashboardOpen(0,'games')});
+
+ await page.locator('#dashboard-rail-mode').selectOption('favorites');assert.equal(await page.locator('.dashboard-recent').count(),3);
+ assert.ok(await page.locator('.dashboard-recent img').first().evaluate(n=>Math.abs(n.getBoundingClientRect().height/n.getBoundingClientRect().width-1.5)<.001),'sidebar artwork is exactly 2:3');
+ await page.locator('#dashboard-rail-mode').selectOption('recent');
+ await page.evaluate(()=>{controllerFocus($('#dashboard-library'));controller('down')});assert.equal(await page.evaluate(()=>document.activeElement.id),'dashboard-favorites');
+ await page.evaluate(()=>controller('activate'));assert.equal(await page.evaluate(()=>favoritesOnly),true);
+ await page.evaluate(()=>{controllerFocus($('#dashboard-apps'));controller('activate')});assert.ok(await page.locator('#apps-drawer').isVisible());await page.evaluate(()=>nativeBack());
+ await page.evaluate(()=>dashboardOpen(0,'games'));
+
  assert.ok(await page.locator('#grid .game').count()<100,'virtualized 1200-game grid');
  await page.evaluate(()=>dashboardSelect(0));
  await page.evaluate(()=>controller('left'));assert.equal(await page.evaluate(()=>dashboard.pane),'recents');
@@ -53,11 +72,57 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Tengami':'
  await page.evaluate(()=>{dashboardOpen(0,'games');dashboardSelect(200);persist()});const selectedId=await page.evaluate(()=>presentationId);
  await page.reload();await page.waitForFunction(()=>!restoring);assert.equal(await page.evaluate(()=>presentation),'dashboard');assert.equal(await page.evaluate(()=>presentationId),selectedId);
  await page.evaluate(()=>{dashboard.pane='recents';dashboard.recentId='g4';dashboardFocus();showDialog('#settings-dialog');$('#appearance-presets').value='Launchbiz';auditionAppearancePreset();finishAppearanceAudition(false)});assert.equal(await page.evaluate(()=>presentation),'dashboard');assert.equal(await page.evaluate(()=>dashboard.pane),'recents');assert.equal(await page.evaluate(()=>dashboard.recentId),'g4');await page.evaluate(()=>hideDialog('#settings-dialog'));
+
+
+ await page.evaluate(()=>{dashboardOpen(0,'games');dashboardSelect(80)});const collapseId=await page.evaluate(()=>presentationId);
+ const expandedWidth=await page.locator('#grid').evaluate(n=>n.clientWidth);
+ await page.click('#dashboard-toggle');await page.waitForTimeout(150);
+ assert.equal(await page.locator('#dashboard-toggle').getAttribute('aria-expanded'),'false');
+ assert.ok(await page.locator('#grid').evaluate(n=>n.clientWidth)>expandedWidth);
+ assert.equal(await page.locator('#dashboard-recents').isVisible(),false);
+ assert.equal(await page.evaluate(()=>presentationId),collapseId);
+ await page.evaluate(()=>{controllerFocus($('#dashboard-apps'));controller('down')});assert.ok(await page.evaluate(()=>document.activeElement.closest('#dashboard-categories')!==null));
+
+ await page.evaluate(()=>{dashboardSelect(dashboard.columns);dashboardController('left')});
+ assert.equal(await page.evaluate(()=>document.activeElement.id),'dashboard-library');
+ await page.evaluate(()=>persist());await page.reload();await page.waitForFunction(()=>!restoring);
+ assert.equal(await page.evaluate(()=>dashboardOptions.collapsed),true);
+ await page.evaluate(()=>{controllerFocus($('#dashboard-toggle'));dashboardController('activate')});
+ assert.equal(await page.locator('#dashboard-toggle').getAttribute('aria-expanded'),'true');
+ assert.ok(await page.locator('#dashboard-recents').isVisible());
+
+ for(const [width,height] of [[1097,592],[800,600],[960,640],[960,600],[1260,540],[640,360],[390,700]])for(const collapsed of [false,true]){
+  await page.setViewportSize({width,height});await page.evaluate(collapsed=>{setDashboardOptions({...dashboardOptions,collapsed});dashboardOpen(0,'games');dashboardSelect(200)},collapsed);await page.waitForTimeout(120);
+  const bad=await page.evaluate(()=>[...document.querySelectorAll('.topbar button,.topbar .search,#dashboard-sort,#dashboard-title')].filter(n=>n.getClientRects().length).map(n=>({id:n.id||n.className,r:n.getBoundingClientRect().toJSON()})).filter(({r})=>r.left<0||r.right>innerWidth+1||r.top<0));assert.deepEqual(bad,[],`header ${width} collapsed=${collapsed}`);
+  const visible=await page.locator('#grid .presentation-selected').evaluate(n=>{const r=n.getBoundingClientRect(),g=n.closest('#grid').getBoundingClientRect();return r.bottom<=g.bottom-2&&r.top>=g.top+2});assert.ok(visible,`selected card ${width} collapsed=${collapsed}`);
+ }
+ await page.setViewportSize({width:1097,height:592});
+
+ await page.evaluate(()=>{setDashboardOptions({...dashboardOptions,collapsed:false});dashboardOpen(0,'games');dashboardSelect(100)});
+ const beforeFav=await page.locator('#grid').evaluate(n=>n.scrollTop);await page.evaluate(()=>controller('favorite'));assert.ok(Math.abs(await page.locator('#grid').evaluate(n=>n.scrollTop)-beforeFav)<2,'favoriting preserves scroll');
+ await page.evaluate(()=>{controller('controls')});for(let i=0;i<15;i++){assert.ok(await page.evaluate(()=>{const n=document.activeElement;return !!n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden'}));await page.evaluate(()=>controller('right'))}await page.evaluate(()=>controller('back'));
+ await page.evaluate(()=>showDialog('#settings-dialog'));assert.equal(await page.locator('#dashboard-options').evaluate(n=>n.hidden),false);await page.evaluate(()=>hideDialog('#settings-dialog'));
+ const densityCounts=[];
+ for(const density of ['spacious','balanced','dense']){
+  await page.evaluate(density=>{setDashboardOptions({density,colors:'cover'});dashboardOpen(0,'games');dashboardSelect(0)},density);
+  await page.waitForTimeout(150);densityCounts.push(await page.evaluate(()=>dashboard.columns));
+  const ratio=await page.locator('#grid .cover').first().evaluate(n=>n.clientWidth/n.clientHeight);assert.ok(Math.abs(ratio-2/3)<.01);
+ }
+ assert.ok(densityCounts[0]<densityCounts[1]&&densityCounts[1]<densityCounts[2]);
+ assert.equal(await page.evaluate(()=>appearanceSnapshot().dashboardOptions.colors),'cover');
+ await page.evaluate(()=>persist());await page.reload();await page.waitForFunction(()=>!restoring);
+ assert.equal(await page.evaluate(()=>dashboardOptions.density),'dense');assert.equal(await page.evaluate(()=>dashboardOptions.colors),'cover');
+ await page.evaluate(()=>setDashboardOptions({density:'balanced',colors:'fixed'}));
+ // A previous row must not leave caption slivers in the top padding.
+ await page.evaluate(()=>{dashboardOpen(0,'games');$('#grid').scrollTop=dashboard.pitch-12;paintDashboard()});
+ assert.equal(await page.locator('#grid .game').first().evaluate(n=>getComputedStyle(n).visibility),'hidden');
+ await page.evaluate(()=>{$('#grid').scrollTop=0;paintDashboard()});
+ assert.equal(await page.locator('#grid .game').first().evaluate(n=>getComputedStyle(n).visibility),'visible');
  // Touch scrolling does not snap back to the old selected row.
  await page.evaluate(()=>{$('#grid').scrollTop=13000});await page.waitForTimeout(200);assert.ok(await page.locator('#grid').evaluate(n=>n.scrollTop)>12900);
  assert.ok(await page.locator('#grid .game').count()<100);
  await page.evaluate(()=>{dashboard.pane='games';controller('down')});assert.ok(await page.evaluate(()=>filtered.findIndex(g=>g.id===presentationId)>100));
- for(const layout of ['library','berlin','seattle','atlantis','redmond','kyoto','dashboard']){await page.evaluate(l=>setPresentation(l),layout);assert.equal(await page.evaluate(()=>presentation),layout);assert.equal(await page.locator('#dashboard-sidebar').isVisible(),layout==='dashboard');}
+ for(const layout of ['library','berlin','seattle','atlantis','redmond','kyoto','dashboard']){await page.evaluate(l=>setPresentation(l),layout);assert.equal(await page.evaluate(()=>presentation),layout);assert.equal(await page.locator('#dashboard-sidebar').isVisible(),layout==='dashboard');assert.equal(await page.locator('#dashboard-toggle').isVisible(),layout==='dashboard');assert.equal(await page.locator('#dashboard-sort').isVisible(),layout==='dashboard');assert.equal(await page.locator('#dashboard-options').evaluate(n=>n.hidden),layout!=='dashboard');}
  await page.evaluate(()=>{games=[];rebuildGenres();update()});assert.equal(await page.locator('.dashboard-recent').count(),0);assert.ok(await page.locator('.dashboard-empty').isVisible());await page.evaluate(()=>{dashboardFocus();controller('left');controller('down');controller('activate')});
  assert.deepEqual(errors,[]);console.log('Dashboard regression checks passed: windowing, controller panes, recents, search, favorites, presets, persistence, five viewport sizes, empty library.');
  }finally{await browser.close();server.close()}

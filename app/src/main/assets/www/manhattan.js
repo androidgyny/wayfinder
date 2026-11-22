@@ -55,6 +55,7 @@ function sizeManhattanCover(){
  Object.assign($('#manhattan-cover').style,{width:width+'px',height:width*1.5+'px'});
 }
 function renderManhattan(){
+ window.queueRecentPolish?.();
  const tabs=$('#manhattan-tabs'),list=sections(),signature=JSON.stringify(list.map(s=>[s.label,searchSummary?searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0):null]));
  if(tabs.dataset.signature!==signature){
   tabs.dataset.signature=signature;tabs.replaceChildren(...list.map((s,i)=>{

@@ -43,3 +43,107 @@ body.input-compact[data-presentation=dashboard] #main{grid-template-rows:40px mi
 body.input-compact[data-presentation=dashboard] :is(.heading,.toolbar,#dashboard-hints){display:none}
 body.input-compact[data-presentation=dashboard] #grid{grid-row:2}
 body.input-compact[data-presentation=dashboard] #dashboard-sidebar{margin-bottom:8px}
+
+/* Durango: a compact library rail and portrait cover tiles. */
+body[data-presentation=dashboard]{--dashboard-rail:clamp(170px,20vw,270px)}
+body[data-presentation=dashboard] .topbar{gap:18px;padding:0 20px;background:linear-gradient(110deg,var(--bg) 20%,#60223844 45%,#24436633)}
+body[data-presentation=dashboard] .brand{width:calc(var(--dashboard-rail) - 20px);min-width:0;flex-shrink:0;letter-spacing:.16em;font-size:17px}
+body[data-presentation=dashboard] #dashboard-title{display:block;font-size:28px;font-weight:650;white-space:nowrap;margin-right:auto}
+body[data-presentation=dashboard] .topbar .search{flex:0 1 280px;min-width:100px}
+body[data-presentation=dashboard] #open-apps{display:none}
+body[data-presentation=dashboard] .shell{grid-template-columns:var(--dashboard-rail) minmax(0,1fr);gap:18px;padding:0 18px 0 0;background:linear-gradient(120deg,#60223818,transparent 60%)}
+body[data-presentation=dashboard] #dashboard-sidebar{border:0;border-radius:0;margin:0;padding:8px 12px 12px;background:var(--bg);overflow:hidden}
+#dashboard-navigation{display:flex;flex-direction:column;gap:5px;padding:0 0 18px;border-bottom:1px solid var(--line);margin-bottom:16px}
+#dashboard-navigation button{display:flex;align-items:center;gap:14px;text-align:left;background:transparent;padding:12px 10px;border-radius:6px;font-size:15px;min-height:42px}
+#dashboard-navigation button[aria-pressed=true]{background:var(--hover)}
+.dashboard-nav-icon{font-family:Arial,sans-serif;font-size:24px;width:24px;text-align:center;line-height:1}
+#dashboard-rail-mode{width:100%;min-width:0;margin:0 0 8px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit;font-size:13px}
+#dashboard-recents{padding:7px;scroll-padding:8px;flex:1}
+.dashboard-recent{padding:5px 0;gap:10px;scroll-margin:8px}
+.dashboard-recent img{width:32px;height:48px;aspect-ratio:2/3;object-fit:cover;border-radius:3px}
+.dashboard-recent strong{font-size:12px}.dashboard-recent small{font-size:10px}
+body[data-presentation=dashboard] #main{grid-template-rows:58px 24px minmax(0,1fr) 44px}
+body[data-presentation=dashboard] .heading{display:none}
+body[data-presentation=dashboard] #dashboard-categories{padding:8px;gap:12px}
+.dashboard-category{min-width:120px;flex:1 0 auto;padding:12px 16px;background:linear-gradient(135deg,rgba(var(--category-tone),.9),rgba(var(--category-tone),.65));color:#fff;border:1px solid #ffffff12;border-radius:7px;text-align:center;font-weight:600;font-size:13px}
+.dashboard-category.current{background:linear-gradient(135deg,#b9e7f6,#8fc9e5);color:#10212b;box-shadow:0 1px 8px #a1dcff35;border-color:#cdefff}
+body[data-presentation=dashboard] .toolbar{max-width:100%;padding-right:12px;font-size:11px}
+body[data-presentation=dashboard] .toolbar select{font-size:11px;padding:2px 7px}
+body[data-presentation=dashboard] #grid .game{height:calc(var(--dashboard-cover) + 34px);padding:0;background:var(--panel);border-radius:7px;text-align:left}
+body[data-presentation=dashboard] #grid .cover{border-radius:7px 7px 0 0;border:0}
+body[data-presentation=dashboard] #grid .game-title{height:34px;line-height:34px;margin:0;padding:0 26px 0 9px;font-size:12px;font-weight:550}
+body[data-presentation=dashboard] #grid .game-genre{display:none}
+body[data-presentation=dashboard] #grid .favorite-badge{position:absolute;top:auto;left:auto;bottom:8px;right:7px;width:18px;height:18px;display:grid;place-items:center;background:transparent;box-shadow:none;padding:0;font-size:16px;line-height:18px}
+body[data-presentation=dashboard][data-selection-style=outline] #grid .presentation-selected .cover{outline:none}
+body[data-presentation=dashboard][data-selection-style=outline] #grid .game.presentation-selected{outline:2px solid var(--accent);outline-offset:3px;background:var(--hover)}
+body[data-presentation=dashboard] #dashboard-hints{border-top:1px solid var(--line);gap:18px}
+@media(max-width:800px){body[data-presentation=dashboard]{--dashboard-rail:150px}body[data-presentation=dashboard] #dashboard-title{font-size:20px}body[data-presentation=dashboard] .brand{display:block;font-size:12px}#dashboard-navigation button{font-size:12px;gap:8px}.dashboard-recent strong{font-size:11px}body[data-presentation=dashboard] .topbar{gap:10px;padding-inline:12px}body[data-presentation=dashboard] .shell{gap:8px;padding-right:8px}}
+@media(max-width:620px){body[data-presentation=dashboard] #dashboard-title{display:none}body[data-presentation=dashboard]{--dashboard-rail:120px}#dashboard-navigation button{padding:8px 4px}.dashboard-nav-icon{font-size:18px;width:18px}#dashboard-rail-mode{font-size:11px}body[data-presentation=dashboard] .brand{width:100px}.dashboard-recent{gap:5px}.dashboard-recent img{width:26px;height:39px}.dashboard-recent small{display:none}}
+@media(max-height:450px){#dashboard-navigation{gap:0;padding-bottom:6px;margin-bottom:8px}#dashboard-navigation button{padding:6px;min-height:30px}body[data-presentation=dashboard] #main{grid-template-rows:48px 22px minmax(0,1fr) 36px}}
+body.input-compact[data-presentation=dashboard] #main{grid-template-rows:40px minmax(0,1fr)}
+body.input-compact[data-presentation=dashboard] #grid{grid-row:2}
+body.input-compact[data-presentation=dashboard] #dashboard-navigation{display:none}
+body[data-presentation=dashboard] .brand small{display:none}
+body[data-presentation=dashboard] .topbar{height:56px}
+body[data-presentation=dashboard] .shell{height:calc(var(--visible-height,100dvh) - 56px)}
+body[data-presentation=dashboard] #main{grid-template-rows:52px 20px minmax(0,1fr) 40px}
+body[data-presentation=dashboard] #grid .cover{border-radius:7px 7px 0 0!important}
+body[data-presentation=dashboard][data-dashboard-pane=navigation] #grid .presentation-selected{outline:none!important}
+body.input-compact[data-presentation=dashboard] .shell{height:calc(var(--input-height) - 56px)}
+body.input-compact[data-presentation=dashboard] #main{grid-template-rows:40px minmax(0,1fr)}
+body[data-presentation=dashboard] .brand-sub{display:none}
+.dashboard-nav-icon svg{display:block;width:24px;height:24px}
+body[data-presentation=dashboard][data-selection-style=outline]:not([data-dashboard-pane=games]) #grid .game.presentation-selected{outline:none;background:var(--panel)}
+/* One continuous, static wash behind the header and library. */
+body[data-presentation=dashboard]{background:radial-gradient(ellipse at 29% 0%,#791d4966,transparent 48%),radial-gradient(ellipse at 100% 0%,#245d8955,transparent 62%),var(--bg)}
+body[data-presentation=dashboard] .topbar{background:linear-gradient(to right,var(--bg) 0,var(--bg) var(--dashboard-rail),transparent var(--dashboard-rail));backdrop-filter:none}
+body[data-presentation=dashboard] .shell{background:transparent}
+body[data-presentation=dashboard] .dashboard-category{background:linear-gradient(155deg,rgba(var(--category-tone),1),rgba(var(--category-tone),.72));box-shadow:inset 0 1px 0 #ffffff20,0 2px 5px #0002}
+body[data-presentation=dashboard] .dashboard-category.current{background:linear-gradient(145deg,#bdeeff,#91d3ef);color:#10212b;border-color:#ccefff;box-shadow:inset 0 1px 2px #ffffff90,0 0 5px #c1edff99,0 0 8px #85cfff55}
+/* Refined console chrome, with artwork remaining exactly 2:3. */
+body[data-presentation=dashboard]{background:radial-gradient(ellipse 65% 48% at 28% 0%,#891a506e,transparent 90%),radial-gradient(ellipse 70% 52% at 100% 0%,#215c8966,transparent 90%),var(--bg)}
+body[data-presentation=dashboard] #dashboard-navigation{gap:3px;padding-bottom:14px;margin-bottom:14px}
+body[data-presentation=dashboard] #dashboard-navigation button{min-height:34px;padding:7px 10px;font-size:14px}
+body[data-presentation=dashboard] #dashboard-navigation button[aria-pressed=true]{background:linear-gradient(120deg,#ffffff25,#ffffff12);box-shadow:inset 0 1px #ffffff0d}
+body[data-presentation=dashboard] #add-game,body[data-presentation=dashboard] #settings-button{background:linear-gradient(#ffffff09,#ffffff03);color:var(--text);border:1px solid var(--line);border-radius:8px;box-shadow:inset 0 1px #ffffff09}
+body[data-presentation=dashboard] #add-game{padding:10px 14px;font-size:13px;white-space:nowrap}
+body[data-presentation=dashboard] #settings-button{width:38px;height:38px;min-width:38px;display:grid;place-items:center;padding:8px}
+body[data-presentation=dashboard] .topbar{gap:12px}
+body[data-presentation=dashboard] .topbar .search{flex:0 1 240px;height:38px}
+body[data-presentation=dashboard] #dashboard-sort{display:block;max-width:125px;min-width:0;font-size:12px;background:var(--field);border:1px solid var(--line);border-radius:7px;padding:8px 5px;color:var(--text)}
+body[data-presentation=dashboard] .toolbar{display:none}
+body[data-presentation=dashboard] #main{grid-template-rows:52px 0 minmax(0,1fr) 40px}
+body[data-presentation=dashboard] #grid .game{height:calc(var(--dashboard-cover) + 30px)}
+body[data-presentation=dashboard] #grid .game-title{height:30px;line-height:30px;font-size:11px;padding:0 9px;font-weight:500}
+body[data-presentation=dashboard] #grid .game.dashboard-favorite .game-title{padding-right:29px}
+body[data-presentation=dashboard] #grid .favorite-badge{bottom:6px}
+body[data-presentation=dashboard][data-selection-style=outline][data-dashboard-pane=games] #grid .game.presentation-selected{outline:2px solid #c8eeff;outline-offset:3px;box-shadow:0 0 5px 3px #9bdaff66,0 0 11px #75c9f244;background:linear-gradient(#ffffff10,#ffffff22),var(--panel)}
+body[data-presentation=dashboard] #dashboard-hints{justify-content:space-evenly;gap:8px}
+body[data-presentation=dashboard] .dashboard-key:is(.key-lb,.key-rb,.key-lt,.key-rt){min-width:28px;height:20px;border:1px solid #ffffff38;border-radius:5px;background:linear-gradient(#85888c,#484b50);box-shadow:inset 0 1px #ffffff3b,0 1px 2px #0005;color:white;font-weight:650}
+body[data-presentation=dashboard] .dashboard-hint:nth-child(5){border-left:1px solid var(--line);padding-left:15px}
+body[data-presentation=dashboard] .dashboard-hint:nth-child(6){border-left:1px solid var(--line);padding-left:15px}
+@media(max-width:800px){body[data-presentation=dashboard] #dashboard-title{font-size:18px}body[data-presentation=dashboard] .topbar{gap:7px}body[data-presentation=dashboard] #dashboard-sort{max-width:95px}body[data-presentation=dashboard] #add-game{padding:8px;font-size:12px}}
+body.input-compact[data-presentation=dashboard] #main{grid-template-rows:40px minmax(0,1fr)}
+/* Durango density and cover-derived color wash. */
+body[data-presentation=dashboard]{background:radial-gradient(ellipse 65% 45% at 28% 0%,rgba(var(--dashboard-warm,105,24,48),.3),transparent 90%),radial-gradient(ellipse 70% 48% at 100% 0%,rgba(var(--dashboard-cool,30,47,65),.22),transparent 90%),var(--bg)}
+body[data-presentation=dashboard] #main{grid-template-rows:52px 27px minmax(0,1fr) 40px}
+body[data-presentation=dashboard] #dashboard-title{max-width:29vw;overflow:hidden;text-overflow:ellipsis;font-size:24px}
+body[data-presentation=dashboard] #dashboard-shelf-title{display:block;grid-row:2;padding:6px 12px 0;font-size:14px;font-weight:600}
+body[data-presentation=dashboard] .dashboard-category{border-radius:4px}
+body[data-presentation=dashboard] #grid .game{border-radius:4px}
+body[data-presentation=dashboard] #grid .cover{border-radius:4px 4px 0 0!important}
+body.input-compact[data-presentation=dashboard] #main{grid-template-rows:40px minmax(0,1fr)}
+body.input-compact[data-presentation=dashboard] #dashboard-shelf-title{display:none}
+body[data-presentation=dashboard] #dashboard-toggle{display:grid;place-items:center;flex:none;width:32px;height:34px;padding:6px;border:1px solid var(--line);border-radius:5px;background:var(--panel);color:var(--text)}
+#dashboard-toggle svg{width:22px;height:22px}
+body[data-presentation=dashboard] .brand{width:calc(var(--dashboard-rail) - 64px);font-size:14px;letter-spacing:.12em}
+body[data-presentation=dashboard][data-dashboard-collapsed=true]{--dashboard-rail:64px}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] .brand{display:none}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-sidebar{padding:8px}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-navigation{border:0;padding:0;margin:0;gap:8px}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-navigation button{justify-content:center;padding:10px 6px;min-height:42px}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-navigation button>span:not(.dashboard-nav-icon){display:none}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] :is(#dashboard-recents,#dashboard-rail-mode){display:none}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-toggle svg{transform:scaleX(-1)}
+body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-title{margin-left:30px}
+@media(max-width:800px){body[data-presentation=dashboard][data-dashboard-collapsed=true] #dashboard-title{margin-left:20px}}

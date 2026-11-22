@@ -11,7 +11,7 @@ function storeDrawerPreference(value){
  try{if(native?.saveApp){const r=JSON.parse(native.saveApp(JSON.stringify(value)));if(!r.ok)throw Error(r.message)}const i=drawerPreferences.findIndex(a=>a.package===value.package);if(i<0)drawerPreferences.push(value);else drawerPreferences[i]=value;return true}catch(e){$('#appearance-error').textContent=e.message;toast('Could not save app changes');return false}
 }
 function loadDrawerPreferences(){try{drawerPreferences=native?.appsPreferences?JSON.parse(native.appsPreferences()):drawerPreferences}catch{}}
-function openApps(){drawerView='home';drawerSection='';drawerPage=0;$('#drawer-search').value='';$('#drawer-letter').value='';loadDrawerPreferences();showDialog('#apps-drawer');renderDrawer();if(native?.drawerApps){drawerLoading=true;native.drawerApps()}($('#app-sections button')||$('#drawer-search')).focus({preventScroll:true})}
+function openApps(){loadAppSections();refreshAppSectionOptions();drawerView='home';drawerSection='';drawerPage=0;$('#drawer-search').value='';$('#drawer-letter').value='';loadDrawerPreferences();showDialog('#apps-drawer');renderDrawer();if(native?.drawerApps){drawerLoading=true;native.drawerApps()}($('#app-sections button')||$('#drawer-search')).focus({preventScroll:true})}
 function openDrawerApp(a){effect('launch');native?.launchApp?.(a.package)}
 function drawerTile(a){const item=el('div','drawer-item'),b=el('button','drawer-app');b.dataset.package=a.package;b.setAttribute('aria-label','Open '+drawerName(a));const im=el('img');im.src=drawerImage(a);im.alt='';im.loading='lazy';b.append(im,el('span','',drawerName(a)));b.onclick=e=>{if(e.detail!==0&&b._held){b._held=false;return;}if(e.detail===0||performance.now()>pinIgnoreClickUntil)openDrawerApp(a)};b.onpointerdown=e=>{b._held=false;startPinDrag(e,a.package);startAppHold(e,b,a.package)};b.oncontextmenu=e=>{e.preventDefault();if(!pinDrag?.active&&performance.now()>pinIgnoreClickUntil){cancelAppHold();editDrawerApp(a.package)}};const edit=el('button','drawer-edit','•••');edit.setAttribute('aria-label','Edit '+drawerName(a));edit.onclick=()=>editDrawerApp(a.package);item.append(b,edit);return item}
 // Lookup tables live only for this synchronous render; edits never see stale entries.
@@ -23,11 +23,12 @@ function renderDrawer(){
  try{renderDrawerContents()}finally{drawerRenderPreferences=previousPreferences;drawerRenderGames=previousGames;}
 }
 function renderDrawerContents(){
+ if(drawerSection&&!appSections.some(s=>s.id===drawerSection))drawerSection='';
  const home=drawerView==='home'&&!$('#drawer-search').value.trim()&&!$('#drawer-letter').value;renderAppSections(home);
  const focusedItem=document.activeElement?.closest('#drawer-grid .drawer-item'),focusedPackage=focusedItem?.querySelector('.drawer-app')?.dataset.package,focusedEdit=document.activeElement?.matches('.drawer-edit'),focusedIndex=focusedItem?[...$('#drawer-grid').children].indexOf(focusedItem):0,focusedTab=document.activeElement?.closest('#drawer-tabs button')?.dataset.drawerView;
  $('#drawer-search').placeholder=drawerView==='other'?'Search non-game apps…':'Search every installed app…';$('#drawer-search').setAttribute('aria-label',drawerView==='other'?'Search non-game apps':'Search installed apps');
  const q=normalize($('#drawer-search').value).trim(),letter=$('#drawer-letter').value;
- const available=drawerCatalog.filter(a=>!q?(drawerView==='home'&&drawerSection&&appSection(a)===drawerSection&&!appPreference(a.package).hideFromSections||drawerView==='all'||drawerView==='other'&&!drawerIsGame(a)||drawerView==='pinned'&&appPreference(a.package).pinned||drawerView==='recent'&&appPreference(a.package).lastUsed>0):(drawerView!=='other'||!drawerIsGame(a))&&normalize(drawerName(a)+' '+a.title+' '+a.package).includes(q));
+ const available=drawerCatalog.filter(a=>!q?(drawerView==='home'&&drawerSection&&appSection(a)===drawerSection&&!appPreference(a.package).hideFromSections||drawerView==='all'||drawerView==='other'&&!drawerIsGame(a)||drawerView==='pinned'&&appPreference(a.package).pinned||drawerView==='recent'&&appPreference(a.package).lastUsed>0):(drawerView!=='other'||!drawerIsGame(a))&&normalize(drawerName(a)+' '+a.title+' '+a.package+' '+(drawerGameEntry(a.package)?.title||'')).includes(q));
  drawerFiltered=available.filter(a=>!letter||(letter==='#'?!/^[A-Z]/.test(normalize(drawerName(a)).toUpperCase()):normalize(drawerName(a)).toUpperCase().startsWith(letter)));
  drawerFiltered.sort((a,b)=>(!q&&drawerView==='pinned'?(appPreference(a.package).order||0)-(appPreference(b.package).order||0):!q&&drawerView==='recent'?(appPreference(b.package).lastUsed||0)-(appPreference(a.package).lastUsed||0):0)||compareTitles(drawerName(a),drawerName(b)));
  drawerPage=Math.max(0,Math.min(drawerPage,Math.max(0,Math.ceil(drawerFiltered.length/drawerPageSize)-1)));
@@ -38,7 +39,7 @@ function renderDrawerContents(){
  $('#drawer-status').hidden=home&&!drawerSection;
  $('#drawer-grid').hidden=home&&!drawerSection;$('#apps-drawer .drawer-pages').hidden=home||drawerFiltered.length<=drawerPageSize;$('#drawer-letter').parentElement.hidden=home;
  $('#drawer-page').textContent=drawerFiltered.length?`${drawerPage+1} / ${Math.ceil(drawerFiltered.length/drawerPageSize)}`:'';$('#drawer-prev').disabled=drawerPage===0;$('#drawer-next').disabled=(drawerPage+1)*drawerPageSize>=drawerFiltered.length;
- if(focusedPackage){const cards=[...$('#drawer-grid').querySelectorAll('.drawer-app')],b=cards.find(b=>b.dataset.package===focusedPackage)||cards[Math.min(focusedIndex,cards.length-1)];(focusedEdit?b?.parentElement.querySelector('.drawer-edit'):b)?.focus({preventScroll:true});if(!b)$('#drawer-search').focus({preventScroll:true});}
+ if(focusedPackage){const cards=[...$('#drawer-grid').querySelectorAll('.drawer-app')],b=cards.find(b=>b.dataset.package===focusedPackage)||cards[Math.min(focusedIndex,cards.length-1)];(focusedEdit?b?.parentElement.querySelector('.drawer-edit'):b)?.focus({preventScroll:true});if(!b)(home?(document.querySelector('[data-section="'+lastAppSection+'"]')||$('#app-sections button')||$('#manage-app-sections')):$('#drawer-search')).focus({preventScroll:true});}
  if(focusedTab)[...$('#drawer-tabs').children].find(b=>b.dataset.drawerView===focusedTab)?.focus({preventScroll:true});
 }
 function drawerChangePage(delta){drawerPage+=delta;renderDrawer();controllerFocus($('#drawer-grid .drawer-app')||$('#drawer-search'))}
@@ -48,7 +49,7 @@ function closeAppAppearance(){
  for(const child of children)hideDialog('#'+child.id);
  hideDialog('#app-appearance');
 }
-function editDrawerApp(pkg){const a=drawerCatalog.find(a=>a.package===pkg);if(!a)return;appearanceDraft={...appPreference(pkg)};$('#appearance-name').value=drawerName(a);$('#appearance-section').value=appearanceDraft.section||'auto';$('#appearance-section-hidden').checked=!!appearanceDraft.hideFromSections;$('#appearance-pinned').checked=!!appearanceDraft.pinned;const pins=drawerPreferences.filter(a=>a.pinned).sort((a,b)=>(a.order||0)-(b.order||0));$('#appearance-order').value=appearanceDraft.pinned?pins.findIndex(a=>a.package===pkg)+1:pins.length+1;$('#appearance-image').src=drawerImage(a);$('#appearance-error').textContent='';refreshAppGameAction();$('#appearance-uninstall').hidden=!native?.canUninstallApp?.(pkg);showDialog('#app-appearance')}
+function editDrawerApp(pkg){const a=drawerCatalog.find(a=>a.package===pkg);if(!a)return;appearanceDraft={...appPreference(pkg)};$('#appearance-name').value=drawerName(a);refreshAppSectionOptions(appearanceDraft.section||'auto');$('#appearance-section-hidden').checked=!!appearanceDraft.hideFromSections;$('#appearance-pinned').checked=!!appearanceDraft.pinned;const pins=drawerPreferences.filter(a=>a.pinned).sort((a,b)=>(a.order||0)-(b.order||0));$('#appearance-order').value=appearanceDraft.pinned?pins.findIndex(a=>a.package===pkg)+1:pins.length+1;$('#appearance-image').src=drawerImage(a);$('#appearance-error').textContent='';refreshAppGameAction();$('#appearance-uninstall').hidden=!native?.canUninstallApp?.(pkg);showDialog('#app-appearance')}
 // Shortcuts can share a host package without representing the app itself.
 function drawerGameEntry(pkg){return drawerRenderGames?drawerRenderGames.get(pkg):games.find(g=>g.package===pkg&&g.kind!=='shortcut'&&!g.intentUri)}
 function refreshAppGameAction(){
@@ -69,7 +70,7 @@ function appsEvent(event,data){
  if(event==='drawerInstalled'){drawerLoading=false;drawerCatalog=[...new Map(data.apps.map(a=>[a.package,a])).values()];loadDrawerPreferences();if($('#apps-drawer').open)renderDrawer();renderPinnedApps();return true}
  if(event==='appLaunched'){loadDrawerPreferences();if($('#apps-drawer').open)renderDrawer();return true}
  if(event==='cover'&&appearanceDraft&&data.id==='app_'+appearanceDraft.package){appearanceDraft.image=data.image;$('#appearance-image').src=data.image;return true}
- if(event==='restored'){loadDrawerPreferences();renderPinnedApps();if($('#apps-drawer').open)renderDrawer()}
+ if(event==='restored'){loadAppSections();loadDrawerPreferences();refreshAppSectionOptions();renderPinnedApps();if($('#apps-drawer').open)renderDrawer()}
  return false;
 }
 function appsController(action){

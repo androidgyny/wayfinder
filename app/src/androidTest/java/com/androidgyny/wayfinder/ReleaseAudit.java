@@ -515,6 +515,9 @@ public class ReleaseAudit extends Instrumentation {
                 JSONArray games=new JSONArray().put(game),apps=new JSONArray(),order=new JSONArray("[\"Puzzles\",\"Arcade\"]");
                 for(int i=0;i<8;i++)apps.put(new JSONObject().put("package","audit.app"+i).put("title","Custom "+i).put("pinned",true).put("order",i).put("section","social").put("hideFromSections",i==7).put("packIcon",new JSONObject().put("pack","missing.pack").put("name","alternate")));
                 apps.getJSONObject(0).put("image","user/audit.jpg");
+                JSONArray sections=new JSONArray("[{\"id\":\"custom_emulation\",\"name\":\"Emulation\",\"note\":\"Classic systems\",\"icon\":\"joystick\",\"color\":\"#79bdb4\",\"order\":0},{\"id\":\"news\",\"color\":\"#df92ab\",\"order\":1}]");
+                call(activity,"storeAppSections",new Class<?>[]{JSONArray.class},sections);
+                apps.getJSONObject(0).put("section","custom_emulation");
                 Files.write(new File((File)field("covers"),"audit.jpg").toPath(),image);
                 replace(games,apps,order);
                 js("appIconPack='missing.pack';lastIconPack='missing.pack';setPalette('midnight');persist();");
@@ -522,11 +525,17 @@ public class ReleaseAudit extends Instrumentation {
                 File exported=new File(activity.getCacheDir(),"export.zip");call(activity,"exportZip",new Class<?>[]{Uri.class},Uri.fromFile(exported));
                 JSONObject manifest;try(ZipFile z=new ZipFile(exported)){manifest=new JSONObject(new String(read(z.getInputStream(z.getEntry("library.json"))),"UTF-8"));check(z.size()==2,"backup deduplicates shared cover and app icon");}
                 check(manifest.getJSONArray("apps").length()==8,"backup includes eight pins and named pack icons");
+                check(manifest.getInt("version")==3&&manifest.getJSONArray("appSections").toString().equals(sections.toString()),"backup includes custom sections, colors and order");
                 check(!manifest.toString().contains("AIza_")&&!manifest.toString().contains(encryptedKey),"library export excludes plaintext and encrypted API credentials");
                 String before=records().toString();stage(exported);check(field("pendingImport")!=null,"valid export stages successfully");cancel();check(records().toString().equals(before),"cancel restore preserves library");
-                replace(new JSONArray(),new JSONArray(),new JSONArray());stage(exported);check(field("pendingImport")!=null,"backup stages against empty library");call(activity,"completeRestore",new Class<?>[]{});cancel();
+                replace(new JSONArray(),new JSONArray(),new JSONArray());call(activity,"storeAppSections",new Class<?>[]{JSONArray.class},new JSONArray());stage(exported);check(field("pendingImport")!=null,"backup stages against empty library");call(activity,"completeRestore",new Class<?>[]{});cancel();
                 check(records().length()==1&&new JSONArray(activity.getPreferences(0).getString("apps","[]")).toString().equals(apps.toString()),"round trip restores custom titles, eight pins, section settings and pack overrides");
                 check(call(field("db"),"order",new Class<?>[]{}).equals(order.toString()),"category order restored");
+                check(activity.getPreferences(0).getString("appSections","[]").equals(sections.toString()),"app sections restored with colors and order");
+                JSONObject badSections=new JSONObject(manifest.toString());badSections.getJSONArray("appSections").getJSONObject(0).put("color","invalid");stage(zip("badsections.zip",badSections,image,null));check(field("pendingImport")==null,"invalid section colors rejected before restore");
+                call(activity,"storeAppSections",new Class<?>[]{JSONArray.class},new JSONArray());
+                check(new JSONArray(activity.getPreferences(0).getString("apps","[]")).getJSONObject(0).getString("section").equals("auto"),"deleting a custom section resets its app assignment");
+                call(activity,"storeAppSections",new Class<?>[]{JSONArray.class},sections);replace(games,apps,order);
                 check(activity.getSharedPreferences("gemini",0).getString("key","").equals(encryptedKey),"library restore preserves this device's Gemini credential");auditCredentials.saveKey("");
                 JSONObject view=new JSONObject(activity.getPreferences(0).getString("view","{}"));
                 check(view.optString("palette").equals("midnight")&&view.optString("appIconPack").equals("missing.pack")&&view.optString("lastIconPack").equals("missing.pack"),"library restore preserves existing device appearance");

@@ -20,7 +20,7 @@ final class AmbientAudio {
     private final BooleanSupplier startupActive;
     private final Consumer<String> error;
     private MediaPlayer player;
-    private boolean resumed, prepared, focus, blocked, destroyed;
+    private boolean resumed, prepared, focus, blocked, waitingForQuiet, destroyed;
     private float level;
     private final AudioAttributes attributes=new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build();
     private final AudioFocusRequest request;
@@ -36,18 +36,20 @@ final class AmbientAudio {
     }
     private File file(){return new File(activity.getFilesDir(),prefs.getString("file","ambient-none"));}
     private String source(){return prefs.getString("source",file().isFile()?"custom":"august");}
-    private boolean available(){return source().equals("august")||file().isFile();}
+    private boolean available(){return source().equals("august")||source().equals("exploration")||(source().equals("custom")&&file().isFile());}
     void select(String source){
-        if(!source.equals("august")&&!source.equals("custom"))return;
-        suspend();release();prefs.edit().putString("source",source).apply();blocked=audio.isMusicActive();
+        if(!source.equals("august")&&!source.equals("exploration")&&!source.equals("custom"))return;
+        suspend();release();prefs.edit().putString("source",source).apply();waitForOtherAudio();
     }
     String settings(){try{return new JSONObject().put("enabled",prefs.getBoolean("enabled",false)).put("volume",prefs.getInt("volume",20)).put("name",prefs.getString("name","")).put("custom",file().isFile()).put("source",source()).put("available",available()).toString();}catch(Exception e){return "{}";}}
     void configure(boolean enabled,int volume){
         boolean was=prefs.getBoolean("enabled",false);
         prefs.edit().putBoolean("enabled",enabled).putInt("volume",Math.max(0,Math.min(100,volume))).apply();
-        if(!enabled){pause();abandon();}else if(!was)blocked=audio.isMusicActive();
+        if(!enabled){pause();abandon();}else if(!was)waitForOtherAudio();
     }
-    void resume(){resumed=true;blocked=audio.isMusicActive();handler.removeCallbacks(tick);handler.post(tick);}
+    // Returning games can keep their audio active briefly after our onResume.
+    private void waitForOtherAudio(){blocked=false;waitingForQuiet=audio.isMusicActive();}
+    void resume(){resumed=true;waitForOtherAudio();handler.removeCallbacks(tick);handler.post(tick);}
     void suspend(){pause();abandon();}
     void leave(){resumed=false;handler.removeCallbacks(tick);suspend();}
     private void pause(){if(player!=null&&prepared){try{if(player.isPlaying())player.pause();player.setVolume(0,0);}catch(IllegalStateException ignored){}}level=0;}
@@ -55,16 +57,17 @@ final class AmbientAudio {
     private void release(){if(player!=null){player.release();player=null;}prepared=false;level=0;}
     private final Runnable tick=new Runnable(){public void run(){
         if(!resumed||destroyed)return;
-        if(!prefs.getBoolean("enabled",false)||startupActive.getAsBoolean()||blocked||!available()){pause();}
+        if(waitingForQuiet&&!blocked&&!audio.isMusicActive())waitingForQuiet=false;
+        if(!prefs.getBoolean("enabled",false)||startupActive.getAsBoolean()||blocked||waitingForQuiet||!available()){pause();}
         else if(!focus){
-            if(audio.isMusicActive())blocked=true;
+            if(audio.isMusicActive())waitingForQuiet=true;
             else focus=audio.requestAudioFocus(request)==AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
         }else if(player==null){
             MediaPlayer next=new MediaPlayer();player=next;
             try{
                 next.setAudioAttributes(attributes);
-                if(source().equals("august")){
-                    try(android.content.res.AssetFileDescriptor asset=activity.getResources().openRawResourceFd(R.raw.another_august)){
+                if(source().equals("august")||source().equals("exploration")){
+                    try(android.content.res.AssetFileDescriptor asset=activity.getResources().openRawResourceFd(source().equals("exploration")?R.raw.chiptune_exploration:R.raw.another_august)){
                         next.setDataSource(asset.getFileDescriptor(),asset.getStartOffset(),asset.getLength());
                     }
                 }else next.setDataSource(file().getAbsolutePath());
@@ -94,7 +97,7 @@ final class AmbientAudio {
     String name(Uri uri){try(Cursor c=activity.getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME},null,null,null)){if(c!=null&&c.moveToFirst())return c.getString(0);}catch(Exception ignored){}return "Your audio file";}
     void accept(File next,String name){
         if(destroyed){next.delete();return;}suspend();release();File old=file();
-        prefs.edit().putString("file",next.getName()).putString("source","custom").putString("name",name).putBoolean("enabled",true).apply();old.delete();blocked=audio.isMusicActive();
+        prefs.edit().putString("file",next.getName()).putString("source","custom").putString("name",name).putBoolean("enabled",true).apply();old.delete();waitForOtherAudio();
     }
     void destroy(){destroyed=true;leave();release();activity.unregisterReceiver(noisy);}
 }

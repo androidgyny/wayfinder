@@ -1,0 +1,11 @@
+Chiptune: Exploration
+By Luis Zuno (ansimuz)
+https://ansimuz.itch.io/
+
+Source: https://opengameart.org/content/chiptune-exploration
+Original archive: https://opengameart.org/sites/default/files/exploration_files.zip
+Original file: exploration files/exploration.ogg
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Bundled unchanged. Playback repeats using Android MediaPlayer looping.

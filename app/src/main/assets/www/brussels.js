@@ -21,6 +21,7 @@ function sizeBrusselsCover(){
 function syncBrusselsCover(){if(presentation!=='brussels')return;const img=$('#brussels-cover');if(backdrop==='gradient')$('#soft-gradient').style.setProperty('--backdrop-rgb',coverColor(img)||'145,113,72');}
 let brusselsSceneKey=null,brusselsScene=-1;
 function renderBrussels(){
+ window.queueRecentPolish?.();
  const sceneKey=JSON.stringify([genre,favoritesOnly]);if(sceneKey!==brusselsSceneKey){brusselsSceneKey=sceneKey;brusselsScene=(brusselsScene+1)%15;}
  syncBrusselsOptions();const tabs=$('#brussels-tabs'),list=sections(),signature=JSON.stringify(list.map(s=>[s.label,searchSummary?searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0):null]));
  if(tabs.dataset.signature!==signature){tabs.dataset.signature=signature;tabs.replaceChildren(...list.map((s,i)=>{

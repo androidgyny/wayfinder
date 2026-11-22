@@ -12,6 +12,7 @@ function sizeBend(){
  if(rows!==bendRows||cols!==bendColumns){bendRows=rows;bendColumns=cols;renderBend();}
 }
 function renderBend(){
+ window.queueRecentPolish?.();
  const tabs=$('#bend-tabs'),list=sections(),key=JSON.stringify(list.map(s=>[s.label,searchSummary?searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0):null]));
  if(tabs.dataset.key!==key){tabs.dataset.key=key;tabs.replaceChildren(...list.map((s,i)=>{const b=el('button','bend-tab'),label=el('span','',s.label.replace('★ ',''));b.append(label);b.title=label.textContent;if(searchSummary){const n=searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0);b.append(el('small','',String(n)));b.classList.toggle('search-no-match',!n);}b.onfocus=()=>bendPane='tabs';b.onclick=()=>{bendPane='tabs';bendOpen(i);bendFocus()};return b}));}
  [...tabs.children].forEach((b,i)=>{const on=i===sectionIndex();b.classList.toggle('current',on);b.tabIndex=on?0:-1;b.setAttribute('aria-pressed',String(on));});revealCategoryItem(tabs,tabs.querySelector('.current'),true);
@@ -22,7 +23,7 @@ function renderBend(){
  while(grid.querySelectorAll('.bend-shelf').length>bendRows)grid.lastElementChild.remove();
  while(grid.querySelectorAll('.bend-shelf').length<bendRows)grid.append(el('div','bend-shelf'));
  const shelves=[...grid.querySelectorAll('.bend-shelf')],keep=new Set();
- items.forEach((g,i)=>{let b=existing.get(g.id);if(!b){b=card(g);b.classList.add('bend-case');const label=el('span','bend-label');b.append(label);b.onfocus=()=>{bendPane='games';if(presentationId!==g.id)bendSelect(filtered.findIndex(item=>item.id===g.id),false)};}syncGameCard(b,g);b.title=g.title;
+ items.forEach((g,i)=>{let b=existing.get(g.id);if(!b){b=card(g);b.classList.add('bend-case');const reflection=el('span','bend-sleeve-reflection');reflection.setAttribute('aria-hidden','true');b.querySelector('.cover').append(reflection);const label=el('span','bend-label');b.append(label);b.onfocus=()=>{bendPane='games';if(presentationId!==g.id)bendSelect(filtered.findIndex(item=>item.id===g.id),false)};}syncGameCard(b,g);b.title=g.title;
  const on=g.id===presentationId;b.classList.toggle('presentation-selected',on);b.classList.remove('controller-selected');b.tabIndex=on?0:-1;b.setAttribute('aria-current',String(on));b.querySelector('img').loading='eager';b.querySelector('.bend-label').textContent=on?(g.favorite?'★ ':'')+g.title:String(start+i+1).padStart(2,'0');
  const shelf=shelves[Math.floor(i/bendColumns)];if(b.parentElement!==shelf||shelf.children[i%bendColumns]!==b)shelf.append(b);keep.add(b);});
  for(const b of existing.values())if(!keep.has(b))b.remove();

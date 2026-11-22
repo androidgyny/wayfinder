@@ -1,6 +1,7 @@
 // Small tactile feedback for raised controls, without delaying their actions.
 (()=>{
  const selectors={
+  manhattan:'.manhattan-actions button',
   sedona:'.topbar button,#sedona-transport button,.sedona-tab',
   atlantis:'.topbar button,#atlantis-actions button',
   redmond:'#redmond-actions button,#settings-button',

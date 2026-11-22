@@ -179,3 +179,5 @@ body[data-presentation=rochester] #rochester-tabs .rochester-tab.current::before
 body[data-presentation=rochester][data-input=controller][data-controller-navigation=controls] #rochester-tabs .rochester-tab:focus{outline:none!important;box-shadow:none!important}
 
 body[data-presentation=rochester] #rochester-tabs .rochester-tab:not(.marquee) .rochester-tab-text{display:block;overflow:hidden;text-overflow:ellipsis}
+/* The light table remains pale even when the surrounding settings use Graphite. */
+body[data-presentation=rochester] #appearance-preview>p{color:#36434a}

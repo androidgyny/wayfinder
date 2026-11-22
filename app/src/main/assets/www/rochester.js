@@ -11,6 +11,7 @@ function sizeRochester(){
  if(cols!==rochesterColumns){rochesterColumns=cols;renderRochester();}
 }
 function renderRochester(){
+ window.queueRecentPolish?.();
  const tabs=$('#rochester-tabs'),list=sections(),key=JSON.stringify(list.map(s=>[s.label,searchSummary?searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0):null]));
  if(tabs.dataset.key!==key){tabs.dataset.key=key;tabs.replaceChildren(...list.map((s,i)=>{const b=el('button','rochester-tab'),label=el('span','rochester-tab-clip'),text=el('span','rochester-tab-text',s.label.replace('★ ',''));label.append(text);b.append(label);b.title=text.textContent;if(searchSummary){const n=searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0);b.append(el('small','',String(n)));b.classList.toggle('search-no-match',!n);}b.onfocus=()=>rochesterPane='tabs';b.onclick=()=>{rochesterPane='tabs';rochesterOpen(i);rochesterFocus()};return b}));}
  [...tabs.querySelectorAll('.rochester-tab')].forEach((b,i)=>{const on=i===sectionIndex();b.classList.toggle('current',on);b.tabIndex=on?0:-1;b.setAttribute('aria-pressed',String(on));});sizeRochesterTabs();
@@ -21,7 +22,7 @@ function renderRochester(){
  while(grid.querySelectorAll('.rochester-shelf').length>rochesterRows)grid.lastElementChild.remove();
  while(grid.querySelectorAll('.rochester-shelf').length<rochesterRows)grid.append(el('div','rochester-shelf'));
  const shelves=[...grid.querySelectorAll('.rochester-shelf')],keep=new Set();
- items.forEach((g,i)=>{let b=existing.get(g.id);if(!b){b=card(g);b.classList.add('rochester-case');const label=el('span','rochester-label');label.append(el('span','lighttable-title'));b.append(label);b.onfocus=()=>{rochesterPane='games';if(presentationId!==g.id)rochesterSelect(filtered.findIndex(item=>item.id===g.id),false)};}syncGameCard(b,g);b.title=g.title;
+ items.forEach((g,i)=>{let b=existing.get(g.id);if(!b){b=card(g);b.classList.add('rochester-case');const light=el('span','rochester-selection-light');light.setAttribute('aria-hidden','true');b.querySelector('.cover').append(light);const label=el('span','rochester-label');label.append(el('span','lighttable-title'));b.append(label);b.onfocus=()=>{rochesterPane='games';if(presentationId!==g.id)rochesterSelect(filtered.findIndex(item=>item.id===g.id),false)};}syncGameCard(b,g);b.title=g.title;
  const on=g.id===presentationId;b.classList.toggle('presentation-selected',on);b.classList.remove('controller-selected');b.tabIndex=on?0:-1;b.setAttribute('aria-current',String(on));b.querySelector('img').loading='eager';b.dataset.lighttableFavorite=String(!!g.favorite);b.querySelector('.lighttable-title').textContent=g.title;
  const shelf=shelves[Math.floor(i/rochesterColumns)];if(b.parentElement!==shelf||shelf.children[i%rochesterColumns]!==b)shelf.insertBefore(b,shelf.children[i%rochesterColumns]||null);keep.add(b);});
  for(const b of existing.values())if(!keep.has(b))b.remove();

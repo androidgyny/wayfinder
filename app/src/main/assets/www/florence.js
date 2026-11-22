@@ -11,6 +11,7 @@ function sizeFlorence(){
  if(cols!==florenceColumns){florenceColumns=cols;renderFlorence();}
 }
 function renderFlorence(){
+ window.queueRecentPolish?.();
  const tabs=$('#florence-tabs'),list=sections(),key=JSON.stringify(list.map(s=>[s.label,searchSummary?searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0):null]));
  if(tabs.dataset.key!==key){tabs.dataset.key=key;tabs.replaceChildren(...list.map((s,i)=>{const b=el('button','florence-tab'),label=el('span','',s.label.replace('★ ',''));b.append(label);b.title=label.textContent;if(searchSummary){const n=searchSectionCount(s.favorite?'favorites':s.genre?'genre:'+s.genre:'all',0);b.append(el('small','',String(n)));b.classList.toggle('search-no-match',!n);}b.onfocus=()=>florencePane='tabs';b.onclick=()=>{florencePane='tabs';florenceOpen(i);florenceFocus()};return b}));}
  [...tabs.children].forEach((b,i)=>{const on=i===sectionIndex();b.classList.toggle('current',on);b.tabIndex=on?0:-1;b.setAttribute('aria-pressed',String(on));});revealCategoryItem(tabs,tabs.querySelector('.current'),true);

@@ -50,11 +50,12 @@ function syncSystemBarColor(){
 function setPalette(value){if(value==='porcelain'||value==='ricepaper')value='parchment';palette=palettes.includes(value)?value:'portal';document.body.dataset.palette=palette;$('#palette').value=palette;updateInterfaceContrast();updateBackgroundPalette();syncSystemBarColor();if(isShowcase())drawBladeSurfaces();persist()}
 function setArtFit(value){artFit=value==='cover'?'cover':'contain';document.body.dataset.artFit=artFit;$('#art-fit').value=artFit;persist()}
 function toast(message){$('#toast').textContent=message;$('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').hidden=true,5000)}
-function persist(){rememberCategoryPlace();trimCategoryHistory();clearTimeout(carouselSaveTimer);if(native&&!restoring&&!window.appearanceAudition)native.saveView(JSON.stringify({brusselsOptions,bendShelfCount,ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,hongkongView,hongkongTone,hongkongRecent,terminalPalette,appIconPack,lastIconPack,categoryPlaces,cambridgeArtwork,cambridgeSection,cambridgePane,cambridgePositions,ulmArtwork,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,coverShadow,coverBorder,interfaceContrast,titleWeight,favoritesOnly,genre,query,sort,size,palette,presentation,presentationId,seattleBrowse,copenhagenIds,copenhagenKept,pragueKey,praguePositions,viennaKey,viennaPositions,soundEnabled,artFit,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons,appearancePresets,visible,scroll:window.scrollY,focus:presentation!=='library'?presentationId:document.activeElement?.closest('.game')?.dataset.id||lastTrigger?.dataset.id||null}))}
+let navigationSaveDeferred=false;
+function persist(){if(navigationSaveDeferred){queueCarouselSave();return;}rememberCategoryPlace();trimCategoryHistory();clearTimeout(carouselSaveTimer);if(native&&!restoring&&!window.appearanceAudition)native.saveView(JSON.stringify({dashboardOptions,brusselsOptions,bendShelfCount,ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,hongkongView,hongkongTone,hongkongRecent,terminalPalette,appIconPack,lastIconPack,categoryPlaces,cambridgeArtwork,cambridgeSection,cambridgePane,cambridgePositions,ulmArtwork,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,coverShadow,coverBorder,interfaceContrast,titleWeight,favoritesOnly,genre,query,sort,size,palette,presentation,presentationId,seattleBrowse,copenhagenIds,copenhagenKept,pragueKey,praguePositions,viennaKey,viennaPositions,soundEnabled,artFit,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons,appearancePresets,visible,scroll:window.scrollY,focus:presentation!=='library'?presentationId:document.activeElement?.closest('.game')?.dataset.id||lastTrigger?.dataset.id||null}))}
 window.saveView=persist;
 function rebuildGenres(){genres=orderedCategories(new Set(games.map(g=>g.genre)));counts=Object.fromEntries(genres.map(g=>[g,games.filter(x=>x.genre===g).length]));$('#genres').replaceChildren();for(const g of genres){const b=el('button','genre');b.dataset.genre=g;b.append(el('span','',g),el('span','',counts[g]));b.addEventListener('click',()=>setGenre(g));$('#genres').append(b)}$('.all>span:last-child').textContent=games.length.toLocaleString();$('.genre-label>span').textContent=genres.length;$('#category-options').replaceChildren(...['',...genres].map(g=>{const o=el('option');o.value=g;o.textContent=g||'All categories…';return o}));if(genre&&!genres.includes(genre))genre=''}
 function reloadLibrary(){const focusId=document.activeElement?.closest('#grid .game')?.dataset.id;if(native)games=JSON.parse(native.library());rebuildGenres();update();if(focusId)controllerFocus(libraryFocusTarget(focusId),true);persist();window.dispatchEvent(new Event('librarychange'))}
-function play(id,trigger){if(presentation==='seattle')presentationId=id;if(!native){toast('Launching is available in the Android app');return}lastTrigger=trigger||lastTrigger;effect('launch');persist();native.launch(String(id))}
+function play(id,trigger){if(presentation==='seattle')presentationId=id;if(!native){toast('Launching is available in the Android app');return}lastTrigger=trigger||lastTrigger;effect('launch');persist();if(!window.runRecentLaunch?.(()=>native.launch(String(id))))native.launch(String(id))}
 function topDialog(){return [...document.querySelectorAll('dialog[open]')].sort((a,b)=>(a._openedOrder||0)-(b._openedOrder||0)).pop()}
 function focusableControl(node){return !!node&&node.isConnected&&!node.disabled&&node.getClientRects().length>0&&getComputedStyle(node).visibility!=='hidden'&&!node.closest('[inert]')&&!node.closest('details:not([open]) > :not(summary)')}
 function libraryFocusTarget(preferredId){
@@ -107,7 +108,7 @@ window.nativeBack=()=>{effect('back');if(controllerControlsScope){leaveControlle
 let controllerGameId=null;
 function controllerFocus(node,silent=false){
  if(!focusableControl(node))return;
- if(node.closest('dialog')){document.body.dataset.input='controller';node.focus({preventScroll:true});node.scrollIntoView({block:'nearest',inline:'nearest'});return;}
+ if(node.closest('dialog')){document.body.dataset.input='controller';node.focus({preventScroll:true});node.scrollIntoView({block:'nearest',inline:'nearest'});if(node.closest('#apps-drawer #drawer-grid')){const grid=$('#drawer-grid'),r=node.getBoundingClientRect(),g=grid.getBoundingClientRect(),top=g.top+grid.clientTop+8,bottom=g.top+grid.clientTop+grid.clientHeight-8;if(r.bottom>bottom)grid.scrollTop+=r.bottom-bottom;else if(r.top<top)grid.scrollTop-=top-r.top;}return;}
  const previousCard=document.activeElement?.closest('.game');
  if(!silent&&document.activeElement!==node)effect('move');
  document.body.dataset.input='controller';
@@ -326,8 +327,9 @@ window.focusStartupGame=focusStartupGame;
 $('#category-options').onchange=e=>{if(e.target.value)$('#edit-genre').value=e.target.value;};
 $('#edit-genre').oninput=e=>{$('#category-options').value=genres.includes(e.target.value)?e.target.value:'';};
 
-function refreshAmbient(){let v={enabled:false,volume:20,custom:false,name:'',source:'august',available:true};try{if(native?.ambientSettings)v={...v,...JSON.parse(native.ambientSettings())}}catch{}$('#ambient-enabled').checked=v.enabled;$('#ambient-enabled').disabled=!v.available;$('#ambient-source').value=v.source;$('#ambient-credit').hidden=v.source!=='august';$('#ambient-custom').hidden=v.source!=='custom';$('#ambient-name').textContent=v.custom?v.name:'No audio selected';$('#ambient-volume').value=v.volume;$('#ambient-volume-value').textContent=v.volume+'%';$('#ambient-clear').disabled=!v.custom;$('#ambient-clear-row').hidden=v.source!=='custom';}
-$('#ambient-source').onchange=()=>{native?.selectAmbient?.($('#ambient-source').value);if(!native){$('#ambient-credit').hidden=$('#ambient-source').value!=='august';$('#ambient-custom').hidden=$('#ambient-source').value!=='custom';$('#ambient-clear-row').hidden=$('#ambient-source').value!=='custom';}};
+function updateAmbientSourceUI(source){const credit=$('#ambient-credit');credit.hidden=source==='custom';credit.textContent=source==='exploration'?'Chiptune: Exploration by Luis Zuno (ansimuz) · CC0. Original looping track from OpenGameArt.org.':'Another August by The Cynic Project (cynicmusic.com / pixelsphere.org) · CC0. Adapted for Wayfinder with a 20-second crossfade; 3:07 loop.';$('#ambient-custom').hidden=source!=='custom';$('#ambient-clear-row').hidden=source!=='custom';}
+function refreshAmbient(){let v={enabled:false,volume:20,custom:false,name:'',source:'august',available:true};try{if(native?.ambientSettings)v={...v,...JSON.parse(native.ambientSettings())}}catch{}$('#ambient-enabled').checked=v.enabled;$('#ambient-enabled').disabled=!v.available;$('#ambient-source').value=v.source;updateAmbientSourceUI(v.source);$('#ambient-custom').hidden=v.source!=='custom';$('#ambient-name').textContent=v.custom?v.name:'No audio selected';$('#ambient-volume').value=v.volume;$('#ambient-volume-value').textContent=v.volume+'%';$('#ambient-clear').disabled=!v.custom;$('#ambient-clear-row').hidden=v.source!=='custom';}
+$('#ambient-source').onchange=()=>{native?.selectAmbient?.($('#ambient-source').value);if(!native)updateAmbientSourceUI($('#ambient-source').value);};
 function configureAmbient(){const volume=Number($('#ambient-volume').value);$('#ambient-volume-value').textContent=volume+'%';native?.configureAmbient?.($('#ambient-enabled').checked,volume)}
 $('#ambient-enabled').onchange=configureAmbient;$('#ambient-volume').oninput=configureAmbient;$('#ambient-volume').onchange=configureAmbient;
 $('#ambient-choose').onclick=()=>native?.chooseAmbient?.();$('#ambient-clear').onclick=()=>native?.clearAmbient?.();refreshAmbient();
@@ -402,7 +404,7 @@ function syncSearchFeedback(){
  for(const [id,offset] of [['category-current',0],['category-before',-1],['category-after',1]])sectionSearchLabel(document.getElementById(id),options[(index+offset+options.length)%options.length]);
  for(const [i,b] of [...document.querySelectorAll('#seattle-categories button')].entries())sectionSearchLabel(b,seattleSections()[i]);
  const scopeLabel=['vienna','prague','copenhagen'].includes(presentation)?'all categories':genre|| (favoritesOnly?'Favorites':presentation==='ithaca'&&ithacaLevel==='games'&&ithacaScope==='recent'||presentation==='tacoma'&&tacomaPage===1||presentation==='hongkong'&&hongkongRecent||presentation==='cambridge'&&cambridgeSection==='recent'||presentation==='ulm'&&ulmSection==='recent'?'Recently played':'All games');
- for(const field of [$('#search'),$('#ulm-search')]){field.placeholder='Search '+scopeLabel;field.setAttribute('aria-label','Search '+scopeLabel);}
+ for(const field of [$('#search'),$('#ulm-search')]){field.placeholder=presentation==='dashboard'?'Search games…':'Search '+scopeLabel;field.setAttribute('aria-label','Search '+scopeLabel);}
  const restoreSearchFocus=document.activeElement?.matches('.show-all-matches');
  const grid=$('#grid');grid.querySelectorAll('.search-empty').forEach(n=>n.remove());grid.classList.remove('search-empty-grid');document.body.classList.remove('search-no-results');
  const overview=presentation==='vienna'||presentation==='prague',active=overview?(presentation==='vienna'?viennaCurrent():pragueCurrent()):null;
@@ -416,3 +418,12 @@ function syncSearchFeedback(){
  const host=presentation==='seattle'?grid.querySelector('.seattle-shelf'):presentation==='vienna'?grid.querySelector('.expanded .vienna-row'):presentation==='prague'?grid.querySelector('.expanded .prague-list'):grid;
  (host||grid).append(panel);$('#empty').hidden=true;if(restoreSearchFocus)panel.querySelector('button')?.focus({preventScroll:true});
 }
+
+// Navigation in every layout shares one deferred state save, including older
+// layout handlers that still call persist directly for category/page changes.
+const dispatchControllerNavigation=window.controller;
+window.controller=action=>{
+ const previous=navigationSaveDeferred;
+ navigationSaveDeferred=previous||(!topDialog()&&['up','down','left','right','pageUp','pageDown','genrePrev','genreNext'].includes(action));
+ try{return dispatchControllerNavigation(action)}finally{navigationSaveDeferred=previous}
+};

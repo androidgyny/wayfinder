@@ -24,6 +24,67 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
 
  await page.evaluate(()=>{window.appSaved=[];native.saveApp=raw=>{window.appSaved.push(JSON.parse(raw));return '{"ok":true}'};native.launchApp=p=>window.launched=p;drawerCatalog=Array.from({length:65},(_,i)=>({package:'test.app'+i,title:'Utility '+i}));drawerPreferences=drawerCatalog.slice(0,8).map((a,i)=>({package:a.package,pinned:true,order:i}));native.appsPreferences=()=>JSON.stringify(drawerPreferences);openApps()});
  assert.equal(await page.locator('.app-section').count(),5);
+ await page.evaluate(()=>{window.savedSections=[];native.appSections=()=>JSON.stringify(savedSections);native.saveAppSections=raw=>{savedSections=JSON.parse(raw);const allowed=new Set(['auto','news','media','social','tools','system',...savedSections.map(s=>s.id)]);drawerPreferences=drawerPreferences.map(a=>allowed.has(a.section||'auto')?a:{...a,section:'auto'});return '{"ok":true}'};loadAppSections()});
+
+ await page.evaluate(()=>openAppSectionEditor(appSections.find(s=>s.id==='media')));
+ assert.equal(await page.locator('#app-section-color').inputValue(),'#b29aed');
+ assert.equal(await page.locator('#app-section-name').isVisible(),false);assert.equal(await page.evaluate(()=>document.activeElement.closest('#app-section-color-picker')?.id),'app-section-color-picker','built-in editor focuses selected color');
+ await page.locator('#app-section-color-picker [aria-label=Coral]').click();await page.locator('#app-section-editor-form').evaluate(f=>f.requestSubmit());
+ assert.equal(await page.evaluate(()=>savedSections.find(s=>s.id==='media').color),'#e7978c');
+ await page.evaluate(()=>{loadAppSections();openAppSectionEditor(appSections.find(s=>s.id==='media'))});
+ assert.equal(await page.locator('#app-section-color').inputValue(),'#e7978c');
+ await page.locator('#app-section-reset-color').click();await page.locator('#app-section-editor-form').evaluate(f=>f.requestSubmit());
+ assert.equal(await page.evaluate(()=>appSections.find(s=>s.id==='media').color),'#b29aed');
+ assert.equal(await page.evaluate(()=>savedSections.some(s=>s.id==='media')),false,'reset removes override');
+ await page.evaluate(()=>{$('#manage-app-sections').click()});await page.locator('[data-manager-section=news] [data-section-action=down]').click();
+ assert.deepEqual(await page.evaluate(()=>appSections.slice(0,2).map(s=>s.id)),['media','news']);
+ await page.evaluate(()=>{loadAppSections();renderDrawer()});assert.equal(await page.locator('#app-sections button').first().getAttribute('data-section'),'media','built-in order survives reload');
+ await page.evaluate(()=>{openAppSectionEditor(appSections.find(s=>s.id==='news'))});await page.locator('#app-section-color-picker [aria-label=Mint]').click();await page.locator('#app-section-editor-form').evaluate(f=>f.requestSubmit());
+ assert.equal(await page.evaluate(()=>appSections[0].id),'media','color editing retains category order');
+
+ await page.evaluate(()=>{window.goodSaveSections=native.saveAppSections;native.saveAppSections=()=>JSON.stringify({ok:false,message:'Simulated storage failure'});openAppSectionEditor(appSections.find(s=>s.id==='news'))});
+ await page.locator('#app-section-color-picker [aria-label=Coral]').click();await page.locator('#app-section-editor-form').evaluate(f=>f.requestSubmit());
+ assert.equal(await page.evaluate(()=>appSections.find(s=>s.id==='news').color),'#7cbfa3','failed save rolls back in-memory color');
+ assert.ok(await page.locator('#app-section-error').textContent().then(s=>s.includes('Simulated')));
+ await page.evaluate(()=>{native.saveAppSections=goodSaveSections;hideDialog('#app-section-editor')});
+ await page.evaluate(()=>{hideDialog('#app-section-manager');savedSections=[];loadAppSections();renderDrawer()});
+
+ for(const viewport of [{width:1097,height:592},{width:640,height:360},{width:800,height:600}]){
+  await page.setViewportSize(viewport);
+  await page.evaluate(()=>{setTypography('editorial');$('#manage-app-sections').click()});
+  for(const id of ['app-section-manager','app-section-editor']){
+   if(id==='app-section-editor')await page.locator('#add-app-section').click();
+   const frame=await page.locator('#'+id).evaluate(d=>{const r=d.getBoundingClientRect(),h=d.querySelector('header').getBoundingClientRect(),f=d.querySelector('footer').getBoundingClientRect(),b=d.querySelector('.app-section-dialog-body');return {font:getComputedStyle(d.querySelector('h2')).fontFamily,fit:r.top>=0&&r.bottom<=innerHeight+1&&f.bottom<=r.bottom&&h.bottom<=f.top,overflow:d.scrollWidth>d.clientWidth+1,padding:parseFloat(getComputedStyle(b).paddingLeft)}});
+   assert.ok(frame.font.includes('WayfinderClean'));assert.ok(frame.fit,JSON.stringify({viewport,id,frame}));assert.equal(frame.overflow,false);assert.ok(frame.padding>=18);
+  }
+  await page.locator('[data-icon="joystick"]').click();
+  assert.equal(await page.evaluate(()=>document.activeElement.dataset.icon),'joystick','icon selection preserves controller focus');
+  await page.evaluate(()=>{hideDialog('#app-section-editor');hideDialog('#app-section-manager')});
+ }
+ await page.setViewportSize({width:640,height:360});
+ await page.evaluate(()=>{savedSections=Array.from({length:20},(_,i)=>({id:'custom_test'+i,name:'Long section '+i+' with a descriptive name',note:'A description that must wrap without pushing controls outside the frame',icon:'joystick'}));loadAppSections();renderDrawer();$('#manage-app-sections').click()});
+ await page.locator('[data-manager-section="custom_test1"] [data-section-action="up"]').click();
+ assert.equal(await page.evaluate(()=>document.activeElement.closest('[data-manager-section]')?.dataset.managerSection),'custom_test1','reorder retains focus on moved section');await page.locator('[data-manager-section=custom_test1] [data-section-action=up]').click({clickCount:1});assert.ok(await page.evaluate(()=>appSections.findIndex(s=>s.id==='custom_test1')<appSections.findIndex(s=>s.id==='system')),'custom sections can move before built-ins');
+ await page.evaluate(()=>hideDialog('#app-section-manager'));
+ const strip=await page.evaluate(()=>{const cards=[...$('#app-sections').children],root=$('#app-sections');cards[0].focus();for(let i=0;i<24;i++)sectionController('right');const last=cards.at(-1).getBoundingClientRect(),r=root.getBoundingClientRect(),dock=$('#app-dock').getBoundingClientRect();return {single:cards.every(c=>Math.abs(c.getBoundingClientRect().top-last.top)<2),scrolled:root.scrollLeft>0,visible:last.right<=r.right+1,dock:dock.bottom<=innerHeight&&dock.top>=r.bottom};});assert.deepEqual(strip,{single:true,scrolled:true,visible:true,dock:true});
+ await page.evaluate(()=>sectionController('down'));assert.equal(await page.evaluate(()=>document.activeElement.closest('#app-dock')?.id),'app-dock','Down reaches pinned apps');
+ await page.setViewportSize({width:1097,height:592});const subtitle=await page.locator('[data-section=custom_test1] .section-note').evaluate(n=>({height:n.getBoundingClientRect().height,line:parseFloat(getComputedStyle(n).lineHeight)}));assert.ok(subtitle.height>=subtitle.line*2-1,'two-line description retains complete line boxes');
+ for(const viewport of [{width:1097,height:592},{width:640,height:360}]){
+  await page.setViewportSize(viewport);await page.evaluate(()=>{drawerSection='custom_test1';renderDrawer()});
+  const compact=await page.locator('[data-section=custom_test1]').evaluate(c=>{const r=c.getBoundingClientRect(),n=c.querySelector('strong').getBoundingClientRect(),a=c.querySelector('.section-art').getBoundingClientRect();return {note:getComputedStyle(c.querySelector('.section-note')).display,icons:getComputedStyle(c.querySelector('.section-icons')).display,fit:a.left>=r.left&&n.right<=r.right&&n.width>0}});
+  assert.deepEqual(compact,{note:'none',icons:'none',fit:true},'compact category contents stay inside their tab');
+ }
+ await page.evaluate(()=>{drawerSection='';renderDrawer()});
+ for(const view of ['home','pinned','recent','other','all']){assert.equal(await page.evaluate(view=>{drawerView=view;renderDrawer();$('#drawer-search').focus();appsController('up');return document.activeElement.id},view),'manage-app-sections','top actions reachable from '+view)}
+ await page.evaluate(()=>{savedSections=[];customAppSections=[];loadAppSections();drawerView='home';renderDrawer()});
+ await page.setViewportSize({width:1097,height:700});
+ await page.evaluate(()=>{savedSections=[{id:'custom_restart',name:'Emulation',note:'Saved before restart',icon:'puzzle-piece'}];customAppSections=[];appSections=[...builtInAppSections];hideDialog('#apps-drawer');openApps()});assert.equal(await page.locator('[data-section=custom_restart]').count(),1,'opening Apps reloads persisted native sections after startup');await page.evaluate(()=>{savedSections=[];loadAppSections();renderDrawer()});
+ await page.locator('#manage-app-sections').click();await page.locator('#add-app-section').click();await page.locator('#app-section-name').fill('Reading');await page.locator('#app-section-note').fill('Books and articles');await page.locator('[data-icon="newspaper"]').click();await page.locator('#app-section-color-picker [aria-label=Coral]').click();assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('aria-label')),'Coral');await page.locator('#app-section-editor-form').evaluate(f=>f.requestSubmit());
+ const customId=await page.evaluate(()=>customAppSections[0].id);assert.equal(await page.evaluate(()=>savedSections[0].color),'#e7978c');await page.evaluate(()=>{loadAppSections();openAppSectionEditor(customAppSections[0])});assert.equal(await page.locator('#app-section-color').inputValue(),'#e7978c');await page.locator('#app-section-color-picker [aria-label=Mint]').click();await page.evaluate(()=>hideDialog('#app-section-editor'));assert.equal(await page.evaluate(()=>customAppSections[0].color),'#e7978c','cancel preserves saved color');assert.equal(await page.locator('.app-section').count(),6,'custom section joins Apps overview');
+ await page.evaluate(id=>editDrawerApp('test.app0'),customId);assert.ok(await page.locator('#appearance-section option').allTextContents().then(items=>items.includes('Reading')),'custom section joins app editor');
+ const aiSections=await page.evaluate(()=>{native.geminiHasKey=()=>true;native.aiSuggest=(request,raw)=>window.aiSuggestionPayload=JSON.parse(raw);aiSuggest(true);return window.aiSuggestionPayload.categories;});assert.ok(aiSections.some(s=>s.id===customId&&s.name==='Reading'&&s.note==='Books and articles'),'custom section joins AI suggestion choices');
+ await page.evaluate(id=>{aiStopSuggestion();hideDialog('#app-appearance');drawerPreferences[0].section=id;drawerSection=id;customAppSections=[];saveAppSections()},customId);assert.equal(await page.locator('.app-section').count(),5,'deleting custom section restores built-in overview');assert.equal(await page.evaluate(()=>drawerPreferences[0].section),'auto','apps from a deleted section return to automatic sorting');assert.equal(await page.evaluate(()=>drawerSection),'','deleting open category returns to overview');
+ await page.evaluate(()=>hideDialog('#app-section-manager'));
  for(const font of ['computer','ibmvga','editorial','outfit','clean','spacegrotesk','oxanium','spacemono','ibmplexsans','nunito','winetahoma','oswald','go']){
   const styles=await page.evaluate(font=>{setTypography(font);const h=getComputedStyle($('.apps-heading h2')),category=getComputedStyle($('.app-section strong'));return {font:h.fontFamily,category:category.fontFamily,weight:h.fontWeight,spacing:h.letterSpacing};},font);
   assert.equal(styles.font,styles.category,'Apps heading matches category font regardless of '+font);
@@ -67,7 +128,10 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await page.locator('[data-section="tools"]').click();
  assert.equal(await page.locator('#drawer-grid .drawer-app').count(),65,'category has every app');
  assert.equal(await page.locator('#drawer-status').isVisible(),true,'expanded section retains status');
- await page.evaluate(()=>{appsController('down');appsController('pageDown');nativeBack()});
+ await page.evaluate(()=>{window.categoryFocusEvents=[];document.addEventListener('focusin',e=>categoryFocusEvents.push(e.target.id));appsController('down');appsController('pageDown');nativeBack()});
+ assert.ok(!(await page.evaluate(()=>categoryFocusEvents)).includes('drawer-search'),'Back must not briefly focus Search and open the keyboard');
+ await page.evaluate(()=>{categoryFocusEvents=[];for(let i=0;i<5;i++){document.querySelector('[data-section=tools]').click();nativeBack()}});
+ assert.ok(!(await page.evaluate(()=>categoryFocusEvents)).includes('drawer-search'),'repeated enter/back avoids transient search focus');
  assert.equal(await page.evaluate(()=>drawerSection),'');assert.equal(await page.evaluate(()=>document.activeElement.dataset.section),'tools');
  await page.evaluate(()=>appsController('down'));assert.ok(await page.evaluate(()=>!!document.activeElement.closest('#app-dock')));
  await page.evaluate(()=>appsController('up'));assert.equal(await page.evaluate(()=>document.activeElement.dataset.section),'tools');
@@ -133,6 +197,14 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
  await page.evaluate(()=>{editDrawerApp('test.app1');$('#appearance-choose').click();window.pendingCatalogToken=String(packPickerToken);nativeEvent('appUninstalled',{package:'test.app1'})});await page.waitForTimeout(30);
  assert.equal(await page.evaluate(()=>$('#pack-icon-picker').open),false,'uninstall closes icon chooser with its parent editor');
  await page.evaluate(()=>receivePackCatalog({token:window.pendingCatalogToken,icons:['late_icon']}));
+
+ // Installed labels may be abbreviations; library names are search aliases.
+ await page.evaluate(()=>{drawerCatalog=[{package:'test.mc3',title:'MC3'},{package:'test.mc4',title:'MC4'},{package:'test.tool',title:'Modern tool'}];games=[{id:'mc3',package:'test.mc3',kind:'app',title:'Modern Combat 3'},{id:'mc4',package:'test.mc4',kind:'app',title:'Modern Combat 4'}];drawerPreferences=[];drawerView='all';$('#drawer-letter').value='';$('#drawer-search').value='Modern';renderDrawer()});
+ assert.equal(await page.evaluate(()=>drawerFiltered.length),3);
+ assert.equal(await page.evaluate(()=>drawerName(drawerCatalog[0])),'MC3','alias does not rename installed apps');
+ await page.evaluate(()=>{drawerView='other';renderDrawer()});assert.deepEqual(await page.evaluate(()=>drawerFiltered.map(a=>a.package)),['test.tool']);
+ await page.evaluate(()=>{drawerView='all';$('#drawer-search').value='MC4';renderDrawer()});assert.deepEqual(await page.evaluate(()=>drawerFiltered.map(a=>a.package)),['test.mc4']);
+ await page.evaluate(()=>{$('#drawer-search').value='Modern Combat 4';games[1].title='Renamed game';renderDrawer()});assert.equal(await page.evaluate(()=>drawerFiltered.length),0,'aliases refresh after library edits');
  assert.deepEqual(errors,[]);console.log('PASS: categories, full contents, controller Back/dock navigation, launch, saved assignments, hidden app search and All apps pagination');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);process.exitCode=1});

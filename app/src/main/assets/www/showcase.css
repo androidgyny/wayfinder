@@ -213,3 +213,17 @@ body[data-presentation=bellevue][data-palette=enamel] #grid .search-empty button
  body.input-compact[data-presentation=bellevue] #blade-surfaces{bottom:0;height:100%}
  body.input-compact[data-presentation=bellevue] .showcase-tab.current{height:44px;padding-top:3px;padding-bottom:3px}
 }
+
+body[data-presentation=milan] .milan-category-text{display:inline-block;white-space:nowrap;padding-right:3px}
+body[data-presentation=milan] #showcase-category.milan-marquee{text-overflow:clip}
+body[data-presentation=milan] .milan-marquee .milan-category-text{animation:milan-category-scroll var(--milan-duration) linear infinite alternate}
+@keyframes milan-category-scroll{0%,15%{transform:translateX(0)}85%,100%{transform:translateX(var(--milan-travel))}}
+body.flourishes-paused .milan-category-text{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){body[data-presentation=milan] .milan-marquee .milan-category-text{animation:none;display:inline}body[data-presentation=milan] #showcase-category.milan-marquee{text-overflow:ellipsis}}
+
+body[data-presentation=bellevue] .bellevue-category-text{display:inline-block;white-space:nowrap;padding-right:3px}
+body[data-presentation=bellevue] .showcase-tab.current.bellevue-marquee .showcase-tab-label{text-overflow:clip}
+body[data-presentation=bellevue] .current.bellevue-marquee .bellevue-category-text{animation:bellevue-category-scroll var(--bellevue-duration) linear infinite alternate}
+@keyframes bellevue-category-scroll{0%,15%{transform:translateX(0)}85%,100%{transform:translateX(var(--bellevue-travel))}}
+body.flourishes-paused .bellevue-category-text{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){body[data-presentation=bellevue] .current.bellevue-marquee .bellevue-category-text{animation:none;display:inline}body[data-presentation=bellevue] .showcase-tab.current.bellevue-marquee .showcase-tab-label{text-overflow:ellipsis}}

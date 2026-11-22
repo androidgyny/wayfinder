@@ -218,3 +218,12 @@ The Manhattan, Bend, Florence, Brussels, and Rochester audit scripts check their
 `gamepad-access-audit.cjs` covers Add game, settings, search, Apps, nested artwork controls, and empty libraries across all 30 layouts. `controller-focus-audit.cjs` and `layout-spacing-audit.cjs` check focus visibility and clipped category controls; Rochester’s shaped focus rim is checked alongside rectangular outlines. `layout-settings-regressions.cjs` covers 72 settings states across all 30 layouts.
 
 `shortcut-editor-audit.cjs` uses synthetic pin requests to check supplied titles and icons, cancellation, save, category refresh, duplicates, and expired requests. It complements the device check of Android’s shortcut request flow; it does not emulate the Android shortcut service.
+
+## Apps, navigation, and preview checks
+
+- `app-sections-regressions.cjs` and `apps-spacing-audit.cjs` cover custom sections, built-in colors and ordering, search by Android and library titles, editor interactions, persistent docks, and controller focus at multiple viewport sizes.
+- `category-track-motion.cjs` checks retargeted Vienna/Prague scrolling, reversal, reduced motion, touch cancellation, and coalesced saves. `all-layout-held-navigation.cjs` exercises repeated navigation across all 30 layouts; reported timings are diagnostic, not device frame-rate measurements.
+- `preview-contrast-audit.cjs` checks the appearance-preview heading in all built-in presets against solid backgrounds and opaque gradient stops. It does not substitute for pixel-level testing over arbitrary user artwork.
+- `recent-polish-audit.cjs`, `bend-launch-audit.cjs`, `milan-marquee-audit.cjs`, and `bellevue-marquee-audit.cjs` cover animation lifecycle, clipping, long labels, dialog isolation, and reduced motion.
+
+The isolated native backup audit also checks version 3 app sections, colors and order, restoration into an empty configuration, invalid section colors, and automatic reassignment when a custom section is deleted.

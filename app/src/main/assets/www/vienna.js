@@ -10,7 +10,7 @@ function renderVienna(){
   const active=shelf.key===viennaKey,section=el('section','vienna-section');section.dataset.shelf=shelf.key;section.classList.toggle('expanded',active);
   const heading=el('button','vienna-heading');heading.setAttribute('aria-expanded',String(active));heading.append(el('span','',shelf.label),el('small','',shelf.items.length+' games'));heading.onclick=()=>viennaOpen(shelf.key,true);section.append(heading);
   if(active){
-   const row=el('div','vienna-row');row.setAttribute('aria-label',shelf.label);const remembered=viennaPositions[shelf.key];const chosen=rememberedCategoryGame(shelf.items,remembered,'vienna:'+shelf.key);
+   const row=el('div','vienna-row');bindCategoryTrack(row);row.setAttribute('aria-label',shelf.label);const remembered=viennaPositions[shelf.key];const chosen=rememberedCategoryGame(shelf.items,remembered,'vienna:'+shelf.key);
    for(const g of shelf.items){const b=card(g);b.tabIndex=g===chosen?0:-1;b.classList.toggle('presentation-selected',g===chosen);row.append(b)}
    section.append(row);
    const status=el('div','vienna-status');section.append(status);
@@ -44,8 +44,8 @@ function viennaSelect(id,focus=true,scroll=true){
  $('.vienna-status').textContent=g.title+' · '+(shelf.items.indexOf(g)+1)+' / '+shelf.items.length;
  if(focus)controllerFocus(target);
  else if(target&&document.activeElement?.closest('.vienna-row')){target.focus({preventScroll:true});controllerGameId=id;}
- if(scroll&&target){const row=target.parentElement;row.viennaIgnoreUntil=performance.now()+250;row.scrollTo({left:Math.max(0,target.offsetLeft-36),behavior:'instant'});}
- queueCoverGlow();persist();
+ if(scroll&&target){const row=target.parentElement;row.viennaIgnoreUntil=performance.now()+250;scrollCategoryTrack(row,Math.max(0,target.offsetLeft-36),'left');}
+ queueCoverGlow();queueCarouselSave();
 }
 function viennaClick(g,b){if(presentationId!==g.id){viennaSelect(g.id,false,false);return}play(g.id,b)}
 function viennaController(action){
@@ -76,3 +76,17 @@ function refreshViennaPreviews(){
  for(const {preview,items} of changes)preview.replaceChildren(...items.map(g=>{const im=el('img');im.src=g.image;im.alt='';im.loading='lazy';return im}));
 }
 window.addEventListener('resize',refreshViennaPreviews);
+
+// Retarget one animation instead of restarting browser smooth-scroll on every repeat.
+const categoryTrackMotion=new WeakMap();
+function stopCategoryTrack(node){const state=categoryTrackMotion.get(node);if(state)cancelAnimationFrame(state.frame);categoryTrackMotion.delete(node)}
+function bindCategoryTrack(node){for(const event of ['pointerdown','wheel'])node.addEventListener(event,()=>stopCategoryTrack(node),{passive:true})}
+function scrollCategoryTrack(node,value,axis='top'){
+ const property=axis==='left'?'scrollLeft':'scrollTop',max=axis==='left'?node.scrollWidth-node.clientWidth:node.scrollHeight-node.clientHeight;
+ const target=Math.max(0,Math.min(max,value));
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){stopCategoryTrack(node);node[property]=target;return}
+ let state=categoryTrackMotion.get(node);if(state){state.target=target;return}
+ state={target,frame:0,last:performance.now()};categoryTrackMotion.set(node,state);
+ const tick=now=>{if(!node.isConnected||topDialog()||!['vienna','prague'].includes(presentation)){stopCategoryTrack(node);return}const dt=Math.min(40,Math.max(1,now-state.last));state.last=now;const current=node[property],delta=state.target-current;node.ignoreUntil=node.viennaIgnoreUntil=now+250;if(Math.abs(delta)<=1){node[property]=state.target;categoryTrackMotion.delete(node);return}node[property]=current+delta*(1-Math.exp(-dt/45));state.frame=requestAnimationFrame(tick)};
+ state.frame=requestAnimationFrame(tick);
+}

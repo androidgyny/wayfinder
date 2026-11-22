@@ -103,7 +103,8 @@ for(const [id,app] of [['editor',false],['app-appearance',true]])$('#'+id).addEv
 function aiSuggest(app){
  const owner=app?appearanceDraft:draft;if(!owner)return;const title=$(app?'#appearance-name':'#edit-title').value.trim(),error=$(app?'#appearance-error':'#edit-error');
  if(!native?.aiSuggest){error.textContent='Available in the updated Android app.';return;}if(!native.geminiHasKey()){error.textContent='Add your Gemini API key in Settings → Library first.';return;}
- aiStopSuggestion();error.textContent='';const request=aiId(),button=app?suggestApp:suggestGame;aiSuggestion={request,app,owner,title,package:owner.package,value:$(app?'#appearance-section':'#edit-genre').value,categories:JSON.stringify(genres)};button.disabled=true;button.textContent='Suggesting…';native.aiSuggest(request,JSON.stringify({app,title,package:owner.package}));
+ const categories=app?appSections.map(s=>({id:s.id,name:s.name,note:s.note||''})):genres,categorySnapshot=JSON.stringify(categories);
+ aiStopSuggestion();error.textContent='';const request=aiId(),button=app?suggestApp:suggestGame;aiSuggestion={request,app,owner,title,package:owner.package,value:$(app?'#appearance-section':'#edit-genre').value,categories:categorySnapshot};button.disabled=true;button.textContent='Suggesting…';native.aiSuggest(request,JSON.stringify({app,title,package:owner.package,categories:app?categories:undefined}));
 }
 const aiPreviousEvent=window.nativeEvent;window.nativeEvent=(event,data)=>{
  if(event==='aiKeyCheck'||event==='aiKeyCheckDone'){$('#gemini-status').textContent=data.message;if(event==='aiKeyCheckDone')$('#gemini-check').disabled=false;return;}
@@ -115,7 +116,8 @@ const aiPreviousEvent=window.nativeEvent;window.nativeEvent=(event,data)=>{
  }
  if(event==='aiSuggestion'&&data.request===aiSuggestion?.request){
   const pending=aiSuggestion,app=pending.app,owner=app?appearanceDraft:draft,field=$(app?'#appearance-section':'#edit-genre'),title=$(app?'#appearance-name':'#edit-title').value.trim();aiStopSuggestion();
-  if(owner!==pending.owner||owner?.package!==pending.package||title!==pending.title||field.value!==pending.value||(!app&&JSON.stringify(genres)!==pending.categories)){$(app?'#appearance-error':'#edit-error').textContent='Details changed while suggesting. Request a fresh suggestion.';return;}
+  const currentCategories=JSON.stringify(app?appSections.map(s=>({id:s.id,name:s.name,note:s.note||''})):genres);
+  if(owner!==pending.owner||owner?.package!==pending.package||title!==pending.title||field.value!==pending.value||currentCategories!==pending.categories){$(app?'#appearance-error':'#edit-error').textContent='Details changed while suggesting. Request a fresh suggestion.';return;}
   const allowed=app?appSections.map(s=>s.id):genres;if(!allowed.includes(data.category)){$(app?'#appearance-error':'#edit-error').textContent='The suggested category is no longer available.';return;}
   field.value=data.category;if(!app)$('#category-options').value=data.category;$(app?'#appearance-error':'#edit-error').textContent='Category suggested. Save to keep it.';return;
  }

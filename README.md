@@ -75,7 +75,7 @@ Choose a way to browse that suits you:
 
 Styles range from restrained and modern to paper notebooks, illuminated slide mounts, galleries, desktop interfaces, music-player panels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
 
-You can also enable interface sounds, play the included background music or your own audio, and choose a startup video under **Settings → Sound & startup**.
+You can also enable interface sounds, choose between the included background tracks or play your own audio, and choose a startup video under **Settings → Sound & startup**.
 
 ![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta23/02-bath.png)
 
@@ -133,7 +133,7 @@ If you report a problem, include your device, Android version, Wayfinder version
 
 ## Credits
 
-Game artwork belongs to its respective creators. Interface audio includes [Interface Sounds by Kenney](https://kenney.nl/assets/interface-sounds) and original Wayfinder Soft Terminal sounds. The included background track, [*Another August*](https://opengameart.org/node/73989), is by [The Cynic Project / Alex Smith](https://cynicmusic.com/). These audio assets are provided under CC0; attribution details are included with the project assets.
+Game artwork belongs to its respective creators. Interface audio includes [Interface Sounds by Kenney](https://kenney.nl/assets/interface-sounds) and original Wayfinder Soft Terminal sounds. The background track, [*Another August*](https://opengameart.org/node/73989), is by [The Cynic Project / Alex Smith](https://cynicmusic.com/). The looping [*Chiptune: Exploration*](https://opengameart.org/content/chiptune-exploration) is by [Luis Zuno / ansimuz](https://ansimuz.itch.io/), bundled unchanged. These audio assets are provided under CC0; attribution details are included with the project assets.
 
 Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
 

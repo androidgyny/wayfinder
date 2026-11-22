@@ -11,7 +11,7 @@ function renderPrague(){
  for(const column of pragueColumns){
   const active=column.key===pragueKey,section=el('section','prague-column');section.dataset.category=column.key;section.classList.toggle('expanded',active);
   const heading=el('button','prague-heading');heading.append(el('span','',column.label),el('small','',column.items.length+' games'));heading.setAttribute('aria-expanded',String(active));heading.onclick=()=>pragueOpen(column.key,true);section.append(heading);
-  const list=el('div','prague-list');list.setAttribute('aria-label',column.label);const chosen=rememberedCategoryGame(column.items,praguePositions[column.key],'prague:'+column.key);
+  const list=el('div','prague-list');bindCategoryTrack(list);list.setAttribute('aria-label',column.label);const chosen=rememberedCategoryGame(column.items,praguePositions[column.key],'prague:'+column.key);
   for(const g of column.items){const row=card(g);row.tabIndex=active&&g===chosen?0:-1;row.classList.toggle('presentation-selected',active&&g===chosen);list.append(row)}
   if(!chosen)list.append(el('p','prague-empty',query?'No games match this search.':'Press Select on a game to add it to Favorites.'));
   if(active)presentationId=chosen?.id||null;if(chosen)praguePositions[column.key]=chosen.id;
@@ -31,7 +31,7 @@ function renderPrague(){
  for(const section of grid.querySelectorAll('.prague-column')){const key=section.dataset.category,list=section.querySelector('.prague-list');list.ignoreUntil=performance.now()+250;if(oldScroll.has(key))list.scrollTop=oldScroll.get(key);const id=praguePositions[key],target=[...section.querySelectorAll('.game')].find(b=>b.dataset.id===id);if(target)pragueReveal(target);}
  queueCoverGlow();syncSearchFeedback();
 }
-function pragueReveal(target){const list=target.parentElement;list.ignoreUntil=performance.now()+250;const top=target.offsetTop-10,bottom=target.offsetTop+target.offsetHeight+10;if(top<list.scrollTop)list.scrollTop=Math.max(0,top);else if(bottom>list.scrollTop+list.clientHeight)list.scrollTop=bottom-list.clientHeight;}
+function pragueReveal(target,animate=false){const list=target.parentElement;list.ignoreUntil=performance.now()+250;const top=target.offsetTop-10,bottom=target.offsetTop+target.offsetHeight+10;const current=categoryTrackMotion.get(list)?.target??list.scrollTop;let next=current;if(top<current)next=Math.max(0,top);else if(bottom>current+list.clientHeight)next=bottom-list.clientHeight;if(animate)scrollCategoryTrack(list,next);else{stopCategoryTrack(list);list.scrollTop=next;}}
 function pragueOpen(key,focus=false){
  clearTimeout(pragueScrollTimer);pragueActivate(key);const remembered=praguePositions[key],column=pragueCurrent();if(column?.items.length)pragueSelect(rememberedCategoryGame(column.items,remembered,'prague:'+key)?.id,false,true);syncSearchFeedback();const section=$('#grid .prague-column.expanded'),grid=$('#grid');
  if(section)grid.scrollLeft=Math.max(0,section.offsetLeft-(grid.clientWidth-section.offsetWidth)/2);
@@ -44,7 +44,7 @@ function pragueSelect(id,focus=true,scroll=true){
  if(target){target.classList.add('presentation-selected');target.tabIndex=0;}
  pragueStatus($('.prague-column.expanded .prague-status'),g,column);
  if(focus)controllerFocus(target);else if(document.activeElement?.closest('.prague-list')){target.focus({preventScroll:true});controllerGameId=id;}
- if(scroll)pragueReveal(target);queueCoverGlow();persist();
+ if(scroll&&target)pragueReveal(target,focus);queueCoverGlow();queueCarouselSave();
 }
 function pragueClick(g,b){const key=b.closest('.prague-column').dataset.category;if(key!==pragueKey){praguePositions[key]=g.id;pragueOpen(key,true);return;}if(presentationId!==g.id){pragueSelect(g.id,false,false);return}play(g.id,b)}
 function pragueController(action){
@@ -54,7 +54,7 @@ function pragueController(action){
  return false;
 }
 
-function pragueStatus(node,g,column){node.replaceChildren();if(g)node.append(el('span','prague-status-title',g.title),el('small','prague-status-count',(column.items.indexOf(g)+1)+' / '+column.items.length));}
+function pragueStatus(node,g,column){if(!g){node.replaceChildren();return;}if(!node.firstElementChild)node.append(el('span','prague-status-title'),el('small','prague-status-count'));node.firstElementChild.textContent=g.title;node.lastElementChild.textContent=(column.items.indexOf(g)+1)+' / '+column.items.length;}
 
 // Change selection without replacing scroll containers, preserving touch momentum.
 function pragueActivate(key){

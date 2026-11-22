@@ -17,6 +17,7 @@ function sizeShowcaseCover(){
 }
 // Show whole category buttons; arrows expose categories outside this window.
 function fitShowcaseTabs(){
+ queueBellevueMarquee();
  if(presentation!=='milan')return;
  const nav=$('#showcase-tabs'),buttons=[...nav.children],active=sectionIndex(),budget=nav.clientWidth;
  if(!budget||!buttons[active])return;
@@ -125,7 +126,7 @@ function renderShowcase(selectionOnly=false){
  const active=sectionIndex(),start=Math.max(0,Math.min(active-2,list.length-5));
  [...tabs.children].forEach((b,i)=>{b.hidden=presentation==='bellevue'&&(i<start||i>=start+5);if(presentation==='bellevue')b.style.removeProperty('max-width');b.dataset.side=i<active?'before':i>active?'after':'current';b.style.setProperty('--blade-slot',i<active?i-start:i-active-1);});
  document.body.style.setProperty('--blade-left',Math.min(4,active-start));document.body.style.setProperty('--blade-right',Math.max(0,Math.min(list.length,start+5)-active-1));
- $('#showcase-category').textContent=sectionLabel().replace('★ ','');$('#showcase-count').textContent=filtered.length.toLocaleString()+' '+(filtered.length===1?'game':'games')+(query?' found':'');
+ setShowcaseCategory(sectionLabel().replace('★ ',''));$('#showcase-count').textContent=filtered.length.toLocaleString()+' '+(filtered.length===1?'game':'games')+(query?' found':'');
  }
  let index=Math.max(0,filtered.findIndex(g=>g.id===presentationId));const game=filtered[index];presentationId=game?.id||null;controllerGameId=presentationId;
  if(!selectionOnly){
@@ -188,5 +189,34 @@ function initShowcase(){
  for(const [key,label,action] of [['A','Open','activate'],['B','Back','back'],['X','Edit','edit'],['Y','Search','search']]){const b=el('button','showcase-hint');b.setAttribute('aria-label',label);b.append(el('b','showcase-key '+key.toLowerCase(),key),el('span','',label));b.onclick=()=>{showcaseFocus();showcaseController(action)||controller(action)};if(['activate','edit'].includes(action))b.dataset.showcaseGame='true';footer.append(b);}
  const help=el('small','showcase-page-help');for(const [keys,label]of [['LB / RB','Categories'],['LT / RT','Pages']]){const group=el('span','showcase-control-group');group.append(el('b','showcase-shoulder',keys),el('span','',label));help.append(group)}footer.append(help);
  for(const [id,label,delta] of [['prev','Previous page',-8],['next','Next page',8]]){const b=el('button','showcase-page',delta<0?'‹':'›');b.id='showcase-'+id;b.setAttribute('aria-label',label);b.onclick=()=>{showcasePane='games';showcaseSelect(Math.max(0,filtered.findIndex(g=>g.id===presentationId))+delta)};footer.append(b);}
- const pos=el('span');pos.id='showcase-position';footer.append(pos);main.append(tabs,heading,art,caption,footer);new ResizeObserver(sizeShowcaseCover).observe(art);new ResizeObserver(fitShowcaseTabs).observe(tabs);document.fonts?.addEventListener('loadingdone',fitShowcaseTabs);
+ const pos=el('span');pos.id='showcase-position';footer.append(pos);main.append(tabs,heading,art,caption,footer);new ResizeObserver(sizeShowcaseCover).observe(art);new ResizeObserver(queueMilanMarquee).observe(category);document.fonts.addEventListener('loadingdone',queueMilanMarquee);new MutationObserver(queueMilanMarquee).observe(document.body,{attributes:true,attributeFilter:['data-presentation']});new ResizeObserver(fitShowcaseTabs).observe(tabs);document.fonts?.addEventListener('loadingdone',fitShowcaseTabs);
 }
+
+// Milan's large category heading reveals overflow without moving the game count.
+let milanMarqueeFrame=0;
+function setShowcaseCategory(text){
+ queueBellevueMarquee();
+ const heading=$('#showcase-category');
+ if(presentation!=='milan'){heading.textContent=text;heading.classList.remove('milan-marquee');return;}
+ if(heading.dataset.label!==text||!heading.firstElementChild){heading.dataset.label=text;heading.title=text;heading.replaceChildren(el('span','milan-category-text',text));heading.classList.remove('milan-marquee');}
+ queueMilanMarquee();
+}
+function queueMilanMarquee(){cancelAnimationFrame(milanMarqueeFrame);milanMarqueeFrame=requestAnimationFrame(()=>{
+ const heading=$('#showcase-category'),label=heading?.querySelector('.milan-category-text');if(!heading)return;
+ const distance=label?Math.max(0,label.scrollWidth-heading.clientWidth):0;
+ heading.style.setProperty('--milan-travel',-distance+'px');heading.style.setProperty('--milan-duration',Math.max(6,distance/28+3)+'s');
+ heading.classList.toggle('milan-marquee',presentation==='milan'&&heading.clientWidth>0&&distance>1);
+ });}
+
+let bellevueMarqueeFrame=0;
+function queueBellevueMarquee(){cancelAnimationFrame(bellevueMarqueeFrame);bellevueMarqueeFrame=requestAnimationFrame(()=>{
+ for(const tab of document.querySelectorAll('#showcase-tabs .showcase-tab')){
+ const clip=tab.querySelector('.showcase-tab-label');if(!clip)continue;
+ const active=presentation==='bellevue'&&tab.classList.contains('current');
+ if(!active){tab.classList.remove('bellevue-marquee');if(clip.firstElementChild)clip.textContent=clip.textContent;continue;}
+ if(!clip.firstElementChild)clip.replaceChildren(el('span','bellevue-category-text',clip.textContent));
+ const distance=Math.max(0,clip.firstElementChild.scrollWidth-clip.clientWidth);
+ tab.style.setProperty('--bellevue-travel',-distance+'px');tab.style.setProperty('--bellevue-duration',Math.max(6,distance/28+3)+'s');
+ tab.classList.toggle('bellevue-marquee',clip.clientWidth>0&&distance>1);
+ }
+ });}

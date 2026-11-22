@@ -25,10 +25,11 @@
   // Scroll only an occluded field, never the carousel or the whole document.
   const field=document.activeElement,dialog=editable(field)?field.closest('dialog[open]'):null;
   if(compact&&dialog){
-   const r=field.getBoundingClientRect(),d=dialog.getBoundingClientRect();
+   const scroller=field.closest('.app-section-dialog-body')||dialog;
+   const r=field.getBoundingClientRect(),d=scroller.getBoundingClientRect();
    const top=Math.max(d.top,0)+12,bottom=Math.min(d.bottom,height)-12;
-   if(r.bottom>bottom)dialog.scrollTop+=r.bottom-bottom;
-   else if(r.top<top)dialog.scrollTop-=top-r.top;
+   if(r.bottom>bottom)scroller.scrollTop+=r.bottom-bottom;
+   else if(r.top<top)scroller.scrollTop-=top-r.top;
   }
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(update);}
