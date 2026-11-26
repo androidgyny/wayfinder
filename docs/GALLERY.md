@@ -36,23 +36,11 @@ These six screenshots show **Wayfinder 0.9.257 Beta 25**. The Taipei game grid w
 
 ## More layouts and the Apps screen
 
-The following 26 screenshots were captured on a Pimax Portal running **Wayfinder 0.9.236 Beta 23**. They show more layouts and the separate Apps screen, including an installed icon pack. The pictured games and covers come from a personal collection.
+The following 24 screenshots were captured on a Pimax Portal running **Wayfinder 0.9.236 Beta 23**. They show more layouts and the separate Apps screen, including an installed icon pack. The pictured games and covers come from a personal collection.
 
 [Indexes and desktops](#indexes-and-desktops) · [Light, paper, and color](#light-paper-and-color) · [Shelves and cover walls](#shelves-and-cover-walls) · [Playful interfaces](#playful-interfaces) · [Everyday apps](#beyond-the-game-library)
 
 ## Indexes and desktops
-
-### Palo Alto
-
-**Hyperstack** — A crisp card catalogue with category tabs, a paged title index, and a single portrait cover. This is the starting preset for fresh installations.
-
-![Palo Alto — Hyperstack.](screenshots/beta23/01-paloalto.png)
-
-### Bath
-
-**Field Notes** — Warm paper, colored tabs, handwritten headings, and a taped portrait cover.
-
-![Bath — Field Notes.](screenshots/beta23/02-bath.png)
 
 ### Manhattan
 
