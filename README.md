@@ -23,15 +23,17 @@ Wayfinder also accepts shortcuts from apps that offer **Add to home screen**. To
 
 Open **Settings → Appearance** and preview a preset. A **layout** determines how you move through the library. A **preset** pairs a layout with choices such as type, color, artwork size, and backdrop. All 33 layouts use the collection you’ve already organized.
 
-| If you like to… | Try |
+| If you want to… | Try |
 | --- | --- |
-| Scan a list of game names | **Hyperstack** on Palo Alto puts a title index beside the selected cover. **Field Notes** on Bath turns the list into a tabbed notebook. |
-| Pick a category before picking a game | **Fresh Ink** on Chicago uses illustrated posters. **Dawn** on Taipei pairs line drawings with a portrait-cover grid adapted from Daijishō. |
-| Browse by box art | **Now Playing** on Cannes lines up games in illuminated cinema cases. **Exposure** on Rochester arranges them on a light table. |
+| Scan titles across categories | **Cross Reference** on Prague places categories in adjacent columns so you can move between their lists. |
+| Return to a favorite | **Mixtape** on Tacoma gives favorites and recently played games their own shelves. |
+| Browse by box art | **Smitchish** on Kyoto lines the covers up on a bright shelf. Move left or right to pick one. |
+| Choose a genre first | **Dawn** on Taipei opens an illustrated category into a portrait-cover grid adapted from Daijishō. |
+| Find something unexpected | **Full House** on Copenhagen deals twelve covers onto a card table. Keep the games that catch your eye and shuffle the rest. |
 
-![Cannes shows BioShock selected in a row of illuminated poster cases beneath the All Games marquee.](docs/screenshots/beta25/cannes.webp)
+![Copenhagen displays twelve game covers in two rows on a green card table.](docs/screenshots/beta23/10-copenhagen.png)
 
-*Now Playing on Cannes. Move across the posters to choose a game, or use the bumpers to change category.*
+*Full House on Copenhagen. You can keep a promising game on the table while you look for another.*
 
 ## As your collection grows
 
