@@ -22,11 +22,9 @@
 
 ![Dawn shows Flight & space combat above a spaceship illustration against an amber mountain backdrop.](screenshots/beta25/dawn.webp)
 
-**Taipei on the Portal.** These two device captures show one collection with a custom monochrome category page and pink Wayfinder logo. Opening *First & third person shooters* reveals its 60 games. Taipei adapts Daijishō’s game-grid layout for portrait covers. The header shows the category count and grid-density controls, and the footer shows play history and controller hints. [Daijishō project](https://github.com/TapiocaFox/Daijishou)
+**Taipei game grid.** Opening a category brings up its games. Here, *First & third person shooters* contains 60 titles, with Battlefield selected. Taipei adapts Daijishō’s game-grid layout for portrait covers. [Daijishō project](https://github.com/TapiocaFox/Daijishou)
 
-![First & third person shooters between the category arrows, with outlined sights below the title.](screenshots/beta25/taipei-category.webp)
-
-![The same category open in a dark portrait grid with Battlefield selected.](screenshots/beta25/taipei-grid.webp)
+![Battlefield selected in a dark grid of portrait covers on the Pimax Portal.](screenshots/beta25/taipei-grid.webp)
 
 ## Browse the poster cases
 
@@ -34,7 +32,7 @@
 
 ![BioShock selected under the All Games marquee between Battlefield and Borderlands 2.](screenshots/beta25/cannes.webp)
 
-The seven images above show **Wayfinder 0.9.257 Beta 25**. The two labeled Portal captures are from the Android release on a Pimax Portal. The other five were captured in a desktop browser running the same release interface with a small example library.
+These six screenshots show **Wayfinder 0.9.257 Beta 25**. The Taipei game grid was captured on a Pimax Portal. The other five were captured in a desktop browser running the same release interface with a small example library.
 
 ## More layouts and the Apps screen
 
