@@ -1,5 +1,7 @@
 # <img src="docs/branding/wayfinder-icon.png" width="64" height="64" alt=""> Wayfinder
 
+**Wayfinder was created with ChatGPT Astra.**
+
 Wayfinder puts the Android games you already own into a library you can browse with a controller or touchscreen. Open it when you want to play, or set it as your handheld’s home screen. Your categories, favorites, and portrait covers follow you when you switch layouts.
 
 **For landscape Android devices running Android 8.0 or later.** [Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.257-beta.25) · [Browse the screenshot gallery](docs/GALLERY.md)
@@ -72,7 +74,7 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Project status
 
-Wayfinder is beta software, made with the help of GPT-6 Astra and tested on a Pimax Portal running Android 10. If something behaves unexpectedly, include the device, Android and Wayfinder versions, layout, controller, and steps to reproduce it. [Release notes](https://github.com/androidgyny/wayfinder/releases) · [Report an issue](https://github.com/androidgyny/wayfinder/issues)
+Wayfinder is beta software, tested on a Pimax Portal running Android 10. If something behaves unexpectedly, include the device, Android and Wayfinder versions, layout, controller, and steps to reproduce it. [Release notes](https://github.com/androidgyny/wayfinder/releases) · [Report an issue](https://github.com/androidgyny/wayfinder/issues)
 
 ## Credits
 
