@@ -1,12 +1,44 @@
 # Wayfinder screenshot gallery
 
-[← Back to the README](../README.md)
+[Back to the README](../README.md)
 
-One collection can feel very different depending on how you browse it. These **26 screenshots** show a selection of Wayfinder’s layouts and presets, followed by its separate Apps screen. Every game view uses the same basic ingredients: titles, categories, and portrait covers.
+## Start with the game list
 
-Captured from **Wayfinder 0.9.236 Beta 23** on a **Pimax Portal (Snapdragon 865), Android 10, at 1920 × 1080**. These are unretouched device screenshots of a curated personal collection. Games, cover artwork, and the app icon pack shown are not bundled with Wayfinder.
+**Hyperstack · Palo Alto.** A fresh installation opens in this layout. Pick a category tab, scan the title index, and use the cover to identify the selected game.
 
-A **layout** determines the arrangement; a **preset** supplies a coordinated appearance. Custom variations are labeled below.
+![Hyperstack shows a monochrome card catalogue with 9MM selected and a star beside the favorited BioShock entry.](screenshots/beta25/hyperstack.webp)
+
+**Field Notes · Bath.** The same collection becomes a handwritten list. Colored tabs separate the categories and a yellow highlight marks your place.
+
+![An open spiral notebook with a list on the left and the selected cover taped to the right page.](screenshots/beta25/field-notes.webp)
+
+## Browse categories, then covers
+
+**Fresh Ink · Chicago.** Move between the illustrated category posters. The selected Survival horror poster shows how many games it contains.
+
+![Chicago category posters for shooters, flight games, run and gun games, and survival horror.](screenshots/beta25/chicago.webp)
+
+**Dawn · Taipei.** An amber line drawing sits beneath the category name. The arrows move between categories. You can choose the illustration, palette, and backdrop in Taipei’s settings.
+
+![Dawn shows Flight & space combat above a spaceship illustration against an amber mountain backdrop.](screenshots/beta25/dawn.webp)
+
+**Taipei on the Portal.** These two device captures show one collection with a custom monochrome category page and pink Wayfinder logo. Opening *First & third person shooters* reveals its 60 games. Taipei adapts Daijishō’s game-grid layout for portrait covers. The header shows the category count and grid-density controls, and the footer shows play history and controller hints. [Daijishō project](https://github.com/TapiocaFox/Daijishou)
+
+![First & third person shooters between the category arrows, with outlined sights below the title.](screenshots/beta25/taipei-category.webp)
+
+![The same category open in a dark portrait grid with Battlefield selected.](screenshots/beta25/taipei-grid.webp)
+
+## Browse the poster cases
+
+**Now Playing · Cannes.** The marquee names the current category. The lit case and plaque identify the game you’ll launch.
+
+![BioShock selected under the All Games marquee between Battlefield and Borderlands 2.](screenshots/beta25/cannes.webp)
+
+The seven images above show **Wayfinder 0.9.257 Beta 25**. The two labeled Portal captures are from the Android release on a Pimax Portal. The other five were captured in a desktop browser running the same release interface with a small example library.
+
+## More layouts and the Apps screen
+
+The following 26 screenshots were captured on a Pimax Portal running **Wayfinder 0.9.236 Beta 23**. They show more layouts and the separate Apps screen, including an installed icon pack. The pictured games and covers come from a personal collection.
 
 [Indexes and desktops](#indexes-and-desktops) · [Light, paper, and color](#light-paper-and-color) · [Shelves and cover walls](#shelves-and-cover-walls) · [Playful interfaces](#playful-interfaces) · [Everyday apps](#beyond-the-game-library)
 

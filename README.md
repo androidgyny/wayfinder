@@ -1,101 +1,48 @@
 # <img src="docs/branding/wayfinder-icon.png" width="64" height="64" alt=""> Wayfinder
 
-**A console-like home for a large Android game collection.**
+Wayfinder puts the Android games you already own into a library you can browse with a controller or touchscreen. Open it when you want to play, or set it as your handheld’s home screen. Your categories, favorites, and portrait covers follow you when you switch layouts.
 
-> **Beta software.** Made with the help of **GPT-6 Astra**.
+**For landscape Android devices running Android 8.0 or later.** [Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.257-beta.25) · [Browse the screenshot gallery](docs/GALLERY.md)
 
-[Download the beta APK](https://github.com/androidgyny/wayfinder/releases/tag/v0.9.257-beta.25)
+![The Hyperstack starting preset shows category tabs above a portrait cover and a two-column game index.](docs/screenshots/beta25/hyperstack.webp)
 
-Wayfinder is a launcher for the Android games you already own. Give each game a category and a cover, then use a controller or the touchscreen to browse your collection and launch a game. The same artwork can fill a cover wall, sit on a notebook page, or appear beside a compact list of hundreds of titles.
+*On first launch, Hyperstack opens with an empty card catalogue. Here it is with games added.*
 
-Use Wayfinder as an ordinary app or make it your handheld’s home screen. A fresh installation starts empty: you choose which installed games and shortcuts to add. Apps that offer “Add to home screen” can send a shortcut and its icon to Wayfinder; you choose its category before saving. Games and cover artwork are not included.
+## Add your first game
 
-![Wayfinder on a Pimax Portal, displaying the Mixtape favorites shelf with Hades selected.](docs/branding/wayfinder-portal-mixtape.png)
+1. Download the APK on your Android device and open it. If Android prompts you, allow installation from the app you used to open the download.
+2. Open Wayfinder and choose **Add game**. Pick an installed game, keep or edit its title, and choose a category. Something as simple as *Puzzle games* is enough to get started.
+3. Choose a cover. You can use an image from your device, look up artwork through Google Play, or search Google Images or SteamGridDB. Portrait images fit the library’s 2:3 frames.
+4. Save the entry, select its cover or title, and press **A** to play. Press **X** to edit it later. Click the **right stick** to reach screen controls such as **Add game** and **Settings**.
 
-*Wayfinder on a Pimax Portal, showing the Mixtape preset. AI-assisted screen composite based on an actual screenshot.*
+Wayfinder also accepts shortcuts from apps that offer **Add to home screen**. To use Wayfinder whenever you press Home, open **Settings → System & help → Set as default launcher**.
 
-[Explore the screenshot gallery →](docs/GALLERY.md)
+## Choose how you browse
 
-## A little setup, many ways to browse
+Open **Settings → Appearance** and preview a preset. A **layout** determines how you move through the library. A **preset** pairs a layout with choices such as type, color, artwork size, and backdrop. All 33 layouts use the collection you’ve already organized.
 
-**A category and an image are the core of each entry.** Wayfinder takes the game's name from the installed app, and you can edit it if needed. Choose a category that makes sense to you and artwork you like. There is no checklist of release dates, developers, descriptions, ratings, or other metadata to complete.
+| If you like to… | Try |
+| --- | --- |
+| Scan a list of game names | **Hyperstack** on Palo Alto puts a title index beside the selected cover. **Field Notes** on Bath turns the list into a tabbed notebook. |
+| Pick a category before picking a game | **Fresh Ink** on Chicago uses illustrated posters. **Dawn** on Taipei pairs line drawings with a portrait-cover grid adapted from Daijishō. |
+| Browse by box art | **Now Playing** on Cannes lines up games in illuminated cinema cases. **Exposure** on Rochester arranges them on a light table. |
 
-That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
+![Cannes shows BioShock selected in a row of illuminated poster cases beneath the All Games marquee.](docs/screenshots/beta25/cannes.webp)
 
-**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 32 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+*Now Playing on Cannes. Move across the posters to choose a game, or use the bumpers to change category.*
 
-## Built for a growing collection
+## As your collection grows
 
-- **Organize in batches.** Rename or merge categories, move several games at once, and drag categories into your preferred order.
-- **Find and rediscover games.** Search titles across your library, browse by category, sort alphabetically, by recency, or with favorites first, and revisit recently played games.
-- **Choose artwork easily.** Find images through Google Play, open Google Images or SteamGridDB searches, or use a file from your device. Preview and adjust how it fits.
-- **Set the mood.** Start with an appearance preset, or adjust colors, fonts, backgrounds, borders, shadows, selection effects, and sound. Preview a preset before keeping it, and save your own combinations.
-- **Keep everyday apps nearby.** A separate Apps screen offers sections, a dock for up to eight favorites, and an All apps view. Use installed icon packs or your own images to personalize app icons.
-- **Maintain your library.** Library information shows counts, storage use, and entries needing attention. Export a backup of your organization and artwork before making larger changes.
+- **Find a game.** Search by title, jump between categories, sort by last played, or mark favorites for a shorter list.
+- **Tidy up in batches.** Rename, merge, or reorder categories and move several games together. Library info shows counts and entries that need attention.
+- **Keep everyday apps handy.** Click the left stick to open Apps. Give apps their own sections, pin up to eight to the dock, and use an installed icon pack or your own images.
+- **Personalize your handheld.** Preview a preset before keeping it, save your own combinations, or choose background audio and startup media in **Settings → Sound & startup**.
 
-Wayfinder does not supply or install games, run emulators, or manage ROM collections. It is a home for the Android games you already have.
+### Optional AI assistance
 
-## What you need
+You can organize the library by hand. If you enable Gemini, **Suggest Category** helps with a single entry, **AI Sort** suggests placements in existing categories, and **AI Reorganize** proposes a new category scheme. You can review proposals before applying them and undo changes while Wayfinder remains open.
 
-- Android 8.0 or later.
-- A touchscreen; a game controller is recommended.
-- A landscape display.
-- Some installed games to add to your library.
-
-Use touch or a controller for everyday browsing. Press the right stick to reach screen controls such as Add game and settings, then use the D-pad and A to select them. Text entry and Android’s file pickers may still need a keyboard or touchscreen.
-
-## Getting started
-
-1. **Install the Wayfinder APK** on your Android device. If Android asks, allow installation from the app you used to open the file.
-2. **Open Wayfinder and choose Add game.** Add a game that is already installed on the device.
-3. **Choose a category and cover.** Keep the app's name or edit it. You can change any of these later.
-4. **Open Settings → Appearance to choose a look.** Start with a preset, or select a layout and adjust it yourself.
-5. **Select a game and launch it.** Browse using touch or your controller.
-
-To open Wayfinder whenever you press Home, go to **Settings → System & help → Set as default launcher**. Using it as your home screen is optional.
-
-The **Help** page in Settings provides a brief guide to everyday use.
-
-## AI category organization
-
-Optional AI tools help organize a large library: **AI Sort** suggests placements in your existing categories, **AI Reorganize** proposes a new category scheme, and **Suggest Category** helps when adding or editing a game or app. Review and adjust proposals before applying them; Undo is available while Wayfinder remains open.
-
-Add your own [Gemini API key](https://aistudio.google.com/apikey) in **Settings → System & help → AI assistance**. Requests send titles, package names, and relevant category information to Gemini. Your key is encrypted on the device and excluded from backups.
-
-## Make the collection your own
-
-Open **Settings → Appearance** and try a preset to see a complete look before keeping it. A **layout** determines how games and categories are arranged; a **preset** combines a layout with colors, fonts, and other styling choices. You can adjust those choices and save your own combinations.
-
-Choose a way to browse that suits you:
-
-- **See more artwork at once** with a cover grid or shelves.
-- **Focus on one game** with a carousel, a fan of covers, or a large cover beside a title list.
-- **Scan a large library quickly** with compact lists, category columns, or a dashboard with recently played games.
-- **Rediscover something to play** with a shuffled table of covers.
-
-Styles range from restrained and modern to paper notebooks, illuminated slide mounts, galleries, a cinema lobby of lit poster cases, desktop interfaces, music-player panels, and colorful terminals. New installations start with **Hyperstack**, a card catalogue with category tabs and a paged title index. Appearance settings show the options that apply to your chosen layout.
-
-You can also enable interface sounds, choose between the included background tracks or play your own audio, and choose a startup video under **Settings → Sound & startup**.
-
-![Bath: KAMI beside a handwritten puzzle list, colored category tabs, and a taped portrait cover.](docs/screenshots/beta23/02-bath.png)
-
-*Bath · Field Notes preset · a warm notebook with colored tabs and a highlighter selection.*
-
-![Rochester: portrait game covers in softly illuminated slide mounts.](docs/screenshots/beta23/25-rochester.png)
-
-*Rochester · Exposure preset · an illuminated light table for portrait artwork.*
-
-## Everyday apps, too
-
-The separate Apps screen keeps everyday Android apps within reach. Browse by section, see all apps, or show only non-game apps. Pin up to eight favorites to the dock for quick access. You decide which apps appear in each section; apps left out of sections remain available in All apps.
-
-![Apps: News, Media, Social, Tools, and System sections above a dock of pinned apps, with colorful controller hints.](docs/screenshots/beta23/26-apps.png)
-
-*Apps · five app sections, a spacious favorites dock, and colorful controller hints.*
-
-App icons shown use [Australis – Icon Pack by UNVOID](https://play.google.com/store/apps/details?id=com.unvoid.australis), available separately on Google Play. Section illustrations use [Phosphor Icons](https://phosphoricons.com/).
-
-[Explore all 26 screenshots](docs/GALLERY.md), captured on a Pimax Portal. The gallery groups quiet indexes, illuminated artwork, shelves, and playful interfaces, with everyday apps in their own section.
+To enable it, enter your own key under **Settings → System & help → AI assistance**. Requests send titles, package names, and relevant category information to Gemini. Wayfinder encrypts the key on your device and excludes it from backups. [Get a Gemini API key](https://aistudio.google.com/apikey)
 
 ## Controller reference
 
@@ -125,15 +72,15 @@ App drawer preferences include names, pins and their order, section assignments,
 
 ## Project status
 
-Wayfinder is an actively evolving personal project, developed and tested with a large game collection on a **Pimax Portal (Snapdragon 865), running Android 10 at 1920 × 1080 resolution**. Layout and on-screen keyboard checks also cover simulated 4:3, 3:2, 16:10, and 21:9 displays. These checks help catch clipping and misplaced controls; support for other devices and controllers is still being established.
-
-See the [release notes](https://github.com/androidgyny/wayfinder/releases) for version-by-version changes.
-
-If you report a problem, include your device, Android version, Wayfinder version, controller, selected layout, and the steps that reproduce it.
+Wayfinder is beta software, made with the help of GPT-6 Astra and tested on a Pimax Portal running Android 10. If something behaves unexpectedly, include the device, Android and Wayfinder versions, layout, controller, and steps to reproduce it. [Release notes](https://github.com/androidgyny/wayfinder/releases) · [Report an issue](https://github.com/androidgyny/wayfinder/issues)
 
 ## Credits
 
-Chicago's category browser is inspired by [Daijishō](https://github.com/TapiocaFox/Daijishou). Its category illustrations were generated for Wayfinder using OpenAI image generation, with subsequent visual review and corrections. Category titles remain editable text rather than part of the illustrations. Taipei uses recolorable category scenes with artwork adapted from [Tabler Icons](https://github.com/tabler/tabler-icons) and [Phosphor Icons](https://github.com/phosphor-icons/core), alongside original illustrations.
+**Taipei layout and Dawn preset.** The game-selection grid in Taipei, including the version used by Dawn, is adapted from Daijishō’s game-grid layout. Wayfinder uses portrait covers and carries over Daijishō’s category heading, item count, compact footer, and controller hints. The centered category title, arrows, and spare line art draw on TFT Black Next, adapted for Daijishō by Jamesinorbit from Anthony Caccese's EmulationStation theme. [Daijishō project](https://github.com/TapiocaFox/Daijishou) · [TFT Black Next in the official wallpaper gallery](https://daijishou.github.io/Gallery/wallpapers_pack#tft-black-next)
+
+Taipei's recolorable category illustrations combine original drawings with adaptations from two MIT-licensed icon sets. [Tabler Icons](https://github.com/tabler/tabler-icons) · [Tabler license](app/src/main/assets/www/taipei/licenses/Tabler-LICENSE.txt) · [Phosphor Icons](https://github.com/phosphor-icons/core) · [Phosphor license](app/src/main/assets/www/taipei/licenses/Phosphor-LICENSE.txt)
+
+Chicago's category browser also draws inspiration from Daijishō. Its illustrated posters were generated for Wayfinder using OpenAI image generation and reviewed and corrected for the layout. [Daijishō project](https://github.com/TapiocaFox/Daijishou)
 
 Game artwork belongs to its respective creators. Interface audio includes [Interface Sounds by Kenney](https://kenney.nl/assets/interface-sounds) and original Wayfinder Soft Terminal sounds. The background track, [*Another August*](https://opengameart.org/node/73989), is by [The Cynic Project / Alex Smith](https://cynicmusic.com/). The looping [*Chiptune: Exploration*](https://opengameart.org/content/chiptune-exploration) is by [Luis Zuno / ansimuz](https://ansimuz.itch.io/), bundled unchanged. These audio assets are provided under CC0; attribution details are included with the project assets.
 
