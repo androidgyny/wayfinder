@@ -89,7 +89,7 @@ function taipeiBack(){
 }
 
 const taipeiMasks=["Action & adventure", "Action RPGs", "All Games", "Arcade & reflex", "Arena & twin-stick shooters", "Board games", "City builders", "Collections & game libraries", "Deckbuilders & card games", "Detective mysteries", "Farming & life sims", "Favorites", "Fighting & beat em ups", "First & third person shooters", "Flight & space combat", "Local multiplayer", "Metroidvanias", "Party games", "Pinball & brick breakers", "Platformers", "Point-and-click adventures", "Puzzle platformers", "Puzzles", "RPGs", "Racing", "Rhythm & music", "Roguelikes & dungeon crawlers", "Run & gun", "SHMUPS", "Simulation & sandbox", "Sports", "Stealth", "Story adventures", "Strategy & tactics", "Survival & crafting", "Survival horror", "Tower defense", "Visual novels & choices", "Word & matching puzzles"];
-function taipeiFocus(){($('#grid .presentation-selected')||$('#grid .show-all-matches'))?.focus({preventScroll:true});}
+function taipeiFocus(){const target=$('#grid .presentation-selected')||$('#grid .show-all-matches');if(document.body.dataset.input==='controller')controllerFocus(target,true);else target?.focus({preventScroll:true});}
 const taipeiPlayDate=new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',year:'numeric'});
 const taipeiTime=new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
 function taipeiUpdateClock(){

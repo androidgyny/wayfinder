@@ -1,5 +1,6 @@
 // The carousel moves covers with transforms; browser scrolling must not move its stage.
 function resetPresentationScroll(){
+ if(presentation==='taipei'||presentation==='portland')return;
  if(presentation==='rochester'||presentation==='florence'||presentation==='bend'||presentation==='cannes'){for(const node of [$('#grid'),$('#main'),$('.shell'),document.body,document.scrollingElement])if(node){node.scrollLeft=0;node.scrollTop=0;}window.scrollTo(0,0);return;}
  if(presentation==='rochester'||presentation==='florence'||presentation==='bend'||presentation==='manhattan'||isShowcase()||presentation==='ithaca'||presentation==='tacoma'||presentation==='hongkong'||presentation==='sedona'||presentation==='brussels'||presentation==='bath'||presentation==='dashboard'||presentation==='library'||presentation==='seattle'||presentation==='vienna'||presentation==='prague'||presentation==='copenhagen'||presentation==='oxford'||presentation==='berlin'||presentation==='ulm'||presentation==='cambridge'||presentation==='abbotsford'||presentation==='paloalto'||presentation==='redmond'||presentation==='sanfrancisco'||presentation==='atlantis')return;
  for(const node of [$('#grid'),$('#main'),$('.shell'),document.scrollingElement]){if(node){node.scrollLeft=0;node.scrollTop=0}}

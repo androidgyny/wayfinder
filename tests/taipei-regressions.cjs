@@ -38,6 +38,15 @@ const root=path.resolve(__dirname,'../app/src/main/assets/www');
   setAtmosphere('mountain',selectionStyle);change('gridBackdrop','custom');
   nativeEvent('backgroundChanged',{});same(backdrop,'mountain','choosing a grid image preserves the category backdrop');
   nativeEvent('backgroundRemoved',{});same(taipeiOptions.gridBackdrop,'flat','removed image resets grid');same(backdrop,'mountain','category backdrop survives removal');
+  const columns=taipeiGridMetrics().columns;
+  taipeiSelect(columns,true);controllerFocus($('#grid .presentation-selected'),true);
+  controller('up');
+  same(presentationId,filtered[0].id,'up from the second row');
+  same($('#grid .controller-selected'),$('#grid .presentation-selected'),'controller outline moved');
+  same(document.activeElement,$('#grid .presentation-selected'),'game focus moved');
+  controller('up');same(document.activeElement,$('#taipei-back'),'toolbar focus');
+  same(css('#grid .presentation-selected','boxShadow'),'none','only the toolbar has a ring');
+  controller('down');same(document.activeElement,$('#grid .presentation-selected'),'return to the first row');
   const gaps={};for(const size of ['compact','comfortable','large']){
    setSize(size);taipeiSelect(0);const {columns} = taipeiGridMetrics(),tiles=[...taipeiTrack.children];
    const box=i=>tiles.find(t=>t.dataset.id===filtered[i].id).getBoundingClientRect();

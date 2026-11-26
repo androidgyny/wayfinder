@@ -112,3 +112,10 @@ body[data-presentation=taipei] #taipei-bar .taipei-density button:focus{color:#f
 @media(max-width:600px){#taipei-count{gap:.3em;padding:.35em .5em}body[data-presentation=taipei][data-taipei-level=games] #taipei-bar{gap:6px}}
 body[data-presentation=taipei] .topbar .mark,.tp-logo-swatch{background:var(--taipei-logo)!important;color:var(--taipei-logo-ink)!important}
 .tp-logo-swatch{display:inline-grid;place-items:center;width:1.5em;height:1.5em;margin-inline-start:.5em;border-radius:4px;font-weight:800}
+
+/* Keep the remembered game when visiting the toolbar, with focus on the control. */
+body[data-presentation=taipei] .topbar:focus-within ~ .shell #main #grid .game.presentation-selected,
+body[data-presentation=taipei] #main #taipei-bar:focus-within ~ #grid .game.presentation-selected{
+ background:transparent;box-shadow:none!important;outline:none!important;
+}
+body[data-presentation=taipei] #main #grid .game .cover::after{display:none!important}

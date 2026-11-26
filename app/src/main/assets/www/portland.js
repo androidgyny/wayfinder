@@ -83,7 +83,7 @@ function portlandBack(){
  else return false;
  portlandFocus();persist();return true;
 }
-function portlandFocus(){($('#grid .presentation-selected')||$('#grid .show-all-matches'))?.focus({preventScroll:true});}
+function portlandFocus(){const target=$('#grid .presentation-selected')||$('#grid .show-all-matches');if(document.body.dataset.input==='controller')controllerFocus(target,true);else target?.focus({preventScroll:true});}
 function portlandSelect(i,focus=false){
  if(!filtered.length)return;
  i=Math.max(0,Math.min(i,filtered.length-1));
