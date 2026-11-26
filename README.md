@@ -76,30 +76,67 @@ Wayfinder is beta software, made with the help of GPT-6 Astra and tested on a Pi
 
 ## Credits
 
-**Taipei layout and Dawn preset.** The game-selection grid in Taipei, including the version used by Dawn, is adapted from Daijishō’s game-grid layout. Wayfinder uses portrait covers and carries over Daijishō’s category heading, item count, compact footer, and controller hints. The centered category title, arrows, and spare line art draw on TFT Black Next, adapted for Daijishō by Jamesinorbit from Anthony Caccese's EmulationStation theme. [Daijishō project](https://github.com/TapiocaFox/Daijishou) · [TFT Black Next in the official wallpaper gallery](https://daijishou.github.io/Gallery/wallpapers_pack#tft-black-next)
+| Layout · preset | Design credit |
+| --- | --- |
+| **Taipei · Dawn** | The game-selection grid adapts **Daijishō’s game-grid layout** for portrait covers, carrying over its category heading, item count, compact footer, and controller hints. The centered category title, arrows, and line art draw on *TFT Black Next*, adapted for Daijishō by Jamesinorbit from Anthony Caccese’s EmulationStation theme. [Daijishō](https://github.com/TapiocaFox/Daijishou) · [TFT Black Next](https://daijishou.github.io/Gallery/wallpapers_pack#tft-black-next) |
+| **Chicago · Fresh Ink** | Daijishō inspired the illustrated category browser. [Daijishō](https://github.com/TapiocaFox/Daijishou) |
+| **Hong Kong · Cognate** | Anthony Caccese’s [Analogue OS Menu for ES-DE](https://github.com/anthonycaccese/analogue-os-menu-es-de). |
+| **Bath · Field Notes** | Zoidburg’s original design, adapted for ES-DE by ant (Anthony Caccese). [Notepad Pocket](https://github.com/anthonycaccese/notepad-pocket-es-de) |
+| **Milan · Homage** | Weestuarty’s [Homage for ES-DE](https://github.com/Weestuarty-es-de/homage-es-de). |
 
-Taipei's recolorable category illustrations combine original drawings with adaptations from two MIT-licensed icon sets. [Tabler Icons](https://github.com/tabler/tabler-icons) · [Tabler license](app/src/main/assets/www/taipei/licenses/Tabler-LICENSE.txt) · [Phosphor Icons](https://github.com/phosphor-icons/core) · [Phosphor license](app/src/main/assets/www/taipei/licenses/Phosphor-LICENSE.txt)
+These are independent adaptations. The linked projects credit the original creators. Attribution does not imply affiliation or endorsement.
 
-Chicago's category browser also draws inspiration from Daijishō. Its illustrated posters were generated for Wayfinder using OpenAI image generation and reviewed and corrected for the layout. [Daijishō project](https://github.com/TapiocaFox/Daijishou)
+<details>
+<summary><strong>Illustrations, icons &amp; interface art</strong></summary>
 
-Game artwork belongs to its respective creators. Interface audio includes [Interface Sounds by Kenney](https://kenney.nl/assets/interface-sounds) and original Wayfinder Soft Terminal sounds. The background track, [*Another August*](https://opengameart.org/node/73989), is by [The Cynic Project / Alex Smith](https://cynicmusic.com/). The looping [*Chiptune: Exploration*](https://opengameart.org/content/chiptune-exploration) is by [Luis Zuno / ansimuz](https://ansimuz.itch.io/), bundled unchanged. These audio assets are provided under CC0; attribution details are included with the project assets.
+- **Taipei category scenes** combine original drawings with adaptations from two MIT-licensed icon sets. [Tabler Icons](https://github.com/tabler/tabler-icons) · [Tabler license](app/src/main/assets/www/taipei/licenses/Tabler-LICENSE.txt) · [Phosphor Icons](https://github.com/phosphor-icons/core) · [Phosphor license](app/src/main/assets/www/taipei/licenses/Phosphor-LICENSE.txt)
+- **Apps section icons** come from Phosphor. [Phosphor Icons](https://phosphoricons.com/) · [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt)
+- **Chicago’s posters** were generated for Wayfinder using OpenAI image generation, then reviewed and corrected for the layout. **Brussels** combines AI-generated comic scenery and a wordmark with an original illustrated header. [Comic scenery](app/src/main/assets/www/comic-scenes/README.md) · [Wordmark](app/src/main/assets/www/comic-wordmark.png) · [Illustrated header](app/src/main/assets/www/comic-header.svg)
+- **Notebook materials** were created for Wayfinder. [Paper](app/src/main/assets/www/notebook-paper.svg) · [Wood](app/src/main/assets/www/notebook-wood.svg) · [Binding rings](app/src/main/assets/www/notebook-rings.svg) · [Tape](app/src/main/assets/www/notebook-tape.svg)
+- **Frames and surfaces** created for Wayfinder include the gallery frame and plaster, rental-shelf wood, light-table styling, procedural Blades metalwork, and Tidal Waves backdrop. [Gallery frame](app/src/main/assets/www/gallery-frame.svg) · [Plaster](app/src/main/assets/www/gallery-plaster.svg) · [Rental-shelf wood](app/src/main/assets/www/rental-wood.svg) · [Tidal Waves](app/src/main/assets/www/backgrounds/tidal-waves.svg)
 
-Pixel-art backdrops are adapted from artwork by [Luis Zuno / ansimuz](https://ansimuz.itch.io/): [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background), [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment), [Urban Landscape](https://opengameart.org/content/urban-landscape), [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) (Alien Environment and Another World), [Fort of Illusion](https://opengameart.org/content/fort-of-illusion), [Underwater Diving](https://opengameart.org/content/underwater-diving-pack), and [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion). See the [background asset notices](app/src/main/assets/www/backgrounds/NOTICE.txt) for licenses and adaptation details.
+Game artwork belongs to its respective creators.
 
-Most bundled fonts come from [Google Fonts](https://github.com/google/fonts) under the SIL Open Font License. IBM VGA (PxPlus IBM VGA 8×16) is by VileR from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/), distributed unmodified under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Wine Tahoma Regular and Bold come from [Wine](https://github.com/wine-mirror/wine/tree/master/fonts) under LGPL 2.1 or later; [corresponding font sources](docs/font-sources/wine-tahoma/) and notices are included. The [Go font family](https://go.dev/blog/go-fonts) by Bigelow & Holmes is included under its [BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt). [Doto](https://github.com/google/fonts/tree/main/ofl/doto) supplies the dot-matrix title display in Sedona under the SIL Open Font License 1.1. Other bundled fonts include [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) for notebook lettering, [Anton](https://github.com/google/fonts/tree/main/ofl/anton) for bold packaging-inspired headlines, and [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) for condensed headings, all under the SIL Open Font License 1.1. [GamePocket](https://github.com/mumchristmas/GamePocket-font) by mumchristmas, based on AbFarid, provides Analogue-inspired pixel lettering under the SIL Open Font License 1.1. [UnifrakturMaguntia](https://github.com/google/fonts/tree/main/ofl/unifrakturmaguntia) and [Libre Caslon Text](https://github.com/google/fonts/tree/main/ofl/librecaslontext) provide newspaper masthead and serif lettering under SIL OFL 1.1. Individual license notices are included in the [fonts directory](app/src/main/assets/www/fonts/).
+</details>
 
-App section artwork uses [Phosphor Icons](https://phosphoricons.com/) under the [MIT license](app/src/main/assets/www/LICENSE-Phosphor.txt).
+<details>
+<summary><strong>Pixel-art backdrops</strong></summary>
 
-The notebook’s [paper](app/src/main/assets/www/notebook-paper.svg), [wood](app/src/main/assets/www/notebook-wood.svg), [binding rings](app/src/main/assets/www/notebook-rings.svg), and [tape](app/src/main/assets/www/notebook-tape.svg), along with the [Tidal Waves backdrop](app/src/main/assets/www/backgrounds/tidal-waves.svg) and procedural Blades metalwork, were created for Wayfinder. The [gallery frame](app/src/main/assets/www/gallery-frame.svg), [plaster](app/src/main/assets/www/gallery-plaster.svg), [rental-shelf wood](app/src/main/assets/www/rental-wood.svg), and light-table styling are original interface assets. Brussels uses [original AI-generated comic scenery](app/src/main/assets/www/comic-scenes/README.md), an AI-generated [wordmark](app/src/main/assets/www/comic-wordmark.png), and an original [illustrated header](app/src/main/assets/www/comic-header.svg).
+Luis Zuno (ansimuz) created the pixel art adapted for Wayfinder’s animated backdrops. The *Sideview Sci-Fi* collection supplies both **Alien Environment** and **Another World**. [Artist’s portfolio](https://ansimuz.itch.io/) · [Bundled licenses and adaptation notes](app/src/main/assets/www/backgrounds/NOTICE.txt)
 
-Design inspirations for these Wayfinder layouts:
+- [Mountain at Dusk](https://opengameart.org/content/mountain-at-dusk-background) · [Magical Road](https://opengameart.org/content/magical-road-pixel-art-environment) · [Urban Landscape](https://opengameart.org/content/urban-landscape)
+- [Sideview Sci-Fi](https://opengameart.org/content/sideview-sci-fi-patreon-collection) · [Fort of Illusion](https://opengameart.org/content/fort-of-illusion) · [Underwater Diving](https://opengameart.org/content/underwater-diving-pack) · [Forest of Illusion](https://opengameart.org/content/sunnyland-forest-of-illusion)
 
-- **Hong Kong / Cognate:** [Analogue OS Menu for ES-DE by Anthony Caccese](https://github.com/anthonycaccese/analogue-os-menu-es-de).
+</details>
 
-- **Bath / Field Notes:** [Notepad Pocket for ES-DE](https://github.com/anthonycaccese/notepad-pocket-es-de), based on Zoidburg’s original design and adapted for ES-DE by ant (Anthony Caccese).
-- **Milan / Homage:** [Homage for ES-DE by Weestuarty](https://github.com/Weestuarty-es-de/homage-es-de).
+<details>
+<summary><strong>Music &amp; interface sounds</strong></summary>
 
-These layouts are independent adaptations for Wayfinder, with no affiliation or endorsement implied. The linked theme projects credit their original creators.
+| What you hear | Creator and source |
+| --- | --- |
+| Interface feedback | Kenney’s [Interface Sounds](https://kenney.nl/assets/interface-sounds) and Wayfinder’s original Soft Terminal sounds. |
+| *Another August* | The Cynic Project (Alex Smith). [Track](https://opengameart.org/node/73989) · [Artist](https://cynicmusic.com/) |
+| *Chiptune: Exploration* | Luis Zuno (ansimuz). The looping track is bundled unchanged. [Track](https://opengameart.org/content/chiptune-exploration) · [Artist](https://ansimuz.itch.io/) |
+
+These audio assets are provided under CC0. Attribution details accompany the project assets.
+
+</details>
+
+<details>
+<summary><strong>Typefaces &amp; font licenses</strong></summary>
+
+Most bundled typefaces come from Google Fonts under the SIL Open Font License. Individual notices are included with the font files. [Google Fonts](https://github.com/google/fonts) · [Bundled font notices](app/src/main/assets/www/fonts/)
+
+| Typeface | Use, source, and license |
+| --- | --- |
+| Doto, Caveat, Anton, Oswald | Dot-matrix titles in Sedona, notebook handwriting, bold packaging-style headlines, and condensed headings, respectively. SIL OFL 1.1. [Doto](https://github.com/google/fonts/tree/main/ofl/doto) · [Caveat](https://github.com/google/fonts/tree/main/ofl/caveat) · [Anton](https://github.com/google/fonts/tree/main/ofl/anton) · [Oswald](https://github.com/google/fonts/tree/main/ofl/oswald) |
+| GamePocket | Analogue-inspired pixel lettering by mumchristmas, based on AbFarid. SIL OFL 1.1. [GamePocket](https://github.com/mumchristmas/GamePocket-font) |
+| UnifrakturMaguntia and Libre Caslon Text | Newspaper masthead and serif lettering. SIL OFL 1.1. [UnifrakturMaguntia](https://github.com/google/fonts/tree/main/ofl/unifrakturmaguntia) · [Libre Caslon Text](https://github.com/google/fonts/tree/main/ofl/librecaslontext) |
+| IBM VGA (PxPlus IBM VGA 8×16) | VileR’s font, distributed unmodified. [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/) · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Wine Tahoma Regular and Bold | From Wine, under LGPL 2.1 or later. [Upstream fonts](https://github.com/wine-mirror/wine/tree/master/fonts) · [Corresponding sources and notices](docs/font-sources/wine-tahoma/) |
+| Go font family | Designed by Bigelow & Holmes. [Go fonts](https://go.dev/blog/go-fonts) · [Bundled BSD-style license](app/src/main/assets/www/fonts/go-LICENSE.txt) |
+
+</details>
 
 ## Build from source
 
