@@ -227,10 +227,11 @@ function arrangeTaipeiSettings(){
  $('#background-color option[value=palette]').textContent=presentation==='taipei'?$('#taipei-gridColor option[value=palette]').textContent:'Match palette';
  for(const [slot,id] of Object.entries({category:'backdrop',colors:'background-color',dim:'background-dim',fit:'art-fit',corners:'cover-corners',brightness:'cover-brightness',sort:'presentation-sort',file:'custom-background-controls'})){
   const node=id==='custom-background-controls'?$('#'+id):$('#'+id).closest('.settings-row');
+  if(presentation!=='taipei'&&!taipeiSlots.has(slot))continue;
   if(!taipeiSlots.has(slot)){const anchor=document.createComment('appearance '+id);node.before(anchor);taipeiSlots.set(slot,anchor);}
   const anchor=taipeiSlots.get(slot);
   if(presentation==='taipei'){const target=$('#taipei-slot-'+slot);if(node.parentNode!==target)target.append(node);}
-  else if(node.previousSibling!==anchor)anchor.after(node);
+  else {anchor.replaceWith(node);taipeiSlots.delete(slot);}
  }
 }
 function syncTaipeiPreviews(){

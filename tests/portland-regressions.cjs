@@ -11,20 +11,20 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'p'+i,title:'Game '+String(i)
  await page.addInitScript(g=>{if(!localStorage.getItem('auditGames'))localStorage.setItem('auditGames',JSON.stringify(g));window.Portal={view:()=>localStorage.getItem('view')||'{}',saveView:v=>localStorage.setItem('view',v),library:()=>localStorage.getItem('auditGames'),sound:()=>{},hideKeyboard:()=>{},setThemeColor:()=>{},appsPreferences:()=>'[]',launch:id=>window.launched=id,favorite:(id,on)=>{let d=JSON.parse(localStorage.getItem('auditGames'));d.find(g=>g.id===id).favorite=on;localStorage.setItem('auditGames',JSON.stringify(d));return '{"ok":true}'}};},fixture);
  await page.goto(require('node:url').pathToFileURL(path.join(root,'index.html')).href);
  await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
- await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='After School').values);update();});
+ await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Fresh Ink').values);update();});
  assert.equal(await page.evaluate(()=>document.body.dataset.presentation),'portland');
- assert.equal(await page.evaluate(()=>portlandScenes.length),36);
- assert.equal(await page.evaluate(()=>new Set(portlandScenes.map(s=>portlandMatch(s[1]))).size),36,'unique exact category matches');
+ assert.equal(await page.evaluate(()=>portlandScenes.length),47);
+ assert.equal(await page.evaluate(()=>new Set(portlandScenes.map(s=>portlandMatch(s[1]))).size),47,'unique exact category matches');
  assert.equal(await page.locator('.portland-postcard').count(),6);
  await page.evaluate(()=>portlandOpen(null));
  for(const [name,w,h] of [['portal',1097,592],['4x3',789,568],['3x2',888,592],['16x10',947,592],['21x9',1381,568],['compact',640,360],['keyboard',640,220]]){
   await page.setViewportSize({width:w,height:h});
   for(const index of [0,17,1199]){
    await page.evaluate(i=>portlandSelect(i,true),index);
-   const a=await page.evaluate(()=>{let b=$('#grid .presentation-selected'),g=$('#grid').getBoundingClientRect(),r=b.getBoundingClientRect(),c=b.querySelector('.cover').getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,grid:{left:g.left,right:g.right,top:g.top,bottom:g.bottom},ratio:c.width/c.height,count:$('#grid .portland-track').children.length,focus:document.activeElement===b};});
+   const a=await page.evaluate(()=>{let b=$('#grid .presentation-selected'),g=$('#grid').getBoundingClientRect(),r=b.getBoundingClientRect(),c=b.querySelector('.cover').getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,grid:{left:g.left,right:g.right,top:g.top,bottom:g.bottom},ratio:c.width/c.height,limit:(Math.ceil(g.height/portlandGridMetrics().rowHeight)+3)*portlandGridMetrics().columns,count:$('#grid .portland-track').children.length,focus:document.activeElement===b};});
    assert.ok(a.left>=a.grid.left-1&&a.right<=a.grid.right+1, name+' horizontal '+JSON.stringify(a));
    assert.ok(a.top>=a.grid.top-1&&a.bottom<=a.grid.bottom+1,name+' vertical '+JSON.stringify(a));
-   assert.ok(Math.abs(a.ratio-2/3)<.01,name+' 2:3');assert.ok(a.count<30,name+' virtualization');assert.ok(a.focus,name+' focus');
+   assert.ok(Math.abs(a.ratio-2/3)<.01,name+' 2:3');assert.ok(a.count<=a.limit,name+' virtualization');assert.ok(a.focus,name+' focus');
   }
  }
  await page.setViewportSize({width:1097,height:592});await page.evaluate(()=>portlandSelect(0,true));
@@ -40,8 +40,8 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'p'+i,title:'Game '+String(i)
  await page.reload();await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
  assert.equal(await page.evaluate(()=>portlandCategory),'Local multiplayer');assert.equal(await page.evaluate(()=>presentationId),id);
  await page.evaluate(()=>portlandPick());assert.ok(await page.locator('#portland-picker').evaluate(e=>e.open));
- assert.equal(await page.locator('#portland-options button').count(),36);
- assert.equal(await page.evaluate(async()=>{const imgs=[...$('#portland-options').querySelectorAll('img')];for(const img of imgs)img.loading='eager';return (await Promise.all(imgs.map(img=>img.decode().then(()=>true,()=>false)))).every(Boolean)}),true,'all 36 bundled illustrations decode');
+ assert.equal(await page.locator('#portland-options button').count(),47);
+ assert.equal(await page.evaluate(async()=>{const imgs=[...$('#portland-options').querySelectorAll('img')];for(const img of imgs)img.loading='eager';return (await Promise.all(imgs.map(img=>img.decode().then(()=>true,()=>false)))).every(Boolean)}),true,'all 47 bundled illustrations decode');
  await page.locator('#portland-options button').first().click();assert.equal(await page.locator('#portland-picker').evaluate(e=>e.open),false);
  await page.evaluate(()=>{query='no game can possibly have this title';$('#search').value=query;update()});assert.ok(await page.locator('.search-empty').count());
  assert.ok(await page.locator('.search-empty').evaluate(e=>e.getBoundingClientRect().bottom<=innerHeight),'empty search message is visible');
@@ -61,6 +61,6 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'p'+i,title:'Game '+String(i)
  assert.equal(await page.evaluate(()=>filtered.length),1,'category-browser search spans all categories');
  assert.equal(await page.evaluate(()=>portlandCategory),null);
  await page.evaluate(()=>{query='';games=[];genres=[];portlandShelf=false;update()});assert.equal(await page.locator('.portland-postcard').count(),1,'empty library');
- assert.deepEqual(errors,[]);console.log('PASS Portland: 1,200 games; seven sizes; boundary geometry, 2:3 covers, virtualization, controller, category restoration, picker, empty search.');
+ assert.deepEqual(errors,[]);console.log('PASS Chicago: 1,200 games; seven sizes; boundary geometry, 2:3 covers, virtualization, controller, category restoration, picker, empty search.');
  }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});

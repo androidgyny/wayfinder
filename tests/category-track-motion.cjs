@@ -18,13 +18,15 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
    const node=document.querySelector(layout==='vienna'?'.vienna-row':'.prague-column.expanded .prague-list'),prop=layout==='vienna'?'scrollLeft':'scrollTop';let saves=0;const original=native.saveView;native.saveView=()=>saves++;
    const samples=[];let sampling=true;const frame=()=>{samples.push(node[prop]);if(sampling)requestAnimationFrame(frame)};requestAnimationFrame(frame);
    for(let i=0;i<25;i++){controller(forward);await new Promise(r=>setTimeout(r,65))}
-   await new Promise(r=>setTimeout(r,400));sampling=false;const end=node[prop],id=presentationId;
+   const settled=async()=>{const until=performance.now()+4000;while(categoryTrackMotion.has(node)&&performance.now()<until)await new Promise(requestAnimationFrame);assertSettled();};
+   function assertSettled(){if(categoryTrackMotion.has(node))throw Error(layout+' scroll never settled');}
+   await settled();sampling=false;const end=node[prop],id=presentationId;
    if(layout==='vienna'){
     const card=node.querySelector('.presentation-selected').getBoundingClientRect(),row=node.getBoundingClientRect();
     if(Math.abs(card.left+card.width/2-row.left-row.width/2)>2)throw Error('Vienna shelf lost its center during held navigation');
    }
    for(let i=0;i<25;i++){controller(backward);await new Promise(r=>setTimeout(r,65))}
-   await new Promise(r=>setTimeout(r,400));native.saveView=original;
+   await settled();native.saveView=original;
    return {samples,end,id,start:node[prop],saves};
   },{layout,forward,backward});
   assert.ok(result.end>100);assert.ok(result.start<2,layout+' returns to beginning');

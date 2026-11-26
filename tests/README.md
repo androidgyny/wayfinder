@@ -1,7 +1,7 @@
 # Regression checks
 
 `portland-regressions.cjs` checks the category browser and game shelf with 1,200
-synthetic games, all 36 bundled illustrations, seven viewport sizes, deep-selection
+synthetic games, all 47 Chicago illustrations, seven viewport sizes, deep-selection
 resizing, 2:3 cover geometry, controller and two-tap touch behavior, favorites,
 saved category/selection, artwork picking, preset Revert, empty libraries, and
 search matches in other categories. `BROWSER_EXECUTABLE` can select an installed
@@ -236,3 +236,5 @@ The Manhattan, Bend, Florence, Brussels, and Rochester audit scripts check their
 - `recent-polish-audit.cjs`, `bend-launch-audit.cjs`, `milan-marquee-audit.cjs`, and `bellevue-marquee-audit.cjs` cover animation lifecycle, clipping, long labels, dialog isolation, and reduced motion.
 
 The isolated native backup audit also checks version 3 app sections, colors and order, restoration into an empty configuration, invalid section colors, and automatic reassignment when a custom section is deleted.
+
+`taipei-regressions.cjs` checks the Taipei artwork picker, category palettes, logo accents, dark grid surfaces, controller focus, two-line title clearance, and saved settings with 1,200 synthetic games.

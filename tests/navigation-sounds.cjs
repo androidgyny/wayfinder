@@ -25,6 +25,8 @@ const {chromium} = require('playwright');
     const preset=builtinAppearancePresets.find(p=>p.values.presentation===mode);
     if(preset) applyAppearanceValues(preset.values);
     setPresentation(mode);
+    if(mode==='portland')portlandOpen(null);
+    if(mode==='taipei')taipeiOpen('all');
     if(mode==='cambridge') cambridgeOpen('all','games');
     if(mode==='prague') pragueOpen('genre:Arcade',true);
     if(mode==='vienna') viennaOpen('genre:Arcade',true);

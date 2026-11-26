@@ -15,7 +15,7 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
 
  const layouts=await page.locator('#presentation option').evaluateAll(ns=>ns.map(n=>n.value));
  for(const layout of layouts){
- await page.evaluate(layout=>{query='';genre='';favoritesOnly=false;setPresentation(layout);update();if(layout==='vienna')viennaOpen('genre:Puzzles',true);else if(layout==='prague')pragueOpen('genre:Puzzles',true);else if(layout==='ulm')ulmOpen('all',true);else if(layout==='cambridge')cambridgeOpen('all','games');else focusStartupGame()},layout);
+ await page.evaluate(layout=>{query='';genre='';favoritesOnly=false;setPresentation(layout);update();if(layout==='portland')portlandOpen(null);else if(layout==='taipei')taipeiOpen('all');else if(layout==='vienna')viennaOpen('genre:Puzzles',true);else if(layout==='prague')pragueOpen('genre:Puzzles',true);else if(layout==='ulm')ulmOpen('all',true);else if(layout==='cambridge')cambridgeOpen('all','games');else focusStartupGame()},layout);
  await page.waitForTimeout(100);
  const result=await page.evaluate(async()=>{let saves=0;const original=native.saveView;native.saveView=()=>saves++;const durations=[];for(const action of ['right','down','left','up','pageDown','pageUp'])for(let i=0;i<8;i++){const t=performance.now();controller(action);durations.push(performance.now()-t);await new Promise(r=>setTimeout(r,65))}await new Promise(r=>setTimeout(r,250));native.saveView=original;return {saves,max:Math.max(...durations),average:durations.reduce((a,b)=>a+b)/durations.length}});
  assert.ok(result.saves<12,layout+' navigation saves coalesced '+result.saves);assert.deepEqual(errors,[],layout);console.log(layout,JSON.stringify(result));

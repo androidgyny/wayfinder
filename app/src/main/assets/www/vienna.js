@@ -117,6 +117,6 @@ function scrollCategoryTrack(node,value,axis='top'){
  if(matchMedia('(prefers-reduced-motion: reduce)').matches){stopCategoryTrack(node);node[property]=target;return}
  let state=categoryTrackMotion.get(node);if(state){state.target=target;return}
  state={target,frame:0,last:performance.now()};categoryTrackMotion.set(node,state);
- const tick=now=>{if(!node.isConnected||topDialog()||!['vienna','prague'].includes(presentation)){stopCategoryTrack(node);return}const dt=Math.min(40,Math.max(1,now-state.last));state.last=now;const current=node[property],delta=state.target-current;node.ignoreUntil=node.viennaIgnoreUntil=now+250;if(Math.abs(delta)<=1){node[property]=state.target;categoryTrackMotion.delete(node);return}node[property]=current+delta*(1-Math.exp(-dt/45));state.frame=requestAnimationFrame(tick)};
+ const tick=now=>{if(!node.isConnected||topDialog()||!['vienna','prague'].includes(presentation)){stopCategoryTrack(node);return}const dt=Math.min(40,Math.max(1,now-state.last));state.last=now;const current=node[property],delta=state.target-current;node.ignoreUntil=node.viennaIgnoreUntil=now+250;if(Math.abs(delta)<=1){node[property]=state.target;categoryTrackMotion.delete(node);return}const step=Math.max(1,Math.abs(delta)*(1-Math.exp(-dt/45)));node[property]=current+Math.sign(delta)*Math.min(step,Math.abs(delta));state.frame=requestAnimationFrame(tick)};
  state.frame=requestAnimationFrame(tick);
 }

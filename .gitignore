@@ -11,3 +11,6 @@ node_modules/
 output/
 .env
 .env.*
+
+# Local Chromium diagnostic log
+/debug.log
