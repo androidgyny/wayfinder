@@ -50,7 +50,7 @@ function ithacaSelect(index,focus=false){
  if(ithacaLevel==='games'){presentationId=items[ithacaIndex]?.id||null;controllerGameId=presentationId;}
  ithacaDrawRows();ithacaSyncArt();if(focus)ithacaFocus();queueCarouselSave();
 }
-function ithacaMove(delta,focus=false){if(topDialog()||presentation!=='ithaca'||!ithacaItems().length)return;const next=Math.max(0,Math.min(ithacaItems().length-1,ithacaIndex+delta));if(next===ithacaIndex){if(focus)ithacaFocus();return;}ithacaSelect(next,focus);effect('select');}
+function ithacaMove(delta,focus=false){if(topDialog()||presentation!=='ithaca'||!ithacaItems().length)return;const next=Math.max(0,Math.min(ithacaItems().length-1,ithacaIndex+delta));if(next===ithacaIndex){if(focus)ithacaFocus();return;}ithacaSelect(next,focus);effect('move');}
 function ithacaDrawRows(){
  const items=ithacaItems(),count=innerHeight<=420?4:5,start=Math.max(0,Math.min(ithacaIndex-2,items.length-count));
  const grid=$('#grid'),restoreFocus=grid.contains(document.activeElement);grid.replaceChildren();

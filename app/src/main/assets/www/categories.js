@@ -16,6 +16,12 @@ function categoryApply(moves,order,label,undo=false,restoreSource,aiProposal){
   if(native&&!native.changeCategories)throw Error('Install the updated Android app to manage categories.');
   if(native){const result=JSON.parse(aiProposal?native.aiApply(JSON.stringify(aiProposal)):native.changeCategories(JSON.stringify({moves,order})));if(!result.ok)throw Error(result.message||'Could not save categories.');}
   else{for(const m of moves)if(!games.some(g=>String(g.id)===m.id&&g.genre===m.from))throw Error('A game changed. Reopen Manage categories and try again.');for(const m of moves)games.find(g=>String(g.id)===m.id).genre=m.to;}
+  if((label==='rename'||label==='merge')&&moves.length){
+   const from='genre:'+moves[0].from,to='genre:'+moves[0].to;
+   portlandRename(moves[0].from,moves[0].to);
+   if(label==='rename'&&taipeiAssignments.has(from)){taipeiAssignments.set(to,taipeiAssignments.get(from));taipeiAssignments.delete(from);}
+   if(taipeiCategory===from)taipeiCategory=to;
+  }
   if(!undo){categoryUndo.push({moves:moves.map(m=>({...m})),beforeOrder,afterOrder:[...order],beforeSource,label});if(categoryUndo.length>20)categoryUndo.shift();}else categoryUndo.pop();
   categoryOrder=[...order];if(native)games=JSON.parse(native.library());
   for(const m of moves)if(!games.some(g=>g.genre===m.from))categoryFollow(m.from,m.to);

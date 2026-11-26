@@ -77,3 +77,4 @@ body[data-presentation=abbotsford][data-terminal-palette=paper] :is(.bbs-key-sea
 body[data-presentation=abbotsford][data-terminal-palette=grayscale]{--bg:#101010;--panel:#202020;--field:#202020;--text:#eeeeee;--muted:#b0b0b0;--accent:#d0d0d0;--accent-ink:#141414;--accent-soft:#363636;--line:#6c6c6c;--hover:#363636;--bbs-gold:#eeeeee;--bbs-pink:#a8a8a8;--bbs-coral:#cdcdcd;--bbs-banner:#1b1b1b;--bbs-category-active:#454545;--bbs-list:#181818;--bbs-selection-ink:#141414;--bbs-inactive:#3a3a3a;--bbs-status:#303030}
 body[data-presentation=abbotsford][data-terminal-palette=grayscale] #abbotsford-footer .bbs-key{color:var(--accent)}
 body[data-presentation=abbotsford][data-typography=ibmvga] #grid .game-title,body[data-presentation=abbotsford][data-typography=ibmvga] .bbs-name{font-size:18px}
+body[data-presentation=abbotsford][data-art-fit=cover] #detail .detail-art img{object-fit:cover}

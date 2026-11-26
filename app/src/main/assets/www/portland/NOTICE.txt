@@ -1,0 +1,5 @@
+Portland category illustrations
+Generated for Wayfinder using OpenAI image generation, November 2026.
+These illustrations are not game screenshots or official game artwork.
+Hardware, puzzle and rhythm illustrations were redrawn after visual review.
+Category names and counts are rendered separately by the launcher.

@@ -279,6 +279,9 @@ body:is([data-presentation=prague],[data-presentation=vienna]) .presentation-sel
 /* Oxford: an alphabetical catalogue with one cover and a direct letter index. */
 #oxford-index{display:none}
 body[data-presentation=oxford] #grid{left:3%;right:48%;top:124px;bottom:76px;overflow-y:auto;overflow-x:hidden;perspective:none;touch-action:pan-y;scroll-padding:8px;padding:6px;scrollbar-width:thin;overscroll-behavior:contain}
+/* Keep the neighboring alphabetical entries in view during directional navigation. */
+body[data-presentation=oxford][data-input=controller] #grid{scroll-padding-block:min(64px,20%)}
+
 body[data-presentation=oxford] #grid .game{position:relative;left:auto;top:auto;transform:none;width:100%;height:44px;display:flex;align-items:center;padding:0 44px 0 14px;margin:0 0 3px;border:1px solid transparent;border-radius:6px;opacity:1;transition:background .1s;scroll-margin:6px}
 body[data-presentation=oxford] #grid .game-title{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:17px;margin:0;font-weight:400}
 body[data-presentation=oxford] #grid .presentation-selected{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
@@ -586,6 +589,11 @@ body[data-selection-style=underline] .cupertino-preview-tile.preview-selected::a
 body[data-backdrop=gradient] #cupertino-preview{background:radial-gradient(ellipse at 35% 35%,rgba(var(--backdrop-rgb,128,128,128),.18),transparent 75%),var(--bg)}
 
 /* Keep Alexandria covers fully viewable on short landscape displays. */
+/* Library uses a fixed two-line caption below each top-aligned box. */
+body[data-presentation=library] #grid .game{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}
+body[data-presentation=library] #grid .game .cover{flex:none}
+body[data-presentation=library] #grid .game-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:1.4;height:2.8em;overflow:hidden}
+body[data-presentation=library] #grid .game-genre{display:none}
 @media(max-height:500px){body[data-presentation=library] #grid .cover{max-width:calc((100dvh - 150px) * 2 / 3);margin-inline:auto}}
 
 body[data-presentation=copenhagen] #grid .game{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
@@ -953,3 +961,6 @@ body :is(.manhattan-hint,.bath-hint,.dashboard-hint,.sedona-hint,.showcase-hint,
 /* Keep a Prague selection update local to its independently scrolling column. */
 body[data-presentation=prague] .prague-column{contain:layout style}
 body[data-presentation=prague] .prague-list{contain:layout style}
+
+/* Switch-style HOME row: move the highlight across the visible covers. */
+body[data-presentation=kyoto] #grid .game{left:4%;transform:translateX(calc((var(--offset) + var(--kyoto-slot,0)) * (var(--tile) + 22px)))}

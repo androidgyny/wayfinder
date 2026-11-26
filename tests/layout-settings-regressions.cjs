@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../app/src/main/assets/www');
-const modes=['rochester','cannes','florence','bend','brussels','manhattan','ithaca','tacoma','hongkong','sedona','milan','bellevue','bath','dashboard','abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna','paloalto','redmond','sanfrancisco','atlantis'];
+const modes=['portland','rochester','cannes','florence','bend','brussels','manhattan','ithaca','tacoma','hongkong','sedona','milan','bellevue','bath','dashboard','abbotsford','library','berlin','cambridge','copenhagen','cupertino','kyoto','oxford','prague','seattle','ulm','venice','vienna','paloalto','redmond','sanfrancisco','atlantis'];
 const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,genre:'Puzzles',kind:'app',package:'test.audit',image:'audit.svg',favorite:i<2,lastPlayed:i+1}));
 (async()=>{
  const server=http.createServer((req,res)=>{
@@ -47,7 +47,7 @@ const fixture=Array.from({length:8},(_,i)=>({id:'audit'+i,title:'Synthetic '+i,g
       if(['rochester','florence','bend','brussels'].includes(mode))for(const id of ['cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','cover-brightness'])expected[id]=false;
       if(['manhattan','ithaca','tacoma'].includes(mode))for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons'])expected[id]=false;
       if(['manhattan','ithaca'].includes(mode))expected['cover-brightness']=false;
-      if(mode==='brussels')expected.typography=false;
+      if(mode==='brussels')expected.typography=false; if(mode==='portland')for(const id of ['cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','cover-brightness','typography'])expected[id]=false;
       // Cannes keeps its lit brass cases; dimming unlit cases and artwork fit still apply.
       if(mode==='cannes')for(const id of ['cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons'])expected[id]=false;
       assert.deepEqual(result.rows,expected,JSON.stringify({mode,artwork,recent,width}));

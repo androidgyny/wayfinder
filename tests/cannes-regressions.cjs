@@ -1,4 +1,4 @@
-/* Cannes / Now Showing: synthetic 1,200-game library; no device, network or real library access. */
+/* Cannes / Now Playing: synthetic 1,200-game library; no device, network or real library access. */
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium}=require('playwright');
 const root=path.resolve(__dirname,'../app/src/main/assets/www'),out=path.resolve(__dirname,'../output/cannes-audit');fs.mkdirSync(out,{recursive:true});
@@ -23,7 +23,7 @@ const cover=n=>`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"
   const origin='http://127.0.0.1:'+server.address().port;
   await page.goto(origin);await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);
   assert.ok(await page.evaluate(()=>[...$('#presentation').options].some(o=>o.value==='cannes'&&o.textContent==='Cannes')),'Cannes is offered');
-  await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Now Showing').values);genre='';favoritesOnly=false;query='';update();cannesSelect(0)});
+  await page.evaluate(()=>{applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Now Playing').values);genre='';favoritesOnly=false;query='';update();cannesSelect(0)});
   await page.evaluate(()=>document.fonts.ready);
   assert.equal(await page.evaluate(()=>document.body.dataset.presentation),'cannes');
   // Wait for the row's transform transition rather than a fixed time; first artwork decodes can delay frames.
@@ -47,6 +47,46 @@ const cover=n=>`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"
     strip:getComputedStyle($('#grid .cannes-strip')).transform,inline:$('#grid .cannes-strip').style.transform,strips:document.querySelectorAll('.cannes-strip').length,stripClass:$('#grid .cannes-strip').className,transition:getComputedStyle($('#grid .cannes-strip')).transition,anims:$('#grid .cannes-strip').getAnimations().length,offset:cannesOffset}});
   const visibleIn=(a,label)=>{assert.ok(a.sel,label+': selection exists');assert.ok(a.sel.left>=a.grid.left-1&&a.sel.right<=a.grid.right+1,label+': selected case horizontally visible '+JSON.stringify(a));
    assert.ok(a.sel.top>=a.grid.top-1&&a.sel.bottom<=a.grid.bottom+1&&a.sel.bottom<=a.footerTop+1,label+': selected case and plate above the box office '+JSON.stringify(a));};
+
+  // Send actual touch input so pointer capture, cancellation and synthesized clicks are exercised.
+  const touch=await page.context().newCDPSession(page);
+  const finger=(type,x)=>touch.send('Input.dispatchTouchEvent',{type,touchPoints:x===undefined?[]:[{x,y:290}]});
+  await settle();
+  await finger('touchStart',760);
+  await finger('touchMove',650);
+  await page.waitForFunction(()=>Math.abs(cannesOffset-110)<2);
+  await finger('touchMove',380);
+  await page.waitForFunction(()=>Math.abs(cannesOffset-380)<2);
+  await finger('touchMove',460);
+  await page.waitForFunction(()=>Math.abs(cannesOffset-300)<2);
+  await page.waitForTimeout(120); // Lift at rest after the reversal.
+  await finger('touchEnd');
+  await settle();
+  assert.ok(await page.evaluate(()=>!window.launched&&filtered.findIndex(g=>g.id===presentationId)>0),'swiping browses without launching');
+  const other=await page.evaluate(()=>{
+   const b=[...document.querySelectorAll('.cannes-case:not(.presentation-selected)')].find(b=>{
+    const r=b.getBoundingClientRect();return r.left>0&&r.right<innerWidth;
+   });
+   return {id:b.dataset.id,x:b.getBoundingClientRect().x+b.offsetWidth/2};
+  });
+  await finger('touchStart',other.x);await finger('touchEnd');
+  await page.waitForFunction(id=>presentationId===id,other.id);
+  assert.ok(await page.evaluate(()=>!window.launched),'a fresh tap selects a poster after dragging');
+  await page.evaluate(()=>cannesSelect(25,false));await settle();
+  await finger('touchStart',700);await finger('touchMove',657);await finger('touchEnd');
+  await settle();
+  assert.equal((await audit()).index,26,'short deliberate swipe advances one poster');
+  const beforeFling=await page.evaluate(()=>cannesOffset);
+  await finger('touchStart',910);
+  for(const x of [780,630,450,240,80])await finger('touchMove',x);
+  await finger('touchEnd');
+  await page.waitForFunction(start=>cannesOffset>start+2*cannesGridWidth,beforeFling,{timeout:3500});
+  await finger('touchStart',600);
+  const stopped=await page.evaluate(()=>cannesOffset);
+  await page.waitForTimeout(150);
+  assert.equal(await page.evaluate(()=>cannesOffset),stopped,'touch arrests the fling immediately');
+  await finger('touchEnd');await settle();
+  assert.ok(await page.evaluate(()=>!window.launched),'braking does not launch a game');
 
   // Geometry at handheld ratios, including the Portal's CSS viewport and Pocket DMG.
   for(const [name,w,h] of [['portal',1097,592],['4x3',789,568],['16x10',947,592],['3x2',888,592],['21x9',1381,568],['pocket-dmg',551,432],['compact',640,360]]){
@@ -113,6 +153,29 @@ const cover=n=>`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"
   await page.evaluate(()=>{showDialog('#settings-dialog');refreshApplicableAppearanceControls();updateAppearancePreview()});
   const rows=await page.evaluate(()=>Object.fromEntries(['palette','typography','cover-brightness','art-fit','cover-glow','backdrop','selection-style','title-weight'].map(id=>[id,!$('#'+id).closest('.settings-row').hidden])));
   assert.deepEqual(rows,{palette:false,typography:true,'cover-brightness':true,'art-fit':true,'cover-glow':false,backdrop:false,'selection-style':false,'title-weight':true});
+  const options=await page.evaluate(()=>{
+   const original=cannesCase;
+   for(const [key,value] of Object.entries({wall:'midnight',scale:'compact',plaques:'selected'})){
+    const field=$('#cannes-'+key);field.value=value;field.dispatchEvent(new Event('change',{bubbles:true}));
+   }
+   return {smaller:cannesCase<original,wall:document.body.dataset.cannesWall,
+    plaque:getComputedStyle($('#grid .game:not(.presentation-selected) .cannes-plate')).visibility};
+  });
+  assert.deepEqual(options,{smaller:true,wall:'midnight',plaque:'hidden'});
+  await page.evaluate(()=>selectSettingsSection('appearance'));
+  for(const width of [1097,640,360]){
+   await page.setViewportSize({width,height:592});
+   const fits=await page.locator('#cannes-plaques').evaluate(select=>{
+    const css=getComputedStyle(select),ctx=document.createElement('canvas').getContext('2d');
+    ctx.font=css.font;
+    const textWidth=ctx.measureText(select.selectedOptions[0].text).width;
+    const available=select.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight);
+    const row=select.parentElement.getBoundingClientRect(),field=select.getBoundingClientRect();
+    return available>=textWidth+16 && field.right<=row.right+1;
+   });
+   assert.ok(fits,'Full selected plaque label and dropdown arrow fit at '+width+'px');
+  }
+  await page.setViewportSize({width:1097,height:592});
   await page.waitForTimeout(300);
   const preview=await page.locator('.appearance-sample').evaluate(e=>getComputedStyle(e).backgroundImage);assert.ok(preview.includes('gradient'),'preview uses the brass case');
   await page.evaluate(()=>hideDialog('#settings-dialog'));
@@ -122,6 +185,9 @@ const cover=n=>`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"
   const saved=await page.evaluate(()=>({id:presentationId,genre}));
   await page.reload();await page.waitForFunction(()=>typeof restoring!=='undefined'&&!restoring);await settle();
   assert.deepEqual(await page.evaluate(()=>({presentation,id:presentationId,genre})),{presentation:'cannes',...saved});
+  assert.deepEqual(await page.evaluate(()=>cannesOptions),{wall:'midnight',scale:'compact',plaques:'selected'});
+  await page.evaluate(()=>applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Now Playing').values));
+  assert.deepEqual(await page.evaluate(()=>cannesOptions),{wall:'velvet',scale:'feature',plaques:'all'});
   a=await audit();visibleIn(a,'after reload');
   assert.deepEqual(errors,[]);
   console.log('Cannes: seven screen ratios, windowed 2:3 cases, marquee fitting, held/reversed/paged navigation, screens, favorites, empty and search states, editing, settings, preview and reload passed.');

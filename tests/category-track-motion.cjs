@@ -19,6 +19,10 @@ const fixture=Array.from({length:1200},(_,i)=>({id:'g'+i,title:i===0?'Monument V
    const samples=[];let sampling=true;const frame=()=>{samples.push(node[prop]);if(sampling)requestAnimationFrame(frame)};requestAnimationFrame(frame);
    for(let i=0;i<25;i++){controller(forward);await new Promise(r=>setTimeout(r,65))}
    await new Promise(r=>setTimeout(r,400));sampling=false;const end=node[prop],id=presentationId;
+   if(layout==='vienna'){
+    const card=node.querySelector('.presentation-selected').getBoundingClientRect(),row=node.getBoundingClientRect();
+    if(Math.abs(card.left+card.width/2-row.left-row.width/2)>2)throw Error('Vienna shelf lost its center during held navigation');
+   }
    for(let i=0;i<25;i++){controller(backward);await new Promise(r=>setTimeout(r,65))}
    await new Promise(r=>setTimeout(r,400));native.saveView=original;
    return {samples,end,id,start:node[prop],saves};

@@ -22,7 +22,7 @@ Use Wayfinder as an ordinary app or make it your handheld’s home screen. A fre
 
 That restraint is intentional. With hundreds or thousands of games, every extra field becomes work repeated across the collection. Organizing a library should leave you time to enjoy it.
 
-**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 31 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
+**Wayfinder makes those few details go a long way.** The same categories and portrait images work across 32 layouts: cover grids, shelves, carousels, dashboards, card arrangements, and compact text lists. Give artwork room to shine, scan many titles at once, or explore a category a few games at a time. Switching views does not mean preparing your collection again.
 
 ## Built for a growing collection
 
@@ -132,6 +132,8 @@ See the [release notes](https://github.com/androidgyny/wayfinder/releases) for v
 If you report a problem, include your device, Android version, Wayfinder version, controller, selected layout, and the steps that reproduce it.
 
 ## Credits
+
+Chicago's category browser is inspired by [Daijishō](https://github.com/TapiocaFox/Daijishou). Its category illustrations were generated for Wayfinder using OpenAI image generation, with subsequent visual review and corrections. Category titles remain editable text rather than part of the illustrations. Taipei uses recolorable category scenes with artwork adapted from [Tabler Icons](https://github.com/tabler/tabler-icons) and [Phosphor Icons](https://github.com/phosphor-icons/core), alongside original illustrations.
 
 Game artwork belongs to its respective creators. Interface audio includes [Interface Sounds by Kenney](https://kenney.nl/assets/interface-sounds) and original Wayfinder Soft Terminal sounds. The background track, [*Another August*](https://opengameart.org/node/73989), is by [The Cynic Project / Alex Smith](https://cynicmusic.com/). The looping [*Chiptune: Exploration*](https://opengameart.org/content/chiptune-exploration) is by [Luis Zuno / ansimuz](https://ansimuz.itch.io/), bundled unchanged. These audio assets are provided under CC0; attribution details are included with the project assets.
 

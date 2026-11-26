@@ -1,5 +1,12 @@
 # Regression checks
 
+`portland-regressions.cjs` checks the category browser and game shelf with 1,200
+synthetic games, all 36 bundled illustrations, seven viewport sizes, deep-selection
+resizing, 2:3 cover geometry, controller and two-tap touch behavior, favorites,
+saved category/selection, artwork picking, preset Revert, empty libraries, and
+search matches in other categories. `BROWSER_EXECUTABLE` can select an installed
+Chromium executable. It never reads the device's library.
+
 `button-press-regressions.cjs` checks tactile feedback on raised controls in
 Sedona, Atlantis, Redmond and Palo Alto: touch/controller activation, immediate
 actions, single pulses, cleanup, canceled gestures, disabled controls, reduced
@@ -217,7 +224,7 @@ The Manhattan, Bend, Florence, Brussels, and Rochester audit scripts check their
 
 `gamepad-access-audit.cjs` covers Add game, settings, search, Apps, nested artwork controls, and empty libraries across every offered layout. `controller-focus-audit.cjs` and `layout-spacing-audit.cjs` check focus visibility and clipped category controls; Rochester’s shaped focus rim is checked alongside rectangular outlines. `layout-settings-regressions.cjs` covers the settings states of every offered layout.
 
-`cannes-regressions.cjs` checks Cannes (Now Showing preset) with 1,200 synthetic games in 24 categories, including a 66-character category name. At seven screen sizes, from Pocket DMG and a 640 × 360 keyboard-height view up to 21:9, it confirms 2:3 poster cases, that only cases near the view are mounted, that the selected case and its nameplate stay above the footer, that the marquee lettering uses Anton and fits at a legible size, and that footer and header controls do not overlap. It also covers held, reversed and paged movement at both ends of a row; changing categories with the bumpers or the vertical D-pad; favorites keeping the row still; empty Favorites; search recovery and Back; editing; layout switching; which appearance settings are shown; the settings preview; and restoring position after a reload. Screenshots go to `output/cannes-audit/`.
+`cannes-regressions.cjs` checks Cannes (Now Playing preset) with 1,200 synthetic games in 24 categories, including a 66-character category name. At seven screen sizes, from Pocket DMG and a 640 × 360 keyboard-height view up to 21:9, it confirms 2:3 poster cases, that only cases near the view are mounted, that the selected case and its nameplate stay above the footer, that the marquee lettering uses Anton and fits at a legible size, and that footer and header controls do not overlap. It also covers held, reversed and paged movement at both ends of a row; changing categories with the bumpers or the vertical D-pad; favorites keeping the row still; empty Favorites; search recovery and Back; editing; layout switching; which appearance settings are shown; the settings preview; and restoring position after a reload. Screenshots go to `output/cannes-audit/`.
 
 `shortcut-editor-audit.cjs` uses synthetic pin requests to check supplied titles and icons, cancellation, save, category refresh, duplicates, and expired requests. It complements the device check of Android’s shortcut request flow; it does not emulate the Android shortcut service.
 

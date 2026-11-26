@@ -374,9 +374,11 @@ public class ReleaseAudit extends Instrumentation {
     private void cannesAudit() throws Exception {
         runOnMainSync(()->{try{call(field("startup"),"dismiss",new Class<?>[]{});}catch(Exception e){throw new RuntimeException(e);}});
         Thread.sleep(400);
-        js("window.cannesAuditErrors=[];addEventListener('error',e=>cannesAuditErrors.push(e.message));games=Array.from({length:1200},(_,i)=>({id:'cinema'+i,title:'Feature '+String(i).padStart(4,'0'),genre:'Screen '+i%8,image:'icon/com.android.settings',package:'com.android.settings',kind:'app',favorite:i%7===0}));rebuildGenres();query='';genre='';favoritesOnly=false;applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Now Showing').values);update();cannesSelect(200);window.cannesLaunches=0;window.cannesSavedPlay=play;play=()=>cannesLaunches++;");
+        js("window.cannesAuditErrors=[];addEventListener('error',e=>cannesAuditErrors.push(e.message));games=Array.from({length:1200},(_,i)=>({id:'cinema'+i,title:'Feature '+String(i).padStart(4,'0'),genre:'Screen '+i%8,image:'icon/com.android.settings',package:'com.android.settings',kind:'app',favorite:i%7===0}));rebuildGenres();query='';genre='';favoritesOnly=false;applyAppearanceValues(builtinAppearancePresets.find(p=>p.name==='Now Playing').values);update();cannesSelect(200);window.cannesLaunches=0;window.cannesSavedPlay=play;play=()=>cannesLaunches++;");
         Thread.sleep(500);
         try{
+            check("true".equals(js("native.sound('move')>0")),"Cannes navigation sample plays through Android SoundPool");
+            check("true".equals(js("cannesOptions.wall==='velvet' && cannesOptions.scale==='feature' && cannesOptions.plaques==='all'")),"Now Playing applies its Cannes defaults");
             for(int direction:new int[]{1,-1}){
                 int before=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
                 int key=direction>0?KeyEvent.KEYCODE_DPAD_RIGHT:KeyEvent.KEYCODE_DPAD_LEFT;
@@ -385,7 +387,7 @@ public class ReleaseAudit extends Instrumentation {
                 runOnMainSync(()->activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,key)));
                 Thread.sleep(500);
                 int after=Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)"));
-                check((after-before)*direction>25,"Cannes held D-pad advances continuously in direction "+direction);
+                check((after-before)*direction>25,"Cannes held D-pad advances continuously in direction "+direction+" (index "+before+" to "+after+", window focused: "+activity.hasWindowFocus()+")");
                 Thread.sleep(250);check(after==Integer.parseInt(js("filtered.findIndex(g=>g.id===presentationId)")),"Cannes stops on release");
                 check("true".equals(js("document.activeElement?.closest('.game')?.dataset.id===presentationId")),"Cannes focus follows held selection");
             }

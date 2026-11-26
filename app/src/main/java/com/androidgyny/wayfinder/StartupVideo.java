@@ -64,7 +64,7 @@ final class StartupVideo {
     }
     void matchBackground(int color){
         if(animation==null)return;openingColor=color;animation.setBackgroundColor(color);if(overlay!=null)overlay.setBackgroundColor(color);
-        boolean light=(android.graphics.Color.red(color)*.2126+android.graphics.Color.green(color)*.7152+android.graphics.Color.blue(color)*.0722)>160;
+        boolean light=(android.graphics.Color.red(color)*.2126+android.graphics.Color.green(color)*.7152+android.graphics.Color.blue(color)*.0722)>152;
         animation.evaluateJavascript("window.setOpeningBackground&&window.setOpeningBackground('"+String.format(java.util.Locale.US,"#%06X",color&0xffffff)+"',"+light+")",null);
     }
     // A separate window covers the SurfaceView video during the handoff.

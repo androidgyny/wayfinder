@@ -44,6 +44,20 @@ function openControllerHeader(){
 function controllerNavigation(action,modal){
  const scope=modal||document;
  if(controllerControlsScope&&controllerControlsScope!==scope)leaveControllerControls();
+ if(!modal&&presentation==='taipei'&&action==='down'&&document.activeElement?.closest('.topbar,#taipei-bar')){
+  if(document.activeElement===$('#search'))native?.hideKeyboard?.();
+  leaveControllerControls();controllerHeaderReturn=null;
+  if(taipeiShelf&&filtered.length)taipeiSelect(Math.max(0,filtered.findIndex(g=>g.id===presentationId)),true);
+  else taipeiFocus();
+  return true;
+ }
+ if(!modal && presentation==='portland' && action==='down' && document.activeElement?.closest('.topbar,#portland-bar')){
+  leaveControllerControls();controllerHeaderReturn=null;
+  if(document.activeElement===$('#search'))native?.hideKeyboard?.();
+  if(portlandShelf && filtered.length)portlandSelect(Math.max(0,filtered.findIndex(g=>g.id===presentationId)),true);
+  else portlandFocus();
+  return true;
+ }
  if(action==='controls'){
   if(controllerControlsScope){leaveControllerControls(true);return true;}
   controllerControlsReturn=document.activeElement;

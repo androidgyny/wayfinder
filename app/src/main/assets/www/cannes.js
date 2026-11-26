@@ -3,6 +3,20 @@
 let cannesPitch=220,cannesCase=190,cannesEdge=28,cannesOffset=0,cannesMarqueeKey=null;
 // Sizes are cached from resize callbacks so moving the selection never forces a layout read.
 let cannesGridWidth=0,cannesBoardSize='',cannesMarqueeFrame=0;
+const cannesDefaults={wall:'velvet',scale:'feature',plaques:'all'};
+let cannesOptions={...cannesDefaults};
+function setCannesOptions(value={},save=true){
+ cannesOptions={
+  wall:['midnight','noir'].includes(value?.wall)?value.wall:'velvet',
+  scale:value?.scale==='compact'?'compact':'feature',
+  plaques:value?.plaques==='selected'?'selected':'all'
+ };
+ for(const [key,option] of Object.entries(cannesOptions))$('#cannes-'+key).value=option;
+ document.body.dataset.cannesWall=cannesOptions.wall;
+ document.body.dataset.cannesPlaques=cannesOptions.plaques;
+ if(presentation==='cannes'&&!restoring){sizeCannes();updateAppearancePreview();}
+ if(save)persist();
+}
 function cannesFocus(){controllerFocus($('#grid .presentation-selected')||$('#grid .show-all-matches'),true);}
 function cannesOpen(i){const list=sections(),s=list[(i+list.length)%list.length];if(!s)return;favoritesOnly=s.favorite;setGenre(s.genre,true);persist();}
 function cannesSelect(i,focus=true){
@@ -53,7 +67,7 @@ function sizeCannes(){
  const grid=$('#grid'),w=grid.clientWidth,h=grid.clientHeight;if(!w||!h)return;
  cannesGridWidth=w;cannesEdge=w<640?16:28;
  const byHeight=(h-20-14-60)/1.5,byWidth=(w-cannesEdge*2)/2.4-14;
- const art=Math.max(40,Math.floor(Math.min(byHeight,byWidth)));
+ const art=Math.max(40,Math.floor(Math.min(byHeight,byWidth)*(cannesOptions.scale==='compact'?.76:1)));
  const pitch=cannesPitch;cannesCase=art+14;cannesPitch=cannesCase+Math.max(16,Math.round(cannesCase*.14));
  grid.style.setProperty('--cannes-art',art+'px');grid.style.setProperty('--cannes-pitch',cannesPitch+'px');grid.style.setProperty('--cannes-edge',cannesEdge+'px');
  cannesMarquee();
@@ -129,6 +143,9 @@ function cannesController(action){
  return false;
 }
 function initCannes(){
+ for(const key of Object.keys(cannesDefaults)){
+  $('#cannes-'+key).onchange=e=>setCannesOptions({...cannesOptions,[key]:e.target.value});
+ }
  const marquee=el('header','cannes-part');marquee.id='cannes-marquee';
  const side=(direction)=>{const b=el('button','cannes-side cannes-'+direction),name=el('span','cannes-side-name'),bumper=el('b','',direction==='prev'?'LB':'RB');name.id='cannes-'+direction+'-name';
   b.setAttribute('aria-label',direction==='prev'?'Previous category':'Next category');if(direction==='prev')b.append(name,bumper);else b.append(bumper,name);
@@ -148,10 +165,90 @@ function initCannes(){
  footer.append(now,ticket,hints);$('#main').append(marquee,footer);
  new ResizeObserver(entries=>{const r=entries[entries.length-1].contentRect,size=Math.round(r.width)+'x'+Math.round(r.height);if(size===cannesBoardSize)return;cannesBoardSize=size;cancelAnimationFrame(cannesMarqueeFrame);cannesMarqueeFrame=requestAnimationFrame(()=>{cannesMarqueeFrame=0;if(presentation==='cannes')cannesMarquee();});}).observe(board);
  document.fonts.ready.then(()=>{if(presentation==='cannes')cannesMarquee(true);});
- const grid=$('#grid');let drag=null,ignoreUntil=0,lastWheel=0;
- grid.addEventListener('pointerdown',e=>{if(presentation==='cannes'&&e.pointerType==='touch')drag={x:e.clientX,y:e.clientY};});
- grid.addEventListener('pointerup',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag=null;if(presentation==='cannes'&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){ignoreUntil=performance.now()+400;cannesController(dx<0?'pageDown':'pageUp');}});
- grid.addEventListener('pointercancel',()=>drag=null);
+ const grid=$('#grid');let drag=null,ignoreUntil=0,lastWheel=0,coastFrame=0;
+ const indexAt=offset=>{
+  if(offset<=0)return 0;
+  if(offset>=cannesTarget(filtered.length-1))return filtered.length-1;
+  return Math.round((offset+cannesGridWidth/2-cannesEdge-cannesCase/2)/cannesPitch);
+ };
+ const moveWall=(strip,offset)=>{
+  const index=indexAt(offset);
+  if(filtered[index]&&presentationId!==filtered[index].id){
+   presentationId=filtered[index].id;renderCannes();
+  }
+  cannesOffset=offset;
+  strip.style.transform=`translate3d(${-offset}px,0,0)`;
+ };
+ grid.addEventListener('pointerdown',e=>{
+  if(presentation!=='cannes'||e.pointerType!=='touch'||!e.isPrimary||!filtered.length)return;
+  const strip=grid.querySelector('.cannes-strip');
+  if(!strip||!cannesTarget(filtered.length-1))return;
+  const braking=Boolean(coastFrame);
+  cancelAnimationFrame(coastFrame);coastFrame=0;
+  ignoreUntil=0;
+  const start=-new DOMMatrixReadOnly(getComputedStyle(strip).transform).m41;
+  drag={id:e.pointerId,strip,x:e.clientX,y:e.clientY,start,lastX:e.clientX,time:e.timeStamp,speed:0,active:braking,
+   index:filtered.findIndex(g=>g.id===presentationId)};
+  if(braking)grid.setPointerCapture(e.pointerId);
+ });
+ grid.addEventListener('pointermove',e=>{
+  if(!drag||e.pointerId!==drag.id)return;
+  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.active){
+   if(Math.max(Math.abs(dx),Math.abs(dy))<6)return;
+   if(Math.abs(dx)<=Math.abs(dy)||presentation!=='cannes'){drag=null;return;}
+   drag.active=true;
+   grid.setPointerCapture(e.pointerId);
+   drag.strip.classList.add('cannes-dragging');
+  }
+  const offset=Math.max(0,Math.min(cannesTarget(filtered.length-1),drag.start-dx));
+  const elapsed=Math.max(1,e.timeStamp-drag.time),velocity=(drag.lastX-e.clientX)/elapsed;
+  const weight=Math.exp(-elapsed/35);
+  drag.speed=drag.speed*weight+velocity*(1-weight);
+  drag.lastX=e.clientX;drag.time=e.timeStamp;
+  moveWall(drag.strip,offset);
+ });
+ const finishDrag=e=>{
+  if(!drag||e.pointerId!==drag.id)return;
+  if(e.type==='lostpointercapture'&&e.target!==grid)return;
+  const gesture=drag;drag=null;
+  if(!gesture.active)return;
+  const strip=gesture.strip;
+  if(presentation!=='cannes'||!strip.isConnected){strip.classList.remove('cannes-dragging');return;}
+  ignoreUntil=performance.now()+400;
+  const flick=e.type==='pointerup'&&e.timeStamp-gesture.time<90&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const travel=gesture.x-gesture.lastX;
+  const speed=Math.min(8,Math.abs(gesture.speed));
+  const direction=Math.sign(travel);
+  const fling=flick&&Math.abs(travel)>=Math.max(58,cannesPitch*.32)&&speed>=.65;
+  const snap=index=>{strip.classList.remove('cannes-dragging');cannesSelect(index,false);};
+  if(!fling){
+   let index=indexAt(cannesOffset);
+   if(Math.abs(travel)<cannesPitch*.7&&e.type==='pointerup'){
+    index=gesture.index+(Math.abs(travel)>=Math.min(32,cannesPitch*.2)?direction:0);
+   }
+   snap(index);return;
+  }
+  // Constant deceleration: doubling release speed quadruples the coasting distance.
+  const start=cannesOffset,duration=Math.min(2400,speed/.003);
+  const distance=gesture.speed>0?speed*duration/2:-speed*duration/2;
+  const limit=cannesTarget(filtered.length-1),begin=performance.now(),context=strip.dataset.context;
+  let last=start;
+  const advance=now=>{
+   coastFrame=0;
+   if(!strip.isConnected||presentation!=='cannes'||strip.dataset.context!==context||cannesOffset!==last||
+      document.body.dataset.input==='controller'||document.querySelector('dialog[open]')){
+    strip.classList.remove('cannes-dragging');return;
+   }
+   const t=Math.min(1,(now-begin)/duration);
+   last=Math.max(0,Math.min(limit,start+distance*t*(2-t)));
+   moveWall(strip,last);
+   if(t===1||last===0||last===limit)snap(indexAt(last));
+   else coastFrame=requestAnimationFrame(advance);
+  };
+  coastFrame=requestAnimationFrame(advance);
+ };
+ for(const event of ['pointerup','pointercancel','lostpointercapture'])grid.addEventListener(event,finishDrag);
  grid.addEventListener('click',e=>{if(presentation==='cannes'&&performance.now()<ignoreUntil&&e.detail){e.preventDefault();e.stopImmediatePropagation();}},true);
  grid.addEventListener('wheel',e=>{if(presentation!=='cannes'||e.ctrlKey||Math.abs(e.deltaY)+Math.abs(e.deltaX)<10)return;e.preventDefault();if(performance.now()-lastWheel<200)return;lastWheel=performance.now();cannesController((Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)>0?'pageDown':'pageUp');},{passive:false});
 }

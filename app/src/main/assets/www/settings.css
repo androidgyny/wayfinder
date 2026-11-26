@@ -16,6 +16,11 @@
 #settings-dialog .settings-row p{font-size:13px;line-height:1.45}
 #settings-dialog .settings-row h3{font-size:15px}
 #settings-dialog .settings-row>select{width:180px;max-width:48%;font-size:14px}
+#settings-dialog #cannes-plaques{width:auto;max-width:100%}
+#chicago-options .settings-row,#cannes-options .settings-row{flex-wrap:wrap}
+#settings-dialog :is(#chicago-options,#cannes-options) .settings-row>select{
+ width:auto;min-width:min(15rem,100%);max-width:100%;
+}
 #settings-dialog #appearance-presets{width:100%;max-width:100%}
 #settings-appearance #preset-options{margin:0 0 24px;padding:16px}
 #preset-options .settings-row{display:block;border:0;padding:6px 0}

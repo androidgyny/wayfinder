@@ -62,7 +62,7 @@ function updateCoverGlow(){
  if(glowCard!==selected){glowCard?.classList.remove('glow-selected');glowCard=selected;if(selected)selected.classList.add('glow-selected');}
  const preview=$('#catalogue-art');const img=presentation==='oxford'?preview:selected?.querySelector('.cover img');
  const color=img?coverColor(img):null;
- if(backdrop==='gradient'){const layer=$('#soft-gradient'),rgb=color||'128,128,128';if(layer.style.getPropertyValue('--backdrop-rgb')!==rgb)layer.style.setProperty('--backdrop-rgb',rgb);if($('#settings-dialog').open)$('#appearance-preview').style.setProperty('--backdrop-rgb',rgb);}
+ if(document.body.dataset.backdrop==='gradient'){const layer=$('#soft-gradient'),rgb=color||'128,128,128';if(layer.style.getPropertyValue('--backdrop-rgb')!==rgb)layer.style.setProperty('--backdrop-rgb',rgb);if($('#settings-dialog').open)$('#appearance-preview').style.setProperty('--backdrop-rgb',rgb);}
  if(selected){if(color)selected.style.setProperty('--cover-glow-rgb',color);else selected.style.removeProperty('--cover-glow-rgb');}
  preview.classList.toggle('glow-selected',(presentation==='oxford')&&!!selected);
  if(color)preview.style.setProperty('--cover-glow-rgb',color);else preview.style.removeProperty('--cover-glow-rgb');
@@ -71,14 +71,14 @@ function setAtmosphere(background,selection){
  // Retire the experimental layered renderer; preserve the same scene and controls.
  if(background==='fortlayers')background='fort';
  backdrop=['tidal','gradient','custom','mountain','magical','urban','alien','another','fort','forest','underwater','digital','fireflies','contours'].includes(background)?background:'flat';selectionStyle=['outline','underline','glow'].includes(selection)?selection:'outline';
- document.body.dataset.backdrop=backdrop;document.body.dataset.selectionStyle=selectionStyle;
+ document.body.dataset.selectionStyle=selectionStyle;
  $('#backdrop').value=backdrop;$('#selection-style').value=selectionStyle;syncCustomBackground();queueCoverGlow();persist();
 }
 function setViennaSeparators(value){viennaSeparators=value==='space'?'space':'lines';document.body.dataset.viennaSeparators=viennaSeparators;$('#vienna-separators').value=viennaSeparators;persist();}
 function migrateRetiredAppearance(value){return value.presentation==='losangeles'?{...value,...builtinAppearancePresets.find(p=>p.name==='Smitchish Dark').values}:value;}
 function initAppearance(value){
  setDashboardOptions(value.dashboardOptions,false);
- setBrusselsOptions(value.brusselsOptions,false);setBendShelves(value.bendShelfCount,false);
+ setBrusselsOptions(value.brusselsOptions,false);setBendShelves(value.bendShelfCount,false);setTaipeiOptions({gridDim:value.backgroundDim??60,gridColor:value.backgroundColor??'original',...value.taipeiOptions},false);setCannesOptions(value.cannesOptions,false);setChicagoOptions(value.chicagoOptions,false);
  hongkongRecent=value.hongkongRecent===true;setHongKongOptions(value.hongkongView,value.hongkongTone,false);
  setTerminalPalette(value.terminalPalette,false);
  setCambridgeArtwork(value.cambridgeArtwork,false);setUlmArtwork(value.ulmArtwork,false);
@@ -107,7 +107,7 @@ function initAppearance(value){
  window.addEventListener('resize',updateAppearancePreview);
  const coverResize=new ResizeObserver(()=>{if($('#settings-dialog').open)updateAppearancePreview()});
  for(const cover of document.querySelectorAll('#main img'))coverResize.observe(cover);
- new MutationObserver(()=>{refreshCupertinoControls();refreshApplicableAppearanceControls();updateAppearancePreview();if(!$('#settings-dialog').open)document.querySelectorAll('.preview-backdrop').forEach(image=>image.removeAttribute('src'))}).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
+ new MutationObserver(()=>{refreshCupertinoControls();refreshApplicableAppearanceControls();updateAppearancePreview();if(!$('#settings-dialog').open)document.querySelectorAll('.preview-backdrop,.tp-preview-bg').forEach(image=>image.removeAttribute('src'))}).observe($('#settings-dialog'),{attributes:true,attributeFilter:['open']});
  refreshCustomFont();$('#custom-font-choose').onclick=chooseCustomFont;$('#typography').onchange=e=>{if(e.target.value==='custom'){refreshCustomFont();if(customFontInfo.url)setTypography('custom');else{$('#typography').value=typography;chooseCustomFont();}}else setTypography(e.target.value);effect('select')};$('#cover-glow').onchange=e=>setCoverGlow(e.target.value==='subtle');
  const grid=$('#grid');new MutationObserver(queueCoverGlow).observe(grid,{childList:true,subtree:true,attributes:true,attributeFilter:['class','src']});
  $('#catalogue-art').addEventListener('load',queueCoverGlow);grid.addEventListener('load',queueCoverGlow,true);grid.addEventListener('focusin',queueCoverGlow);
@@ -140,6 +140,8 @@ function refreshCupertinoControls(){
 function refreshLayoutControls(){
  $('#dashboard-options').hidden=presentation!=='dashboard';
  $('#brussels-options').hidden=presentation!=='brussels';
+ $('#chicago-options').hidden=presentation!=='portland';
+ $('#taipei-options').hidden=presentation!=='taipei';$('#cannes-options').hidden=presentation!=='cannes';
  $('#bend-options').hidden=presentation!=='bend';
  $('#hongkong-options').hidden=presentation!=='hongkong';
  $('#cambridge-options').hidden=presentation!=='cambridge';$('#ulm-options').hidden=presentation!=='ulm';
@@ -161,7 +163,7 @@ function setCoverOptions(corners,brightness,menus){
  document.body.dataset.coverCorners=coverCorners;document.body.dataset.coverBrightness=coverBrightness;document.body.dataset.menuButtons=menuButtons;
  $('#cover-corners').value=coverCorners;$('#cover-brightness').value=coverBrightness;$('#menu-buttons').value=menuButtons;persist();
 }
-function appearanceSnapshot(){return {dashboardOptions:{...dashboardOptions},brusselsOptions:{...brusselsOptions},bendShelfCount,hongkongView,hongkongTone,terminalPalette,cambridgeArtwork,ulmArtwork,coverShadow,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
+function appearanceSnapshot(){return {dashboardOptions:{...dashboardOptions},brusselsOptions:{...brusselsOptions},taipeiOptions:{...taipeiOptions},cannesOptions:{...cannesOptions},chicagoOptions:{...chicagoOptions},bendShelfCount,hongkongView,hongkongTone,terminalPalette,cambridgeArtwork,ulmArtwork,coverShadow,coverBorder,interfaceContrast,titleWeight,presentation,palette,typography,coverGlow,backdrop,backgroundDim,backgroundColor,selectionStyle,artFit,size,cupertinoReflections,cupertinoSpacing,berlinCoverSize,kyotoTitlePlacement,cupertinoTitlePlacement,viennaSeparators,coverCorners,coverBrightness,menuButtons}}
 function availableAppearancePresets(){return [...builtinAppearancePresets.filter(b=>!appearancePresets.some(p=>p.name.toLowerCase()===b.name.toLowerCase())),...appearancePresets].sort((a,b)=>compareTitles(a.name,b.name))}
 function refreshPresetButtons(){const name=$('#appearance-presets').value;$('#preset-apply').disabled=!availableAppearancePresets().some(p=>p.name===name);$('#preset-preview').disabled=$('#preset-apply').disabled;$('#preset-delete').disabled=!appearancePresets.some(p=>p.name===name);const preset=availableAppearancePresets().find(p=>p.name===name);$('#preset-origin').textContent=preset?(builtinAppearancePresets.includes(preset)?'Built-in preset':'Your saved preset'):'';}
 function refreshPresets(selected=''){
@@ -177,7 +179,7 @@ function applyAppearancePreset(){
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;applyAppearanceValues(preset.values);$('#preset-status').textContent='Applied “'+preset.name+'”.';
 }
 function applyAppearanceValues(v){v=migrateRetiredAppearance(v);if(v.preserveOtherSettings)v={...appearanceSnapshot(),...v};const wasRestoring=restoring;restoring=true;
- try{setDashboardOptions(v.dashboardOptions??dashboardOptions,false);setBrusselsOptions(v.brusselsOptions??brusselsOptions,false);setBendShelves(v.bendShelfCount??bendShelfCount,false);setHongKongOptions(v.hongkongView??hongkongView,v.hongkongTone??hongkongTone,false);if(['az','za','recent','favorites'].includes(v.sort)){sort=v.sort;$('#sort').value=sort;}if(v.terminalPalette!==undefined)setTerminalPalette(v.terminalPalette,false);setCoverShadow(v.coverShadow);setCambridgeArtwork(v.cambridgeArtwork,false);setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
+ try{setDashboardOptions(v.dashboardOptions??dashboardOptions,false);setBrusselsOptions(v.brusselsOptions??brusselsOptions,false);setBendShelves(v.bendShelfCount??bendShelfCount,false);setTaipeiOptions(v.taipeiOptions?{gridDim:v.backgroundDim??60,gridColor:v.backgroundColor??'original',...v.taipeiOptions}:taipeiOptions,false);setCannesOptions(v.cannesOptions??cannesOptions,false);setChicagoOptions(v.chicagoOptions??chicagoOptions,false);setHongKongOptions(v.hongkongView??hongkongView,v.hongkongTone??hongkongTone,false);if(['az','za','recent','favorites'].includes(v.sort)){sort=v.sort;$('#sort').value=sort;}if(v.terminalPalette!==undefined)setTerminalPalette(v.terminalPalette,false);setCoverShadow(v.coverShadow);setCambridgeArtwork(v.cambridgeArtwork,false);setUlmArtwork(v.ulmArtwork,false);setLightAppearance(v.coverBorder,v.interfaceContrast,v.titleWeight);setBackgroundColor(v.backgroundColor);setBackgroundDim(v.backgroundDim??60);setPalette(v.palette);setTypography(v.typography);setCoverGlow(v.coverGlow);setAtmosphere(v.backdrop,v.selectionStyle);setArtFit(v.artFit);setCoverOptions(v.coverCorners,v.coverBrightness,v.menuButtons);setCupertinoOptions(v.cupertinoReflections,v.cupertinoSpacing);setBerlinCoverSize(v.berlinCoverSize);setViennaSeparators(v.viennaSeparators);kyotoTitlePlacement=v.kyotoTitlePlacement==='below'?'below':'above';cupertinoTitlePlacement=v.cupertinoTitlePlacement==='below'?'below':'above';setSize(['compact','comfortable','large'].includes(v.size)?v.size:'comfortable');setPresentation(v.presentation);refreshLayoutControls();sizePresentation();}
  finally{restoring=wasRestoring;persist()}
 }
 
@@ -198,6 +200,7 @@ function setLightAppearance(border,contrast,weight){
 // Settings previews use library records, independent of rendered cover tiles.
 // Load only while Settings is open, including when Ulm artwork is disabled.
 function updateAppearancePreview(){
+ if(presentation==='taipei'){syncTaipeiPreviews();return;}
  if(!$('#settings-dialog').open)return;
  if(backdrop==='gradient')$('#appearance-preview').style.setProperty('--backdrop-rgb',$('#soft-gradient').style.getPropertyValue('--backdrop-rgb')||'128,128,128');
  const sample=$('.appearance-sample img');
@@ -261,6 +264,7 @@ function syncUlmSettingsSample(sample){
 
 // Visibility describes actual layout behavior; hidden values remain saved.
 function refreshApplicableAppearanceControls(){
+ arrangeTaipeiSettings();
  const bbs=presentation==='abbotsford',ulm=['ulm','cambridge','abbotsford'].includes(presentation),artwork=!bbs&&(presentation==='cambridge'?cambridgeArtwork:!ulm||ulmArtwork);
  $('#custom-font-controls').hidden=typography!=='custom';
  const shadow=artwork&&['dashboard','library','berlin','seattle','vienna','prague','copenhagen','oxford','ulm','cambridge'].includes(presentation);
@@ -269,23 +273,26 @@ function refreshApplicableAppearanceControls(){
   'terminal-palette':bbs,'cover-shadow':shadow,
   'presentation-sort':!(presentation==='hongkong'&&hongkongRecent)&&!['oxford','copenhagen'].includes(presentation)&&!(presentation==='cambridge'&&cambridgeSection==='recent')&&!(presentation==='ulm'&&ulmLevel==='games'&&ulmSection==='recent'),
   'art-fit':artwork,'cover-border':artwork,'cover-corners':artwork,'cover-glow':artwork&&!['hongkong','sedona','milan','bellevue','manhattan','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
-  'palette':!bbs&&presentation!=='hongkong','backdrop':!['hongkong','sedona','redmond','sanfrancisco'].includes(presentation),'interface-contrast':!bbs&&presentation!=='hongkong','title-weight':!['ibmvga','gamepocket'].includes(typography),
+  'palette':!bbs&&presentation!=='hongkong','backdrop':!['portland','hongkong','sedona','redmond','sanfrancisco'].includes(presentation),'interface-contrast':!bbs&&presentation!=='hongkong','title-weight':!['ibmvga','gamepocket'].includes(typography),
   'typography':true,'cover-brightness':!['hongkong','sedona','milan','bellevue','manhattan','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)&&(!ulm||bbs),'menu-buttons':!['hongkong','sedona','milan','bellevue','manhattan','bath','ulm','cambridge','venice','abbotsford','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation),
   'selection-style':!ulm&&!['hongkong','sedona','milan','bellevue','manhattan','bath','paloalto','redmond','sanfrancisco','atlantis'].includes(presentation)
  };
  if(presentation==='ithaca'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;rows['presentation-sort']=ithacaLevel==='games'&&ithacaScope!=='recent';}
  if(['rochester','florence','bend','brussels'].includes(presentation)){for(const id of ['palette','cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;}
- if(presentation==='brussels'){rows['typography']=false;rows['title-weight']=false;}
+ if(presentation==='brussels'){rows['typography']=false;rows['title-weight']=false;} if(presentation==='portland'||presentation==='taipei'){for(const id of ['palette','cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','interface-contrast','cover-brightness','typography','title-weight'])rows[id]=false;}
  // Cannes keeps its own lobby colors and frames; typography sets the nameplates and box office.
  if(presentation==='cannes'){for(const id of ['palette','cover-border','cover-corners','cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast'])rows[id]=false;}
  if(presentation==='manhattan'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast','cover-brightness'])rows[id]=false;}
  if(presentation==='tacoma'){for(const id of ['cover-glow','cover-shadow','selection-style','menu-buttons','backdrop','interface-contrast'])rows[id]=false;rows['presentation-sort']=tacomaPage!==1;rows['cover-brightness']=tacomaPage<2;}
+ if(bbs)rows['art-fit']=true;
+ if(presentation==='taipei'){rows['cover-brightness']=true;rows['cover-corners']=true;rows['backdrop']=true;}
  for(const [id,visible] of Object.entries(rows))$('#'+id).closest('.settings-row').hidden=!visible;
- $('#appearance-preview').hidden=!artwork;
+ $('#appearance-preview').hidden=!artwork||presentation==='taipei';
  // Oxford dims neighboring text rows rather than separate cover tiles.
  const brightness=$('#cover-brightness').closest('.settings-row');
- brightness.querySelector('h3').textContent=(presentation==='oxford'||bbs)?'Unselected titles':'Unselected covers';
- brightness.querySelector('p').textContent=(presentation==='oxford'||bbs)?'Keep neighboring titles equally bright or dim them to emphasize your selection.':'Keep neighboring artwork equally bright or dim it to emphasize your selection.';
+ $('#cover-brightness').setAttribute('aria-label',presentation==='taipei'?'Unselected games':presentation==='oxford'||bbs?'Unselected titles':'Unselected covers');
+ brightness.querySelector('h3').textContent=presentation==='taipei'?'Unselected games':(presentation==='oxford'||bbs)?'Unselected titles':'Unselected covers';
+ brightness.querySelector('p').textContent=presentation==='taipei'?'Keep covers and titles equally bright, or dim the unselected games.':(presentation==='oxford'||bbs)?'Keep neighboring titles equally bright or dim them to emphasize your selection.':'Keep neighboring artwork equally bright or dim it to emphasize your selection.';
  for(const heading of document.querySelectorAll('#settings-appearance .settings-subheading')){
   let node=heading.nextElementSibling,visible=false;
   while(node&&!node.classList.contains('settings-subheading')){if(!node.hidden)visible=true;node=node.nextElementSibling;}
@@ -298,7 +305,7 @@ function auditionAppearancePreset(){
  if(window.appearanceAudition)return;
  const preset=availableAppearancePresets().find(p=>p.name===$('#appearance-presets').value);if(!preset)return;
  rememberCategoryPlace();
- const navigation=JSON.parse(JSON.stringify({rochesterPane,brusselsPane,brusselsSceneKey,brusselsScene,florencePane,bendPane,ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,manhattanPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
+ const navigation=JSON.parse(JSON.stringify({taipeiCategory,taipeiShelf,portlandCategory,portlandShelf,rochesterPane,brusselsPane,brusselsSceneKey,brusselsScene,florencePane,bendPane,ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,manhattanPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}));
  window.appearanceAudition={name:preset.name,values:appearanceSnapshot(),navigation,scrollX:scrollX,scrollY:scrollY,settingsScroll:$('#settings-dialog').scrollTop,scrolls:[...document.querySelectorAll('[id]')].filter(n=>n.scrollTop||n.scrollLeft).map(n=>({id:n.id,top:n.scrollTop,left:n.scrollLeft}))};
  hideDialog('#settings-dialog');
  try{applyAppearanceValues(preset.values);$('#audition-name').textContent=preset.name;showDialog('#preset-audition');$('#audition-keep').focus({preventScroll:true});}
@@ -309,7 +316,7 @@ function finishAppearanceAudition(keep){
  hideDialog('#preset-audition');
  if(!keep){
   applyAppearanceValues(audition.values);
-  ({rochesterPane,brusselsPane,brusselsSceneKey,brusselsScene,florencePane,bendPane,ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,manhattanPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
+  ({taipeiCategory,taipeiShelf,portlandCategory,portlandShelf,rochesterPane,brusselsPane,brusselsSceneKey,brusselsScene,florencePane,bendPane,ithacaLevel,ithacaScope,ithacaIndex,tacomaPage,tacomaCategory,tacomaInside,dashboardPane:dashboard.pane,dashboardRecentId:dashboard.recentId,atlantisPane:atlantisBrowser.state.pane,sanfranciscoPane,redmondPane:redmondBrowser.state.pane,hongkongPane,hongkongRecent,showcasePane,sedonaPane,manhattanPane,bathPane,paloaltoPane,abbotsfordPane,ownSearchMode,ownSearchQuery,categoryPlaces,genre,query,favoritesOnly,sort,visible,presentationId,seattleBrowse,cambridgeSection,cambridgePane,cambridgePositions,ulmLevel,ulmSection,ulmPositions,ulmCategoryKey,pragueKey,praguePositions,viennaKey,viennaPositions,copenhagenIds,copenhagenKept,copenhagenFilter,controllerGameId,menuTouchId,ulmSearchOpen}=audition.navigation);
   renderedCategoryKey=null;$('#search').value=query;$('#sort').value=sort;update();
   for(const saved of audition.scrolls){const node=document.getElementById(saved.id);if(node){node.scrollTop=saved.top;node.scrollLeft=saved.left;}}
   window.scrollTo(audition.scrollX,audition.scrollY);
@@ -321,6 +328,7 @@ function finishAppearanceAudition(keep){
 }
 
 function syncPreviewBackdrop(){
+ if(presentation==='taipei'){syncTaipeiPreviews();return;}
  if(!$('#settings-dialog').open)return;
  const actual=$('#custom-backdrop'),src=actual.getAttribute('src'),style=getComputedStyle(actual);
  for(const [target,id] of [['appearance-preview','appearance-backdrop'],['cupertino-preview','cupertino-backdrop']]){
@@ -382,5 +390,16 @@ builtinAppearancePresets.push({name:'Private Collection',values:{...builtinAppea
 
 builtinAppearancePresets.push({name:'Graphic Content',values:{...builtinAppearancePresets[0].values,presentation:'brussels',sort:'az',brusselsOptions:{strength:75,background:'rotate',density:8,sceneryColor:'muted',coverColor:'original'},palette:'notebook',typography:'clean',backdrop:'flat',coverGlow:false,coverCorners:'square',coverBorder:'none',titleWeight:'bold',coverShadow:'off',artFit:'cover'}});
 
-builtinAppearancePresets.push({name:'Now Showing',values:{...builtinAppearancePresets[0].values,presentation:'cannes',palette:'graphite',typography:'oswald',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,coverBrightness:'dimmed',backdrop:'flat',artFit:'cover',sort:'az'}});
+builtinAppearancePresets.push({name:'Fresh Ink',values:{...builtinAppearancePresets[0].values,presentation:'portland',chicagoOptions:{...chicagoDefaults,counts:'selected'},palette:'parchment',typography:'nunito',titleWeight:'bold',coverCorners:'soft',artFit:'cover',sort:'az'}});
+builtinAppearancePresets.push({name:'Now Playing',values:{...builtinAppearancePresets[0].values,presentation:'cannes',cannesOptions:{...cannesDefaults},palette:'graphite',typography:'oswald',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,coverBrightness:'dimmed',backdrop:'flat',artFit:'cover',sort:'az'}});
 builtinAppearancePresets.push({name:'Exposure',values:{...builtinAppearancePresets[0].values,presentation:'rochester',palette:'graphite',typography:'clean',titleWeight:'regular',coverCorners:'square',coverBorder:'none',coverShadow:'off',coverGlow:false,backdrop:'flat',artFit:'cover',sort:'az'}});
+builtinAppearancePresets.push({
+ name:'Dawn',
+ values:{
+  ...builtinAppearancePresets[0].values,presentation:'taipei',palette:'graphite',
+  taipeiOptions:{palette:'amber',font:'space',gridBackdrop:'flat',gridColor:'original',gridDim:60},
+  backdrop:'mountain',backgroundColor:'palette',backgroundDim:70,
+  size:'comfortable',artFit:'cover',coverCorners:'soft',coverBrightness:'even',
+  coverBorder:'none',coverShadow:'off',coverGlow:false,selectionStyle:'outline',sort:'az'
+ }
+});

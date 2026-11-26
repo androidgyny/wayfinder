@@ -1,0 +1,149 @@
+#portland-bar{display:none}
+body[data-presentation=portland]{--pl-paper:#f4deb1;--pl-ink:#183c35;--pl-teal:#205b58;color:var(--pl-ink);background:#f4deb1}
+body[data-presentation=portland] .topbar{background:var(--pl-paper);color:var(--pl-ink);height:46px;min-height:46px;border:0}
+body[data-presentation=portland] aside,body[data-presentation=portland] #main>:not(#grid):not(#portland-bar):not(#portland-hints){display:none!important}
+body[data-presentation=portland] .shell{display:block;height:calc(100dvh - 46px)}
+body[data-presentation=portland] #main{height:100%;padding:10px 0 14px;display:flex;flex-direction:column;overflow:hidden;gap:8px;background:#f4deb1}
+body[data-presentation=portland] #portland-bar{display:flex;align-items:center;gap:10px;margin:0 4%;min-height:40px}
+#portland-heading,.portland-caption strong{font-family:Nunito,system-ui,sans-serif;font-weight:900;letter-spacing:-.025em}
+#portland-heading{margin:0;flex:1;font-size:clamp(18px,3.6vw,34px);line-height:1.05;overflow-wrap:anywhere}
+#portland-bar button,#portland-picker button{background:#f4deb1;color:#183c35;border:1px solid #a78971;border-radius:12px;padding:8px 12px}
+body[data-presentation=portland][data-chicago-width=narrow] .portland-postcard{flex-basis:clamp(115px,calc((100dvh - 135px)*.36),300px)}
+body[data-presentation=portland][data-chicago-width=wide] .portland-postcard{flex-basis:clamp(165px,calc((100dvh - 135px)*.62),480px)}
+body[data-presentation=portland][data-chicago-counts=off] .portland-caption small,
+body[data-presentation=portland][data-chicago-counts=selected] .portland-postcard:not(.presentation-selected) small{display:none}
+body[data-presentation=portland][data-chicago-paper=smooth] :is(.topbar,#main,#portland-picker){background-image:none}
+body[data-presentation=portland] #grid{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;gap:9px;padding:6px 1.5%;margin:0;touch-action:pan-x;overscroll-behavior:contain;scrollbar-width:thin}
+.portland-postcard{
+ position:relative;isolation:isolate;flex:0 0 clamp(135px,calc((100dvh - 135px)*.46),375px);
+ height:100%;padding:0;overflow:hidden;background:#183c35;color:#fff1d7;
+ border:0;border-radius:12px;scroll-snap-align:center;
+}
+.portland-art{display:flex;min-width:0;min-height:0;width:100%;height:100%;overflow:hidden;background:#183c35}
+.portland-art img{flex:1;width:0;min-width:0;height:100%;object-fit:cover}
+.portland-postcard>.portland-art{position:absolute;inset:0}
+.portland-caption{
+ position:absolute;inset:auto 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+ padding:38px 11px 12px;text-align:left;color:#fff1d7;
+ background:linear-gradient(transparent,#132f28ec 64%);
+}
+.portland-caption strong{font-size:clamp(17px,2.2vw,30px);line-height:1.02;overflow-wrap:anywhere}
+.portland-caption small{font-size:12px;line-height:1.1}
+body[data-presentation=portland] #grid .portland-postcard.presentation-selected{
+ outline:3px solid var(--chicago-focus,#ba482d);outline-offset:1px;box-shadow:none;
+}
+body[data-portland-level=categories][data-presentation=portland] #grid{scroll-snap-type:x proximity}
+body[data-portland-level=games][data-presentation=portland] #grid{display:block;padding:0;overflow-x:hidden;overflow-y:auto;touch-action:pan-y;overflow-anchor:none}
+.portland-track{position:relative;height:100%}
+body[data-presentation=portland] #grid .game{position:absolute;top:8px;display:block;padding:0;margin:0;background:var(--pl-ink);border:2px solid var(--pl-ink);border-radius:10px;color:#fff1d7;overflow:hidden;height:auto}
+body[data-presentation=portland] #grid .game .cover{width:100%;aspect-ratio:2/3;display:block;border-radius:6px;overflow:hidden}
+body[data-presentation=portland] #grid .game .cover img{width:100%;height:100%;object-fit:cover}
+body[data-art-fit=contain][data-presentation=portland] #grid .game .cover img{object-fit:contain}
+body[data-presentation=portland] #grid .game .game-title{color:#fff1d7;display:block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;padding:3px 6px}
+body[data-presentation=portland] #grid .game :is(.game-genre,.card-edit,.card-favorite){display:none!important}
+body[data-presentation=portland] #grid .cover::after{display:none}
+body[data-presentation=portland] #grid .game-title{font-family:Nunito,system-ui,sans-serif;font-size:14px;line-height:20px;font-weight:700}
+body[data-presentation=portland] #grid .game:focus-visible{outline-offset:-3px;outline-color:#ba482d}
+body[data-presentation=portland] #grid .presentation-selected{border-color:#ba482d;box-shadow:0 0 0 2px #f4deb1}
+body[data-presentation=portland] #grid .game.presentation-selected{
+ transform:none;outline:3px solid var(--chicago-focus,#99412c)!important;outline-offset:1px!important;
+}
+body[data-presentation=portland] #grid .portland-track .game{opacity:1!important}
+body[data-chicago-dimming=subtle]{--chicago-cover-brightness:.92}
+body[data-chicago-dimming=strong]{--chicago-cover-brightness:.80}
+body[data-presentation=portland] #grid .game:not(.presentation-selected) .cover{
+ filter:brightness(var(--chicago-cover-brightness,1));
+}
+#portland-picker{
+ width:min(800px,94vw);padding:clamp(18px,3.2vw,32px);scroll-padding:22px;
+ background:#f4deb1;color:#183c35;border:1px solid #92754b;
+}
+#portland-picker h2{margin:0 0 16px;padding-right:44px;overflow-wrap:anywhere}
+#portland-picker #portland-close{top:12px;right:12px}
+#portland-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:16px;margin-top:20px}
+#portland-options button{display:grid;align-content:start;padding:9px;gap:8px;font-weight:700}
+#portland-options img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:6px}
+#portland-options [aria-pressed=true]{outline:3px solid #ad452d;outline-offset:1px}
+body[data-presentation=portland] :is(.topbar,#main,#portland-picker){
+ color-scheme:light;--accent:#99412c;--accent-ink:#fff1d7;--accent-soft:#eac5a2;
+ --text:#183c35;--muted:#575641;--line:#9f8963;--field:#f5e6c8;--hover:#ead5ad;
+ accent-color:#99412c;-webkit-tap-highlight-color:rgba(153,65,44,.18);
+ scrollbar-color:#907249 #ecdbbb;
+}
+body[data-presentation=portland] :is(.topbar,#main,#portland-picker){
+ background-color:var(--pl-paper);
+ background-image:linear-gradient(to bottom,var(--pl-paper-start,rgba(244,222,177,.76)),rgba(244,222,177,.76)),url(portland-paper.webp);
+ background-size:100% 100%,384px 384px;
+}
+body[data-presentation=portland] .topbar{--pl-paper-start:var(--pl-paper)}
+body[data-presentation=portland][data-input=controller] :is(#portland-picker,.topbar,#main) :focus-visible{
+ outline-color:var(--chicago-focus,#99412c)!important;
+}
+body[data-presentation=portland] :is(.topbar,#main,#portland-picker) ::selection{background:#b85338;color:#fff1d7}
+#portland-picker::backdrop{background:#16271ed4}
+
+#portland-hints{display:none}
+body[data-presentation=portland][data-portland-level=categories] #main>#portland-hints{
+ display:flex;align-items:center;justify-content:flex-end;gap:18px;
+ margin:0 1.5%;padding:5px 0 0;border-top:2px solid #183c35;color:#183c35;
+ font:700 13px/1.2 Nunito,system-ui,sans-serif;
+}
+#portland-hints b{display:inline-grid;place-items:center;width:1.5em;height:1.5em;background:#183c35;color:#f4deb1;border-radius:50%}
+@media(max-height:340px){body[data-presentation=portland][data-portland-level=categories] #main>#portland-hints{display:none}}
+
+
+body[data-chicago-ground=mist]{--chicago-ground:#bbcdd2;--chicago-wash:#bbcdd2ef;--chicago-field:#dbe7e8}
+body[data-chicago-ground=ochre]{--chicago-ground:#dfbf81;--chicago-wash:#dfbf81ef;--chicago-field:#efdaad}
+body[data-chicago-ground=indigo]{--chicago-ground:#303950;--chicago-wash:#303950ef;--chicago-field:#242c40}
+body[data-chicago-ground=plum]{--chicago-ground:#553c50;--chicago-wash:#553c50ef;--chicago-field:#402c3c}
+body[data-chicago-ground=ivory]{--chicago-ground:#f7efda;--chicago-wash:#f7efdaef;--chicago-field:#fff9eb}
+body[data-chicago-ground=sage]{--chicago-ground:#bdcab2;--chicago-wash:#bdcab2ef;--chicago-field:#d3ddca}
+body[data-chicago-ground=terracotta]{--chicago-ground:#904d39;--chicago-wash:#904d39ef;--chicago-field:#713e30}
+body[data-chicago-ground=ink]{--chicago-ground:#24443d;--chicago-wash:#24443def;--chicago-field:#16332d}
+body[data-chicago-ground=charcoal]{--chicago-ground:#343735;--chicago-wash:#343735ef;--chicago-field:#242825}
+body:is([data-chicago-ground=indigo],[data-chicago-ground=plum],[data-chicago-ground=ink],[data-chicago-ground=charcoal],[data-chicago-ground=terracotta]){
+ --chicago-text:#fff1d7;--chicago-muted:#f3dfc4;--chicago-line:#c7ab8c;
+ --chicago-focus:#ffda85;--chicago-accent:#ffda85;--chicago-accent-ink:#30251c;
+}
+body[data-presentation=portland][data-chicago-ground=paper]{--chicago-shadow:#183c35;--chicago-light:#f4deb1;--chicago-text:#183c35;--chicago-accent:#99412c;--chicago-accent-ink:#fff9ef;--chicago-focus:#99412c}
+body[data-presentation=portland][data-chicago-ground=ivory]{--chicago-shadow:#393426;--chicago-light:#f7efda;--chicago-text:#393426;--chicago-accent:#675432;--chicago-accent-ink:#fff9ef;--chicago-focus:#675432}
+body[data-presentation=portland][data-chicago-ground=ochre]{--chicago-shadow:#392e20;--chicago-light:#dfbf81;--chicago-text:#392e20;--chicago-accent:#664826;--chicago-accent-ink:#fff9ef;--chicago-focus:#664826}
+body[data-presentation=portland][data-chicago-ground=sage]{--chicago-shadow:#263b30;--chicago-light:#bdcab2;--chicago-text:#263b30;--chicago-accent:#405f47;--chicago-accent-ink:#fff9ef;--chicago-focus:#405f47}
+body[data-presentation=portland][data-chicago-ground=mist]{--chicago-shadow:#233944;--chicago-light:#bbcdd2;--chicago-text:#233944;--chicago-accent:#365766;--chicago-accent-ink:#fff9ef;--chicago-focus:#365766}
+body[data-presentation=portland][data-chicago-ground=terracotta]{--chicago-shadow:#472a24;--chicago-light:#f5dbbe;--chicago-text:#f5dbbe;--chicago-accent:#f9d2a7;--chicago-accent-ink:#472a24;--chicago-focus:#f9d2a7}
+body[data-presentation=portland][data-chicago-ground=ink]{--chicago-shadow:#132e2a;--chicago-light:#dce9d5;--chicago-text:#dce9d5;--chicago-accent:#b7e2ca;--chicago-accent-ink:#132e2a;--chicago-focus:#b7e2ca}
+body[data-presentation=portland][data-chicago-ground=charcoal]{--chicago-shadow:#242825;--chicago-light:#e5e5da;--chicago-text:#e5e5da;--chicago-accent:#d4dbbf;--chicago-accent-ink:#242825;--chicago-focus:#d4dbbf}
+body[data-presentation=portland][data-chicago-ground=indigo]{--chicago-shadow:#1e2436;--chicago-light:#e3e6f4;--chicago-text:#e3e6f4;--chicago-accent:#c4d0ff;--chicago-accent-ink:#1e2436;--chicago-focus:#c4d0ff}
+body[data-presentation=portland][data-chicago-ground=plum]{--chicago-shadow:#352431;--chicago-light:#f1dfeb;--chicago-text:#f1dfeb;--chicago-accent:#f5cce6;--chicago-accent-ink:#352431;--chicago-focus:#f5cce6}
+body[data-presentation=portland]{background-color:var(--chicago-ground,var(--pl-paper))}
+body[data-presentation=portland] :is(.topbar,#main,#portland-picker){
+ --text:var(--chicago-text,#183c35);--muted:var(--chicago-muted,#575641);
+ --panel:var(--chicago-field,var(--pl-paper));--field:var(--chicago-field,#f5e6c8);--line:var(--chicago-line,#9f8963);
+ --accent:var(--chicago-accent,#99412c);--accent-ink:var(--chicago-accent-ink,#fff1d7);
+ color:var(--text);background-color:var(--chicago-ground,var(--pl-paper));
+}
+body[data-presentation=portland]:not([data-chicago-ground=paper]) :is(.topbar,#main,#portland-picker){
+ background-image:none;
+}
+body[data-presentation=portland]:not([data-chicago-ground=paper])[data-chicago-paper=grain] :is(.topbar,#main,#portland-picker){
+ background-image:linear-gradient(var(--chicago-grain-start,var(--chicago-wash)),var(--chicago-wash)),url(portland-paper.webp);
+}
+body[data-presentation=portland] :is(#portland-bar,#portland-picker) button{
+ background:var(--field);color:var(--text);border-color:var(--line);
+}
+body[data-presentation=portland][data-portland-level=categories] #main>#portland-hints{
+ color:var(--text);border-color:var(--line);
+}
+body[data-presentation=portland] #portland-hints b{background:var(--text);color:var(--chicago-ground,var(--pl-paper))}
+
+body[data-presentation=portland]:not([data-chicago-ground=paper]) .topbar :is(.secondary,.icon){background-color:var(--field);color:var(--text)}
+
+body[data-presentation=portland] .topbar{--chicago-grain-start:var(--chicago-ground)}
+
+
+body[data-presentation=portland] .portland-caption{
+ background:linear-gradient(transparent,var(--chicago-shadow) 84%);color:#fffaf0;
+}
+body[data-presentation=portland] #grid .game{background:var(--chicago-shadow);border-color:var(--chicago-shadow)}
+body[data-presentation=portland] #grid .game.presentation-selected{border-color:var(--chicago-focus);box-shadow:0 0 0 2px var(--chicago-light)}
+body[data-presentation=portland] #portland-options [aria-pressed=true]{outline-color:var(--chicago-focus)}

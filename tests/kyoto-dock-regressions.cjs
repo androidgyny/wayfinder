@@ -32,6 +32,24 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
   assert.ok(bounds.dock.bottom<=bounds.height,JSON.stringify(bounds));
  }
  await page.setViewportSize({width:1097,height:592});await page.waitForTimeout(200);
+ // Measure screen positions after transitions settle, including a reversal at the far end.
+ const position=async(index,action)=>{
+  await page.evaluate(({index,action})=>{
+   if(action)controller(action);
+   else{presentationId=filtered[index].id;renderPresentation();controllerFocus($('#grid .presentation-selected'));}
+  },{index,action});
+  await page.waitForTimeout(250);
+  return page.evaluate(()=>{
+   const grid=$('#grid').getBoundingClientRect(),r=$('#grid .presentation-selected').getBoundingClientRect();
+   return {left:r.left-grid.left,right:grid.right-r.right,width:r.width,first:kyotoFirst};
+  });
+ };
+ const first=await position(0),second=await position(null,'right');
+ assert.equal(first.first,0);assert.equal(second.first,0);
+ assert.ok(second.left-first.left>=first.width,'focus crosses the stationary first tiles');
+ const last=await position(19),previous=await position(null,'left');
+ assert.ok(last.right>=0&&last.right<first.width,'last cover visible at the right');
+ assert.ok(Math.abs(last.first-previous.first)<.01&&last.left-previous.left>=last.width-1,'reversal moves focus back across the stationary row');
  // Compare frame-to-frame motion at both native held-D-pad repeat rates.
  for(const mode of ['kyoto','cupertino','venice'])for(const direction of ['right','left'])for(const interval of [110,65]){
   await page.evaluate(mode=>setPresentation(mode),mode);
@@ -39,6 +57,9 @@ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900"><rec
    const override=document.createElement('style');
    if(legacy)override.textContent=`body[data-presentation=${mode}] #grid .game{transition:transform ${mode==='venice'?160:100}ms ease-out,opacity 100ms ease-out}`;
    document.head.append(override);
+   if(mode==='kyoto'){
+    presentationId=filtered[direction==='right'?0:filtered.length-1].id;renderPresentation();
+   }
    presentationId=filtered[direction==='right'?5:10].id;renderPresentation();controllerFocus($('#grid .presentation-selected'));
    await new Promise(r=>setTimeout(r,220));
    const tracked=$('#grid .game[data-carousel-index="'+(direction==='right'?6:9)+'"]'),samples=[];

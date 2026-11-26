@@ -1,6 +1,9 @@
 // Vienna keeps a full native scrolling row only for the expanded category.
 let viennaKey='favorites',viennaPositions={},viennaShelves=[],viennaScrollTimer=0;
 function viennaCurrent(){return viennaShelves.find(s=>s.key===viennaKey)}
+function viennaTarget(row,card){
+ return card.offsetLeft+(card.offsetWidth-row.clientWidth)/2;
+}
 function renderVienna(){
  clearTimeout(viennaScrollTimer);
  viennaShelves=[{key:'favorites',label:'★ Favorites',items:filtered.filter(g=>g.favorite)},...genres.map(name=>({key:'genre:'+name,label:name,items:filtered.filter(g=>g.genre===name)})).filter(s=>s.items.length||!!query)];
@@ -16,7 +19,24 @@ function renderVienna(){
    const status=el('div','vienna-status');section.append(status);
    if(chosen){presentationId=chosen.id;viennaPositions[shelf.key]=chosen.id;status.textContent=chosen.title+' · '+(shelf.items.indexOf(chosen)+1)+' / '+shelf.items.length;}
    else{presentationId=null;row.append(el('p','vienna-empty',query?'No favorites match this search.':'Your favorites belong here. Open a game’s menu or press Select to add one.'));status.textContent='↑ ↓ Categories · ← → Games · Triggers: jump through games';}
-   row.addEventListener('scroll',()=>{if(performance.now()<(row.viennaIgnoreUntil||0))return;clearTimeout(viennaScrollTimer);viennaScrollTimer=setTimeout(()=>{if(presentation!=='vienna'||!row.isConnected)return;const x=row.getBoundingClientRect().left+36;let best=null,distance=Infinity;for(const b of row.querySelectorAll('.game')){const d=Math.abs(b.getBoundingClientRect().left-x);if(d<distance){distance=d;best=b}}if(best)viennaSelect(best.dataset.id,false,false);},160)},{passive:true});
+   row.addEventListener('scroll',()=>{
+    if(categoryTrackMotion.has(row)||performance.now()<(row.viennaIgnoreUntil||0))return;
+    clearTimeout(viennaScrollTimer);
+    viennaScrollTimer=setTimeout(()=>{
+     if(presentation!=='vienna'||!row.isConnected||categoryTrackMotion.has(row)||performance.now()<(row.viennaIgnoreUntil||0))return;
+     let best;
+     if(row.scrollLeft<=1)best=row.firstElementChild;
+     else if(row.scrollLeft+row.clientWidth>=row.scrollWidth-1)best=row.lastElementChild;
+     else{
+      let distance=Infinity;
+      for(const card of row.querySelectorAll('.game')){
+       const d=Math.abs(viennaTarget(row,card)-row.scrollLeft);
+       if(d<distance){distance=d;best=card;}
+      }
+     }
+     if(best?.dataset.id)viennaSelect(best.dataset.id,false,false);
+    },160);
+   },{passive:true});
   }else{
    const preview=el('button','vienna-preview');preview.setAttribute('aria-label','Browse '+shelf.label);preview.tabIndex=-1;preview.onclick=()=>viennaOpen(shelf.key,true);
    if(!shelf.items.length)preview.append(el('span','','Add your favorite games here'));section.append(preview);
@@ -25,7 +45,7 @@ function renderVienna(){
  }
  $('#grid').replaceChildren(fragment);refreshViennaPreviews();syncSearchFeedback();$('#load').hidden=true;$('#empty').hidden=true;
  const selected=$('#grid .presentation-selected'),row=selected?.parentElement;
- if(selected&&row){row.viennaIgnoreUntil=performance.now()+250;row.scrollLeft=Math.max(0,selected.offsetLeft-36);}
+ if(selected&&row){row.viennaIgnoreUntil=performance.now()+250;row.scrollLeft=viennaTarget(row,selected);}
  queueCoverGlow();
 }
 function viennaOpen(key,focus=false){
@@ -44,7 +64,7 @@ function viennaSelect(id,focus=true,scroll=true){
  $('.vienna-status').textContent=g.title+' · '+(shelf.items.indexOf(g)+1)+' / '+shelf.items.length;
  if(focus)controllerFocus(target);
  else if(target&&document.activeElement?.closest('.vienna-row')){target.focus({preventScroll:true});controllerGameId=id;}
- if(scroll&&target){const row=target.parentElement;row.viennaIgnoreUntil=performance.now()+250;scrollCategoryTrack(row,Math.max(0,target.offsetLeft-36),'left');}
+ if(scroll&&target){const row=target.parentElement;row.viennaIgnoreUntil=performance.now()+250;scrollCategoryTrack(row,viennaTarget(row,target),'left');}
  queueCoverGlow();queueCarouselSave();
 }
 function viennaClick(g,b){if(presentationId!==g.id){viennaSelect(g.id,false,false);return}play(g.id,b)}
@@ -75,12 +95,22 @@ function refreshViennaPreviews(){
  // Measure every shelf before inserting images, avoiding one layout pass per category.
  for(const {preview,items} of changes)preview.replaceChildren(...items.map(g=>{const im=el('img');im.src=g.image;im.alt='';im.loading='lazy';return im}));
 }
-window.addEventListener('resize',refreshViennaPreviews);
+window.addEventListener('resize',()=>{
+ refreshViennaPreviews();
+ if(presentation!=='vienna')return;
+ const selected=$('.vienna-row .presentation-selected'),row=selected?.parentElement;
+ if(row){
+  stopCategoryTrack(row);row.viennaIgnoreUntil=performance.now()+250;
+  row.scrollLeft=viennaTarget(row,selected);
+ }
+});
 
 // Retarget one animation instead of restarting browser smooth-scroll on every repeat.
 const categoryTrackMotion=new WeakMap();
 function stopCategoryTrack(node){const state=categoryTrackMotion.get(node);if(state)cancelAnimationFrame(state.frame);categoryTrackMotion.delete(node)}
-function bindCategoryTrack(node){for(const event of ['pointerdown','wheel'])node.addEventListener(event,()=>stopCategoryTrack(node),{passive:true})}
+function bindCategoryTrack(node){for(const event of ['pointerdown','wheel'])node.addEventListener(event,()=>{
+ stopCategoryTrack(node);node.viennaIgnoreUntil=0;
+},{passive:true})}
 function scrollCategoryTrack(node,value,axis='top'){
  const property=axis==='left'?'scrollLeft':'scrollTop',max=axis==='left'?node.scrollWidth-node.clientWidth:node.scrollHeight-node.clientHeight;
  const target=Math.max(0,Math.min(max,value));
